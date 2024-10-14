@@ -10,9 +10,9 @@ public enum MapTileCollectionType
 
 public struct MapTileCollection
 {
-    public MapTileCollectionType MapTileCollectionType { get; set; }
+    public MapTileCollectionType MapTileCollectionType;
     public int Id;
-    public Vector2 CollectionOrigin { get; set; }
+    public Vector2 CollectionOrigin;
     public List<MapTile> MapTiles;
 
     public MapTileCollection(MapTileCollectionType mapTileCollectionType, int id, Vector2 collectionOrigin)

@@ -19,9 +19,11 @@ public class GridMapManager : Singleton<GridMapManager>
     [Space]
     [Header("Misc")]
     [SerializeField] private int maxRoomAttempts = 100;
+    [SerializeField] private GameObject debugMarker;
 
     private readonly List<MapTileCollection> mapTileCollections = new();
     private MapTile[] mapTiles = new MapTile[0];
+    private GameObject debugHolder;
 
     public float MapTileSize { get { return mapTileSize; } }
     public GameObject Floor {  get { return floor; } }
@@ -48,6 +50,8 @@ public class GridMapManager : Singleton<GridMapManager>
             }
         }
         mapTileCollections.Clear();
+        Destroy(debugHolder);
+        debugHolder = new GameObject("Debug Holder");
     }
 
     public void GenerateGridMap()
@@ -61,15 +65,14 @@ public class GridMapManager : Singleton<GridMapManager>
     {
         for (int i = 0; i < roomCount; i++)
         {
-            GenerateRandomRoom();
+            GenerateRectangularRoom();
         }
     }
 
     private void GenerateRectangularRoom()
     {
         bool success = false;
-        MapTileCollection mapTileCollection = new(MapTileCollectionType.None, mapTileCollections.Count, Vector2.zero);
-        mapTileCollections.Add(mapTileCollection);
+        MapTileCollection mapTileCollection = new(MapTileCollectionType.None, mapTileCollections.Count, new Vector2(1, 1));
 
         int attempt = 0;
         while (!success && attempt < maxRoomAttempts)
@@ -79,6 +82,7 @@ public class GridMapManager : Singleton<GridMapManager>
             int roomWidth = Random.Range(minRoomSize, maxRoomSize);
 
             Vector2 roomPosition = new(Random.Range(0, mapLength - roomLength), Random.Range(0, mapWidth - roomWidth));
+            mapTileCollection.CollectionOrigin = roomPosition;
 
             Vector2[] mapTilePositions = new Vector2[roomLength * roomWidth];
             for (int y = 0; y < roomWidth; y++)
@@ -96,9 +100,9 @@ public class GridMapManager : Singleton<GridMapManager>
             }
         }
 
-        if (!success)
+        if (success)
         {
-            mapTileCollections.Remove(mapTileCollection);
+            mapTileCollections.Add(mapTileCollection);
         }
     }
 
@@ -106,19 +110,21 @@ public class GridMapManager : Singleton<GridMapManager>
     {
         bool success = false;
         MapTileCollection mapTileCollection = new(MapTileCollectionType.None, mapTileCollections.Count, Vector2.zero);
-        mapTileCollections.Add(mapTileCollection);
 
         int attempt = 0;
         while (!success && attempt < maxRoomAttempts)
         {
             attempt++;
             Vector2 roomPosition = new(Random.Range(0, mapLength), Random.Range(0, mapWidth));
+            mapTileCollection.CollectionOrigin.Set(roomPosition.x, roomPosition.y);
+            Debug.Log(mapTileCollection.CollectionOrigin);
             success = PlaceMapTile(mapTileCollection, roomPosition);
         }
 
+        Debug.Log(mapTileCollection.CollectionOrigin);
+
         if (!success)
         {
-            mapTileCollections.Remove(mapTileCollection);
             return;
         }
 
@@ -164,6 +170,8 @@ public class GridMapManager : Singleton<GridMapManager>
 
             success = tilesPlaced >= maxTiles;
         }
+
+        mapTileCollections.Add(mapTileCollection);
     }
 
     public void GenerateHallways()
@@ -185,6 +193,10 @@ public class GridMapManager : Singleton<GridMapManager>
                 continue;
             }
             mapTile.Spawn();
+        }
+        foreach (MapTileCollection mapTileCollection in mapTileCollections)
+        {
+            Instantiate(debugMarker, new Vector3(mapTileCollection.CollectionOrigin.x * mapTileSize, 0, mapTileCollection.CollectionOrigin.y * mapTileSize), Quaternion.identity, debugHolder.transform);
         }
     }
 

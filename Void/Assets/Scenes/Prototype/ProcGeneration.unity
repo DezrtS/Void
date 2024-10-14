@@ -519,6 +519,8 @@ MonoBehaviour:
   floor: {fileID: 5392416673444309645, guid: 9cf00a829defd8d4d83a0816dad7f0b2, type: 3}
   wall: {fileID: 4417452138280026189, guid: 5cbca8cd29492f140902ec61742052cf, type: 3}
   maxRoomAttempts: 100
+  debugMarker: {fileID: 6701413836251729326, guid: cfc14957752c45d4d828602cd5cf7f6c,
+    type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
