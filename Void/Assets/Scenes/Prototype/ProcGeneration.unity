@@ -514,6 +514,8 @@ MonoBehaviour:
   seed: 1234
   mapTilePrefab: {fileID: 7671630724220301803, guid: 1e9c4f23232bcef469f39c6163bec5dc,
     type: 3}
+  floor: {fileID: 3301612806943969791, guid: 9cf00a829defd8d4d83a0816dad7f0b2, type: 3}
+  wall: {fileID: 1853562726948681842, guid: 5cbca8cd29492f140902ec61742052cf, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -12,6 +12,13 @@ public class GridMapManager : Singleton<GridMapManager>
     private readonly List<MapTileCollection> mapTileCollections = new();
     private MapTile[] mapTiles = new MapTile[0];
 
+    [SerializeField] private GameObject floor;
+    [SerializeField] private GameObject wall;
+
+    public float MapTileSize { get { return mapTileSize; } }
+    public GameObject Floor {  get { return floor; } }
+    public GameObject Wall { get { return wall; } }
+
     private void Start()
     {
         GenerateGridMap();
@@ -57,7 +64,7 @@ public class GridMapManager : Singleton<GridMapManager>
     private void GenerateSquareRoom()
     {
         bool success = false;
-        MapTileCollection mapTileCollection = new(MapTileCollectionType.None, Vector2.zero);
+        MapTileCollection mapTileCollection = new(MapTileCollectionType.None, mapTileCollections.Count, Vector2.zero);
         mapTileCollections.Add(mapTileCollection);
 
         int maxAttempts = 100;
@@ -100,7 +107,14 @@ public class GridMapManager : Singleton<GridMapManager>
 
     public void SpawnTiles()
     {
-
+        foreach (MapTile mapTile in mapTiles)
+        {
+            if (!mapTile)
+            {
+                continue;
+            }
+            mapTile.Spawn();
+        }
     }
 
     public bool PlaceMapTile(MapTileCollection mapTileCollection, Vector2 position)
@@ -110,6 +124,7 @@ public class GridMapManager : Singleton<GridMapManager>
             int index = (int) (position.x + position.y * mapLength);
             GameObject spawnedMapTile = Instantiate(mapTilePrefab, new Vector3(position.x * mapTileSize, 0, position.y * mapTileSize), Quaternion.identity, transform);
             MapTile mapTile = spawnedMapTile.GetComponent<MapTile>();
+            mapTile.SetMapTile(mapTileCollection, position);
             mapTiles[index] = mapTile;
             mapTileCollection.MapTiles.Add(mapTile);
             return true;
@@ -122,6 +137,7 @@ public class GridMapManager : Singleton<GridMapManager>
         int index = (int)(position.x + position.y * mapLength);
         GameObject spawnedMapTile = Instantiate(mapTilePrefab, new Vector3(position.x * mapTileSize, 0, position.y * mapTileSize), Quaternion.identity, transform);
         MapTile mapTile = spawnedMapTile.GetComponent<MapTile>();
+        mapTile.SetMapTile(mapTileCollection, position);
         mapTiles[index] = mapTile;
         mapTileCollection.MapTiles.Add(mapTile);
     }
