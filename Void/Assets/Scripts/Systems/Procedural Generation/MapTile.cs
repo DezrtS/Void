@@ -7,6 +7,8 @@ public class MapTile : MonoBehaviour
     private MapTileCollection parentCollection;
     private Vector2 position;
 
+    public Vector2 Position {  get { return position; } }
+
     public void SetMapTile(MapTileCollection parentCollection, Vector2 position)
     {
         this.parentCollection = parentCollection;
@@ -26,19 +28,19 @@ public class MapTile : MonoBehaviour
 
         if (hasNorthWall == null || hasNorthWall.parentCollection.Id != parentCollection.Id)
         {
-            Instantiate(gridMapManager.Wall, transform.position + new Vector3(0, 0, mapTileSize / 2), Quaternion.Euler(0, 90, 0), transform);
+            Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 0, 0), transform);
         }
         if (hasEastWall == null || hasEastWall.parentCollection.Id != parentCollection.Id)
         {
-            Instantiate(gridMapManager.Wall, transform.position + new Vector3(mapTileSize / 2, 0, 0), Quaternion.Euler(0, 180, 0), transform);
+            Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 90, 0), transform);
         }
         if (hasSouthWall == null || hasSouthWall.parentCollection.Id != parentCollection.Id)
         {
-            Instantiate(gridMapManager.Wall, transform.position - new Vector3(0, 0, mapTileSize / 2), Quaternion.Euler(0, 270, 0), transform);
+            Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 180, 0), transform);
         }
         if (hasWestWall == null || hasWestWall.parentCollection.Id != parentCollection.Id)
         {
-            Instantiate(gridMapManager.Wall, transform.position - new Vector3(mapTileSize / 2, 0, 0), Quaternion.Euler(0, 0, 0), transform);
+            Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 270, 0), transform);
         }
     }
 }

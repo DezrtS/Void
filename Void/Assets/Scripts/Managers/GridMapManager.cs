@@ -3,34 +3,38 @@ using UnityEngine;
 
 public class GridMapManager : Singleton<GridMapManager>
 {
+    [Header("Grid Map Parameters")]
+    [SerializeField] private int seed = 1234;
     [SerializeField] private int mapLength = 25;
     [SerializeField] private int mapWidth = 25;
     [SerializeField] private float mapTileSize = 10;
+    [SerializeField] private int minRoomSize = 3;
+    [SerializeField] private int maxRoomSize = 20;
     [SerializeField] private int roomCount = 5;
-    [SerializeField] private int seed = 1234;
+    [Space(10)]
+    [Header("Prefabs")]
     [SerializeField] private GameObject mapTilePrefab;
-    private readonly List<MapTileCollection> mapTileCollections = new();
-    private MapTile[] mapTiles = new MapTile[0];
-
     [SerializeField] private GameObject floor;
     [SerializeField] private GameObject wall;
+    [Space]
+    [Header("Misc")]
+    [SerializeField] private int maxRoomAttempts = 100;
+
+    private readonly List<MapTileCollection> mapTileCollections = new();
+    private MapTile[] mapTiles = new MapTile[0];
 
     public float MapTileSize { get { return mapTileSize; } }
     public GameObject Floor {  get { return floor; } }
     public GameObject Wall { get { return wall; } }
 
-    private void Start()
-    {
-        GenerateGridMap();
-        GenerateRooms();
-    }
-
-    public void SetGridMapParameters(int seed, int mapLength, int mapWidth, float mapTileSize, int roomCount)
+    public void SetGridMapParameters(int seed, int mapLength, int mapWidth, float mapTileSize, int minRoomSize, int maxRoomSize, int roomCount)
     {
         this.seed = seed;
         this.mapLength = mapLength;
         this.mapWidth = mapWidth;
         this.mapTileSize = mapTileSize;
+        this.minRoomSize = minRoomSize;
+        this.maxRoomSize = maxRoomSize;
         this.roomCount = roomCount;
     }
 
@@ -57,42 +61,109 @@ public class GridMapManager : Singleton<GridMapManager>
     {
         for (int i = 0; i < roomCount; i++)
         {
-            GenerateSquareRoom();
+            GenerateRandomRoom();
         }
     }
 
-    private void GenerateSquareRoom()
+    private void GenerateRectangularRoom()
     {
         bool success = false;
         MapTileCollection mapTileCollection = new(MapTileCollectionType.None, mapTileCollections.Count, Vector2.zero);
         mapTileCollections.Add(mapTileCollection);
 
-        int maxAttempts = 100;
         int attempt = 0;
-
-        while (!success && attempt < maxAttempts)
+        while (!success && attempt < maxRoomAttempts)
         {
             attempt++;
-            int roomSize = Random.Range(3, 25);
+            int roomLength = Random.Range(minRoomSize, maxRoomSize);
+            int roomWidth = Random.Range(minRoomSize, maxRoomSize);
 
-            Vector2 roomPosition = new(Random.Range(0, mapLength - roomSize), Random.Range(0, mapWidth - roomSize));
+            Vector2 roomPosition = new(Random.Range(0, mapLength - roomLength), Random.Range(0, mapWidth - roomWidth));
 
-            Vector2[] mapTilePositions = new Vector2[roomSize * roomSize];
-            for (int x = 0; x < roomSize; x++)
+            Vector2[] mapTilePositions = new Vector2[roomLength * roomWidth];
+            for (int y = 0; y < roomWidth; y++)
             {
-                for (int y = 0; y < roomSize; y++)
+                for (int x = 0; x < roomLength; x++)
                 {
-                    mapTilePositions[x * roomSize + y] = new Vector2(roomPosition.x + x, roomPosition.y + y);
+                    mapTilePositions[x + roomLength * y] = new Vector2(roomPosition.x + x, roomPosition.y + y);
                 }
             }
 
             success = PlaceMapTiles(mapTileCollection, mapTilePositions);
             if (!success)
             {
-                Debug.LogWarning($"Failed to generate room, retrying (Attempt: {attempt} / {maxAttempts})");
+                Debug.LogWarning($"Failed to generate room, retrying (Attempt: {attempt} / {maxRoomAttempts})");
             }
         }
 
+        if (!success)
+        {
+            mapTileCollections.Remove(mapTileCollection);
+        }
+    }
+
+    private void GenerateRandomRoom()
+    {
+        bool success = false;
+        MapTileCollection mapTileCollection = new(MapTileCollectionType.None, mapTileCollections.Count, Vector2.zero);
+        mapTileCollections.Add(mapTileCollection);
+
+        int attempt = 0;
+        while (!success && attempt < maxRoomAttempts)
+        {
+            attempt++;
+            Vector2 roomPosition = new(Random.Range(0, mapLength), Random.Range(0, mapWidth));
+            success = PlaceMapTile(mapTileCollection, roomPosition);
+        }
+
+        if (!success)
+        {
+            mapTileCollections.Remove(mapTileCollection);
+            return;
+        }
+
+        attempt = 0;
+        success = false;
+        int maxTiles = Random.Range(minRoomSize * minRoomSize, maxRoomSize * 2);
+        int tilesPlaced = 0;
+        while (!success && attempt < maxRoomAttempts)
+        {
+            attempt++;
+            MapTile tile = mapTileCollection.MapTiles[Random.Range(0, mapTileCollection.MapTiles.Count)];
+
+            int direction = Random.Range(0, 4);
+
+            if (direction == 0)
+            {
+                if (PlaceMapTile(mapTileCollection, tile.Position + new Vector2(1, 0)))
+                {
+                    tilesPlaced++;
+                }
+            }
+            else if (direction == 1)
+            {
+                if (PlaceMapTile(mapTileCollection, tile.Position + new Vector2(0, 1)))
+                {
+                    tilesPlaced++;
+                }
+            }
+            else if (direction == 2)
+            {
+                if (PlaceMapTile(mapTileCollection, tile.Position - new Vector2(1, 0)))
+                {
+                    tilesPlaced++;
+                }
+            }
+            else if (direction == 3)
+            {
+                if (PlaceMapTile(mapTileCollection, tile.Position - new Vector2(0, 1)))
+                {
+                    tilesPlaced++;
+                }
+            }
+
+            success = tilesPlaced >= maxTiles;
+        }
     }
 
     public void GenerateHallways()

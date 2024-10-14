@@ -14,9 +14,6 @@ public class GridMapEditor : Editor
         {
             GridMapManager.Instance.GenerateGridMap();
             GridMapManager.Instance.GenerateRooms();
-        }
-        if (GUILayout.Button("SPAWN MAP TILES"))
-        {
             GridMapManager.Instance.SpawnTiles();
         }
         EditorGUI.EndDisabledGroup();
