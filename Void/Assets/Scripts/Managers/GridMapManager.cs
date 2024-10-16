@@ -12,6 +12,10 @@ public class GridMapManager : Singleton<GridMapManager>
     [SerializeField] private int maxRoomSize = 20;
     [SerializeField] private int roomCount = 5;
     [Space(10)]
+    [Header("Options")]
+    [SerializeField] private bool enableCollectionOriginMarkers;
+    [SerializeField] private bool enableTriangulationVisualization;
+    [Space(10)]
     [Header("Prefabs")]
     [SerializeField] private GameObject mapTilePrefab;
     [SerializeField] private GameObject floor;
@@ -121,8 +125,6 @@ public class GridMapManager : Singleton<GridMapManager>
             success = PlaceMapTile(mapTileCollection, roomPosition);
         }
 
-        Debug.Log(mapTileCollection.CollectionOrigin);
-
         if (!success)
         {
             return;
@@ -194,9 +196,12 @@ public class GridMapManager : Singleton<GridMapManager>
             }
             mapTile.Spawn();
         }
-        foreach (MapTileCollection mapTileCollection in mapTileCollections)
+        if (enableCollectionOriginMarkers)
         {
-            Instantiate(debugMarker, new Vector3(mapTileCollection.CollectionOrigin.x * mapTileSize, 0, mapTileCollection.CollectionOrigin.y * mapTileSize), Quaternion.identity, debugHolder.transform);
+            foreach (MapTileCollection mapTileCollection in mapTileCollections)
+            {
+                Instantiate(debugMarker, new Vector3(mapTileCollection.CollectionOrigin.x * mapTileSize, 0, mapTileCollection.CollectionOrigin.y * mapTileSize), Quaternion.identity, debugHolder.transform);
+            }
         }
     }
 
@@ -268,5 +273,43 @@ public class GridMapManager : Singleton<GridMapManager>
             return mapTiles[index];
         }
         return null;
+    }
+
+    public void GenerateRoomConnections()
+    {
+        List<Vector2> points = new List<Vector2>();
+        foreach (MapTileCollection mapTileCollection in mapTileCollections)
+        {
+            points.Add(mapTileCollection.CollectionOrigin);
+        }
+
+        if (points.Count <= 2)
+        {
+            return;
+        }
+
+        Delaunay delaunay = Delaunay.Triangulate(points);
+
+        EdgeVisualizer visualizer = GetComponent<EdgeVisualizer>();
+        if (enableTriangulationVisualization)
+        {
+            visualizer.DrawEdges(delaunay.Edges, true);
+        } 
+        else
+        {
+            visualizer.ClearLines();
+        }
+
+        PrimMST primMST = PrimMST.Construct(delaunay.Edges, points[0]);
+
+        foreach (Edge edge in primMST.DiscardedEdges)
+        {
+            if (Random.Range(1, 101) < 12.5f)
+            {
+                primMST.MinimumSpanningTree.Add(edge);
+            }
+        }
+
+        visualizer.DrawEdges(primMST.MinimumSpanningTree, true);
     }
 }

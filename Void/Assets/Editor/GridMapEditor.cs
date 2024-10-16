@@ -15,6 +15,7 @@ public class GridMapEditor : Editor
             GridMapManager.Instance.GenerateGridMap();
             GridMapManager.Instance.GenerateRooms();
             GridMapManager.Instance.SpawnTiles();
+            GridMapManager.Instance.GenerateRoomConnections();
         }
         EditorGUI.EndDisabledGroup();
     }

@@ -473,6 +473,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1757736483}
   - component: {fileID: 1757736484}
+  - component: {fileID: 1757736485}
   m_Layer: 0
   m_Name: GridMapManager
   m_TagString: Untagged
@@ -514,6 +515,8 @@ MonoBehaviour:
   minRoomSize: 3
   maxRoomSize: 20
   roomCount: 5
+  enableCollectionOriginMarkers: 1
+  enableTriangulationVisualization: 1
   mapTilePrefab: {fileID: 7671630724220301803, guid: 1e9c4f23232bcef469f39c6163bec5dc,
     type: 3}
   floor: {fileID: 5392416673444309645, guid: 9cf00a829defd8d4d83a0816dad7f0b2, type: 3}
@@ -521,6 +524,19 @@ MonoBehaviour:
   maxRoomAttempts: 100
   debugMarker: {fileID: 6701413836251729326, guid: cfc14957752c45d4d828602cd5cf7f6c,
     type: 3}
+--- !u!114 &1757736485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757736482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 817f243bdf93592459b5cc4f6b181cfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineMaterial: {fileID: 2100000, guid: 64bf73e7ec621b943a1619d82a20ca31, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
