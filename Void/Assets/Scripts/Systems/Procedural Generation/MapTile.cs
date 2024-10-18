@@ -5,11 +5,12 @@ using UnityEngine;
 public class MapTile : MonoBehaviour
 {
     private MapTileCollection parentCollection;
-    private Vector2 position;
+    private Vector2Int position;
 
-    public Vector2 Position {  get { return position; } }
+    public MapTileCollection ParentCollection { get { return parentCollection; } }
+    public Vector2Int Position {  get { return position; } }
 
-    public void SetMapTile(MapTileCollection parentCollection, Vector2 position)
+    public void SetMapTile(MapTileCollection parentCollection, Vector2Int position)
     {
         this.parentCollection = parentCollection;
         this.position = position;
@@ -21,10 +22,10 @@ public class MapTile : MonoBehaviour
         float mapTileSize = gridMapManager.MapTileSize;
         Instantiate(gridMapManager.Floor, transform.position, Quaternion.identity, transform);
 
-        MapTile hasNorthWall = gridMapManager.GetMapTile(position + new Vector2(0, 1));
-        MapTile hasEastWall = gridMapManager.GetMapTile(position + new Vector2(1, 0));
-        MapTile hasSouthWall = gridMapManager.GetMapTile(position + new Vector2(0, -1));
-        MapTile hasWestWall = gridMapManager.GetMapTile(position + new Vector2(-1, 0));
+        MapTile hasNorthWall = gridMapManager.GetMapTile(position + new Vector2Int(0, 1));
+        MapTile hasEastWall = gridMapManager.GetMapTile(position + new Vector2Int(1, 0));
+        MapTile hasSouthWall = gridMapManager.GetMapTile(position + new Vector2Int(0, -1));
+        MapTile hasWestWall = gridMapManager.GetMapTile(position + new Vector2Int(-1, 0));
 
         if (hasNorthWall == null || hasNorthWall.parentCollection.Id != parentCollection.Id)
         {

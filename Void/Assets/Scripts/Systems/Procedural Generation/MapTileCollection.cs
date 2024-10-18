@@ -12,10 +12,10 @@ public struct MapTileCollection
 {
     public MapTileCollectionType MapTileCollectionType;
     public int Id;
-    public Vector2 CollectionOrigin;
+    public Vector2Int CollectionOrigin;
     public List<MapTile> MapTiles;
 
-    public MapTileCollection(MapTileCollectionType mapTileCollectionType, int id, Vector2 collectionOrigin)
+    public MapTileCollection(MapTileCollectionType mapTileCollectionType, int id, Vector2Int collectionOrigin)
     {
         MapTileCollectionType = mapTileCollectionType;
         Id = id;
