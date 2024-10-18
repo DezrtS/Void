@@ -7,7 +7,7 @@ public class EdgeVisualizer : MonoBehaviour
     public Material lineMaterial;
     private GameObject lineHolder;
 
-    public void DrawEdges(List<Edge> edges, bool useGridMap)
+    public void DrawEdges(List<Prim.Edge> edges, bool useGridMap)
     {
         ClearLines();
         lineHolder = new GameObject("Line Holder");
@@ -15,14 +15,14 @@ public class EdgeVisualizer : MonoBehaviour
         {
             foreach (var edge in edges)
             {
-                DrawGridMapLine(edge.A, edge.B);
+                DrawGridMapLine(edge.U.Position, edge.V.Position);
             }
         }
         else
         {
             foreach (var edge in edges)
             {
-                DrawLine(edge.A, edge.B);
+                DrawLine(edge.U.Position, edge.V.Position);
             }
         }
     }
@@ -42,7 +42,7 @@ public class EdgeVisualizer : MonoBehaviour
 
     void DrawGridMapLine(Vector2 p1, Vector2 p2)
     {
-        float tileSize = GridMapManager.Instance.MapTileSize;
+        float tileSize = GridMapManager.Instance.TileSize;
         GameObject line = new GameObject("Edge");
         line.transform.parent = lineHolder.transform;
         LineRenderer lr = line.AddComponent<LineRenderer>();

@@ -509,14 +509,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 1234
-  mapLength: 50
-  mapWidth: 50
-  mapTileSize: 1
+  size: {x: 50, y: 50}
+  tileSize: 1
   minRoomSize: 3
   maxRoomSize: 20
-  roomCount: 5
-  enableCollectionOriginMarkers: 1
-  enableTriangulationVisualization: 1
+  roomCount: 10
+  spawnCollectionOrigins: 1
+  drawRoomConnections: 1
   mapTilePrefab: {fileID: 7671630724220301803, guid: 1e9c4f23232bcef469f39c6163bec5dc,
     type: 3}
   floor: {fileID: 5392416673444309645, guid: 9cf00a829defd8d4d83a0816dad7f0b2, type: 3}

@@ -12,9 +12,9 @@ public class GridMapEditor : Editor
         EditorGUI.BeginDisabledGroup(!Application.isPlaying);
         if (GUILayout.Button("GENERATE NEW GRID MAP"))
         {
-            GridMapManager.Instance.GenerateGridMap();
+            GridMapManager.Instance.InitializeGridMap();
             GridMapManager.Instance.GenerateRooms();
-            GridMapManager.Instance.GenerateRoomConnections();
+            GridMapManager.Instance.GenerateHallways();
             GridMapManager.Instance.SpawnTiles();
         }
         EditorGUI.EndDisabledGroup();
