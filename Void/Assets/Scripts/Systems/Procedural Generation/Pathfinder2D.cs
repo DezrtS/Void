@@ -36,6 +36,7 @@ public class Pathfinder2D
     SimplePriorityQueue<Node, float> queue;
     HashSet<Node> closed;
     Stack<Vector2Int> stack;
+    private float straightness = 0.5f;
 
     public Pathfinder2D(Vector2Int size)
     {
@@ -80,11 +81,24 @@ public class Pathfinder2D
 
         grid[start].Cost = 0;
         queue.Enqueue(grid[start], 0);
+        bool wasHorizontal = end.x -  start.x > end.y - start.y;
+        int horizontalCostFactor = 1;
 
         while (queue.Count > 0)
         {
             Node node = queue.Dequeue();
             closed.Add(node);
+
+            if (node.Previous != null)
+            {
+                bool isHorizontal = node.Position.y == node.Previous.Position.y;
+
+                if (isHorizontal != wasHorizontal)
+                {
+                    wasHorizontal = isHorizontal;
+                    horizontalCostFactor++;
+                }
+            }
 
             if (node.Position == end)
             {
@@ -97,7 +111,12 @@ public class Pathfinder2D
                 var neighbor = grid[node.Position + offset];
                 if (closed.Contains(neighbor)) continue;
 
+                bool isHorizontal = node.Position.y == neighbor.Position.y;
                 var pathCost = costFunction(node, neighbor);
+                if (isHorizontal != wasHorizontal)
+                {
+                    pathCost.cost += straightness * horizontalCostFactor;
+                }
                 float newCost;
                 if (pathCost.isGoal) 
                 {

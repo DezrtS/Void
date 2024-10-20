@@ -20,7 +20,8 @@ public class MapTile : MonoBehaviour
     {
         GridMapManager gridMapManager = GridMapManager.Instance;
         float mapTileSize = gridMapManager.TileSize;
-        Instantiate(gridMapManager.Floor, transform.position, Quaternion.identity, transform);
+        GameObject floor = Instantiate(gridMapManager.Floor, transform.position, Quaternion.identity, transform);
+        floor.transform.localScale = mapTileSize * Vector3.one;
 
         bool isHallway = parentCollection.MapTileCollectionType == MapTileCollectionType.Hallway;
 
@@ -33,45 +34,53 @@ public class MapTile : MonoBehaviour
         {
             if (hasNorthWall.parentCollection.Id != parentCollection.Id && !(isHallway && hasNorthWall.parentCollection.MapTileCollectionType == MapTileCollectionType.Hallway))
             {
-                Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 0, 0), transform);
+                GameObject wall = Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 0, 0), transform);
+                wall.transform.localScale = mapTileSize * Vector3.one;
             }
         }
         else
         {
-            Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 0, 0), transform);
+            GameObject wall = Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 0, 0), transform);
+            wall.transform.localScale = mapTileSize * Vector3.one;
         }
         if (hasEastWall)
         {
             if (hasEastWall.parentCollection.Id != parentCollection.Id && !(isHallway && hasEastWall.parentCollection.MapTileCollectionType == MapTileCollectionType.Hallway))
             {
-                Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 90, 0), transform);
+                GameObject wall = Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 90, 0), transform);
+                wall.transform.localScale = mapTileSize * Vector3.one;
             }
         }
         else
         {
-            Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 90, 0), transform);
+            GameObject wall = Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 90, 0), transform);
+            wall.transform.localScale = mapTileSize * Vector3.one;
         }
         if (hasSouthWall)
         {
             if (hasSouthWall.parentCollection.Id != parentCollection.Id && !(isHallway && hasSouthWall.parentCollection.MapTileCollectionType == MapTileCollectionType.Hallway))
             {
-                Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 180, 0), transform);
+                GameObject wall = Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 180, 0), transform);
+                wall.transform.localScale = mapTileSize * Vector3.one;
             }
         }
         else
         {
-            Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 180, 0), transform);
+            GameObject wall = Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 180, 0), transform);
+            wall.transform.localScale = mapTileSize * Vector3.one;
         }
         if (hasWestWall)
         {
             if (hasWestWall.parentCollection.Id != parentCollection.Id && !(isHallway && hasWestWall.parentCollection.MapTileCollectionType == MapTileCollectionType.Hallway))
             {
-                Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 270, 0), transform);
+                GameObject wall = Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 270, 0), transform);
+                wall.transform.localScale = mapTileSize * Vector3.one;
             }
         }
         else
         {
-            Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 270, 0), transform);
+            GameObject wall = Instantiate(gridMapManager.Wall, transform.position, Quaternion.Euler(0, 270, 0), transform);
+            wall.transform.localScale = mapTileSize * Vector3.one;
         }
     }
 }

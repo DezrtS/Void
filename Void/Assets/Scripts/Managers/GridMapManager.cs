@@ -90,6 +90,8 @@ public class GridMapManager : Singleton<GridMapManager>
         }
     }
 
+
+
     private void GenerateRectangularRoom()
     {
         bool success = false;
@@ -209,7 +211,8 @@ public class GridMapManager : Singleton<GridMapManager>
         List<Vertex> points = new List<Vertex>();
         foreach (MapTileCollection mapTileCollection in mapTileCollections)
         {
-            points.Add(new Vertex(mapTileCollection.CollectionOrigin));
+            // By Using the Collection Average Position, it is not guarenteed that that position contains a goal tile, which could void the path/connection to the room in question.
+            points.Add(new Vertex(mapTileCollection.CollectionAveragePosition));
         }
 
         Delaunay2D delaunay = Delaunay2D.Triangulate(points);
@@ -219,6 +222,11 @@ public class GridMapManager : Singleton<GridMapManager>
         foreach (var edge in delaunay.Edges)
         {
             edges.Add(new Prim.Edge(edge.U, edge.V));
+        }
+
+        if (edges.Count < 1)
+        {
+            return;
         }
 
         List<Prim.Edge> mst = Prim.MinimumSpanningTree(edges, edges[0].U);
@@ -266,12 +274,25 @@ public class GridMapManager : Singleton<GridMapManager>
 
                 if (gridMap[b.Position])
                 {
-                    pathInfo.isStart = gridMap[b.Position].ParentCollection.Id == startCollectionId;
-                    pathInfo.isGoal = gridMap[b.Position].ParentCollection.Id == endCollectionId;
-                    pathInfo.traversable = gridMap[b.Position].ParentCollection.MapTileCollectionType == MapTileCollectionType.Hallway;
+                    MapTile mapTile = gridMap[b.Position];
+                    MapTileCollectionType mapTileCollectionType = mapTile.ParentCollection.MapTileCollectionType;
+
+                    pathInfo.isStart = mapTile.ParentCollection.Id == startCollectionId;
+                    pathInfo.isGoal = mapTile.ParentCollection.Id == endCollectionId;
+
+                    if (mapTileCollectionType == MapTileCollectionType.Hallway)
+                    {
+                        pathInfo.cost += 5;
+                        pathInfo.traversable = true;
+                    }
+                    else
+                    {
+                        pathInfo.traversable = false;
+                    }
                 }
                 else
                 {
+                    pathInfo.cost += 10;
                     pathInfo.traversable = true;
                 }
 
@@ -280,7 +301,7 @@ public class GridMapManager : Singleton<GridMapManager>
 
             if (path != null)
             {
-                MapTileCollection mapTileCollection = new(MapTileCollectionType.Hallway, mapTileCollections.Count, path[1]);
+                MapTileCollection mapTileCollection = new(MapTileCollectionType.Hallway, mapTileCollections.Count, path[0]);
                 mapTileCollections.Add(mapTileCollection);
                 PlaceMapPossibleTiles(mapTileCollection, path);
             }
@@ -308,7 +329,7 @@ public class GridMapManager : Singleton<GridMapManager>
         {
             foreach (MapTileCollection mapTileCollection in mapTileCollections)
             {
-                Instantiate(debugMarker, new Vector3(mapTileCollection.CollectionOrigin.x * tileSize, 0, mapTileCollection.CollectionOrigin.y * tileSize), Quaternion.identity, debugHolder.transform);
+                Instantiate(debugMarker, new Vector3(mapTileCollection.CollectionAveragePosition.x * tileSize, 0, mapTileCollection.CollectionAveragePosition.y * tileSize), Quaternion.identity, debugHolder.transform);
             }
         }
     }
@@ -321,7 +342,7 @@ public class GridMapManager : Singleton<GridMapManager>
             MapTile mapTile = spawnedMapTile.GetComponent<MapTile>();
             mapTile.SetMapTile(mapTileCollection, position);
             gridMap[position] = mapTile;
-            mapTileCollection.MapTiles.Add(mapTile);
+            mapTileCollection.AddMapTile(mapTile);
             return true;
         }
         return false;
@@ -333,7 +354,7 @@ public class GridMapManager : Singleton<GridMapManager>
         MapTile mapTile = spawnedMapTile.GetComponent<MapTile>();
         mapTile.SetMapTile(mapTileCollection, position);
         gridMap[position] = mapTile;
-        mapTileCollection.MapTiles.Add(mapTile);
+        mapTileCollection.AddMapTile(mapTile);
     }
 
     public void ForcePlaceMapTiles(MapTileCollection mapTileCollection, List<Vector2Int> positions)
@@ -396,6 +417,10 @@ public class GridMapManager : Singleton<GridMapManager>
 
     public MapTile GetMapTile(Vector2Int position)
     {
-        return gridMap[position];
+        if (gridMap.InBounds(position))
+        {
+            return gridMap[position];
+        }
+        return null;
     }
 }
