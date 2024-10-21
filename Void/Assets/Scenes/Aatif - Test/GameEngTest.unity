@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 202921037}
   - component: {fileID: 202921041}
   m_Layer: 0
-  m_Name: Spike
+  m_Name: Bullet
   m_TagString: Dmg
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -222,8 +222,8 @@ Transform:
   m_GameObject: {fileID: 202921036}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.3537645, y: 0.259, z: 4.4438334}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.3537645, y: 1.489, z: 4.4438334}
+  m_LocalScale: {x: 0.43752, y: 0.4087028, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
