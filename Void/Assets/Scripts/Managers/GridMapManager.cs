@@ -10,6 +10,10 @@ public class GridMapManager : Singleton<GridMapManager>
     [SerializeField] private int minRoomSize = 3;
     [SerializeField] private int maxRoomSize = 20;
     [SerializeField] private int roomCount = 5;
+    [Range(0, 100)]
+    [SerializeField] private float additionalHallwayChance = 12.5f;
+    [Range(0, 100)]
+    [SerializeField] private float randomRoomChance = 30f;
     [SerializeField] private int maxRoomAttempts = 100;
     [Space(10)]
     [Header("Tile Spawning Parameters")]
@@ -30,8 +34,8 @@ public class GridMapManager : Singleton<GridMapManager>
 
     private Grid2D<MapTile> gridMap;
     private Grid2D<InteriorTile> interiorGridMap;
-    private List<TileCollection> tileCollections = new List<TileCollection>();
-    private List<FixtureInstance> fixtureInstances = new List<FixtureInstance>();
+    private readonly List<TileCollection> tileCollections = new List<TileCollection>();
+    private readonly List<FixtureInstance> fixtureInstances = new List<FixtureInstance>();
 
     private GameObject debugHolder;
     private GameObject levelHolder;
@@ -95,7 +99,7 @@ public class GridMapManager : Singleton<GridMapManager>
     {
         for (int i = 0; i < roomCount; i++)
         {
-            if (Roll(30))
+            if (Roll(randomRoomChance))
             {
                 GenerateRandomRoom();
             }
@@ -251,7 +255,7 @@ public class GridMapManager : Singleton<GridMapManager>
 
         foreach (var edge in remainingEdges)
         {
-            if (Roll(12.5f))
+            if (Roll(additionalHallwayChance))
             {
                 chosenEdges.Add(edge);
             }
