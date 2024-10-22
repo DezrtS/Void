@@ -138,7 +138,7 @@ public class GridMapManager : Singleton<GridMapManager>
                 }
             }
 
-            success = PlaceMapTiles(tileCollection, mapTilePositions);
+            success = PlaceMapTiles(tileCollection, MapTile.MapTileType.Room, mapTilePositions);
         }
 
         if (success)
@@ -162,7 +162,7 @@ public class GridMapManager : Singleton<GridMapManager>
         {
             attempt++;
             Vector2Int roomPosition = new(Random.Range(0, gridSize.x), Random.Range(0, gridSize.y));
-            success = PlaceMapTile(tileCollection, roomPosition);
+            success = PlaceMapTile(tileCollection, MapTile.MapTileType.Room, roomPosition);
         }
 
         if (!success)
@@ -184,28 +184,28 @@ public class GridMapManager : Singleton<GridMapManager>
 
             if (direction == 0)
             {
-                if (PlaceMapTile(tileCollection, position + new Vector2Int(1, 0)))
+                if (PlaceMapTile(tileCollection, MapTile.MapTileType.Room, position + new Vector2Int(1, 0)))
                 {
                     tilesPlaced++;
                 }
             }
             else if (direction == 1)
             {
-                if (PlaceMapTile(tileCollection, position + new Vector2Int(0, 1)))
+                if (PlaceMapTile(tileCollection, MapTile.MapTileType.Room, position + new Vector2Int(0, 1)))
                 {
                     tilesPlaced++;
                 }
             }
             else if (direction == 2)
             {
-                if (PlaceMapTile(tileCollection, position - new Vector2Int(1, 0)))
+                if (PlaceMapTile(tileCollection, MapTile.MapTileType.Room, position - new Vector2Int(1, 0)))
                 {
                     tilesPlaced++;
                 }
             }
             else if (direction == 3)
             {
-                if (PlaceMapTile(tileCollection, position - new Vector2Int(0, 1)))
+                if (PlaceMapTile(tileCollection, MapTile.MapTileType.Room, position - new Vector2Int(0, 1)))
                 {
                     tilesPlaced++;
                 }
@@ -325,7 +325,7 @@ public class GridMapManager : Singleton<GridMapManager>
                 tileCollection.AddConnection(path[1], path[0]);
                 tileCollection.AddConnection(path[path.Count - 2], path[path.Count - 1]);
 
-                PlaceMapPossibleTiles(tileCollection, path);
+                PlaceMapPossibleTiles(tileCollection, MapTile.MapTileType.Hallway, path);
             }
         }
 
@@ -410,11 +410,11 @@ public class GridMapManager : Singleton<GridMapManager>
         }
     }
 
-    public bool PlaceMapTile(TileCollection tileCollection, Vector2Int position)
+    public bool PlaceMapTile(TileCollection tileCollection, MapTile.MapTileType type, Vector2Int position)
     {
         if (CanPlaceMapTile(position))
         {
-            MapTile mapTile = new MapTile(MapTile.MapTileType.Room, tileCollection);
+            MapTile mapTile = new MapTile(type, tileCollection);
             gridMap[position] = mapTile;
             tileCollection.AddMapTilePosition(position);
             return true;
@@ -422,30 +422,30 @@ public class GridMapManager : Singleton<GridMapManager>
         return false;
     }
 
-    public void ForcePlaceMapTile(TileCollection tileCollection, Vector2Int position)
+    public void ForcePlaceMapTile(TileCollection tileCollection, MapTile.MapTileType type, Vector2Int position)
     {
-        MapTile mapTile = new MapTile(MapTile.MapTileType.Room, tileCollection);
+        MapTile mapTile = new MapTile(type, tileCollection);
         gridMap[position] = mapTile;
         tileCollection.AddMapTilePosition(position);
     }
 
-    public void ForcePlaceMapTiles(TileCollection tileCollection, List<Vector2Int> positions)
+    public void ForcePlaceMapTiles(TileCollection tileCollection, MapTile.MapTileType type, List<Vector2Int> positions)
     {
         foreach (Vector2Int position in positions)
         {
-            ForcePlaceMapTile(tileCollection, position);
+            ForcePlaceMapTile(tileCollection, type, position);
         }
     }
 
-    public void ForcePlaceMapTiles(TileCollection tileCollection, HashSet<Vector2> positions)
+    public void ForcePlaceMapTiles(TileCollection tileCollection, MapTile.MapTileType type, HashSet<Vector2> positions)
     {
         foreach (Vector2 position in positions)
         {
-            ForcePlaceMapTile(tileCollection, new Vector2Int((int)position.x, (int)position.y));
+            ForcePlaceMapTile(tileCollection, type, new Vector2Int((int)position.x, (int)position.y));
         }
     }
 
-    public bool PlaceMapTiles(TileCollection tileCollection, List<Vector2Int> positions)
+    public bool PlaceMapTiles(TileCollection tileCollection, MapTile.MapTileType type, List<Vector2Int> positions)
     {
         if (!CanPlaceMapTiles(positions))
         {
@@ -453,16 +453,16 @@ public class GridMapManager : Singleton<GridMapManager>
         }
         foreach (Vector2Int position in positions)
         {
-            ForcePlaceMapTile(tileCollection, position);
+            ForcePlaceMapTile(tileCollection, type, position);
         }
         return true;
     }
 
-    public void PlaceMapPossibleTiles(TileCollection tileCollection, List<Vector2Int> positions)
+    public void PlaceMapPossibleTiles(TileCollection tileCollection, MapTile.MapTileType type, List<Vector2Int> positions)
     {
         foreach (Vector2Int position in positions)
         {
-            PlaceMapTile(tileCollection, position);
+            PlaceMapTile(tileCollection, type, position);
         }
     }
 

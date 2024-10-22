@@ -5,33 +5,27 @@ using FMODUnity;
 
 public class AudioManager : Singleton<AudioManager>
 {
-    private List<EventInstance> eventInstances;
-    private List<StudioEventEmitter> eventEmitters;
+    private readonly List<EventInstance> eventInstances = new List<EventInstance>();
 
-    private EventInstance musicEventInstance;
-
-    protected override void Awake()
+    public EventInstance CreateEventInstance(EventReference eventReference)
     {
-        base.Awake();
-
-        eventInstances = new List<EventInstance>();
-        eventEmitters = new List<StudioEventEmitter>();
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        eventInstances.Add(eventInstance);
+        return eventInstance;
     }
 
-    private void InitializeMusic(EventReference musicEventReference)
+    public EventInstance CreateEventInstance(EventReference eventReference, GameObject attachTo)
     {
-        musicEventInstance = CreateInstance(musicEventReference);
-        musicEventInstance.start();
+        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
+        eventInstances.Add(eventInstance);
+        RuntimeManager.AttachInstanceToGameObject(eventInstance, attachTo);
+        return eventInstance;
     }
 
-    public void SetMusicParameter(string name, float value)
+    public void RemoveEventInstance(EventInstance eventInstance)
     {
-        musicEventInstance.setParameterByName(name, value);
-    }
-
-    public void PlayOneShot(EventReference sound, Vector3 worldPosition)
-    {
-        RuntimeManager.PlayOneShot(sound, worldPosition);
+        eventInstances.Remove(eventInstance);
+        RuntimeManager.DetachInstanceFromGameObject(eventInstance);
     }
 
     public void PlayOneShot(EventReference sound)
@@ -39,19 +33,9 @@ public class AudioManager : Singleton<AudioManager>
         RuntimeManager.PlayOneShot(sound);
     }
 
-    public EventInstance CreateInstance(EventReference eventReference)
+    public void PlayOneShot(EventReference sound, Vector3 worldPosition)
     {
-        EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
-        eventInstances.Add(eventInstance);
-        return eventInstance;
-    }
-
-    public StudioEventEmitter InitializeEventEmitter(EventReference eventReference, GameObject emitterGameObject)
-    {
-        StudioEventEmitter emitter = emitterGameObject.GetComponent<StudioEventEmitter>();
-        emitter.EventReference = eventReference;
-        eventEmitters.Add(emitter);
-        return emitter;
+        RuntimeManager.PlayOneShot(sound, worldPosition);
     }
 
     public void CleanUp()
@@ -62,15 +46,11 @@ public class AudioManager : Singleton<AudioManager>
             eventInstance.release();
         }
 
-        foreach (StudioEventEmitter emitter in eventEmitters)
-        {
-            emitter.Stop();
-        }
+        eventInstances.Clear();
     }
 
     private void OnDestroy()
     {
         CleanUp();
     }
-
 }
