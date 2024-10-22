@@ -5,7 +5,7 @@ using UnityEngine;
 public class AatifPlayerMove : MonoBehaviour
 {
     public int health = 10;
-
+    float speed = 15;
 
 
 
@@ -23,22 +23,22 @@ public class AatifPlayerMove : MonoBehaviour
 
     void moveCharacter()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
-            transform.Translate(Vector3.forward);
+            transform.Translate(Vector3.forward * Time.deltaTime * speed);
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S))
         {
-            transform.Translate(Vector3.back);
+            transform.Translate(Vector3.back * Time.deltaTime * speed);
         }
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
-            transform.Translate(Vector3.left);
+            transform.Translate(Vector3.left * Time.deltaTime * speed);
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
-            transform.Translate(Vector3.right);
+            transform.Translate(Vector3.right * Time.deltaTime * speed);
         }
     }
 
