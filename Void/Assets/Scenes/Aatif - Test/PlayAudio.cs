@@ -6,6 +6,6 @@ public class PlayAudio : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        AudioManager.Instance.PlayOneShot(FMODEventsManager.Instance.Sound1, Vector3.zero);
+        AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound1);
     }
 }
