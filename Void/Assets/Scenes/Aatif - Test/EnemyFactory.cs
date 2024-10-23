@@ -7,19 +7,8 @@ public class EnemyFactory : MonoBehaviour
     int fHeatlh;
     float fScale;
     float enemySpeed;
+
   
-
-
-    void Start()
-    {
-        
-    }
-
-   
-    void Update()
-    {
-        
-    }
 
     public int setRandomHealth()
     {
@@ -31,6 +20,8 @@ public class EnemyFactory : MonoBehaviour
     {
         fScale = Random.Range(1f , 3f);
         return fScale;
+
+        
     }
     public float setRandomSpeed()
     {
