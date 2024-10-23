@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Debug Room
   m_EditorClassIdentifier: 
   gridSize: {x: 5, y: 5}
+  GridSize: {x: 2, y: 2}
   tilePositions: []
-  spawnTiles: 0
-  hasInterior: 0
-  roomPrefab: {fileID: 0}
+  SpawnTiles: 0
+  HasInterior: 0
+  RoomPrefab: {fileID: 0}
