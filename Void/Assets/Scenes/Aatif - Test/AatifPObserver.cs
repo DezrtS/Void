@@ -12,6 +12,7 @@ public class AatifPObserver : MonoBehaviour
     public TextMeshProUGUI text;
     public TextMeshPro diaText;
 
+    public TextMeshProUGUI floorLevelTXT;
 
     void Start()
     {
@@ -25,6 +26,7 @@ public class AatifPObserver : MonoBehaviour
         text.SetText("Health: " + player.health.ToString());
         diaText.SetText("Health: " + player.health.ToString());
         onDeath();
+        floorLevelTXT.SetText("Floor: " + GameManagerAatifSingleton.instance.floorLevel.ToString());
     }
 
     private void onDeath()
