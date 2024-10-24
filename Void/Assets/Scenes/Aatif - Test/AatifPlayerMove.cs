@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class AatifPlayerMove : MonoBehaviour
 {
+    /*
+     * This is the player movement class, it may be changed later to allow more functions, it also may require button remapping, and it will need to store its local buttom mapping 
+     * so it is not changed across the server
+     */
+
     public int health = 10;
     float speed = 15;
 
