@@ -6,6 +6,12 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+
+    /*
+     * This enemy script holds how the enemies work in the scene
+     * 
+     * Future Notes: The movement will need to change to work with unity's navMesh or A* 
+     */
     public int eHealth;
     public float scale;
     public float speed;

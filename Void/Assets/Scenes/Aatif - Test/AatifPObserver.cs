@@ -6,6 +6,13 @@ using UnityEngine;
 
 public class AatifPObserver : MonoBehaviour
 {
+
+    /* Explanation
+     * This class observers the player stats then communicates that with UI elements
+     * This allows for the player to not need to talk directly with the objects that need to
+     * be affected by the player. This class helps deal with to many circular dependancies
+     */
+
     AatifPlayerMove player;
 
     public GameObject DeathScreen;
