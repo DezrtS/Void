@@ -49,6 +49,7 @@ public class TaskManager : Singleton<TaskManager>
     public void OnTaskCompletion(Task task)
     {
         Debug.Log($"{task.Data.Name} was completed");
+        AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound1);
         // Send Out Event That Other Observers Can Listen To.
     }
 
