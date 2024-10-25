@@ -10,8 +10,13 @@ public class ButtonTask : Task
     {
         if (other.CompareTag("Player"))
         {
-            CompleteSubtask(0);
+            Press();
         }
+    }
+
+    public void Press()
+    {
+        CompleteSubtask(0);
     }
 
     public override void CompleteTask()

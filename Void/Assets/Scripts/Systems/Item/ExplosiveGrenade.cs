@@ -7,7 +7,6 @@ public class ExplosiveGrenade : ThrowableItem
     [SerializeField] private float radius;
     [SerializeField] private float damage;
     [SerializeField] private float timeToActivation;
-    [SerializeField] private float effectDuration;
     [SerializeField] private LayerMask effectableLayers;
 
     private bool isActive = false;
