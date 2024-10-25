@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd2bc470b0c01a74d904c986a4d4f27d, type: 3}
+  m_Name: CharacterPresetData
+  m_EditorClassIdentifier: 
+  presetName: One
+  characterPrefab: {fileID: 5111068473147693634, guid: 00e1199275b47594d90cd5156c28b10a,
+    type: 3}
+  bootOptions:
+  - {fileID: 1719220740510416536, guid: 64f739bf1af2bd74f9df171efc7db228, type: 3}
+  - {fileID: 6098131869585554533, guid: 8fa9a7e45113ec146a9b5eb9f8cb1577, type: 3}
+  - {fileID: 3237596581051209955, guid: e29884e1b6e1a3d42b2bf7f605cda274, type: 3}
+  hatOptions:
+  - {fileID: 24856467728068954, guid: 00d919c166924744fb69d52908aaae92, type: 3}
+  - {fileID: 9077459088441079354, guid: 2e511161dc7cd074ebd055639c5409a4, type: 3}
+  - {fileID: 1475392991599297182, guid: 4bcfadd80aed3bd44b5192d0c1be936d, type: 3}
