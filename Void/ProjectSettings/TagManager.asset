@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Dmg
+  - AatifTaskTest
   layers:
   - Default
   - TransparentFX
