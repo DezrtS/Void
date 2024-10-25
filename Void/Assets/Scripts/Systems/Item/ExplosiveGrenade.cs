@@ -8,6 +8,7 @@ public class ExplosiveGrenade : ThrowableItem
     [SerializeField] private float damage;
     [SerializeField] private float timeToActivation;
     [SerializeField] private LayerMask effectableLayers;
+    [SerializeField] private GameObject explosionEffect;
 
     private bool isActive = false;
     private float timer = 0;
@@ -34,13 +35,18 @@ public class ExplosiveGrenade : ThrowableItem
         {
             Debug.Log(hit.collider.gameObject.name);
         }
+        Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound2);
         Destroy(gameObject);
     }
 
     protected override void OnThrow()
     {
         base.OnThrow();
-        isActive = true;
-        timer = timeToActivation;
+        if (!isActive)
+        {
+            isActive = true;
+            timer = timeToActivation;
+        }
     }
 }

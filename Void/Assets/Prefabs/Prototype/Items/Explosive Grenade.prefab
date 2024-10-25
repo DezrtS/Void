@@ -155,7 +155,8 @@ MonoBehaviour:
   radius: 5
   damage: 5
   timeToActivation: 2
-  effectDuration: 1
   effectableLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  explosionEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
+    type: 3}
