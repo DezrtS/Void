@@ -2,65 +2,44 @@
 ------------------------------------------------------------------------------
 # FOR GAME ENGINE DESIGN ASSIGNMENT 1-4
 ------------------------------------------------------------------------------
-Denzil Walrond Role     -->     Lead Programmer
-Aatif Sattaur Role      -->     Programmer (Normally Project Manager)
-Michael Atteh Role      -->     Programmer (Normally Lead Artist)
++ Denzil Walrond Role     -->     Lead Programmer
++ Aatif Sattaur Role      -->     Programmer (Normally Project Manager)
++ Michael Atteh Role      -->     Programmer (Normally Lead Artist)
 ------------------------------------------------------------------------------
 Denzil Walrond Roles and Responsibilities:
-    Implement AudioManager                  [Singleton]
-        + Create Diagram
-        + Write Explaination
-    Implement Undo/Redo Room Data Edits     [Command]
-        + Create Diagram
-        + Write Explaination
-    Implement Crafting Items                [Factory]
-        + Create Diagram
-        + Write Explaination
-    Implement Task Completions              [Observer]
-        + Create Diagram
-        + Write Explaination
-    Record Demo Video on Contributions
-    Setup Readme File
++ Implement AudioManager                  [Singleton]
++ Implement Undo/Redo Room Data Edits     [Command]
++ Implement Crafting Items                [Factory]
++ Implement Task Completions              [Observer]
++ Create Diagram on Implementations
++ Write Explaination on Implementations
++ Record Demo Video on Contributions
++ Setup Readme File
 
 Aatif Sattaur Roles and Responsibilities:
-    Implement GameManager                   [Singleton]
-        + Create Diagram
-        + Write Explaination
-    Implement Movement Task Undo            [Command]
-        + Create Diagram
-        + Write Explaination
-    Implement Enemy Creation                [Factory]
-        + Create Diagram
-        + Write Explaination
-    Implement Player UI Updater             [Observer]
-        + Create Diagram
-        + Write Explaination
-    Record Demo Video on Contributions
-    Edit Together Demo Videos
++ Implement GameManager                   [Singleton]
++ Implement Movement Task Undo            [Command]
++ Implement Enemy Creation                [Factory]
++ Implement Player UI Updater             [Observer]
++ Create Diagram on Implementations
++ Write Explaination on Implementations
++ Record Demo Video on Contributions
++ Edit Together Demo Videos
 
 Michael Atteh Roles and Responsibilities:
-    Implement CustomizerManager             [Singleton]
-        + Create Diagram
-        + Write Explaination
-    Implement Character Customization       [Command]
-        + Create Diagram
-        + Write Explaination
-    Implement Preset Character Spawner      [Factory]
-        + Create Diagram
-        + Write Explaination
-    Implement UI Updater                    [Observer]
-        + Create Diagram
-        + Write Explaination
-    Record Demo Video on Contributions
++ Implement CustomizerManager             [Singleton]
++ Implement Character Customization       [Command]
++ Implement Preset Character Spawner      [Factory]
++ Implement UI Updater                    [Observer]
++ Create Diagram on Implementations
++ Write Explaination on Implementations
++ Record Demo Video on Contributions
 ------------------------------------------------------------------------------
-Denzil Walrond Contribution Percentage   -->    33.33%
-Aatif Sattaur Contribution Percentage    -->    33.33%
-Michael Atteh Contribution Percentage    -->    33.33%
++ Denzil Walrond Contribution Percentage   -->    33.33%
++ Aatif Sattaur Contribution Percentage    -->    33.33%
++ Michael Atteh Contribution Percentage    -->    33.33%
 ------------------------------------------------------------------------------
 Video Link: https://youtu.be/W4lFgs5P2B8
-
-
-
 ------------------------------------------------------------------------------
 Interactive Media Scenario Information (10/100),
 
