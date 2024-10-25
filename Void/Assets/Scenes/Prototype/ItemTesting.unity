@@ -807,6 +807,13 @@ MonoBehaviour:
       Data3: 114609852
       Data4: -1499329898
     Path: event:/Debugging/Sound1
+  Sound2:
+    Guid:
+      Data1: -1605055152
+      Data2: 1326565119
+      Data3: -789222729
+      Data4: -1421211024
+    Path: event:/Debugging/Sound2
 --- !u!114 &1410070554
 MonoBehaviour:
   m_ObjectHideFlags: 0
