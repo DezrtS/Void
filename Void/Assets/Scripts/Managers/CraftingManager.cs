@@ -25,5 +25,9 @@ public class CraftingManager : Singleton<CraftingManager>
         {
             testItem.Use();
         }
+        else if (Input.GetKeyUp(KeyCode.F) && testItem != null)
+        {
+            testItem.StopUsing();
+        }
     }
 }

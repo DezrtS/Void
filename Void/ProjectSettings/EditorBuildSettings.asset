@@ -12,10 +12,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Prototype/ItemTesting.unity
     guid: 0beaf04103b7c674883d347735cd7ff9
   - enabled: 1
-    path: Assets/Scenes/Aatif - Test/GameEngTest.unity
+    path: Assets/Scenes/Aatif/GameEngTest.unity
     guid: 898dafba697cfe6419d588de596640fd
   - enabled: 1
-    path: Assets/Scenes/Aatif - Test/ComputerTaskTest/ComputerTaskTestScene.unity
+    path: Assets/Scenes/Aatif/ComputerTaskTest/ComputerTaskTestScene.unity
     guid: 430e9af08e7ed6d44aab9a4bcfe80050
   - enabled: 1
     path: Assets/Scenes/Michael/customizer.unity
