@@ -8,16 +8,17 @@ public class SurvivorController : NetworkBehaviour
 {
     public Transform spawnPoint;
     public GameObject FPSCameraPrefab; 
+    public int playerHP = 100;
     private Camera playerCamera;
-    public float walkSpeed = 6f;
-    public float runSpeed = 12f;
-    public float jumpPower = 7f;
-    public float gravity = 10f;
-    public float lookSpeed = 2f;
-    public float lookXLimit = 45f;
-    public float defaultHeight = 2f;
-    public float crouchHeight = 1f;
-    public float crouchSpeed = 3f;
+    private float walkSpeed = 6f;
+    private float runSpeed = 12f;
+    private float jumpPower = 7f;
+    private float gravity = 10f;
+    private float lookSpeed = 2f;
+    private float lookXLimit = 45f;
+    private float defaultHeight = 2f;
+    private float crouchHeight = 1f;
+    private float crouchSpeed = 3f;
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
@@ -101,15 +102,12 @@ public class SurvivorController : NetworkBehaviour
 
         characterController.Move(moveDirection * Time.deltaTime);
 
-        // Mouse look for FPS-style camera
         if (canMove && playerCamera != null)
         {
-            // Rotate the camera vertically (up/down)
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
 
-            // Rotate the player horizontally (left/right)
             float rotationY = Input.GetAxis("Mouse X") * lookSpeed;
             transform.Rotate(0, rotationY, 0);
         }
