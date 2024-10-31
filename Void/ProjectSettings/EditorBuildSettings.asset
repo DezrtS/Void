@@ -9,6 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Prototype/Base.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
   - enabled: 1
+
     path: Assets/Scenes/Prototype/ItemTesting.unity
     guid: 0beaf04103b7c674883d347735cd7ff9
   - enabled: 1
@@ -20,4 +21,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Michael/customizer.unity
     guid: 534cd343f09bb1e4abb6c11c746695ac
+
   m_configObjects: {}
