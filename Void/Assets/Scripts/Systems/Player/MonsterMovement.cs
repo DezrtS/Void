@@ -6,9 +6,15 @@ using Unity.Netcode;
 [RequireComponent(typeof(CharacterController))]
 public class MonsterMovement : NetworkBehaviour
 {
-     public Transform spawnPoint;
-    public GameObject FPSCameraPrefab; 
+    //monster stats
+    public GameObject attackRadius;
+    public float meleeDamage = 15;
     public int monsterHP = 350;
+    private float attackTimer = 2.0f;
+    private float lastAttack;
+    private bool canDamage = false;
+
+    //monster movement
     private Camera playerCamera;
     private float walkSpeed = 8f;
     private float runSpeed = 16f;
@@ -19,6 +25,8 @@ public class MonsterMovement : NetworkBehaviour
     private float defaultHeight = 3f;
     private float crouchHeight = 2f;
     private float crouchSpeed = 5f;
+    public Transform spawnPoint;
+    public GameObject FPSCameraPrefab;
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
@@ -110,6 +118,31 @@ public class MonsterMovement : NetworkBehaviour
 
             float rotationY = Input.GetAxis("Mouse X") * lookSpeed;
             transform.Rotate(0, rotationY, 0);
+        } 
+
+        lastAttack += Time.deltaTime;
+        if (lastAttack > attackTimer)
+        {
+            canDamage = false;
         }
+
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            Attack();
+            StopAttack();
+        }
+    } 
+
+    void Attack()
+    {
+        canDamage = true;
+        attackRadius.SetActive(true);
+        lastAttack = 0.0f;
+    }
+    
+    void StopAttack()
+    {
+        canDamage = false;
+        attackRadius.SetActive(false);
     }
 }
