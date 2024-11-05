@@ -2,29 +2,33 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour, IProjectile
 {
-    private Rigidbody rig;
     private IProjectileSpawner spawner;
     private ProjectileData projectileData;
+    private Vector3 velocity;
     private bool isFired = false;
     private float lifetimeTimer = 0;
 
     public IProjectileSpawner Spawner => spawner;
     public ProjectileData ProjectileData => projectileData;
 
-    private void Awake()
-    {
-        rig = GetComponent<Rigidbody>();
-    }
-
-    private void FixedUpdate()
+    private void Update()
     {
         if (isFired)
         {
-            lifetimeTimer -= Time.fixedDeltaTime;
-            if (lifetimeTimer <= 0 )
+            if (Physics.Raycast(transform.position, velocity.normalized, out RaycastHit hitInfo, velocity.magnitude * Time.deltaTime, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
+            {
+                spawner?.OnProjectileHit(this, gameObject, hitInfo.collider);
+            }
+
+            lifetimeTimer -= Time.deltaTime;
+            if (lifetimeTimer <= 0)
             {
                 Destroy();
             }
+
+            velocity.y += projectileData.Gravity * Time.deltaTime;
+            transform.position += velocity * Time.deltaTime;
+            transform.forward = velocity.normalized;
         }
     }
 
@@ -41,14 +45,10 @@ public class Bullet : MonoBehaviour, IProjectile
             Destroy();
         }
         lifetimeTimer = projectileData.LifetimeDuration;
-        rig.AddForce(projectileData.FireSpeed * direction, ForceMode.Impulse);
+        velocity = projectileData.FireSpeed * direction;
         isFired = true;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        spawner?.OnProjectileHit(this, collision);
-    }
 
     public void Destroy()
     {

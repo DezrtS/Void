@@ -1,21 +1,25 @@
 using FMODUnity;
 using UnityEngine;
 
-public class Gun : Item
+public class Gun : Item, IReload
 {
     [SerializeField] private GameObject projectileSpawnerObject;
     [SerializeField] private float fireRate;
     [SerializeField] private int maxAmmo;
-    [SerializeField] private float reloadSpeed;
-    [SerializeField] private float windupTime;
+    [SerializeField] private float timeToReload;
+    [SerializeField] private float timeToWindUp;
     [SerializeField] private EventReference fireSound;
 
     protected IProjectileSpawner projectileSpawner;
-    protected bool firing;
+    protected bool isFiring;
     protected int ammo;
     private float fireRateTimer;
     private float reloadTimer;
     private float windupTimer;
+
+    public int MaxAmmo => maxAmmo;
+    public int Ammo => ammo;
+    public float ReloadSpeed => timeToReload;
 
     private void Start()
     {
@@ -25,20 +29,20 @@ public class Gun : Item
 
     protected override void OnUse()
     {
-        firing = true;
-        windupTimer = windupTime;
+        isFiring = true;
+        windupTimer = timeToWindUp;
     }
 
     protected override void OnStopUsing()
     {
-        firing = false;
+        isFiring = false;
     }
 
     private void FixedUpdate()
     {
         UpdateTimers();
 
-        if (firing)
+        if (isFiring)
         {
             TryFire();
         }
@@ -96,9 +100,9 @@ public class Gun : Item
         projectileSpawner.SpawnProjectile();
     }
 
-    protected void Reload()
+    public void Reload()
     {
-        reloadTimer = reloadSpeed;
+        reloadTimer = timeToReload;
         ammo = maxAmmo;
     }
 }

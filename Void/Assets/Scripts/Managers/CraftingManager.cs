@@ -15,19 +15,48 @@ public class CraftingManager : Singleton<CraftingManager>
         return item;
     }
 
+    public Item CraftItem(RecipeData recipe, Dictionary<ResourceData, int> inventory)
+    {
+        foreach (ResourceRequirement resourceRequirement in recipe.ResourceRequirements)
+        {
+            if (inventory.TryGetValue(resourceRequirement.Resource, out int amount))
+            {
+                if (amount >= resourceRequirement.Amount)
+                {
+                    int newAmount = amount - resourceRequirement.Amount;
+                    if (newAmount <= 0)
+                    {
+                        inventory.Remove(resourceRequirement.Resource);
+                    }
+                    else
+                    {
+                        inventory[resourceRequirement.Resource] = amount - resourceRequirement.Amount;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        return CraftItem(recipe);
+    }
+
+    public Item GetTestItem()
+    {
+        return testItem;
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
             testItem = CraftItem(recipes[0]);
-        }
-        else if (Input.GetKeyDown(KeyCode.F) && testItem != null)
-        {
-            testItem.Use();
-        }
-        else if (Input.GetKeyUp(KeyCode.F) && testItem != null)
-        {
-            testItem.StopUsing();
         }
     }
 }

@@ -5,14 +5,8 @@ using UnityEngine;
 public class BulletSpawner : MonoBehaviour, IProjectileSpawner
 {
     [SerializeField] private ProjectileData projectileData;
-    //private List<IProjectile> spawnedProjectiles;
 
     public event IProjectileSpawner.HitHandler OnHit;
-
-    //private void Awake()
-    //{
-    //    spawnedProjectiles = new List<IProjectile>();
-    //}
 
     public void SpawnProjectile()
     {
@@ -20,12 +14,11 @@ public class BulletSpawner : MonoBehaviour, IProjectileSpawner
         IProjectile projectile = bullet.GetComponent<IProjectile>();
         projectile.Initialize(this, projectileData);
         projectile.Fire(transform.forward);
-        //spawnedProjectiles.Add(projectile);
     }
 
-    public void OnProjectileHit(IProjectile projectile, Collision collision)
+    public void OnProjectileHit(IProjectile projectile, GameObject projectileGameObject, Collider hitCollider)
     {
-        OnHit?.Invoke(collision);
+        OnHit?.Invoke(hitCollider);
         projectile.Destroy();
     }
 }
