@@ -6,8 +6,14 @@ public class DeployableItem : Item
 {
     [SerializeField] private float deployRange = 5;
     [SerializeField] private LayerMask deployLayers;
+    protected bool deployed;
 
-    public override void Use()
+    public override bool CanUse()
+    {
+        return (base.CanUse() && !deployed);
+    }
+
+    protected override void OnUse()
     {
         Deploy();
     }
@@ -24,8 +30,8 @@ public class DeployableItem : Item
 
     protected virtual void OnDeploy()
     {
-        canUse = false;
         canPickUp = false;
         canDrop = false;
+        deployed = true;
     }
 }

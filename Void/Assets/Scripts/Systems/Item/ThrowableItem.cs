@@ -2,39 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class ThrowableItem : Item
 {
     [SerializeField] private float thowSpeed;
     [SerializeField] private float spinSpeed;
 
-    private Rigidbody rig;
+    protected bool thrown = false;
 
-    private void Awake()
+    public override bool CanUse()
     {
-        rig = GetComponent<Rigidbody>();
+        return (base.CanUse() && !thrown);
     }
 
-    public override void Use()
+    protected override void OnUse()
     {
         Throw();
     }
 
-    public override void OnPickUp()
+    private void Throw()
     {
-        base.OnPickUp();
-        rig.isKinematic = true;
-    }
-
-    public override void OnDrop()
-    {
-        base.OnDrop();
-        rig.isKinematic = false;
-    }
-
-    public void Throw()
-    {
-        rig.isKinematic = false;
         rig.AddForce(thowSpeed * transform.forward, ForceMode.Impulse);
         rig.angularVelocity = spinSpeed * Vector3.right;
 
@@ -43,8 +29,8 @@ public class ThrowableItem : Item
 
     protected virtual void OnThrow()
     {
-        canUse = false;
         canPickUp = false;
         canDrop = false;
+        thrown = true;
     }
 }

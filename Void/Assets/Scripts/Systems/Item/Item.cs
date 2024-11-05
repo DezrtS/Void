@@ -1,26 +1,72 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public abstract class Item : MonoBehaviour, IUseable
 {
     [SerializeField] private ItemData ItemData;
-    [SerializeField] protected bool canUse = true;
     [SerializeField] protected bool canPickUp = true;
     [SerializeField] protected bool canDrop = true;
 
-    public bool CanUse { get { return canUse; } }
-    public bool CanPickUp { get { return canPickUp; } }
-    public bool CanDrop { get { return canDrop; } }
+    protected bool isUsing;
+    protected Rigidbody rig;
 
-    public abstract void Use();
-    public virtual void OnPickUp()
+    public event IUseable.UseHandler OnUsed;
+
+    public bool IsUsing => isUsing;
+    public bool CanPickUp => canPickUp;
+    public bool CanDrop => canDrop;
+
+    private void Awake()
+    {
+        rig = GetComponent<Rigidbody>();
+    }
+
+    public virtual bool CanUse()
+    {
+        return !isUsing;
+    }
+
+    public void Use()
+    {
+        if (CanUse())
+        {
+            isUsing = true;
+            OnUsed?.Invoke(true);
+            OnUse();
+        }
+    }
+
+    protected virtual void OnUse() { }
+    
+    public void StopUsing()
+    {
+        if (isUsing)
+        {
+            isUsing = false;
+            OnUsed?.Invoke(false);
+            OnStopUsing();
+        }
+    }
+
+    protected virtual void OnStopUsing() { }
+
+    public void PickUp()
     {
         canPickUp = false;
         canDrop = true;
+        rig.isKinematic = true;
+        OnPickUp();
     }
 
-    public virtual void OnDrop()
+    protected virtual void OnPickUp() { }
+
+    public void Drop()
     {
         canDrop = false;
         canPickUp = true;
+        rig.isKinematic = false;
+        OnDrop();
     }
+
+    protected virtual void OnDrop() { }
 }
