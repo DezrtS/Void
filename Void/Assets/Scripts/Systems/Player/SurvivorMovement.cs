@@ -7,9 +7,9 @@ using Unity.Netcode;
 public class SurvivorController : NetworkBehaviour
 {
     public Transform spawnPoint;
-    public GameObject monster;
-    public GameObject monsterSpawn;
-    private Transform monsterLoc;
+    //public GameObject monster;
+    //public GameObject monsterSpawn;
+    //private Transform monsterLoc;
     public GameObject FPSCameraPrefab; 
     public int playerHP = 100;
     private Camera playerCamera;
@@ -32,8 +32,6 @@ public class SurvivorController : NetworkBehaviour
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-
-        monsterLoc = GameObject.Find ("Spawn").transform;
 
         if (IsOwner)
         {
@@ -117,10 +115,10 @@ public class SurvivorController : NetworkBehaviour
             transform.Rotate(0, rotationY, 0);
         }
 
-        if (Input.GetKey(KeyCode.E))
+        /*if (Input.GetKey(KeyCode.E))
         {
+            monsterLoc = GameObject.Find ("Spawn").transform;
             Instantiate(monster, monsterLoc.position, monsterLoc.rotation);
-            
-        }
+        }*/
     }
 }

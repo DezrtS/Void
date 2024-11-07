@@ -66,6 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09b8c757932c6164c95cedee00969af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meleeDamage: 15
 --- !u!1 &1226164427272906266
 GameObject:
   m_ObjectHideFlags: 0
@@ -78,6 +79,7 @@ GameObject:
   - component: {fileID: 1384909004099709357}
   - component: {fileID: 3075301660036057103}
   - component: {fileID: 4435774627995240600}
+  - component: {fileID: -8887219458936362995}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -141,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2345328776
+  GlobalObjectIdHash: 4241046524
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -168,6 +170,37 @@ MonoBehaviour:
   spawnPoint: {fileID: 5392849664127405794}
   FPSCameraPrefab: {fileID: 1675628873728395439, guid: 9da46762dd5c986409790bb6d4c6c424,
     type: 3}
+--- !u!114 &-8887219458936362995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226164427272906266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &8397124164421904461
 GameObject:
   m_ObjectHideFlags: 0
