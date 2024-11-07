@@ -555,7 +555,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -2031,6 +2031,11 @@ MonoBehaviour:
   serverBtn: {fileID: 1460747638}
   hostBtn: {fileID: 665067479}
   joinBtn: {fileID: 1484036129}
+  monsterBtn: {fileID: 368442088}
+  monsterPre: {fileID: 1226164427272906266, guid: e05f3d712a921da43a0595a57bef3a62,
+    type: 3}
+  playerPre: {fileID: 1575300930724462412, guid: c3fe956afc504604ead5371accbaea4a,
+    type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
