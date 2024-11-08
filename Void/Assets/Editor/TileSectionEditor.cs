@@ -1,16 +1,16 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
-[CustomEditor(typeof(RoomData))]
-public class RoomDataEditor : Editor
+[CustomEditor(typeof(TileSection), true)]
+public class TileSectionEditor : Editor
 {
-    private RoomData roomData;
+    private TileSection tileSection;
     private CommandInvoker commandInvoker;
     private float gridButtonSize = 50f;
 
     private void OnEnable()
     {
-        roomData = (RoomData)target;
+        tileSection = (TileSection)target;
         commandInvoker = new CommandInvoker();
     }
 
@@ -18,44 +18,44 @@ public class RoomDataEditor : Editor
     {
         DrawDefaultInspector();
 
-        if (roomData.gridSize.x <= 0 || roomData.gridSize.y <= 0)
+        if (tileSection.gridSize.x <= 0 || tileSection.gridSize.y <= 0)
         {
             EditorGUILayout.HelpBox("Grid size must be greater than zero.", MessageType.Warning);
             return;
         }
 
         float inspectorWidth = EditorGUIUtility.currentViewWidth;
-        gridButtonSize = Mathf.Min((inspectorWidth - roomData.gridSize.x * 5f) / roomData.gridSize.x, 50f);
+        gridButtonSize = Mathf.Min((inspectorWidth - tileSection.gridSize.x * 5f) / tileSection.gridSize.x, 50f);
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Update Grid Size", GUILayout.Width(inspectorWidth - 26), GUILayout.Height(50f)))
         {
-            ICommand command = new ChangeGridSize(roomData, roomData.GridSize);
+            ICommand command = new ChangeGridSize(tileSection, tileSection.GridSize);
             commandInvoker.ExecuteCommand(command);
         }
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
 
-        for (int y = 0; y < roomData.gridSize.y; y++)
+        for (int y = 0; y < tileSection.gridSize.y; y++)
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            for (int x = 0; x < roomData.gridSize.x; x++)
+            for (int x = 0; x < tileSection.gridSize.x; x++)
             {
                 Vector2Int position = new Vector2Int(x, y);
-                bool contains = roomData.tilePositions.Contains(position);
+                bool contains = tileSection.tilePositions.Contains(position);
                 GUI.backgroundColor = GetColor(contains);
                 if (GUILayout.Button($"{x},{y}", GUILayout.Width(gridButtonSize), GUILayout.Height(gridButtonSize)))
                 {
                     if (contains)
                     {
-                        ICommand command = new DeselectGridPosition(roomData, position);
+                        ICommand command = new DeselectGridPosition(tileSection, position);
                         commandInvoker.ExecuteCommand(command);
                     }
                     else
                     {
-                        ICommand command = new SelectGridPosition(roomData, position);
+                        ICommand command = new SelectGridPosition(tileSection, position);
                         commandInvoker.ExecuteCommand(command);
                     }
                 }
@@ -65,11 +65,6 @@ public class RoomDataEditor : Editor
         }
 
         GUI.backgroundColor = Color.white;
-
-        if (GUI.changed)
-        {
-            EditorUtility.SetDirty(roomData);
-        }
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
@@ -88,12 +83,17 @@ public class RoomDataEditor : Editor
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Reset", GUILayout.Width(inspectorWidth - 26), GUILayout.Height(50f)))
         {
-            ICommand command = new ResetGridPositions(roomData);
+            ICommand command = new ResetGridPositions(tileSection);
             commandInvoker.ExecuteCommand(command);
         }
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.HelpBox($"Command History: {commandInvoker.CommandHistory.Count}, Redo History: {commandInvoker.RedoStack.Count}", MessageType.Info);
+
+        if (GUI.changed)
+        {
+            EditorUtility.SetDirty(tileSection);
+        }
     }
 
     public Color GetColor(bool contains)
