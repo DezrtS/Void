@@ -1441,6 +1441,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 727313504}
   m_CullTransparentMesh: 1
+--- !u!1 &1072685084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1072685085}
+  m_Layer: 0
+  m_Name: Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1072685085
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072685084}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.05, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1176701457
 GameObject:
   m_ObjectHideFlags: 0
@@ -2032,7 +2063,6 @@ MonoBehaviour:
   serverBtn: {fileID: 1460747638}
   hostBtn: {fileID: 665067479}
   joinBtn: {fileID: 1484036129}
-  monsterBtn: {fileID: 368442088}
   monsterPre: {fileID: 1226164427272906266, guid: e05f3d712a921da43a0595a57bef3a62,
     type: 3}
   playerPre: {fileID: 1575300930724462412, guid: c3fe956afc504604ead5371accbaea4a,
@@ -2068,3 +2098,4 @@ SceneRoots:
   - {fileID: 1376938872}
   - {fileID: 1176701461}
   - {fileID: 1255329743}
+  - {fileID: 1072685085}

@@ -6,13 +6,13 @@ using Unity.Netcode;
 [RequireComponent(typeof(CharacterController))]
 public class SurvivorController : NetworkBehaviour
 {
-    public Transform spawnPoint;
-    //public GameObject monster;
-    //public GameObject monsterSpawn;
-    //private Transform monsterLoc;
+    public Transform spawnPoint; // Reference to the camera spawn point
     public GameObject FPSCameraPrefab; 
     public int playerHP = 100;
+
     private Camera playerCamera;
+    private CharacterController characterController;
+
     private float walkSpeed = 6f;
     private float runSpeed = 12f;
     private float jumpPower = 7f;
@@ -25,35 +25,44 @@ public class SurvivorController : NetworkBehaviour
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
-    private CharacterController characterController;
 
     private bool canMove = true;
 
-    void Start()
+    private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+    }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        
         if (IsOwner)
         {
-            if (FPSCameraPrefab == null)
-            {
-                Debug.LogError("FPSCameraPrefab is not assigned in the Inspector.");
-                return;
-            }
+            SpawnPlayerCamera();
+        }
+    }
 
-            GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position, transform.rotation);
-            playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
+    private void SpawnPlayerCamera()
+    {
+        if (FPSCameraPrefab == null || spawnPoint == null)
+        {
+            Debug.LogError("FPSCameraPrefab or spawnPoint is not assigned in the Inspector.");
+            return;
+        }
 
-            // Debugging to check if the camera component is found
-            if (playerCamera == null)
-            {
-                Debug.LogError("Camera component not found in FPSCameraPrefab or its children. Please ensure FPSCameraPrefab has a Camera component.");
-            }
-            else
-            {
-                Debug.Log("Camera component successfully assigned.");
-            }
+        // Instantiate the camera prefab at the exact location of the spawnPoint
+        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position, spawnPoint.rotation);
+        playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
 
+        if (playerCamera == null)
+        {
+            Debug.LogError("Camera component not found in FPSCameraPrefab or its children.");
+        }
+        else
+        {
+            Debug.Log("Camera component successfully assigned.");
+            // Parent the instantiated camera to the player transform
             instantiatedCamera.transform.SetParent(transform);
 
             Cursor.lockState = CursorLockMode.Locked;
@@ -114,11 +123,5 @@ public class SurvivorController : NetworkBehaviour
             float rotationY = Input.GetAxis("Mouse X") * lookSpeed;
             transform.Rotate(0, rotationY, 0);
         }
-
-        /*if (Input.GetKey(KeyCode.E))
-        {
-            monsterLoc = GameObject.Find ("Spawn").transform;
-            Instantiate(monster, monsterLoc.position, monsterLoc.rotation);
-        }*/
     }
 }

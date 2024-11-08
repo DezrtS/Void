@@ -6,15 +6,15 @@ using Unity.Netcode;
 [RequireComponent(typeof(CharacterController))]
 public class MonsterMovement : NetworkBehaviour
 {
-    //monster stats
+    // Monster stats
     public GameObject attackRadius;
+    public NetworkVariable<int> monsterHP = new NetworkVariable<int>(350);
     public float meleeDamage = 15;
-    public int monsterHP = 350;
     private float attackTimer = 2.0f;
     private float lastAttack;
-    private bool canDamage = false;
+    private NetworkVariable<bool> canDamage = new NetworkVariable<bool>(false);
 
-    //monster movement
+    // Monster movement
     private Camera playerCamera;
     private float walkSpeed = 8f;
     private float runSpeed = 16f;
@@ -31,46 +31,46 @@ public class MonsterMovement : NetworkBehaviour
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
     private CharacterController characterController;
-
     private bool canMove = true;
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+        
+        if (!IsOwner) return;
+        
         characterController = GetComponent<CharacterController>();
 
-        if (IsOwner)
+        if (FPSCameraPrefab == null)
         {
-            if (FPSCameraPrefab == null)
-            {
-                Debug.LogError("FPSCameraPrefab is not assigned in the Inspector.");
-                return;
-            }
-
-            GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position, transform.rotation);
-            playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
-
-            // Debugging to check if the camera component is found
-            if (playerCamera == null)
-            {
-                Debug.LogError("Camera component not found in FPSCameraPrefab or its children. Please ensure FPSCameraPrefab has a Camera component.");
-            }
-            else
-            {
-                Debug.Log("Camera component successfully assigned.");
-            }
-
-            instantiatedCamera.transform.SetParent(transform);
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            Debug.LogError("FPSCameraPrefab is not assigned in the Inspector.");
+            return;
         }
+
+        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, transform.position + Vector3.up * 0.5f, transform.rotation);
+        playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
+
+        if (playerCamera == null)
+        {
+            Debug.LogError("Camera component not found in FPSCameraPrefab.");
+            return;
+        }
+
+        instantiatedCamera.transform.SetParent(transform);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()
     {
-        if (!IsOwner) return;
+        if (!IsOwner || !IsSpawned) return;
 
-        // FPS Movement
+        HandleMovement();
+        HandleAttack();
+    }
+
+    private void HandleMovement()
+    {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
 
@@ -94,7 +94,7 @@ public class MonsterMovement : NetworkBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
         }
 
-        // Crouch control
+        // Handle crouching
         if (Input.GetKey(KeyCode.LeftControl) && canMove)
         {
             characterController.height = crouchHeight;
@@ -104,8 +104,8 @@ public class MonsterMovement : NetworkBehaviour
         else
         {
             characterController.height = defaultHeight;
-            walkSpeed = 6f;
-            runSpeed = 12f;
+            walkSpeed = 8f;
+            runSpeed = 16f;
         }
 
         characterController.Move(moveDirection * Time.deltaTime);
@@ -115,34 +115,64 @@ public class MonsterMovement : NetworkBehaviour
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        }
+    }
 
-            float rotationY = Input.GetAxis("Mouse X") * lookSpeed;
-            transform.Rotate(0, rotationY, 0);
-        } 
-
+    private void HandleAttack()
+    {
         lastAttack += Time.deltaTime;
         if (lastAttack > attackTimer)
         {
-            canDamage = false;
+            SetCanDamageServerRpc(false);
         }
 
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Attack();
-            StopAttack();
+            AttackServerRpc();
         }
-    } 
+        else if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            StopAttackServerRpc();
+        }
+    }
 
-    void Attack()
+    [ServerRpc]
+    private void AttackServerRpc()
     {
-        canDamage = true;
-        attackRadius.SetActive(true);
+        SetCanDamageServerRpc(true);
+        UpdateAttackRadiusClientRpc(true);
         lastAttack = 0.0f;
     }
-    
-    void StopAttack()
+
+    [ServerRpc]
+    private void StopAttackServerRpc()
     {
-        canDamage = false;
-        attackRadius.SetActive(false);
+        SetCanDamageServerRpc(false);
+        UpdateAttackRadiusClientRpc(false);
+    }
+
+    [ServerRpc]
+    private void SetCanDamageServerRpc(bool value)
+    {
+        canDamage.Value = value;
+    }
+
+    [ClientRpc]
+    private void UpdateAttackRadiusClientRpc(bool active)
+    {
+        if (attackRadius != null)
+        {
+            attackRadius.SetActive(active);
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (playerCamera != null)
+        {
+            Destroy(playerCamera.gameObject);
+        }
     }
 }
