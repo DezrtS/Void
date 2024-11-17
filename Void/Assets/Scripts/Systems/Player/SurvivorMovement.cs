@@ -138,16 +138,21 @@ public class SurvivorController : NetworkBehaviour
             return;
         }
 
+        // Perform a raycast downwards from the spawn point to detect the ground.
         Ray ray = new Ray(spawnPoint.position, Vector3.down);
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 10f))
         {
+            // If the raycast hits something, adjust the position slightly above the ground.
             float groundOffset = 0.1f;
             transform.position = hitInfo.point + Vector3.up * (characterController.height / 2 + groundOffset);
         }
         else
         {
-            Debug.LogWarning("No ground detected below the spawn point.");
-            transform.position = spawnPoint.position; 
+            // If no ground is detected, we can fallback to spawnPoint, but adjust the height.
+            Debug.LogWarning("No ground detected below the spawn point. Using fallback position.");
+
+            // Adjust the position using the spawn point's y-axis value plus a slight offset.
+            transform.position = spawnPoint.position + Vector3.up * (characterController.height / 2);
         }
     }
 
