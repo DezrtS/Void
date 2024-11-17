@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public struct FixtureInstance
+public class FixtureInstance
 {
-    //public FixtureData Data;
+    public FixtureData Data;
     public Vector2 Position;
     public Vector2 Forward;
 }

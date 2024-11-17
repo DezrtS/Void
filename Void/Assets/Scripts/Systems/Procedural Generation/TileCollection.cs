@@ -68,29 +68,4 @@ public class TileCollection
     {
         connections.Add((from, to));
     }
-
-    public void PlaceFixtureAnywhere() // FixtureData
-    {
-        
-    }
-
-    public bool PlaceFixture(/*FixtureData data, */Vector2Int position, Vector2Int forward)
-    {
-        return false;
-    }
-
-    public bool CanPlaceFixture(List<Vector2Int> positions)
-    {
-        return false;
-    }
-
-    public void GenerateInterior()
-    {
-
-    }
-
-    public void GenerateWalkways()
-    {
-
-    }
 }

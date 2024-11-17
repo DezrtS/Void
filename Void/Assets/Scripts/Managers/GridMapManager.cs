@@ -22,6 +22,7 @@ public class GridMapManager : Singleton<GridMapManager>
     [Header("Interior Generation Parameters")]
     [SerializeField] private int interiorTilesPerMapTile = 3;
     [SerializeField] private int maxFixtureAttempts = 100;
+    public List<FixtureData> fixtures;
     [Space(10)]
     [Header("Visualization Options")]
     [SerializeField] private bool spawnCollectionAveragePositions;
@@ -81,6 +82,19 @@ public class GridMapManager : Singleton<GridMapManager>
     {
         ResetInteriorGridMap();
         interiorGridMap = new Grid2D<InteriorTile>(gridSize * interiorTilesPerMapTile, Vector2Int.zero);
+        foreach (TileCollection collection in tileCollections)
+        {
+            foreach (Vector2Int position in collection.mapTilePositions)
+            {
+                for (int y = 0; y < interiorTilesPerMapTile; y++)
+                {
+                    for (int x = 0; x < interiorTilesPerMapTile; x++)
+                    {
+                        interiorGridMap[interiorTilesPerMapTile * position + new Vector2Int(x, y)] = new InteriorTile(InteriorTile.InteriorTileType.None, null);
+                    }
+                }
+            }
+        }
     }
 
     public void InitializeInteriorGridMap(int interiorTilesPerMapTile)
@@ -325,7 +339,7 @@ public class GridMapManager : Singleton<GridMapManager>
                 tileCollection.AddConnection(path[1], path[0]);
                 tileCollection.AddConnection(path[path.Count - 2], path[path.Count - 1]);
 
-                PlaceMapPossibleTiles(tileCollection, MapTile.MapTileType.Hallway, path);
+                PlacePossibleMapTiles(tileCollection, MapTile.MapTileType.Hallway, path);
             }
         }
 
@@ -335,6 +349,11 @@ public class GridMapManager : Singleton<GridMapManager>
         }
     }
 
+    public void GenerateWalkways()
+    {
+
+    }
+
     public void GenerateTasks()
     {
 
@@ -342,7 +361,30 @@ public class GridMapManager : Singleton<GridMapManager>
 
     public void GenerateInteriors()
     {
-
+        foreach (TileCollection collection in tileCollections)
+        {
+            int attempt = 0;
+            int start = fixtureInstances.Count;
+            while (attempt < maxFixtureAttempts)
+            {
+                FixtureData fixtureData = fixtures[0];
+                Vector2Int position = interiorTilesPerMapTile * collection.GetRandomMapTilePosition() + new Vector2Int(Random.Range(0, interiorTilesPerMapTile), Random.Range(0, interiorTilesPerMapTile));
+                FixtureInstance fixtureInstance = new FixtureInstance();
+                fixtureInstance.Data = fixtureData;
+                fixtureInstance.Position = ((Vector2)(position) - interiorTilesPerMapTile * 0.5f * Vector2.one) / interiorTilesPerMapTile;
+                fixtureInstance.Forward = Vector2Int.up;
+                List<Vector2Int> positions = new List<Vector2Int>();
+                foreach (Vector2Int offset in fixtureData.tilePositions)
+                {
+                    positions.Add(position + offset);
+                }
+                if (PlaceInteriorTiles(InteriorTile.InteriorTileType.Fixture, fixtureInstance, positions))
+                {
+                    SpawnFixture(fixtureInstance);
+                }
+                attempt++;
+            }
+        }
     }
 
     public void SpawnTiles()
@@ -409,14 +451,16 @@ public class GridMapManager : Singleton<GridMapManager>
             }
         }
     }
+    public void SpawnFixture(FixtureInstance fixtureInstance)
+    {
+        Instantiate(fixtureInstance.Data.FixturePrefab, tileSize * new Vector3(fixtureInstance.Position.x, 0, fixtureInstance.Position.y), Quaternion.identity, levelHolder.transform);
+    }
 
     public bool PlaceMapTile(TileCollection tileCollection, MapTile.MapTileType type, Vector2Int position)
     {
         if (CanPlaceMapTile(position))
         {
-            MapTile mapTile = new MapTile(type, tileCollection);
-            gridMap[position] = mapTile;
-            tileCollection.AddMapTilePosition(position);
+            ForcePlaceMapTile(tileCollection, type, position);
             return true;
         }
         return false;
@@ -437,28 +481,17 @@ public class GridMapManager : Singleton<GridMapManager>
         }
     }
 
-    public void ForcePlaceMapTiles(TileCollection tileCollection, MapTile.MapTileType type, HashSet<Vector2> positions)
-    {
-        foreach (Vector2 position in positions)
-        {
-            ForcePlaceMapTile(tileCollection, type, new Vector2Int((int)position.x, (int)position.y));
-        }
-    }
-
     public bool PlaceMapTiles(TileCollection tileCollection, MapTile.MapTileType type, List<Vector2Int> positions)
     {
         if (!CanPlaceMapTiles(positions))
         {
             return false;
         }
-        foreach (Vector2Int position in positions)
-        {
-            ForcePlaceMapTile(tileCollection, type, position);
-        }
+        ForcePlaceMapTiles(tileCollection, type, positions);
         return true;
     }
 
-    public void PlaceMapPossibleTiles(TileCollection tileCollection, MapTile.MapTileType type, List<Vector2Int> positions)
+    public void PlacePossibleMapTiles(TileCollection tileCollection, MapTile.MapTileType type, List<Vector2Int> positions)
     {
         foreach (Vector2Int position in positions)
         {
@@ -485,5 +518,84 @@ public class GridMapManager : Singleton<GridMapManager>
             }
         }
         return true;
+    }
+
+//-------------------------------------------------------------------------------------------------------------------------
+
+    public bool PlaceInteriorTile(InteriorTile.InteriorTileType type, FixtureInstance fixture, Vector2Int position)
+    {
+        if (CanPlaceInteriorTile(position))
+        {
+            ForcePlaceInteriorTile(type, fixture, position);
+            return true;
+        }
+        return false;
+    }
+
+    public void ForcePlaceInteriorTile(InteriorTile.InteriorTileType type, FixtureInstance fixture, Vector2Int position)
+    {
+        InteriorTile interiorTile = new InteriorTile(type, fixture);
+        interiorGridMap[position] = interiorTile;
+        if (fixture != null)
+        {
+            fixtureInstances.Add(fixture);
+        }
+    }
+
+    public void ForcePlaceInteriorTiles(InteriorTile.InteriorTileType type, FixtureInstance fixture, List<Vector2Int> positions)
+    {
+        foreach (Vector2Int position in positions)
+        {
+            ForcePlaceInteriorTile(type, fixture, position);
+        }
+    }
+
+    public bool PlaceInteriorTiles(InteriorTile.InteriorTileType type, FixtureInstance fixture, List<Vector2Int> positions)
+    {
+        if (!CanPlaceInteriorTiles(positions))
+        {
+            return false;
+        }
+        ForcePlaceInteriorTiles(type, fixture, positions);
+        return true;
+    }
+
+    public void PlacePossibleInteriorTiles(InteriorTile.InteriorTileType type, FixtureInstance fixture, List<Vector2Int> positions)
+    {
+        foreach (Vector2Int position in positions)
+        {
+            PlaceInteriorTile(type, fixture, position);
+        }
+    }
+
+    public bool CanPlaceInteriorTile(Vector2Int position)
+    {
+        if (interiorGridMap.InBounds(position))
+        {
+            return interiorGridMap[position].Type == InteriorTile.InteriorTileType.None;
+        }
+        return false;
+    }
+
+    public bool CanPlaceInteriorTiles(List<Vector2Int> positions)
+    {
+        foreach (Vector2Int position in positions)
+        {
+            if (!CanPlaceInteriorTile(position))
+            {
+                Debug.Log($"Tile Not Empty {position}");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool CanPlaceFixture(Vector2Int position)
+    {
+        if (interiorGridMap.InBounds(position))
+        {
+            return interiorGridMap[position].Type == InteriorTile.InteriorTileType.None;
+        }
+        return false;
     }
 }

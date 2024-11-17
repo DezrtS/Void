@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Debug Gun
   Description: It's a gun
-  ItemPrefab: {fileID: 57907132256727038, guid: 1c05eb14518d1c546a9292fb7dd7d023,
+  ItemPrefab: {fileID: 5793455159812539837, guid: 7e2b407959f71ac4ea300d90365ce3e1,
     type: 3}
