@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4485477558148152696}
   - component: {fileID: 6235030401920068693}
   - component: {fileID: 6165085840863327359}
+  - component: {fileID: 8406312557854551622}
   m_Layer: 0
   m_Name: Survivor
   m_TagString: Player
@@ -131,6 +132,22 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &8406312557854551622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575300930724462412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9011a9a417e758344bf1bf0c8643720b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  totalHealth: 100
+  currentHealth: 0
+  rb: {fileID: 0}
 --- !u!1 &5032421582807441334
 GameObject:
   m_ObjectHideFlags: 0

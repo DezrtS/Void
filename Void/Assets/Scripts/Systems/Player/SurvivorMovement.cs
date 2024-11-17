@@ -6,13 +6,13 @@ using Unity.Netcode;
 [RequireComponent(typeof(CharacterController))]
 public class SurvivorController : NetworkBehaviour
 {
-    public Transform spawnPoint; // Reference to the camera spawn point
-    public GameObject FPSCameraPrefab; 
-    public int playerHP = 100;
+    public Transform spawnPoint;
+    public GameObject FPSCameraPrefab;
 
     private Camera playerCamera;
     private CharacterController characterController;
 
+    // Movement settings
     private float walkSpeed = 6f;
     private float runSpeed = 12f;
     private float jumpPower = 7f;
@@ -28,53 +28,31 @@ public class SurvivorController : NetworkBehaviour
 
     private bool canMove = true;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (IsOwner)
+        {
+            AlignToGround();
+            SpawnPlayerCamera();
+        }
+    }
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
     }
 
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-        
-        if (IsOwner)
-        {
-            SpawnPlayerCamera();
-        }
-    }
-
-    private void SpawnPlayerCamera()
-    {
-        if (FPSCameraPrefab == null || spawnPoint == null)
-        {
-            Debug.LogError("FPSCameraPrefab or spawnPoint is not assigned in the Inspector.");
-            return;
-        }
-
-        // Instantiate the camera prefab at the exact location of the spawnPoint
-        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position, spawnPoint.rotation);
-        playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
-
-        if (playerCamera == null)
-        {
-            Debug.LogError("Camera component not found in FPSCameraPrefab or its children.");
-        }
-        else
-        {
-            Debug.Log("Camera component successfully assigned.");
-            // Parent the instantiated camera to the player transform
-            instantiatedCamera.transform.SetParent(transform);
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-
     private void Update()
     {
-        if (!IsOwner) return;
+        if (!IsOwner || !IsSpawned) return;
 
-        // FPS Movement
+        HandleMovement();
+    }
+
+    private void HandleMovement()
+    {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
 
@@ -98,7 +76,6 @@ public class SurvivorController : NetworkBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
         }
 
-        // Crouch control
         if (Input.GetKey(KeyCode.LeftControl) && canMove)
         {
             characterController.height = crouchHeight;
@@ -119,9 +96,46 @@ public class SurvivorController : NetworkBehaviour
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        }
+    }
 
-            float rotationY = Input.GetAxis("Mouse X") * lookSpeed;
-            transform.Rotate(0, rotationY, 0);
+    private void SpawnPlayerCamera()
+    {
+        if (FPSCameraPrefab == null || spawnPoint == null)
+        {
+            Debug.LogError("FPSCameraPrefab or spawnPoint is not assigned in the Inspector.");
+            return;
+        }
+
+        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position, spawnPoint.rotation);
+        playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
+
+        if (playerCamera == null)
+        {
+            Debug.LogError("Camera component not found in FPSCameraPrefab or its children.");
+        }
+        else
+        {
+            Debug.Log("Camera component successfully assigned.");
+            instantiatedCamera.transform.SetParent(transform);
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
+    private void AlignToGround()
+    {
+        Ray ray = new Ray(transform.position, Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 10f))
+        {
+            float groundOffset = 0.1f; 
+            transform.position = hitInfo.point + Vector3.up * (characterController.height / 2 + groundOffset);
+        }
+        else
+        {
+            Debug.LogWarning("No ground detected below the spawn point.");
         }
     }
 }

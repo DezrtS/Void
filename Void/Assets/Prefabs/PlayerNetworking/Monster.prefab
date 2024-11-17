@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: -8887219458936362995}
   m_Layer: 0
   m_Name: Monster
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,9 +164,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 540d65290feb6f842b61dfafe6114820, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRadius: {fileID: 409447271050410054}
-  meleeDamage: 15
-  monsterHP: 350
+  monsterHP:
+    m_InternalValue: 350
+  damageSpherePrefab: {fileID: 6368004395190296302, guid: 290337a6f423b8b4ab758b5f19e13e8e,
+    type: 3}
   spawnPoint: {fileID: 5392849664127405794}
   FPSCameraPrefab: {fileID: 1675628873728395439, guid: 9da46762dd5c986409790bb6d4c6c424,
     type: 3}
