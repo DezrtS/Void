@@ -5,13 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05bbb3c4-6f7c-4865-baf9-5df882d1fd4e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/fmodstudio.bundle/Contents/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/fmodstudio.bundle/Contents/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/fmodstudioL.bundle/Contents/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/fmodstudioL.bundle/Contents/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/resonanceaudio.bundle/Contents/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Plugins/FMOD/platforms/mac/lib/resonanceaudio.bundle/Contents/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Void/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Void/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/Armature_Armature_mixamo.com_Layer0.anim" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/Armature_Armature_mixamo.com_Layer0.anim.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/back.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Clips/back.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/drag.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Clips/drag.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/front.anim" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/front.anim.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/gun_aim.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Clips/gun_aim.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/gun_idle.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Clips/gun_idle.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/idle.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Clips/idle.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/interact.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Clips/interact.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/left.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Clips/left.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/right.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Clips/right.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/shoot_gun.anim" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/shoot_gun.anim.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/walk.anim" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Clips/walk.anim.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Controllers/CharacterAnimController.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Controllers/CharacterAnimController.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Controllers/characterlowermask.mask" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Controllers/characterlowermask.mask" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animations/Controllers/characteruppermask.mask" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animations/Controllers/characteruppermask.mask" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Models/character_model5.fbx" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/character_model5.fbx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Models/character_model5.fbx.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/character_model5.fbx.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prototype/Base.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prototype/Base.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/SkyandFogSettingsProfile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/SkyandFogSettingsProfile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Systems/Player/TestMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Systems/Player/TestMovement.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +57,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Game-engine-michael&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Animation-setup&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -99,6 +118,8 @@
       <workItem from="1729786166515" duration="1992000" />
       <workItem from="1729793283588" duration="622000" />
       <workItem from="1729793925243" duration="8196000" />
+      <workItem from="1731867973807" duration="136000" />
+      <workItem from="1731868121960" duration="2846000" />
     </task>
     <servers />
   </component>
