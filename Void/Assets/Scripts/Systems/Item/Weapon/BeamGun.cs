@@ -3,10 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class BeamGun : Item
 {
     [SerializeField] private Beam beam;
+    [SerializeField] private VisualEffect effect;
     [SerializeField] private float timeToWindUp;
     [SerializeField] private float timeToReachFullPower;
     [SerializeField] private float timeToOverheat;
@@ -31,6 +33,7 @@ public class BeamGun : Item
     protected override void OnUse()
     {
         isFiring = true;
+        effect.Play();
     }
 
     protected override void OnStopUsing()

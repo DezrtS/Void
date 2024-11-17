@@ -1,0 +1,6 @@
+VisualElement {
+}
+
+.button {
+    padding: 5px;
+}

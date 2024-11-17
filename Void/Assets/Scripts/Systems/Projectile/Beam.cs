@@ -35,8 +35,6 @@ public class Beam : MonoBehaviour
                 maxPower = 1;
             }
         }
-
-        transform.localScale = Mathf.Min(power, maxPower) * range * Vector3.forward + new Vector3(1, 1, 0);
     }
 
     public void OnBeamHit()
