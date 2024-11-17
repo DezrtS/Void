@@ -4,7 +4,8 @@ using Unity.Netcode;
 
 public class MeleeDamage : NetworkBehaviour
 {
-    public int damageAmount = 10;
+    public int monsterMelee = 25;
+    public int playerMelee = 50;
     public float despawnDelay = 0.1f;
 
     private void OnTriggerEnter(Collider other)
@@ -14,7 +15,20 @@ public class MeleeDamage : NetworkBehaviour
             DamageSystem playerHealth = other.GetComponent<DamageSystem>();
             if (playerHealth != null)
             {
-                playerHealth.Damage(damageAmount);
+                playerHealth.Damage(monsterMelee);
+            }
+
+            if (IsServer)
+            {
+                DespawnSphere();
+            }
+        }
+        if (other.CompareTag("Monster"))
+        {
+            DamageSystem playerHealth = other.GetComponent<DamageSystem>();
+            if (playerHealth != null)
+            {
+                playerHealth.Damage(playerMelee);
             }
 
             if (IsServer)

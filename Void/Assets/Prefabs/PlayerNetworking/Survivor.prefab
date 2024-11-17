@@ -100,7 +100,8 @@ MonoBehaviour:
   spawnPoint: {fileID: 3662237747590448752}
   FPSCameraPrefab: {fileID: 1675628873728395439, guid: 9da46762dd5c986409790bb6d4c6c424,
     type: 3}
-  playerHP: 100
+  damageSpherePrefab: {fileID: 6368004395190296302, guid: 290337a6f423b8b4ab758b5f19e13e8e,
+    type: 3}
 --- !u!114 &6165085840863327359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,7 +148,6 @@ MonoBehaviour:
   damage: 0
   totalHealth: 100
   currentHealth: 0
-  rb: {fileID: 0}
 --- !u!1 &5032421582807441334
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,6 @@ using Unity.Netcode;
 public class MonsterMovement : NetworkBehaviour
 {
     // Monster stats
-    public NetworkVariable<int> monsterHP = new NetworkVariable<int>(350);
     private float attackTimer = 2.0f;
     private float lastAttack;
     private NetworkVariable<bool> canDamage = new NetworkVariable<bool>(false);
