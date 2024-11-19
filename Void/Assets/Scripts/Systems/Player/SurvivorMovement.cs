@@ -6,13 +6,18 @@ using Unity.Netcode;
 [RequireComponent(typeof(CharacterController))]
 public class SurvivorController : NetworkBehaviour
 {
-    public Transform spawnPoint; // Reference to the camera spawn point
-    public GameObject FPSCameraPrefab; 
-    public int playerHP = 100;
+    public Transform spawnPoint;
+    public GameObject FPSCameraPrefab;
+    public GameObject damageSpherePrefab;
+
+    private float attackTimer = 2.0f;
+    private float lastAttack;
+    private NetworkVariable<bool> canDamage = new NetworkVariable<bool>(false);
 
     private Camera playerCamera;
     private CharacterController characterController;
 
+    // Movement settings
     private float walkSpeed = 6f;
     private float runSpeed = 12f;
     private float jumpPower = 7f;
@@ -28,53 +33,32 @@ public class SurvivorController : NetworkBehaviour
 
     private bool canMove = true;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (IsOwner)
+        {
+            AlignToGround();
+            SpawnPlayerCamera();
+        }
+    }
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
     }
 
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-        
-        if (IsOwner)
-        {
-            SpawnPlayerCamera();
-        }
-    }
-
-    private void SpawnPlayerCamera()
-    {
-        if (FPSCameraPrefab == null || spawnPoint == null)
-        {
-            Debug.LogError("FPSCameraPrefab or spawnPoint is not assigned in the Inspector.");
-            return;
-        }
-
-        // Instantiate the camera prefab at the exact location of the spawnPoint
-        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position, spawnPoint.rotation);
-        playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
-
-        if (playerCamera == null)
-        {
-            Debug.LogError("Camera component not found in FPSCameraPrefab or its children.");
-        }
-        else
-        {
-            Debug.Log("Camera component successfully assigned.");
-            // Parent the instantiated camera to the player transform
-            instantiatedCamera.transform.SetParent(transform);
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-
     private void Update()
     {
-        if (!IsOwner) return;
+        if (!IsOwner || !IsSpawned) return;
 
-        // FPS Movement
+        HandleMovement();
+        HandleAttack();
+    }
+
+    private void HandleMovement()
+    {
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
 
@@ -98,7 +82,6 @@ public class SurvivorController : NetworkBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
         }
 
-        // Crouch control
         if (Input.GetKey(KeyCode.LeftControl) && canMove)
         {
             characterController.height = crouchHeight;
@@ -119,9 +102,132 @@ public class SurvivorController : NetworkBehaviour
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+        }
+    }
 
-            float rotationY = Input.GetAxis("Mouse X") * lookSpeed;
-            transform.Rotate(0, rotationY, 0);
+    private void SpawnPlayerCamera()
+    {
+        if (FPSCameraPrefab == null || spawnPoint == null)
+        {
+            Debug.LogError("FPSCameraPrefab or spawnPoint is not assigned in the Inspector.");
+            return;
+        }
+
+        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position, spawnPoint.rotation);
+        playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
+
+        if (playerCamera == null)
+        {
+            Debug.LogError("Camera component not found in FPSCameraPrefab or its children.");
+        }
+        else
+        {
+            instantiatedCamera.transform.SetParent(transform);
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
+    private void AlignToGround()
+    {
+        if (spawnPoint == null)
+        {
+            Debug.LogWarning("SpawnPoint is not assigned.");
+            return;
+        }
+
+        // Perform a raycast downwards from the spawn point to detect the ground.
+        Ray ray = new Ray(spawnPoint.position, Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 10f))
+        {
+            // If the raycast hits something, adjust the position slightly above the ground.
+            float groundOffset = 0.1f;
+            transform.position = hitInfo.point + Vector3.up * (characterController.height / 2 + groundOffset);
+        }
+        else
+        {
+            // If no ground is detected, we can fallback to spawnPoint, but adjust the height.
+            Debug.LogWarning("No ground detected below the spawn point. Using fallback position.");
+
+            // Adjust the position using the spawn point's y-axis value plus a slight offset.
+            transform.position = spawnPoint.position + Vector3.up * (characterController.height / 2);
+        }
+    }
+
+
+    private void HandleAttack()
+    {
+        lastAttack += Time.deltaTime;
+        if (lastAttack > attackTimer)
+        {
+            SetCanDamageServerRpc(false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            AttackServerRpc();
+        }
+        else if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            StopAttackServerRpc();
+        }
+    }
+
+    [ServerRpc]
+    private void AttackServerRpc()
+    {
+        SetCanDamageServerRpc(true);
+        SpawnDamageSphereServerRpc();
+        lastAttack = 0.0f;
+    }
+
+    [ServerRpc]
+    private void StopAttackServerRpc()
+    {
+        SetCanDamageServerRpc(false);
+    }
+
+    [ServerRpc]
+    private void SetCanDamageServerRpc(bool value)
+    {
+        canDamage.Value = value;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnDamageSphereServerRpc()
+    {
+        if (damageSpherePrefab == null || playerCamera == null)
+        {
+            Debug.LogError("Damage Sphere Prefab or Player Camera is not assigned!");
+            return;
+        }
+
+        Vector3 spawnPosition = playerCamera.transform.position + playerCamera.transform.forward * 2f;
+
+        GameObject damageSphere = Instantiate(damageSpherePrefab, spawnPosition, Quaternion.identity);
+
+        NetworkObject networkObject = damageSphere.GetComponent<NetworkObject>();
+        if (networkObject != null)
+        {
+            networkObject.Spawn();
+        }
+        else
+        {
+            Debug.LogError("Damage Sphere does not have a NetworkObject component!");
+        }
+
+        Debug.Log($"Damage Sphere instantiated at {spawnPosition} in the direction of the camera.");
+    }
+
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (playerCamera != null)
+        {
+            Destroy(playerCamera.gameObject);
         }
     }
 }

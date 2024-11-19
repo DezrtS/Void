@@ -7,12 +7,11 @@ using Unity.Netcode;
 public class MonsterMovement : NetworkBehaviour
 {
     // Monster stats
-    public GameObject attackRadius;
-    public NetworkVariable<int> monsterHP = new NetworkVariable<int>(350);
-    public float meleeDamage = 15;
     private float attackTimer = 2.0f;
     private float lastAttack;
     private NetworkVariable<bool> canDamage = new NetworkVariable<bool>(false);
+
+    public GameObject damageSpherePrefab;
 
     // Monster movement
     private Camera playerCamera;
@@ -119,7 +118,7 @@ public class MonsterMovement : NetworkBehaviour
         }
     }
 
-    private void HandleAttack()
+   private void HandleAttack()
     {
         lastAttack += Time.deltaTime;
         if (lastAttack > attackTimer)
@@ -141,7 +140,7 @@ public class MonsterMovement : NetworkBehaviour
     private void AttackServerRpc()
     {
         SetCanDamageServerRpc(true);
-        UpdateAttackRadiusClientRpc(true);
+        SpawnDamageSphereServerRpc();
         lastAttack = 0.0f;
     }
 
@@ -149,7 +148,6 @@ public class MonsterMovement : NetworkBehaviour
     private void StopAttackServerRpc()
     {
         SetCanDamageServerRpc(false);
-        UpdateAttackRadiusClientRpc(false);
     }
 
     [ServerRpc]
@@ -158,12 +156,28 @@ public class MonsterMovement : NetworkBehaviour
         canDamage.Value = value;
     }
 
-    [ClientRpc]
-    private void UpdateAttackRadiusClientRpc(bool active)
+    [ServerRpc]
+    private void SpawnDamageSphereServerRpc()
     {
-        if (attackRadius != null)
+        if (damageSpherePrefab == null || playerCamera == null)
         {
-            attackRadius.SetActive(active);
+            Debug.LogError("Damage Sphere Prefab or Player Camera is not assigned!");
+            return;
+        }
+
+        Vector3 spawnPosition = playerCamera.transform.position + playerCamera.transform.forward * 2f;
+
+        GameObject damageSphere = Instantiate(damageSpherePrefab, spawnPosition, Quaternion.identity);
+        Debug.Log($"Damage Sphere instantiated at {spawnPosition} in the direction of the camera.");
+
+        NetworkObject networkObject = damageSphere.GetComponent<NetworkObject>();
+        if (networkObject != null)
+        {
+            networkObject.Spawn();
+        }
+        else
+        {
+            Debug.LogError("Damage Sphere does not have a NetworkObject component!");
         }
     }
 
