@@ -6,5 +6,5 @@ public abstract class TileSection : ScriptableObject
 {
     public Vector2Int GridSize;
     [HideInInspector] public Vector2Int gridSize = Vector2Int.one;
-    [HideInInspector] public List<Vector2Int> tilePositions;
+    public List<Vector2Int> tilePositions;
 }

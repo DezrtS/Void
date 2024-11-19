@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2727eff2645464eb1f51d8584c75b5, type: 3}
   m_Name: Debug Room
   m_EditorClassIdentifier: 
-  gridSize: {x: 5, y: 5}
   GridSize: {x: 2, y: 2}
+  gridSize: {x: 5, y: 5}
   tilePositions:
   - {x: 1, y: 0}
   - {x: 2, y: 2}

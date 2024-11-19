@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using System;
 
 public class FixtureEditorWindow : EditorWindow
 {
@@ -13,6 +14,7 @@ public class FixtureEditorWindow : EditorWindow
     private VisualElement tileGridScrollView;
     private VisualElement relationshiopVisualizationScrollView;
 
+    private ProgressBar restrictionProgressBar;
     private ProgressBar relationshipProgressBar;
 
     // Data Editor
@@ -21,6 +23,13 @@ public class FixtureEditorWindow : EditorWindow
     private Button undoButton;
     private Button redoButton;
     private Button resetButton;
+
+    private Button removeRestrictionButton;
+    private Button newRestrictionButton;
+    private Button previousRestrictionButton;
+    private Button nextRestrictionButton;
+    private Button removePositionButton;
+    private Button newPositionButton;
 
     // Relationships Editor
     private Button backToFixturesButton;
@@ -32,8 +41,16 @@ public class FixtureEditorWindow : EditorWindow
     private TextField fixtureNameField;
     private DropdownField fixtureTagsField;
     private Vector2IntField gridSizeField;
+    private EnumField restrictionTypeField;
+    private Toggle hasInteriorTileTypeToggle;
+    private EnumField interiorTileTypeField;
+    private Toggle hasFixtureTypeToggle;
+    private ListView allowedFixtureTypeTagList;
+    private Toggle hasPathToWalkableTileToggle;
+
     private FloatField weightField;
     private Vector2IntField positionField;
+    private EnumField rotationPresetField;
     private Vector2IntField forwardField;
 
     private List<FixtureData> fixtures;
@@ -45,6 +62,7 @@ public class FixtureEditorWindow : EditorWindow
     private Vector2Int gridSize = new Vector2Int(2, 2);
     List<FixtureRelationshipData> selectedFixtureRelationshipDatas = new();
     private int currentRelationship = 0;
+    private int currentRestriction = 0;
     private CommandInvoker commandInvoker;
 
     [MenuItem("Window/Fixture Editor")]
@@ -101,6 +119,35 @@ public class FixtureEditorWindow : EditorWindow
             GenerateTileGrid();
         };
 
+        removeRestrictionButton = rootVisualElement.Q<Button>("RemoveRelationshipButton");
+        removeRestrictionButton.clicked += OnRemoveRestriction;
+        newRestrictionButton = rootVisualElement.Q<Button>("NewRestrictionButton");
+        newRestrictionButton.clicked += OnNewRestriction;
+        previousRestrictionButton = rootVisualElement.Q<Button>("PreviousRestrictionButton");
+        previousRestrictionButton.clicked += () =>
+        {
+            currentRestriction = Mathf.Max(0, currentRestriction - 1);
+        };
+        nextRestrictionButton = rootVisualElement.Q<Button>("NextRestrictionButton");
+        nextRestrictionButton.clicked += () =>
+        {
+            if (!selectedFixture)
+            {
+                return;
+            }
+            else if (!selectedFixture.RestrictionData)
+            {
+                return;
+            }
+
+            selectedFixture.RestrictionData.Restrictions ??= new();
+            currentRestriction = Mathf.Min(selectedFixture.RestrictionData.Restrictions.Count() - 1, currentRestriction + 1);
+        };
+        removePositionButton = rootVisualElement.Q<Button>("RemovePositionButton");
+        removePositionButton.clicked += OnRemovePosition;
+        newPositionButton = rootVisualElement.Q<Button>("NewPositionButton");
+        newPositionButton.clicked += OnNewPosition;
+
         backToFixturesButton = rootVisualElement.Q<Button>("BackToFixturesButton");
         backToFixturesButton.clicked += OnBackToFixtures;
         previousRelationshipButton = rootVisualElement.Q<Button>("PreviousRelationshipButton");
@@ -131,7 +178,7 @@ public class FixtureEditorWindow : EditorWindow
         });
 
         fixtureTagsField = rootVisualElement.Q<DropdownField>("FixtureTagsField");
-        fixtureNameField.RegisterValueChangedCallback(evt =>
+        fixtureTagsField.RegisterValueChangedCallback(evt =>
         {
             
         });
@@ -140,6 +187,55 @@ public class FixtureEditorWindow : EditorWindow
         gridSizeField.RegisterValueChangedCallback(evt =>
         {
             gridSize = evt.newValue;
+        });
+
+        restrictionTypeField = rootVisualElement.Q<EnumField>("RestrictionTypeField");
+        restrictionTypeField.Init(Restriction.RestrictionType.Manditory);
+        restrictionTypeField.RegisterValueChangedCallback(evt =>
+        {
+            if (selectedFixture)
+            {
+
+            }
+        });
+
+        hasInteriorTileTypeToggle = rootVisualElement.Q<Toggle>("HasInteriorTileTypeToggle");
+        hasInteriorTileTypeToggle.RegisterValueChangedCallback(evt =>
+        {
+            if (selectedFixture)
+            {
+
+            }
+        });
+
+        interiorTileTypeField = rootVisualElement.Q<EnumField>("InteriorTileTypeField");
+        interiorTileTypeField.Init(InteriorTile.InteriorTileType.None);
+        interiorTileTypeField.RegisterValueChangedCallback(evt =>
+        {
+            if (selectedFixture)
+            {
+
+            }
+        });
+
+        hasFixtureTypeToggle = rootVisualElement.Q<Toggle>("HasFixtureTypeToggle");
+        hasFixtureTypeToggle.RegisterValueChangedCallback(evt =>
+        {
+            if (selectedFixture)
+            {
+
+            }
+        });
+
+        allowedFixtureTypeTagList = rootVisualElement.Q<ListView>("FixtureTagField");
+
+        hasPathToWalkableTileToggle = rootVisualElement.Q<Toggle>("HasWalkablePathToggle");
+        hasPathToWalkableTileToggle.RegisterValueChangedCallback(evt =>
+        {
+            if (selectedFixture)
+            {
+
+            }
         });
 
         weightField = rootVisualElement.Q<FloatField>("WeightField");
@@ -157,16 +253,86 @@ public class FixtureEditorWindow : EditorWindow
             if (selectedRelationship)
             {
                 selectedRelationship.Position = evt.newValue;
+                selectedRelationship.OtherRelationship.Position = -evt.newValue;
                 GenerateRelationshipVisualization();
             }
         });
 
-        forwardField = rootVisualElement.Q<Vector2IntField>("ForwardField");
-        forwardField.RegisterValueChangedCallback(evt =>
+        rotationPresetField = rootVisualElement.Q<EnumField>("RotationPresetField");
+        rotationPresetField.Init(RotationPreset.Zero);
+        rotationPresetField.RegisterValueChangedCallback(evt =>
         {
             if (selectedRelationship)
-            {
-                selectedRelationship.Forward =  evt.newValue;
+            { 
+                selectedRelationship.RotationPreset = (RotationPreset)evt.newValue;
+                //selectedRelationship.OtherRelationship.RotationPreset = (RotationPreset)(evt.newValue % 2);
+                Matrix4x4 rotationMatrix = new Matrix4x4(
+                    new Vector4(1, 0, 0, 0),
+                    new Vector4(0, 1, 0, 0),
+                    new Vector4(0, 0, 1, 0),
+                    new Vector4(0, 0, 0, 1)
+                );
+
+                if (selectedRelationship.RotationPreset == RotationPreset.Ninety)
+                {
+                    rotationMatrix = new Matrix4x4(
+                        new Vector4(0, -1, 0, 0),
+                        new Vector4(1, 0, 0, 0),
+                        new Vector4(0, 0, 1, 0),
+                        new Vector4(0, 0, 0, 1)
+                    );
+
+                    selectedRelationship.OtherRelationship.RotationPreset = RotationPreset.TwoSeventy;
+                    selectedRelationship.OtherRelationship.RotationMatrix = new Matrix4x4(
+                        new Vector4(0, 1, 0, 0),
+                        new Vector4(-1, 0, 0, 0),
+                        new Vector4(0, 0, 1, 0),
+                        new Vector4(0, 0, 0, 1)
+                    );
+                    Vector2 rotatedPosition = selectedRelationship.OtherRelationship.RotationMatrix * (Vector2)selectedRelationship.Position;
+                    selectedRelationship.OtherRelationship.Position = new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y);
+                }
+                else if (selectedRelationship.RotationPreset == RotationPreset.OneEighty)
+                {
+                    rotationMatrix = new Matrix4x4(
+                        new Vector4(-1, 0, 0, 0),
+                        new Vector4(0, -1, 0, 0),
+                        new Vector4(0, 0, 1, 0),
+                        new Vector4(0, 0, 0, 1)
+                    );
+
+                    selectedRelationship.OtherRelationship.RotationPreset = selectedRelationship.RotationPreset;
+                    selectedRelationship.OtherRelationship.RotationMatrix = rotationMatrix;
+                    selectedRelationship.OtherRelationship.Position = selectedRelationship.Position;
+                }
+                else if (selectedRelationship.RotationPreset == RotationPreset.TwoSeventy)
+                {
+                    rotationMatrix = new Matrix4x4(
+                        new Vector4(0, 1, 0, 0),
+                        new Vector4(-1, 0, 0, 0),
+                        new Vector4(0, 0, 1, 0),
+                        new Vector4(0, 0, 0, 1)
+                    );
+
+                    selectedRelationship.OtherRelationship.RotationPreset = RotationPreset.Ninety;
+                    selectedRelationship.OtherRelationship.RotationMatrix = new Matrix4x4(
+                        new Vector4(0, -1, 0, 0),
+                        new Vector4(1, 0, 0, 0),
+                        new Vector4(0, 0, 1, 0),
+                        new Vector4(0, 0, 0, 1)
+                    );
+                    Vector2 rotatedPosition = selectedRelationship.OtherRelationship.RotationMatrix * (Vector2)selectedRelationship.Position;
+                    selectedRelationship.OtherRelationship.Position = new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y);
+                }
+                else
+                {
+                    selectedRelationship.OtherRelationship.RotationPreset = RotationPreset.Zero;
+                    selectedRelationship.OtherRelationship.RotationMatrix = rotationMatrix;
+                    Vector2 rotatedPosition = rotationMatrix * (Vector2)selectedRelationship.Position;
+                    selectedRelationship.OtherRelationship.Position = new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y);
+                }
+
+                selectedRelationship.RotationMatrix = rotationMatrix;
                 GenerateRelationshipVisualization();
             }
         });
@@ -190,20 +356,16 @@ public class FixtureEditorWindow : EditorWindow
 
         fixtureDataEditorContainer.style.display = DisplayStyle.None;
         fixtureRelationshipsEditorContainer.style.display = DisplayStyle.Flex;
-        var otherFixtures = fixtures.FindAll(f =>
-        {
-            return f != selectedFixture;
-        });
 
-        fixtureList.itemsSource = otherFixtures;
+        fixtureList.itemsSource = fixtures;
         fixtureList.makeItem = () => new Label();
         fixtureList.bindItem = (element, i) =>
         {
-            (element as Label).text = otherFixtures[i].name;
+            (element as Label).text = fixtures[i].name;
         };
 
         fixtureList.SetSelection(0);
-        subSelectedFixture = otherFixtures[0];
+        subSelectedFixture = fixtures[0];
 
         fixtureList.selectionChanged += objects =>
         {
@@ -270,8 +432,9 @@ public class FixtureEditorWindow : EditorWindow
 
         // Get the selected asset path
         string assetPath = AssetDatabase.GetAssetPath(selectedRelationship);
+        string otherAssetPath = AssetDatabase.GetAssetPath(selectedRelationship.OtherRelationship);
 
-        if (!string.IsNullOrEmpty(assetPath))
+        if (!string.IsNullOrEmpty(assetPath) && !string.IsNullOrEmpty(otherAssetPath))
         {
             // Confirm deletion
             if (EditorUtility.DisplayDialog("Delete Asset",
@@ -279,8 +442,10 @@ public class FixtureEditorWindow : EditorWindow
                 "Yes", "No"))
             {
                 selectedFixture.Relationships.Remove(selectedRelationship);
+                subSelectedFixture.Relationships.Remove(selectedRelationship.OtherRelationship);
                 // Delete the asset
                 AssetDatabase.DeleteAsset(assetPath);
+                AssetDatabase.DeleteAsset(otherAssetPath);
                 AssetDatabase.SaveAssets();
 
                 // Print a confirmation message
@@ -296,6 +461,16 @@ public class FixtureEditorWindow : EditorWindow
         GenerateRelationshipVisualization();
     }
 
+    private void OnRemoveRestriction()
+    {
+
+    }
+
+    private void OnRemovePosition()
+    {
+
+    }
+
     private void OnNewRelationship()
     {
         if (!subSelectedFixture || !selectedFixture)
@@ -304,20 +479,41 @@ public class FixtureEditorWindow : EditorWindow
         }
 
         selectedFixture.Relationships ??= new List<FixtureRelationshipData>();
+        subSelectedFixture.Relationships ??= new List<FixtureRelationshipData>();
 
         FixtureRelationshipData fixtureRelationshipData = CreateInstance<FixtureRelationshipData>();
         fixtureRelationshipData.OtherFixture = subSelectedFixture;
+        FixtureRelationshipData otherFixtureRelationshipData = CreateInstance<FixtureRelationshipData>();
+        otherFixtureRelationshipData.OtherFixture = selectedFixture;
+        fixtureRelationshipData.OtherRelationship = otherFixtureRelationshipData;
+        otherFixtureRelationshipData.OtherRelationship = fixtureRelationshipData;
         string folderPath = "Assets/Resources/Procedural Generation/Fixture Relationships";
         string assetName = $"{selectedFixture.name}-{subSelectedFixture.name}.asset";
         string assetPath = $"{folderPath}/{assetName}";
+        string otherAssetName = $"{subSelectedFixture.name}-{selectedFixture.name}.asset";
+        string otherAssetPath = $"{folderPath}/{otherAssetName}";
         assetPath = AssetDatabase.GenerateUniqueAssetPath(assetPath);
+        otherAssetPath = AssetDatabase.GenerateUniqueAssetPath(otherAssetPath);
         AssetDatabase.CreateAsset(fixtureRelationshipData, assetPath);
+        AssetDatabase.CreateAsset(otherFixtureRelationshipData, otherAssetPath);
         AssetDatabase.SaveAssets();
 
         selectedFixture.Relationships.Add(fixtureRelationshipData);
+        subSelectedFixture.Relationships.Add(otherFixtureRelationshipData);
         EditorUtility.SetDirty(selectedFixture);
+        EditorUtility.SetDirty(subSelectedFixture);
         GenerateRelationshipVisualization();
         Debug.Log("Created New Relationship");
+    }
+
+    private void OnNewRestriction()
+    {
+
+    }
+
+    private void OnNewPosition()
+    {
+
     }
 
     private void OnSelectNewFixture()
@@ -422,6 +618,11 @@ public class FixtureEditorWindow : EditorWindow
         }
     }
 
+    public void ResetRestrictions()
+    {
+
+    }
+
     public void GenerateRelationshipVisualization()
     {
         relationshiopVisualizationScrollView.Clear();
@@ -461,10 +662,12 @@ public class FixtureEditorWindow : EditorWindow
 
         weightField.value = selectedRelationship.Weight;
         positionField.value = selectedRelationship.Position;
-        forwardField.value = selectedRelationship.Forward;
+        rotationPresetField.value = selectedRelationship.RotationPreset;
 
-        Vector2Int minBounds = new Vector2Int(Mathf.Min(0, -selectedRelationship.OtherFixture.gridSize.x + selectedRelationship.Position.x), Mathf.Min(0, -selectedRelationship.OtherFixture.gridSize.y + selectedRelationship.Position.y));
-        Vector2Int maxBounds = new Vector2Int(Mathf.Max(selectedFixture.gridSize.x, selectedRelationship.OtherFixture.gridSize.x + selectedRelationship.Position.x), Mathf.Max(selectedFixture.gridSize.y, selectedRelationship.OtherFixture.gridSize.y + selectedRelationship.Position.y));
+        int max = Mathf.Max(selectedRelationship.OtherFixture.gridSize.x, selectedRelationship.OtherFixture.gridSize.y);
+
+        Vector2Int minBounds = new Vector2Int(Mathf.Min(0, -max + selectedRelationship.Position.x), Mathf.Min(0, -max + selectedRelationship.Position.y));
+        Vector2Int maxBounds = new Vector2Int(Mathf.Max(selectedFixture.gridSize.x, max + 1 + selectedRelationship.Position.x), Mathf.Max(selectedFixture.gridSize.y, max + 1 + selectedRelationship.Position.y));
 
         for (int y = minBounds.y; y < maxBounds.y; y++)
         {
@@ -485,9 +688,10 @@ public class FixtureEditorWindow : EditorWindow
                 };
 
                 Vector2Int position = new Vector2Int(x, y);
+                Vector2 rotatedPosition = (Vector2)(selectedRelationship.RotationMatrix * (Vector2)(position - selectedRelationship.Position)) + selectedRelationship.Position;
 
                 bool containsMain = selectedFixture.tilePositions.Contains(position);
-                bool containsSecondary = selectedRelationship.OtherFixture.tilePositions.Contains((position - selectedRelationship.Position) * selectedRelationship.Forward);
+                bool containsSecondary = selectedRelationship.OtherFixture.tilePositions.Contains(new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y) - selectedRelationship.Position);
 
                 if (containsMain && containsSecondary)
                 {
