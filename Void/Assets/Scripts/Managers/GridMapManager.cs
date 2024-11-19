@@ -22,9 +22,11 @@ public class GridMapManager : Singleton<GridMapManager>
     [Header("Interior Generation Parameters")]
     [SerializeField] private int interiorTilesPerMapTile = 3;
     [SerializeField] private int maxFixtureAttempts = 100;
+    public List<FixtureData> fixtures;
     [Space(10)]
     [Header("Visualization Options")]
     [SerializeField] private bool spawnCollectionAveragePositions;
+    [SerializeField] private bool spawnFixturePositions;
     [SerializeField] private bool drawRoomConnectionTree;
     [SerializeField] private GameObject debugMarker;
     [Space(10)]
@@ -81,6 +83,19 @@ public class GridMapManager : Singleton<GridMapManager>
     {
         ResetInteriorGridMap();
         interiorGridMap = new Grid2D<InteriorTile>(gridSize * interiorTilesPerMapTile, Vector2Int.zero);
+        foreach (TileCollection collection in tileCollections)
+        {
+            foreach (Vector2Int position in collection.mapTilePositions)
+            {
+                for (int y = 0; y < interiorTilesPerMapTile; y++)
+                {
+                    for (int x = 0; x < interiorTilesPerMapTile; x++)
+                    {
+                        interiorGridMap[interiorTilesPerMapTile * position + new Vector2Int(x, y)] = new InteriorTile(InteriorTile.InteriorTileType.None, null);
+                    }
+                }
+            }
+        }
     }
 
     public void InitializeInteriorGridMap(int interiorTilesPerMapTile)
@@ -325,7 +340,7 @@ public class GridMapManager : Singleton<GridMapManager>
                 tileCollection.AddConnection(path[1], path[0]);
                 tileCollection.AddConnection(path[path.Count - 2], path[path.Count - 1]);
 
-                PlaceMapPossibleTiles(tileCollection, MapTile.MapTileType.Hallway, path);
+                PlacePossibleMapTiles(tileCollection, MapTile.MapTileType.Hallway, path);
             }
         }
 
@@ -335,6 +350,11 @@ public class GridMapManager : Singleton<GridMapManager>
         }
     }
 
+    public void GenerateWalkways()
+    {
+
+    }
+
     public void GenerateTasks()
     {
 
@@ -342,7 +362,200 @@ public class GridMapManager : Singleton<GridMapManager>
 
     public void GenerateInteriors()
     {
+        foreach (TileCollection collection in tileCollections)
+        {
+            int attempt = 0;
+            int start = fixtureInstances.Count;
+            
+            while (attempt < maxFixtureAttempts)
+            {
+                int selectedFixtureIndex = Random.Range(0, fixtures.Count);
+                bool placeNewFixture = false;
 
+                while (!placeNewFixture)
+                {
+                    FixtureData fixture = fixtures[selectedFixtureIndex];
+                    Vector2Int randomPosition = interiorTilesPerMapTile * collection.GetRandomMapTilePosition() + new Vector2Int(Random.Range(0, interiorTilesPerMapTile), Random.Range(0, interiorTilesPerMapTile));
+                    RotationPreset randomRotationPreset = (RotationPreset)Random.Range(0, 4);
+
+                    Matrix4x4 rotationMatrix = new Matrix4x4(
+                        new Vector4(1, 0, 0, 0),
+                        new Vector4(0, 1, 0, 0),
+                        new Vector4(0, 0, 1, 0),
+                        new Vector4(0, 0, 0, 1)
+                    );
+
+                    if (randomRotationPreset == RotationPreset.Ninety)
+                    {
+                        rotationMatrix = new Matrix4x4(
+                            new Vector4(0, -1, 0, 0),
+                            new Vector4(1, 0, 0, 0),
+                            new Vector4(0, 0, 1, 0),
+                            new Vector4(0, 0, 0, 1)
+                        );
+                    }
+                    else if (randomRotationPreset == RotationPreset.OneEighty)
+                    {
+                        rotationMatrix = new Matrix4x4(
+                            new Vector4(-1, 0, 0, 0),
+                            new Vector4(0, -1, 0, 0),
+                            new Vector4(0, 0, 1, 0),
+                            new Vector4(0, 0, 0, 1)
+                        );
+                    }
+                    else if (randomRotationPreset == RotationPreset.TwoSeventy)
+                    {
+                        rotationMatrix = new Matrix4x4(
+                            new Vector4(0, 1, 0, 0),
+                            new Vector4(-1, 0, 0, 0),
+                            new Vector4(0, 0, 1, 0),
+                            new Vector4(0, 0, 0, 1)
+                        );
+                    }
+
+                    FixtureInstance fixtureInstance = new FixtureInstance();
+                    fixtureInstance.Data = fixture;
+                    fixtureInstance.ParentCollection = collection;
+                    fixtureInstance.Position = randomPosition;
+                    fixtureInstance.RotationMatrix = rotationMatrix;
+                    fixtureInstance.RotationPreset = randomRotationPreset;
+
+                    List<Vector2Int> positions = new List<Vector2Int>();
+                    foreach (Vector2Int tilePosition in fixture.tilePositions)
+                    {
+                        Vector3 rotatedPosition = rotationMatrix * (Vector2)tilePosition;
+                        positions.Add(new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y) + randomPosition);
+                    }
+
+                    if (CanPlaceInteriorTiles(positions))
+                    {
+                        if (VerifyRestrictions(fixtureInstance))
+                        {
+                            ForcePlaceInteriorTiles(InteriorTile.InteriorTileType.Fixture, fixtureInstance, positions);
+                            fixtureInstances.Add(fixtureInstance);
+                            SpawnFixture(fixtureInstance);
+                        }
+                        else
+                        {
+                            placeNewFixture = true;
+                            Debug.LogWarning($"Unable to Place Fixture {fixture.name} at Position {randomPosition} at Rotation {randomRotationPreset}");
+                        }
+                    }
+                    else
+                    {
+                        placeNewFixture = true;
+                    }
+                }
+
+
+
+
+                //FixtureData fixtureData = fixtures[0];
+                //Vector2Int position = interiorTilesPerMapTile * collection.GetRandomMapTilePosition() + new Vector2Int(Random.Range(0, interiorTilesPerMapTile), Random.Range(0, interiorTilesPerMapTile));
+                //FixtureInstance fixtureInstance = new FixtureInstance();
+                //fixtureInstance.Data = fixtureData;
+                //fixtureInstance.Position = ((Vector2)(position) - interiorTilesPerMapTile * 0.5f * Vector2.one) / interiorTilesPerMapTile;
+                //fixtureInstance.Forward = Vector2Int.up;
+                //List<Vector2Int> positions = new List<Vector2Int>();
+                //foreach (Vector2Int offset in fixtureData.tilePositions)
+                //{
+                //    positions.Add(position + offset);
+                //}
+                //if (PlaceInteriorTiles(InteriorTile.InteriorTileType.Fixture, fixtureInstance, positions))
+                //{
+                //    SpawnFixture(fixtureInstance);
+                //}
+                attempt++;
+            }
+        }
+    }
+
+    public bool VerifyRestrictions(FixtureInstance fixtureInstance)
+    {
+        RestrictionData restrictionData = fixtureInstance.Data.RestrictionData;
+
+        if (restrictionData == null)
+        {
+            return true;
+        }
+        else if (restrictionData.Restrictions == null)
+        {
+            return true;
+        }
+        else if (restrictionData.Restrictions.Count == 0)
+        {
+            return true;
+        }
+
+        bool passed = true;
+        foreach (Restriction restriction in restrictionData.Restrictions)
+        {
+            passed = true;
+            if (restriction.HasInteriorTileType && passed)
+            {
+                foreach (Vector2Int position in restriction.Positions)
+                {
+                    Vector3 rotatedPosition = fixtureInstance.RotationMatrix * (Vector2)position;
+                    if (interiorGridMap[fixtureInstance.Position + new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y)].Type != restriction.InteriorTileType)
+                    {
+                        passed = false;
+                        break;
+                    }
+                }
+            }
+
+            if (restriction.HasPathToWalkableTile && passed)
+            {
+                Vector2Int size = fixtureInstance.ParentCollection.Bounds.upperRight - fixtureInstance.ParentCollection.Bounds.lowerLeft;
+                Pathfinder2D pathfinder2D = new Pathfinder2D(size * interiorTilesPerMapTile);
+                Vector2Int end = fixtureInstance.ParentCollection.connections[0].from;
+
+                foreach (Vector2Int pos in restriction.Positions)
+                {
+                    List<Vector2Int> path = pathfinder2D.FindPath(pos, end, (Pathfinder2D.Node a, Pathfinder2D.Node b) =>
+                    {
+                        Pathfinder2D.PathInfo pathInfo = new Pathfinder2D.PathInfo();
+
+                        pathInfo.cost = Vector2Int.Distance(b.Position, end);
+                        pathInfo.traversable = true;
+
+                        InteriorTile interiorTile = interiorGridMap[b.Position];
+
+                        if (interiorTile.Type == InteriorTile.InteriorTileType.None)
+                        {
+                            pathInfo.cost += 5;
+                        }
+                        else if (interiorTile.Type == InteriorTile.InteriorTileType.Walkway)
+                        {
+                            pathInfo.traversable = false;
+                            pathInfo.isGoal = true;
+                        }
+                        else
+                        {
+                            pathInfo.traversable = false;
+                        }
+
+                        return pathInfo;
+                    });
+
+                    if (path.Count == 0)
+                    {
+                        passed = false;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (passed)
+            {
+                break;
+            }
+        }
+
+        return passed;
     }
 
     public void SpawnTiles()
@@ -409,14 +622,28 @@ public class GridMapManager : Singleton<GridMapManager>
             }
         }
     }
+    public void SpawnFixture(FixtureInstance fixtureInstance)
+    {
+        Vector2 spawnPosition = ((Vector2)(fixtureInstance.Position) - (interiorTilesPerMapTile / 2) * Vector2.one) / interiorTilesPerMapTile;
+        float rotation = 90 * (int)fixtureInstance.RotationPreset;
+        Instantiate(fixtureInstance.Data.FixturePrefab, tileSize * new Vector3(spawnPosition.x, 0, spawnPosition.y), Quaternion.Euler(0, rotation, 0), levelHolder.transform);
+
+        if (spawnFixturePositions)
+        {
+            foreach (Vector2Int position in fixtureInstance.Data.tilePositions)
+            {
+                Vector3 rotatedPosition = fixtureInstance.RotationMatrix * (Vector2)position;
+                Vector2 newSpawnPosition = (((Vector2)rotatedPosition + fixtureInstance.Position) - (interiorTilesPerMapTile / 2) * Vector2.one) / interiorTilesPerMapTile;
+                Instantiate(debugMarker, tileSize * new Vector3(newSpawnPosition.x, 0, newSpawnPosition.y), Quaternion.identity, levelHolder.transform);
+            }
+        }
+    }
 
     public bool PlaceMapTile(TileCollection tileCollection, MapTile.MapTileType type, Vector2Int position)
     {
         if (CanPlaceMapTile(position))
         {
-            MapTile mapTile = new MapTile(type, tileCollection);
-            gridMap[position] = mapTile;
-            tileCollection.AddMapTilePosition(position);
+            ForcePlaceMapTile(tileCollection, type, position);
             return true;
         }
         return false;
@@ -437,28 +664,17 @@ public class GridMapManager : Singleton<GridMapManager>
         }
     }
 
-    public void ForcePlaceMapTiles(TileCollection tileCollection, MapTile.MapTileType type, HashSet<Vector2> positions)
-    {
-        foreach (Vector2 position in positions)
-        {
-            ForcePlaceMapTile(tileCollection, type, new Vector2Int((int)position.x, (int)position.y));
-        }
-    }
-
     public bool PlaceMapTiles(TileCollection tileCollection, MapTile.MapTileType type, List<Vector2Int> positions)
     {
         if (!CanPlaceMapTiles(positions))
         {
             return false;
         }
-        foreach (Vector2Int position in positions)
-        {
-            ForcePlaceMapTile(tileCollection, type, position);
-        }
+        ForcePlaceMapTiles(tileCollection, type, positions);
         return true;
     }
 
-    public void PlaceMapPossibleTiles(TileCollection tileCollection, MapTile.MapTileType type, List<Vector2Int> positions)
+    public void PlacePossibleMapTiles(TileCollection tileCollection, MapTile.MapTileType type, List<Vector2Int> positions)
     {
         foreach (Vector2Int position in positions)
         {
@@ -486,4 +702,99 @@ public class GridMapManager : Singleton<GridMapManager>
         }
         return true;
     }
+
+//-------------------------------------------------------------------------------------------------------------------------
+
+    public bool PlaceInteriorTile(InteriorTile.InteriorTileType type, FixtureInstance fixture, Vector2Int position)
+    {
+        if (CanPlaceInteriorTile(position))
+        {
+            ForcePlaceInteriorTile(type, fixture, position);
+            return true;
+        }
+        return false;
+    }
+
+    public void ForcePlaceInteriorTile(InteriorTile.InteriorTileType type, FixtureInstance fixture, Vector2Int position)
+    {
+        InteriorTile interiorTile = new InteriorTile(type, fixture);
+        interiorGridMap[position] = interiorTile;
+        if (fixture != null)
+        {
+            fixtureInstances.Add(fixture);
+        }
+    }
+
+    public void ForcePlaceInteriorTiles(InteriorTile.InteriorTileType type, FixtureInstance fixture, List<Vector2Int> positions)
+    {
+        foreach (Vector2Int position in positions)
+        {
+            ForcePlaceInteriorTile(type, fixture, position);
+        }
+    }
+
+    public bool PlaceInteriorTiles(InteriorTile.InteriorTileType type, FixtureInstance fixture, List<Vector2Int> positions)
+    {
+        if (!CanPlaceInteriorTiles(positions))
+        {
+            return false;
+        }
+        ForcePlaceInteriorTiles(type, fixture, positions);
+        return true;
+    }
+
+    public void PlacePossibleInteriorTiles(InteriorTile.InteriorTileType type, FixtureInstance fixture, List<Vector2Int> positions)
+    {
+        foreach (Vector2Int position in positions)
+        {
+            PlaceInteriorTile(type, fixture, position);
+        }
+    }
+
+    public bool CanPlaceInteriorTile(Vector2Int position)
+    {
+        if (interiorGridMap.InBounds(position))
+        {
+            return interiorGridMap[position].Type == InteriorTile.InteriorTileType.None;
+        }
+        return false;
+    }
+
+    public bool CanPlaceInteriorTiles(List<Vector2Int> positions)
+    {
+        foreach (Vector2Int position in positions)
+        {
+            if (!CanPlaceInteriorTile(position))
+            {
+                Debug.Log($"Tile Not Empty {position}");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // TODO Change to allow Fixtures placed out of bounds that only have tiles in bounds and take into accoutn Rotation Matrix
+    //public bool CanPlaceFixture(FixtureInstance fixture)
+    //{
+    //    if (interiorGridMap.InBounds(fixture.Position))
+    //    {
+    //        List<Vector2Int> positions = new List<Vector2Int>();
+    //        foreach (Vector2Int tilePosition in fixture.Data.tilePositions)
+    //        {
+    //            positions.Add(tilePosition);
+    //        }
+
+    //        return CanPlaceInteriorTiles(positions);
+    //    }
+    //    return false;
+    //}
+
+    //public bool CanPlaceFixture(FixtureInstance fixture, List<Vector2Int> positions)
+    //{
+    //    if (interiorGridMap.InBounds(fixture.Position))
+    //    {
+    //        return CanPlaceInteriorTiles(positions);
+    //    }
+    //    return false;
+    //}
 }

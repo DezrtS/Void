@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UXML/FixtureEditor.uss?fileID=7433441132597879392&amp;guid=4e9cbd6adbc59d349837956cc7d126f1&amp;type=3#FixtureEditor" />
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:Button text="Back to Fixtures" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BackToFixturesButton" class="button" />
+        <ui:VisualElement name="RelationshipDataContainer" style="flex-grow: 1;">
+            <ui:ProgressBar value="100" title="Create New Relationship" name="RelationshipProgressBar" high-value="100" />
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: auto;">
+                <ui:Button text="Remove Relationship" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RemoveRelationshipButton" class="button" style="flex-grow: 1;" />
+                <ui:Button text="New Relationship" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewRelationshipButton" class="button" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; flex-wrap: nowrap; flex-direction: row; justify-content: flex-start; align-items: auto; align-self: auto;">
+                <ui:Button text="Previous Relationship" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PreviousRelationshipButton" class="button" style="flex-basis: auto; width: auto; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; flex-grow: 1;" />
+                <ui:Button text="Next Relationship" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NextRelationshipButton" class="button" style="width: auto; align-items: stretch; flex-basis: auto; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; flex-grow: 1; flex-shrink: 0;" />
+            </ui:VisualElement>
+            <ui:FloatField label="Weight" value="0" name="WeightField" class="field" />
+            <ui:Vector2IntField label="Position" name="PositionField" class="field" />
+            <ui:EnumField label="Rotation Preset" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="RotationPresetField" class="field" />
+            <ui:Vector2IntField label="Forward" name="ForwardField" class="field" />
+            <ui:ScrollView name="RelationshipVisualizationScrollView" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

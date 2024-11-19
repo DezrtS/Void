@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a373f24dc1b8cea4b91aeb323a70e598, type: 3}
+  m_Name: Table
+  m_EditorClassIdentifier: 
+  GridSize: {x: 0, y: 0}
+  gridSize: {x: 4, y: 3}
+  tilePositions:
+  - {x: 1, y: 0}
+  - {x: 0, y: 0}
+  - {x: 2, y: 0}
+  - {x: 2, y: 1}
+  - {x: 0, y: 1}
+  - {x: 1, y: 1}
+  - {x: 0, y: 2}
+  - {x: 1, y: 2}
+  - {x: 2, y: 2}
+  - {x: 3, y: 0}
+  - {x: 3, y: 1}
+  - {x: 3, y: 2}
+  Name: Table
+  FixturePrefab: {fileID: 4978444199689355885, guid: f2a52ab0f9fd90a4a9f0b9630a289451,
+    type: 3}
+  RestrictionData: {fileID: 0}
+  Relationships:
+  - {fileID: 11400000, guid: 0a04f12f56cc38449a09cb93817e181a, type: 2}
+  - {fileID: 11400000, guid: fe4aed6056b9d3b49ad8e6b1e6fd2bc9, type: 2}

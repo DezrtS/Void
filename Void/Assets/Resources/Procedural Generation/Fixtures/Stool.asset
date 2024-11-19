@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a373f24dc1b8cea4b91aeb323a70e598, type: 3}
+  m_Name: Stool
+  m_EditorClassIdentifier: 
+  GridSize: {x: 1, y: 1}
+  gridSize: {x: 1, y: 1}
+  tilePositions:
+  - {x: 0, y: 0}
+  Name: Stool
+  FixturePrefab: {fileID: 1861900983576766389, guid: 81306ca0f10483346abf36b3f32bdc1b,
+    type: 3}
+  RestrictionData: {fileID: 11400000, guid: 8130b42883966ed4f9d5ed3015d707af, type: 2}
+  Relationships:
+  - {fileID: 11400000, guid: d03ab9f120b8d5c43bb217de58ed3542, type: 2}
