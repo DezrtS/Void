@@ -14,9 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Restrictions:
   - Type: 0
-    HasInteriorTileType: 0
+    HasInteriorTileType: 1
     HasFixtureType: 0
     HasPathToWalkableTile: 0
     InteriorTileType: 0
     FixtureType: 0
-    Positions: []
+    Positions:
+    - {x: -1, y: 0}
+  - Type: 0
+    HasInteriorTileType: 1
+    HasFixtureType: 0
+    HasPathToWalkableTile: 0
+    InteriorTileType: 0
+    FixtureType: 0
+    Positions:
+    - {x: 1, y: 0}
+  - Type: 0
+    HasInteriorTileType: 1
+    HasFixtureType: 0
+    HasPathToWalkableTile: 0
+    InteriorTileType: 0
+    FixtureType: 0
+    Positions:
+    - {x: 0, y: -1}
+  - Type: 0
+    HasInteriorTileType: 1
+    HasFixtureType: 0
+    HasPathToWalkableTile: 0
+    InteriorTileType: 0
+    FixtureType: 0
+    Positions:
+    - {x: 0, y: 1}

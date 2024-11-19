@@ -3,4 +3,24 @@ VisualElement {
 
 .button {
     padding: 5px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    -unity-font-style: bold;
+}
+
+.field {
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+}
+
+.progress-bar {
+    margin-top: 25px;
 }

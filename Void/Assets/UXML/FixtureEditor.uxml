@@ -2,8 +2,9 @@
     <ui:Template name="SelectionList" src="project://database/Assets/UXML/SelectionList.uxml?fileID=9197481963319205126&amp;guid=f2592d24a4979104eb565a37d8560f95&amp;type=3#SelectionList" />
     <ui:Template name="FixtureDataEditor" src="project://database/Assets/UXML/FixtureDataEditor.uxml?fileID=9197481963319205126&amp;guid=8c96d56b7fdef754c8cbdfe9388ae0a0&amp;type=3#FixtureDataEditor" />
     <ui:Template name="FixtureRelationshipsEditor" src="project://database/Assets/UXML/FixtureRelationshipsEditor.uxml?fileID=9197481963319205126&amp;guid=0e2b0be7090653540b92a16786fa7613&amp;type=3#FixtureRelationshipsEditor" />
+    <Style src="project://database/Assets/UXML/FixtureEditor.uss?fileID=7433441132597879392&amp;guid=4e9cbd6adbc59d349837956cc7d126f1&amp;type=3#FixtureEditor" />
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
-        <ui:VisualElement name="SelectionListContainer" style="flex-grow: 1;">
+        <ui:VisualElement name="SelectionListContainer" style="flex-grow: 0; flex-basis: 300px; flex-shrink: 0;">
             <ui:Instance template="SelectionList" name="SelectionList" style="flex-grow: 0; flex-shrink: 0; width: 100px;" />
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; flex-direction: column; display: flex; flex-basis: auto; position: relative; visibility: visible;">
