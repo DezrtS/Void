@@ -173,7 +173,7 @@ Material:
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
     - _ExcludeFromTUAndAA: 0
-    - _Fill_Height: 4.72
+    - _Fill_Height: 5.74
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightMapParametrization: 0
@@ -194,10 +194,10 @@ Material:
     - _MetallicRemapMin: 0
     - _NormalMapSpace: 0
     - _NormalScale: 1
-    - _ObjectHeight: 6
+    - _ObjectHeight: 5
     - _ObjectSpaceUVMapping: 0
     - _ObjectSpaceUVMappingEmissive: 0
-    - _OffsetPoint: 1
+    - _OffsetPoint: 0
     - _OpaqueCullMode: 2
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
