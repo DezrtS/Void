@@ -1338,7 +1338,7 @@ Transform:
   m_GameObject: {fileID: 948995770}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.3, y: 2.43, z: -6.23}
+  m_LocalPosition: {x: -20.48, y: 2.43, z: -12.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2762,6 +2762,8 @@ MonoBehaviour:
   additionalHallwayChance: 50
   randomRoomChance: 30
   maxRoomAttempts: 100
+  rooms:
+  - {fileID: 11400000, guid: a8b7664e7c9f5034f97f8c2907c15cae, type: 2}
   tileSize: 5
   interiorTilesPerMapTile: 5
   fixturesPerTileCollection: 25
@@ -2771,13 +2773,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d06fb754ce3879c42896e0511aa3eb8c, type: 2}
   - {fileID: 11400000, guid: 6464df81ce0be8944b52c55f2b76c0df, type: 2}
   - {fileID: 11400000, guid: efeb817e866bbc740b6513c8d36844f9, type: 2}
-  spawnCollectionAveragePositions: 1
-  spawnFixturePositions: 1
-  spawnFixtureRelationships: 1
+  spawnCollectionAveragePositions: 0
+  spawnFixturePositions: 0
+  spawnFixtureRelationships: 0
   drawRoomConnectionTree: 1
   debugMarker: {fileID: 6701413836251729326, guid: cfc14957752c45d4d828602cd5cf7f6c,
     type: 3}
-  debugMarker2: {fileID: 0}
   floor: {fileID: 5392416673444309645, guid: 9cf00a829defd8d4d83a0816dad7f0b2, type: 3}
   wall: {fileID: 4417452138280026189, guid: 5cbca8cd29492f140902ec61742052cf, type: 3}
 --- !u!114 &1757736485

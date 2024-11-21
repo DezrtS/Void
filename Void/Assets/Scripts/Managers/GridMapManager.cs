@@ -15,6 +15,7 @@ public class GridMapManager : Singleton<GridMapManager>
     [Range(0, 100)]
     [SerializeField] private float randomRoomChance = 30f;
     [SerializeField] private int maxRoomAttempts = 100;
+    public List<RoomData> rooms;
     [Space(10)]
     [Header("Tile Spawning Parameters")]
     [SerializeField] private float tileSize = 10;
@@ -32,7 +33,6 @@ public class GridMapManager : Singleton<GridMapManager>
     [SerializeField] private bool spawnFixtureRelationships;
     [SerializeField] private bool drawRoomConnectionTree;
     [SerializeField] private GameObject debugMarker;
-    [SerializeField] private GameObject debugMarker2;
     [Space(10)]
     [Header("Prefabs")]
     [SerializeField] private GameObject floor;
@@ -154,6 +154,8 @@ public class GridMapManager : Singleton<GridMapManager>
 
     public void GenerateRooms()
     {
+        PlacePredefinedRooms();
+
         for (int i = 0; i < roomCount; i++)
         {
             if (Roll(randomRoomChance))
@@ -167,9 +169,24 @@ public class GridMapManager : Singleton<GridMapManager>
         }
     }
 
-    public void PlacePredefinedRoom()
+    public void PlacePredefinedRooms()
     {
-
+        RoomData roomData = rooms[0];
+        Vector2Int position = new Vector2Int(gridSize.x / 2 - roomData.gridSize.x / 2, gridSize.x / 2 - roomData.gridSize.x / 2);
+        TileCollection collection = new TileCollection(TileCollection.TileCollectionType.Room, 0);
+        List<Vector2Int> newPositions = new List<Vector2Int>(roomData.tilePositions);
+        for (int i = 0; i < newPositions.Count; i++)
+        {
+            newPositions[i] += position;
+        }
+        foreach (Connection connection in roomData.connections)
+        {
+            collection.AddConnection(connection.from + position, connection.to + position);
+        }
+        collection.InitiatlizeRoom(roomData);
+        tileCollections.Add(collection);
+        PlaceMapTiles(collection, MapTile.MapTileType.Room, newPositions);
+        Instantiate(roomData.RoomPrefab, interiorTilesPerMapTile * new Vector3(position.x, 0, position.y), Quaternion.identity, levelHolder.transform);
     }
 
     private void GenerateRectangularRoom()
@@ -288,7 +305,18 @@ public class GridMapManager : Singleton<GridMapManager>
         foreach (TileCollection tileCollection in tileCollections)
         {
             // By Using the Collection Average Position, it is not guarenteed that that position contains a goal tile, which could void the path/connection to the room in question.
-            points.Add(new Vertex(tileCollection.GetClosestMapTilePositionToAverage()));
+            //RoomData roomData = tileCollection.RoomData;
+            //if (roomData)
+            //{
+            //    foreach (Connection connection in roomData.connections)
+            //    {
+            //        points.Add(new Vertex(connection.from + tileCollection.Bounds.lowerLeft));
+            //    }
+            //}
+            //else
+            //{
+                points.Add(new Vertex(tileCollection.GetClosestMapTilePositionToAverage()));
+            //}
         }
 
         Delaunay2D delaunay = Delaunay2D.Triangulate(points);
@@ -306,6 +334,13 @@ public class GridMapManager : Singleton<GridMapManager>
         }
 
         List<Prim.Edge> chosenEdges = Prim.MinimumSpanningTree(edges, edges[0].U);
+
+        //chosenEdges.RemoveAll(edge =>
+        //{
+        //    Vector2Int from = new Vector2Int((int)edge.U.Position.x, (int)edge.U.Position.y);
+        //    Vector2Int to = new Vector2Int((int)edge.V.Position.x, (int)edge.V.Position.y);
+        //    return (gridMap[from].Collection == gridMap[to].Collection);
+        //});
 
         var remainingEdges = new HashSet<Prim.Edge>(edges);
         remainingEdges.ExceptWith(chosenEdges);
@@ -341,8 +376,16 @@ public class GridMapManager : Singleton<GridMapManager>
         {
             Vector2Int start = new Vector2Int((int)edge.U.Position.x, (int)edge.U.Position.y);
             Vector2Int end = new Vector2Int((int)edge.V.Position.x, (int)edge.V.Position.y);
-            int startCollectionId = gridMap[start].Collection.Id;
-            int endCollectionId = gridMap[end].Collection.Id;
+            MapTile startTile = gridMap[start];
+            MapTile endTile = gridMap[end];
+            bool containsRoomData = false;
+            //if (endTile.Collection != null)
+            //{
+            //    containsRoomData = endTile.Collection.RoomData != null;
+            //}
+            
+            bool startTileExists = startTile.Type != MapTile.MapTileType.None;
+            bool endTileExists = endTile.Type != MapTile.MapTileType.None;
 
             List<Vector2Int> path = pathfinder2D.FindPath(start, end, (Pathfinder2D.Node a, Pathfinder2D.Node b) =>
             {
@@ -360,8 +403,23 @@ public class GridMapManager : Singleton<GridMapManager>
                 else if (mapTile.Type == MapTile.MapTileType.Room)
                 {
                     pathInfo.traversable = false;
-                    pathInfo.isStart = mapTile.Collection.Id == startCollectionId;
-                    pathInfo.isGoal = mapTile.Collection.Id == endCollectionId;
+                    if (startTileExists && !containsRoomData)
+                    {
+                        pathInfo.isStart = mapTile.Collection.Id == startTile.Collection.Id;
+                    }
+                    else
+                    {
+                        pathInfo.isStart = false;
+                    }
+                 
+                    if (endTileExists && !containsRoomData)
+                    {
+                        pathInfo.isGoal = mapTile.Collection.Id == endTile.Collection.Id;
+                    }
+                    else
+                    {
+                        pathInfo.isGoal = b.Position == end;
+                    }
                 }
                 else if (mapTile.Type == MapTile.MapTileType.Hallway)
                 {
@@ -373,14 +431,20 @@ public class GridMapManager : Singleton<GridMapManager>
 
             if (path != null)
             {
-                MapTile startConnection = gridMap[path[0]];
-                MapTile endConnection = gridMap[path[path.Count - 1]];
+                if (startTileExists && endTileExists)
+                {
+                    MapTile startConnection = gridMap[path[0]];
+                    MapTile endConnection = gridMap[path[path.Count - 1]];
 
-                startConnection.Collection.AddConnection(path[0], path[1]);
-                endConnection.Collection.AddConnection(path[path.Count - 1], path[path.Count - 2]);
+                    startConnection.Collection.AddConnection(path[0], path[1]);
+                    if (!containsRoomData)
+                    {
+                        endConnection.Collection.AddConnection(path[path.Count - 1], path[path.Count - 2]);
+                    }
 
-                tileCollection.AddConnection(path[1], path[0]);
-                tileCollection.AddConnection(path[path.Count - 2], path[path.Count - 1]);
+                    tileCollection.AddConnection(path[1], path[0]);
+                    tileCollection.AddConnection(path[path.Count - 2], path[path.Count - 1]);
+                }
 
                 PlacePossibleMapTiles(tileCollection, MapTile.MapTileType.Hallway, path);
             }
@@ -406,6 +470,15 @@ public class GridMapManager : Singleton<GridMapManager>
     {
         foreach (TileCollection collection in tileCollections)
         {
+            RoomData roomData = collection.RoomData;
+            if (roomData)
+            {
+                if (roomData.HasInterior)
+                {
+                    continue;
+                }
+            }
+
             bool establishedOriginFixture = false;
             int attempt = 0;
             while (!establishedOriginFixture && attempt < maxFixtureAttempts)
@@ -482,8 +555,11 @@ public class GridMapManager : Singleton<GridMapManager>
             }
         }
 
-        EdgeVisualizer edgeVisualizer = GetComponent<EdgeVisualizer>();
-        edgeVisualizer.DrawEdges(relationshipEdges, true);
+        if (spawnFixtureRelationships)
+        {
+            EdgeVisualizer edgeVisualizer = GetComponent<EdgeVisualizer>();
+            edgeVisualizer.DrawEdges(relationshipEdges, true);
+        }
     }
 
     private FixtureInstance PlaceRandomFixture(TileCollection collection, int verifyFrom)
@@ -514,6 +590,13 @@ public class GridMapManager : Singleton<GridMapManager>
                 if (doThroughWallCheck)
                 {
                     Vector2 scaledPosition = (rotatedPosition + randomPosition) / interiorTilesPerMapTile;
+                    // TODO SCALED POSITION IS SOMETIMES OUT OF BOUNDS (AT MAX X OR Y)
+                    if (!gridMap.InBounds(new Vector2Int((int)scaledPosition.x, (int)scaledPosition.y)))
+                    {
+                        forceQuit = true;
+                        //Debug.LogWarning("Fixture Placed Through Wall");
+                        break;
+                    }
 
                     if (gridMap[scaledPosition].Collection != collection)
                     {
@@ -586,7 +669,6 @@ public class GridMapManager : Singleton<GridMapManager>
             }
 
             FixtureData fixture = relationship.OtherFixture;
-            // -->
             Vector3 originRotatedPosition = fixtureInstance.RotationMatrix * (Vector2)relationship.Position;
             Vector2Int position = (new Vector2Int((int)originRotatedPosition.x, (int)originRotatedPosition.y) + fixtureInstance.Position);
 
@@ -599,8 +681,6 @@ public class GridMapManager : Singleton<GridMapManager>
             newFixtureInstance.RotationMatrix = GetRotationMatrix(newRotationPreset);
             newFixtureInstance.RotationPreset = newRotationPreset;
 
-            // <--
-
             bool forceQuit = false;
             List<Vector2Int> positions = new List<Vector2Int>();
             foreach (Vector2Int tilePosition in fixture.tilePositions)
@@ -610,6 +690,13 @@ public class GridMapManager : Singleton<GridMapManager>
                 if (doThroughWallCheck)
                 {
                     Vector2 scaledPosition = (rotatedPosition + newFixtureInstance.Position) / interiorTilesPerMapTile;
+
+                    if (!gridMap.InBounds(new Vector2Int((int)scaledPosition.x, (int)scaledPosition.y)))
+                    {
+                        forceQuit = true;
+                        //Debug.LogWarning("Fixture Placed Through Wall");
+                        break;
+                    }
 
                     if (gridMap[scaledPosition].Collection != collection)
                     {
@@ -693,7 +780,15 @@ public class GridMapManager : Singleton<GridMapManager>
                     foreach (Vector2Int position in restriction.Positions)
                     {
                         Vector3 rotatedPosition = fixtureInstance.RotationMatrix * (Vector2)position;
-                        if (interiorGridMap[fixtureInstance.Position + new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y)].Type == restriction.InteriorTileType)
+                        Vector2Int offsetPosition = fixtureInstance.Position + new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y);
+                        InteriorTile.InteriorTileType interiorTileType = InteriorTile.InteriorTileType.Wall;
+
+                        if (interiorGridMap.InBounds(offsetPosition))
+                        {
+                            interiorTileType = interiorGridMap[offsetPosition].Type;
+                        }
+
+                        if (interiorTileType == restriction.InteriorTileType)
                         {
                             if (!manditoryVsProhibited)
                             {
@@ -718,9 +813,20 @@ public class GridMapManager : Singleton<GridMapManager>
                     Pathfinder2D pathfinder2D = new Pathfinder2D(size * interiorTilesPerMapTile);
                     Vector2Int end = fixtureInstance.ParentCollection.connections[0].from;
 
-                    foreach (Vector2Int pos in restriction.Positions)
+                    foreach (Vector2Int position in restriction.Positions)
                     {
-                        List<Vector2Int> path = pathfinder2D.FindPath(pos, end, (Pathfinder2D.Node a, Pathfinder2D.Node b) =>
+                        Vector3 rotatedPosition = fixtureInstance.RotationMatrix * (Vector2)position;
+                        Vector2Int offsetPosition = fixtureInstance.Position + new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y);
+                        if (!interiorGridMap.InBounds(offsetPosition))
+                        {
+                            if (manditoryVsProhibited)
+                            {
+                                condition = false;
+                                break;
+                            }
+                        }
+
+                        List<Vector2Int> path = pathfinder2D.FindPath(position, end, (Pathfinder2D.Node a, Pathfinder2D.Node b) =>
                         {
                             Pathfinder2D.PathInfo pathInfo = new Pathfinder2D.PathInfo();
 
@@ -792,6 +898,15 @@ public class GridMapManager : Singleton<GridMapManager>
 
         foreach (TileCollection collection in tileCollections)
         {
+            RoomData roomData = collection.RoomData;
+            if (roomData)
+            {
+                if (!roomData.SpawnTiles)
+                {
+                    continue;
+                }
+            }
+
             foreach (Vector2Int position in collection.mapTilePositions)
             {
                 GameObject newTile = new GameObject("Tile");
