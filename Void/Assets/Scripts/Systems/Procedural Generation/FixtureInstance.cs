@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum RotationPreset
@@ -8,6 +9,7 @@ public enum RotationPreset
     TwoSeventy
 }
 
+[Serializable]
 public class FixtureInstance
 {
     public FixtureData Data;

@@ -2764,15 +2764,20 @@ MonoBehaviour:
   maxRoomAttempts: 100
   tileSize: 5
   interiorTilesPerMapTile: 5
+  fixturesPerTileCollection: 25
   maxFixtureAttempts: 100
+  doThroughWallCheck: 1
   fixtures:
   - {fileID: 11400000, guid: d06fb754ce3879c42896e0511aa3eb8c, type: 2}
   - {fileID: 11400000, guid: 6464df81ce0be8944b52c55f2b76c0df, type: 2}
   - {fileID: 11400000, guid: efeb817e866bbc740b6513c8d36844f9, type: 2}
   spawnCollectionAveragePositions: 1
+  spawnFixturePositions: 1
+  spawnFixtureRelationships: 1
   drawRoomConnectionTree: 1
   debugMarker: {fileID: 6701413836251729326, guid: cfc14957752c45d4d828602cd5cf7f6c,
     type: 3}
+  debugMarker2: {fileID: 0}
   floor: {fileID: 5392416673444309645, guid: 9cf00a829defd8d4d83a0816dad7f0b2, type: 3}
   wall: {fileID: 4417452138280026189, guid: 5cbca8cd29492f140902ec61742052cf, type: 3}
 --- !u!114 &1757736485

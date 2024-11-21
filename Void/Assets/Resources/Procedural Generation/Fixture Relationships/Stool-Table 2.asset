@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ddabc535ca166c84b9c993897a0b5763, type: 3}
-  m_Name: Table-Stool
+  m_Name: Stool-Table 2
   m_EditorClassIdentifier: 
-  OtherRelationship: {fileID: 11400000, guid: d03ab9f120b8d5c43bb217de58ed3542, type: 2}
-  OtherFixture: {fileID: 11400000, guid: d06fb754ce3879c42896e0511aa3eb8c, type: 2}
+  OtherRelationship: {fileID: 11400000, guid: c2a18e2fc2b8c184589d36d4e67e812b, type: 2}
+  OtherFixture: {fileID: 11400000, guid: efeb817e866bbc740b6513c8d36844f9, type: 2}
   Enabled: 1
   Weight: 1
-  Position: {x: -1, y: 1}
+  Position: {x: 4, y: 1}
   RotationMatrix:
-    e00: 1
+    e00: -1
     e01: 0
     e02: 0
     e03: 0
     e10: 0
-    e11: 1
+    e11: -1
     e12: 0
     e13: 0
     e20: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  RotationPreset: 0
+  RotationPreset: 2
   Rotatable: 0
   Mirrorable: 0
   MirrorAxis: {x: 1, y: 0}

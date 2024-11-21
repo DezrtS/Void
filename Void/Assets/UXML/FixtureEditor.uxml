@@ -2,6 +2,7 @@
     <ui:Template name="SelectionList" src="project://database/Assets/UXML/SelectionList.uxml?fileID=9197481963319205126&amp;guid=f2592d24a4979104eb565a37d8560f95&amp;type=3#SelectionList" />
     <ui:Template name="FixtureDataEditor" src="project://database/Assets/UXML/FixtureDataEditor.uxml?fileID=9197481963319205126&amp;guid=8c96d56b7fdef754c8cbdfe9388ae0a0&amp;type=3#FixtureDataEditor" />
     <ui:Template name="FixtureRelationshipsEditor" src="project://database/Assets/UXML/FixtureRelationshipsEditor.uxml?fileID=9197481963319205126&amp;guid=0e2b0be7090653540b92a16786fa7613&amp;type=3#FixtureRelationshipsEditor" />
+    <ui:Template name="FixtureRestrictionGroupsEditor" src="project://database/Assets/UXML/FixtureRestrictionGroupsEditor.uxml?fileID=9197481963319205126&amp;guid=19e18eb7925ca29458bb282d21604d82&amp;type=3#FixtureRestrictionGroupsEditor" />
     <Style src="project://database/Assets/UXML/FixtureEditor.uss?fileID=7433441132597879392&amp;guid=4e9cbd6adbc59d349837956cc7d126f1&amp;type=3#FixtureEditor" />
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
         <ui:VisualElement name="SelectionListContainer" style="flex-grow: 0; flex-basis: 300px; flex-shrink: 0;">
@@ -16,6 +17,11 @@
             <ui:VisualElement name="FixtureRelationshipsEditorContainer" style="flex-grow: 1; display: none;">
                 <ui:ScrollView>
                     <ui:Instance template="FixtureRelationshipsEditor" name="FixtureRelationshipsEditor" style="flex-shrink: 0; flex-grow: 1; display: flex;" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="FixtureRestrictionGroupsEditorContainer" style="flex-grow: 1; display: none;">
+                <ui:ScrollView>
+                    <ui:Instance template="FixtureRestrictionGroupsEditor" name="FixtureRestrictionGroupsEditor" />
                 </ui:ScrollView>
             </ui:VisualElement>
         </ui:VisualElement>

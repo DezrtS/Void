@@ -25,6 +25,7 @@ public class FixtureData : TileSection
 
     public string Name;
     public GameObject FixturePrefab;
+    public List<RestrictionData> Restrictions = new List<RestrictionData>();
     public RestrictionData RestrictionData;
-    public List<FixtureRelationshipData> Relationships;
+    public List<FixtureRelationshipData> Relationships = new List<FixtureRelationshipData>();
 }

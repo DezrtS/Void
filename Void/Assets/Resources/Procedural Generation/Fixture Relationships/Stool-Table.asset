@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OtherRelationship: {fileID: 11400000, guid: fe4aed6056b9d3b49ad8e6b1e6fd2bc9, type: 2}
   OtherFixture: {fileID: 11400000, guid: efeb817e866bbc740b6513c8d36844f9, type: 2}
+  Enabled: 1
   Weight: 1
-  Position: {x: 0, y: 0}
+  Position: {x: 1, y: -1}
   RotationMatrix:
     e00: 1
     e01: 0
