@@ -6,6 +6,7 @@ public class FixtureRelationshipData : ScriptableObject
 {
     public FixtureRelationshipData OtherRelationship;
     public FixtureData OtherFixture;
+    public bool Enabled = true;
     public float Weight = 1;
     public Vector2Int Position;
     public Matrix4x4 RotationMatrix = Matrix4x4.identity;

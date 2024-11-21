@@ -19,12 +19,13 @@ MonoBehaviour:
   - {x: 1, y: 0}
   - {x: 2, y: 0}
   - {x: 3, y: 0}
-  - {x: 3, y: 1}
   - {x: 2, y: 1}
   - {x: 0, y: 1}
   - {x: 1, y: 1}
+  - {x: 3, y: 1}
   Name: Industrial Shelf
   FixturePrefab: {fileID: 6721971350154314497, guid: 8168a986aeec84b4e8a96a11530e0804,
     type: 3}
+  Restrictions: []
   RestrictionData: {fileID: 0}
   Relationships: []

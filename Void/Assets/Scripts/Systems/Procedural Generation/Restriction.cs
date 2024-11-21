@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public struct Restriction
+public class Restriction
 {
     public enum RestrictionType
     {
@@ -17,5 +17,5 @@ public struct Restriction
     public bool HasPathToWalkableTile;
     public InteriorTile.InteriorTileType InteriorTileType;
     public FixtureData.FixtureType FixtureType;
-    public List<Vector2Int> Positions;
+    public List<Vector2Int> Positions = new List<Vector2Int>();
 }
