@@ -90,7 +90,7 @@ public class NetworkManagerUI : MonoBehaviour
         // Define a spawn area for players
         float randomX = Random.Range(-5f, 5f);
         float randomZ = Random.Range(-5f, 5f);
-        return new Vector3(randomX, 0f, randomZ);
+        return new Vector3(randomX, 3f, randomZ);
     }
 
     private void OnDestroy()

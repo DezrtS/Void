@@ -39,7 +39,6 @@ public class SurvivorController : NetworkBehaviour
 
         if (IsOwner)
         {
-            AlignToGround();
             SpawnPlayerCamera();
         }
     }
@@ -54,7 +53,6 @@ public class SurvivorController : NetworkBehaviour
         if (!IsOwner || !IsSpawned) return;
 
         HandleMovement();
-        HandleAttack();
     }
 
     private void HandleMovement()
@@ -127,107 +125,6 @@ public class SurvivorController : NetworkBehaviour
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
-    }
-
-    private void AlignToGround()
-    {
-        if (spawnPoint == null)
-        {
-            Debug.LogWarning("SpawnPoint is not assigned.");
-            return;
-        }
-
-        // Perform a raycast downwards from the spawn point to detect the ground.
-        Ray ray = new Ray(spawnPoint.position, Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, 10f))
-        {
-            // If the raycast hits something, adjust the position slightly above the ground.
-            float groundOffset = 0.1f;
-            transform.position = hitInfo.point + Vector3.up * (characterController.height / 2 + groundOffset);
-        }
-        else
-        {
-            // If no ground is detected, we can fallback to spawnPoint, but adjust the height.
-            Debug.LogWarning("No ground detected below the spawn point. Using fallback position.");
-
-            // Adjust the position using the spawn point's y-axis value plus a slight offset.
-            transform.position = spawnPoint.position + Vector3.up * (characterController.height / 2);
-        }
-    }
-
-
-    private void HandleAttack()
-    {
-        lastAttack += Time.deltaTime;
-        if (lastAttack > attackTimer)
-        {
-            SetCanDamageServerRpc(false);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            AttackServerRpc();
-        }
-        else if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            StopAttackServerRpc();
-        }
-    }
-
-    [ServerRpc]
-    private void AttackServerRpc()
-    {
-        SetCanDamageServerRpc(true);
-        SpawnDamageSphereServerRpc();
-        lastAttack = 0.0f;
-    }
-
-    [ServerRpc]
-    private void StopAttackServerRpc()
-    {
-        SetCanDamageServerRpc(false);
-    }
-
-    [ServerRpc]
-    private void SetCanDamageServerRpc(bool value)
-    {
-        canDamage.Value = value;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnDamageSphereServerRpc()
-    {
-        if (damageSpherePrefab == null || playerCamera == null)
-        {
-            Debug.LogError("Damage Sphere Prefab or Player Camera is not assigned!");
-            return;
-        }
-
-        Vector3 spawnPosition = playerCamera.transform.position + playerCamera.transform.forward * 2f;
-
-        GameObject damageSphere = Instantiate(damageSpherePrefab, spawnPosition, Quaternion.identity);
-
-        NetworkObject networkObject = damageSphere.GetComponent<NetworkObject>();
-        if (networkObject != null)
-        {
-            networkObject.Spawn();
-        }
-        else
-        {
-            Debug.LogError("Damage Sphere does not have a NetworkObject component!");
-        }
-
-        Debug.Log($"Damage Sphere instantiated at {spawnPosition} in the direction of the camera.");
-    }
-
-
-    public override void OnNetworkDespawn()
-    {
-        base.OnNetworkDespawn();
-        if (playerCamera != null)
-        {
-            Destroy(playerCamera.gameObject);
         }
     }
 }
