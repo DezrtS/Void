@@ -56,7 +56,8 @@ public class CraftingManager : Singleton<CraftingManager>
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            testItem = CraftItem(recipes[Random.Range(0, recipes.Count)]);
+            //testItem = CraftItem(recipes[Random.Range(0, recipes.Count)]); Aatif Change
+            testItem = CraftItem(recipes[0]);
         }
     }
 }
