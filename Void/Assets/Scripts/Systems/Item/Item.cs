@@ -1,7 +1,8 @@
+using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public abstract class Item : MonoBehaviour, IUseable
+public abstract class Item : NetworkBehaviour, IUseable
 {
     [SerializeField] private ItemData ItemData;
     [SerializeField] protected bool canPickUp = true;
@@ -50,6 +51,14 @@ public abstract class Item : MonoBehaviour, IUseable
 
     protected virtual void OnStopUsing() { }
 
+    public void RequestPickUp(ulong playerNetworkObjectId)
+    {
+        if (canPickUp)
+        {
+            ItemManager.Instance.RequestItemPickUpServerRpc(NetworkObjectId, playerNetworkObjectId);
+        }
+    }
+
     public void PickUp()
     {
         canPickUp = false;
@@ -59,6 +68,14 @@ public abstract class Item : MonoBehaviour, IUseable
     }
 
     protected virtual void OnPickUp() { }
+
+    public void RequestDrop(ulong playerNetworkObjectId)
+    {
+        if (canPickUp)
+        {
+            ItemManager.Instance.RequestItemDropServerRpc(NetworkObjectId, playerNetworkObjectId);
+        }
+    }
 
     public void Drop()
     {

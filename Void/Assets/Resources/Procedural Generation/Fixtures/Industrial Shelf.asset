@@ -26,6 +26,7 @@ MonoBehaviour:
   Name: Industrial Shelf
   FixturePrefab: {fileID: 6721971350154314497, guid: 8168a986aeec84b4e8a96a11530e0804,
     type: 3}
-  Restrictions: []
+  Restrictions:
+  - {fileID: 11400000, guid: bd033504d608a7740862e1a3fd2a42a2, type: 2}
   RestrictionData: {fileID: 0}
   Relationships: []
