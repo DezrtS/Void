@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public abstract class Item : NetworkBehaviour, IUseable
+public class Item : NetworkBehaviour, IUseable
 {
     [SerializeField] private ItemData itemData;
     [SerializeField] protected bool canPickUp = true;

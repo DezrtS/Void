@@ -41,8 +41,6 @@ public class Gun : Item, IReload
 
     private void FixedUpdate()
     {
-        //if (!IsOwner) return;
-
         UpdateTimers();
 
         if (isFiring)

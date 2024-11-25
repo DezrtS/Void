@@ -42,10 +42,14 @@ public class Inventory : NetworkBehaviour
         {
             if (!SelectedItem())
             {
-                RaycastHit[] hits = Physics.SphereCastAll(transform.position, 5, transform.forward);
-                foreach (RaycastHit hit in hits)
+                Collider[] hits = Physics.OverlapSphere(transform.position, 1);
+                foreach (Collider hit in hits)
                 {
                     if (hit.transform.TryGetComponent(out Item item)) {
+                        if (SelectedItem())
+                        {
+                            RequestItemDropServerRpc(SelectedItem().NetworkObjectId, new ServerRpcParams());
+                        }
                         RequestItemPickUpServerRpc(item.NetworkObjectId, new ServerRpcParams());
                     }
                 }

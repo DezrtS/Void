@@ -30,8 +30,7 @@ MonoBehaviour:
   Name: Table
   FixturePrefab: {fileID: 4978444199689355885, guid: f2a52ab0f9fd90a4a9f0b9630a289451,
     type: 3}
-  Restrictions:
-  - {fileID: 11400000, guid: 7a15b87de4c25ad4d9cfd2f4e4904e88, type: 2}
+  Restrictions: []
   RestrictionData: {fileID: 0}
   Relationships:
   - {fileID: 11400000, guid: fe4aed6056b9d3b49ad8e6b1e6fd2bc9, type: 2}

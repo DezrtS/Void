@@ -776,12 +776,16 @@ public class GridMapManager : Singleton<GridMapManager>
             return true;
         }
 
+        bool allDisabled = true;
         foreach (RestrictionData restrictionData in fixtureInstance.Data.Restrictions)
         {
             if (!restrictionData.Enabled)
             {
-                // Change to Allow Restrictions that are all disabled to be evaluated as true;
                 continue;
+            }
+            else
+            {
+                allDisabled = false;
             }
 
             bool manditoryVsProhibited;
@@ -897,6 +901,11 @@ public class GridMapManager : Singleton<GridMapManager>
             {
                 return true;
             }
+        }
+
+        if (allDisabled)
+        {
+            return true;
         }
 
         return false;

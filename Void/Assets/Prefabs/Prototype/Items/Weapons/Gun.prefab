@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3444017396566940289}
   - component: {fileID: 5307645163814568986}
   - component: {fileID: 3826028151340264229}
+  - component: {fileID: 2529711161331610991}
   - component: {fileID: 1205744350412627968}
   m_Layer: 0
   m_Name: Gun
@@ -135,6 +136,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2529711161331610991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57907132256727038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 686115942
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &1205744350412627968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,14 +169,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba6be3bfc7186e47a6ddf3446af6bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
+  itemData: {fileID: 0}
   canPickUp: 1
   canDrop: 1
   projectileSpawnerObject: {fileID: 9140252326772598537}
   fireRate: 0.25
   maxAmmo: 10
-  reloadSpeed: 1
-  windupTime: 0
+  timeToReload: 0
+  timeToWindUp: 0
   fireSound:
     Guid:
       Data1: 0

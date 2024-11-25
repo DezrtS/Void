@@ -7,9 +7,9 @@ public class ItemManager : NetworkSingleton<ItemManager>
 {
     private void Start()
     {
-        string logFilePath = System.IO.Path.Combine(Application.persistentDataPath, "AnalyticsLog.csv");
-        EventLoggerInterop.InitializeLogger(logFilePath);
-        Debug.Log("Log File Path: " + logFilePath);
+        //string logFilePath = System.IO.Path.Combine(Application.persistentDataPath, "AnalyticsLog.csv");
+        //EventLoggerInterop.InitializeLogger(logFilePath);
+        //Debug.Log("Log File Path: " + logFilePath);
     }
 
     public void CreateItemPickUpLog(ulong clientId, Item item)
@@ -24,6 +24,6 @@ public class ItemManager : NetworkSingleton<ItemManager>
 
     private void OnDisable()
     {
-        EventLoggerInterop.ShutdownLogger();
+        //EventLoggerInterop.ShutdownLogger();
     }
 }
