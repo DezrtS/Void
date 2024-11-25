@@ -13,13 +13,14 @@ public class BulletSpawner : MonoBehaviour, IProjectileSpawner
     private void Start()
     {
         objectPool = gameObject.GetComponent<ObjectPool>();
-        objectPool.InitializePool(projectileData.Prefab, 5, false);
+        objectPool.InitializePool(projectileData.Prefab, 5, true);
+        
     }
     public void SpawnProjectile()
     {
         //GameObject bullet = Instantiate(projectileData.Prefab, transform.position, Quaternion.identity);
-        GameObject bullet = Instantiate(objectPool.GetObject(), transform.position, Quaternion.identity); // Changed
-        objectPool.ReturnToPool(bullet); // Changed
+        GameObject bullet = objectPool.GetObject();
+        bullet.transform.position = transform.position;
 
         IProjectile projectile = bullet.GetComponent<IProjectile>();
         projectile.Initialize(this, projectileData);
@@ -28,7 +29,8 @@ public class BulletSpawner : MonoBehaviour, IProjectileSpawner
 
     public void OnProjectileHit(IProjectile projectile, GameObject projectileGameObject, Collider hitCollider)
     {
+        objectPool.ReturnToPool(projectileGameObject);
         OnHit?.Invoke(hitCollider);
-        projectile.Destroy();
+        //projectile.Destroy();
     }
 }
