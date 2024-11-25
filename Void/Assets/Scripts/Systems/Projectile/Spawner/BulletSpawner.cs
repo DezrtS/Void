@@ -13,13 +13,21 @@ public class BulletSpawner : MonoBehaviour, IProjectileSpawner
     private void Start()
     {
         objectPool = gameObject.GetComponent<ObjectPool>();
-        objectPool.InitializePool(projectileData.Prefab, 5, true);
+        objectPool.InitializePool(projectileData.Prefab, 15, false);
         
     }
     public void SpawnProjectile()
     {
+
+        
         //GameObject bullet = Instantiate(projectileData.Prefab, transform.position, Quaternion.identity);
         GameObject bullet = objectPool.GetObject();
+
+        if (bullet == null)
+        {
+            return;
+        }
+
         bullet.transform.position = transform.position;
 
         IProjectile projectile = bullet.GetComponent<IProjectile>();
