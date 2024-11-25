@@ -18,12 +18,15 @@ public class Bullet : MonoBehaviour, IProjectile
             if (Physics.Raycast(transform.position, velocity.normalized, out RaycastHit hitInfo, velocity.magnitude * Time.deltaTime, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
             {
                 spawner?.OnProjectileHit(this, gameObject, hitInfo.collider);
+                lifetimeTimer = projectileData.LifetimeDuration;
             }
 
             lifetimeTimer -= Time.deltaTime;
             if (lifetimeTimer <= 0)
             {
-                Destroy();
+                //Destroy();
+                spawner.OnProjectileHit(this,gameObject,null);
+                lifetimeTimer = projectileData.LifetimeDuration;
             }
 
             velocity.y += projectileData.Gravity * Time.deltaTime;

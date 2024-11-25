@@ -121,6 +121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4381912256224793128}
   - component: {fileID: 9082257127205320915}
+  - component: {fileID: 1465321600957527110}
   m_Layer: 0
   m_Name: ProjectileSpawner
   m_TagString: Untagged
@@ -156,6 +157,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: 57765bcfb44dad646b54caad86ddf2a3, type: 2}
+  objectPool: {fileID: 1465321600957527110}
+--- !u!114 &1465321600957527110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4735076810010294097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ff192d9ebb87e40afd1ca4ab8f79fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefab: {fileID: 3948855964855248953, guid: e996c3baede487c44a87403b581c8ab6,
+    type: 3}
 --- !u!1001 &5582098862231754971
 PrefabInstance:
   m_ObjectHideFlags: 0
