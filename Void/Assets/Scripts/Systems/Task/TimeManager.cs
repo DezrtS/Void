@@ -4,12 +4,12 @@ using Unity.Netcode;
 
 public class NetworkTimer : NetworkBehaviour
 {
-    [SerializeField] private TMP_Text timerText; // Reference to the TextMeshPro UI element
-    [SerializeField] private float maxTime = 300f; // Timer duration in seconds (5 minutes)
+    [SerializeField] private TMP_Text timerText; 
+    [SerializeField] private float maxTime = 300f; 
 
-    // Network variable to synchronize the timer across the network
+
     private NetworkVariable<float> timer = new NetworkVariable<float>(
-        300f, // Start at 5 minutes (300 seconds)
+        300f, 
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
