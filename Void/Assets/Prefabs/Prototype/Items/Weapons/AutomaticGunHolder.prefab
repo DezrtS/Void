@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba6be3bfc7186e47a6ddf3446af6bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
+  itemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
   canPickUp: 1
   canDrop: 1
   projectileSpawnerObject: {fileID: 4735076810010294097}

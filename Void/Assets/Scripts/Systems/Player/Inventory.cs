@@ -172,6 +172,7 @@ public class Inventory : NetworkBehaviour
             {
                 // Assign the ownership to the client who requested the pickup
                 itemNetworkObject.ChangeOwnership(rcpParams.Receive.SenderClientId);
+                ItemManager.Instance.CreateItemPickUpLog(rcpParams.Receive.SenderClientId, item);
                 HandleItemPickUp(item);
                 PickUp(item);
                 HandleItemPickUpClientRpc(itemNetworkObjectId, rcpParams.Receive.SenderClientId);
@@ -217,6 +218,7 @@ public class Inventory : NetworkBehaviour
             {
                 // Assign the ownership to the client who requested the pickup
                 itemNetworkObject.ChangeOwnership(rcpParams.Receive.SenderClientId);
+                ItemManager.Instance.CreateItemDropLog(rcpParams.Receive.SenderClientId, item);
                 HandleItemDrop(item);
                 Drop();
                 HandleItemDropClientRpc(itemNetworkObjectId, rcpParams.Receive.SenderClientId);
