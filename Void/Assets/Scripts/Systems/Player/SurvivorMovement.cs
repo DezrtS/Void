@@ -10,8 +10,6 @@ public class SurvivorController : NetworkBehaviour
     public GameObject FPSCameraPrefab;
     public GameObject damageSpherePrefab;
 
-    private float attackTimer = 2.0f;
-    private float lastAttack;
     private NetworkVariable<bool> canDamage = new NetworkVariable<bool>(false);
 
     private Camera playerCamera;

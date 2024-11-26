@@ -4021,7 +4021,7 @@ GameObject:
   - component: {fileID: 7237260118470533564}
   - component: {fileID: 6724957605685235399}
   m_Layer: 5
-  m_Name: HPFramae
+  m_Name: HPFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

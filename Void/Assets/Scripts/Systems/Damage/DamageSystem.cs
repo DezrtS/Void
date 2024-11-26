@@ -20,7 +20,7 @@ public class DamageSystem : NetworkBehaviour
 
         currentHealth.OnValueChanged += (oldValue, newValue) =>
         {
-            Debug.Log($"Health updated: {oldValue} -> {newValue}");
+            OnDamageTaken?.Invoke(newValue, totalHealth.Value);
         };
     }
 

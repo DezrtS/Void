@@ -70,24 +70,22 @@ public class NetworkManagerUI : MonoBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        if (!NetworkManager.Singleton.IsHost || clientId != NetworkManager.Singleton.LocalClientId)
+        if (NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject != null)
         {
-            GameObject playerInstance = Instantiate(playerPre, GetRandomSpawnPosition(), Quaternion.identity);
-            NetworkObject networkObject = playerInstance.GetComponent<NetworkObject>();
-
-            if (networkObject != null)
+            if (NetworkManager.Singleton.LocalClientId == clientId)
             {
-                networkObject.SpawnAsPlayerObject(clientId);
+                var player = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
+                var playerUIManager = player.GetComponent<PlayerUIManager>();
+                
+                if (playerUIManager != null)
+                {
+                    Debug.Log("Player UI Manager initialized for client.");
+                }
+                else
+                {
+                    Debug.LogWarning("Player UI Manager script is missing!");
+                }
             }
-            else
-            {
-                Debug.LogError("Player prefab does not have a NetworkObject component.");
-            }
-        }
-
-        if (NetworkManager.Singleton.LocalClientId == clientId)
-        {
-            AssignHealthBarToLocalPlayer(clientId);
         }
     }
 
