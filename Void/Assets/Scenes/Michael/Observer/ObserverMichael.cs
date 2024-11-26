@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,23 +7,38 @@ using UnityEngine.UI;
 
 public class ObserverMichael : MonoBehaviour
 {
-    public TextMeshProUGUI text;
-    public TextMeshProUGUI text2;
-    public Transform hairsTransform;
-    public Transform bootsTransform;
+    public TextMeshProUGUI boots;
+    public TextMeshProUGUI hair;
+    //public Transform hairsTransform;
+    //public Transform bootsTransform;
         
     // Start is called before the first frame update
     void Start()
     {
-
-       CurrentClothingName();
+        PeiceCustomizerGUI.activePeice += CurrentClothingName;
+        
+       
     }
 
-    void CurrentClothingName()
+    void CurrentClothingName(string active)
     {
         
         
-        Debug.Log("CLOTHING CHANGED!!");
+        Debug.Log("CLOTHING CHANGED!!" + active);
+        if (active.Contains("H"))
+        {
+            hair.text = "Active Hair: " + active;
+        }
+
+        if (active.Contains("Boots"))
+        {
+            boots.text = ("Active boots: " + active);    
+        }
+        
+        
+        
+        
+        
         /*//hairsTransform = transform.Find("Hairs");
 
         if (hairsTransform != null)
@@ -60,6 +76,6 @@ public class ObserverMichael : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PeiceCustomizerGUI.onButtonClicked = CurrentClothingName;
+        //PeiceCustomizerGUI.onButtonClicked = CurrentClothingName;
     }
 }

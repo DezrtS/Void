@@ -3,13 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CapsuleCollider))]
 public class TestMovement : MonoBehaviour
 {
+    private Rigidbody rig;
+    [SerializeField] private float speed;
+    Animator animator;
+    [SerializeField] float movementmultiplier = 1.2f;
+    
 
+    private void Awake()
+    {
+        rig = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+    }
     public Transform playerBody;
     public CharacterController playerController;
 
-    private float speed = 12;
     private float strafeSpeed = 12;
     private float sprintMultiplier;
     private float gravity = -19.62f;

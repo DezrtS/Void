@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
@@ -14,7 +16,12 @@ public class PeiceCustomizerGUI :  MonoBehaviour
     public List<ButtonData> buttonDataList;
     public delegate void OnButtonClicked();
     public static OnButtonClicked onButtonClicked;
+    public static Action<String> activePeice;
     public int customizationManagerIndex;
+    public SceneObjectsData sceneObjectsData;
+    [SerializeField] private SceneObjectManager sceneObjectManager;
+    [SerializeField] private Button saveButton;
+    
     void Start()
     {
 
@@ -23,6 +30,15 @@ public class PeiceCustomizerGUI :  MonoBehaviour
             character = character,
             peiceOptions = new List<GameObject>(peiceOptions)
         };
+        sceneObjectManager = GetComponent<SceneObjectManager>();
+        if (sceneObjectsData.objectNames.Count == 0)
+        {
+            foreach (GameObject option in peiceOptions)
+            {
+                sceneObjectsData.objectNames.Add(option.name);
+            }    
+        }
+        
         
         var customizationManagerIndex = this.customizationManagerIndex;
         var currentCustomizer = customizationManager.gameObjects.Count;
@@ -50,8 +66,13 @@ public class PeiceCustomizerGUI :  MonoBehaviour
         }
 
         
-        
+        saveButton.onClick.AddListener(SaveClick);
         UpdatePeice();
+    }
+
+    private void SaveClick()
+    {
+        Save(peiceOptions[currentPeiceIndex], peiceOptions[currentPeiceIndex].name);
     }
 
     void Update()
@@ -86,7 +107,13 @@ public class PeiceCustomizerGUI :  MonoBehaviour
         var command = new ChangePeiceCommand(character, peiceOptions[currentPeiceIndex], new List<GameObject>(peiceOptions));
         customizer.AddCommand(command);
         customizer.ExecuteCommands();
-        onButtonClicked?.Invoke();
+        activePeice?.Invoke(peiceOptions[currentPeiceIndex].name);
         
+    }
+
+    public void Save(GameObject saveObject, string saveName)
+    {
+        sceneObjectsData.activeObjectName = peiceOptions[currentPeiceIndex].name;
+        sceneObjectManager.SaveActiveObject(peiceOptions[currentPeiceIndex]);
     }
 }
