@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CharacterPresetData
   m_EditorClassIdentifier: 
   presetName: One
-  characterPrefab: {fileID: 5111068473147693634, guid: 00e1199275b47594d90cd5156c28b10a,
+  characterPrefab: {fileID: 2785085331211442722, guid: f0bba3e9ad5a59b4887c31267e9ba9fb,
     type: 3}
   bootOptions:
   - {fileID: 1719220740510416536, guid: 64f739bf1af2bd74f9df171efc7db228, type: 3}

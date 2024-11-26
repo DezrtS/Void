@@ -3,9 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CapsuleCollider))]
 public class TestMovement : MonoBehaviour
 {
+    private Rigidbody rig;
+    [SerializeField] private float speed;
+    Animator animator;
+    [SerializeField] float movementmultiplier = 1.2f;
+    
 
+    private void Awake()
+    {
+        rig = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+    }
     public Transform playerBody;
     public CharacterController playerController;
 
