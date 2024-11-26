@@ -695,6 +695,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hairActivator: {fileID: 2054732511}
   bootsActivator: {fileID: 2054732512}
+  hairManager: {fileID: 2054732516}
+  bootsManager: {fileID: 2054732515}
 --- !u!114 &2054732515
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -21,6 +21,7 @@ public class PeiceCustomizerGUI :  MonoBehaviour
     public SceneObjectsData sceneObjectsData;
     [SerializeField] private SceneObjectManager sceneObjectManager;
     [SerializeField] private Button saveButton;
+    private bool isDirty;
     
     void Start()
     {
@@ -72,6 +73,7 @@ public class PeiceCustomizerGUI :  MonoBehaviour
 
     private void SaveClick()
     {
+        isDirty = true;
         Save(peiceOptions[currentPeiceIndex], peiceOptions[currentPeiceIndex].name);
     }
 
@@ -86,6 +88,12 @@ public class PeiceCustomizerGUI :  MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             NextPeice();
+        }
+
+        if (isDirty)
+        {
+            Debug.Log("Saving changes...");
+            isDirty = false;
         }
     }
 
@@ -108,12 +116,13 @@ public class PeiceCustomizerGUI :  MonoBehaviour
         customizer.AddCommand(command);
         customizer.ExecuteCommands();
         activePeice?.Invoke(peiceOptions[currentPeiceIndex].name);
+        //Save(peiceOptions[currentPeiceIndex], peiceOptions[currentPeiceIndex].name);
         
     }
 
     public void Save(GameObject saveObject, string saveName)
     {
-        sceneObjectsData.activeObjectName = peiceOptions[currentPeiceIndex].name;
-        sceneObjectManager.SaveActiveObject(peiceOptions[currentPeiceIndex]);
+        sceneObjectsData.activeObjectName = saveName;
+        sceneObjectManager.SaveActiveObject(saveObject);
     }
 }
