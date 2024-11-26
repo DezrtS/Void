@@ -8,6 +8,16 @@ public class Bullet : MonoBehaviour, IProjectile
     private bool isFired = false;
     private float lifetimeTimer = 0;
 
+    // Temp Variables
+
+    //private float lifetime;
+    //private float gravity;
+    //private float fireSpeed;
+    //private float damage;
+    //private LayerMask layerMask;
+
+    //
+
     public IProjectileSpawner Spawner => spawner;
     public ProjectileData ProjectileData => projectileData;
 
@@ -15,7 +25,7 @@ public class Bullet : MonoBehaviour, IProjectile
     {
         if (isFired)
         {
-            if (Physics.Raycast(transform.position, velocity.normalized, out RaycastHit hitInfo, velocity.magnitude * Time.deltaTime, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, velocity.normalized, out RaycastHit hitInfo, velocity.magnitude * Time.deltaTime, projectileData.LayerMask /*layerMask*/, QueryTriggerInteraction.Ignore))
             {
                 spawner?.OnProjectileHit(this, gameObject, hitInfo.collider);
                 lifetimeTimer = projectileData.LifetimeDuration;
@@ -29,7 +39,7 @@ public class Bullet : MonoBehaviour, IProjectile
                 lifetimeTimer = projectileData.LifetimeDuration;
             }
 
-            velocity.y += projectileData.Gravity * Time.deltaTime;
+            velocity.y += projectileData.Gravity /*gravity*/ * Time.deltaTime;
             transform.position += velocity * Time.deltaTime;
             transform.forward = velocity.normalized;
         }
@@ -39,6 +49,11 @@ public class Bullet : MonoBehaviour, IProjectile
     {
         this.spawner = spawner;
         this.projectileData = projectileData;
+        //lifetime = projectileData.LifetimeDuration;
+        //gravity = projectileData.Gravity;
+        //fireSpeed = projectileData.FireSpeed;
+        //damage = projectileData.Damage;
+        //layerMask = projectileData.LayerMask;
     }
 
     public void Fire( Vector3 direction)
@@ -49,6 +64,8 @@ public class Bullet : MonoBehaviour, IProjectile
         }
         lifetimeTimer = projectileData.LifetimeDuration;
         velocity = projectileData.FireSpeed * direction;
+        //velocity = fireSpeed * direction;
+        //lifetimeTimer = lifetime;
         isFired = true;
     }
 

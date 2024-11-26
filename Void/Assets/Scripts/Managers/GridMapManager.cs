@@ -5,6 +5,7 @@ using Graphs;
 public class GridMapManager : Singleton<GridMapManager>
 {
     [Header("Map Generation Parameters")]
+    [SerializeField] private bool generateOnStart = true;
     [SerializeField] private int seed = 1234;
     [SerializeField] private Vector2Int gridSize = new Vector2Int(50, 50);
     [SerializeField] private int minRoomSize = 3;
@@ -91,6 +92,20 @@ public class GridMapManager : Singleton<GridMapManager>
                 new Vector4(0, 0, 0, 1)
             ),
         };
+    }
+
+    private void Start()
+    {
+        if (generateOnStart)
+        {
+            InitializeGridMap();
+            GenerateRooms();
+            GenerateHallways();
+            SpawnTiles();
+            InitializeInteriorGridMap();
+            GenerateTasks();
+            GenerateInteriors();
+        }
     }
 
     public void InitializeGridMap()
@@ -499,6 +514,7 @@ public class GridMapManager : Singleton<GridMapManager>
                         while (attempt < maxFixtureAttempts)
                         {
                             FixtureInstance selectedFixture = fixtureInstances[validRelationshipsStart + selectedFixtureIndex];
+                            // TODO : FIX OUT OF RANGE ERROR
                             FixtureInstance placedFixture = PlaceRandomRelationship(collection, selectedFixture, start);
 
                             if (placedFixture == null)
@@ -760,12 +776,16 @@ public class GridMapManager : Singleton<GridMapManager>
             return true;
         }
 
+        bool allDisabled = true;
         foreach (RestrictionData restrictionData in fixtureInstance.Data.Restrictions)
         {
             if (!restrictionData.Enabled)
             {
-                // Change to Allow Restrictions that are all disabled to be evaluated as true;
                 continue;
+            }
+            else
+            {
+                allDisabled = false;
             }
 
             bool manditoryVsProhibited;
@@ -881,6 +901,11 @@ public class GridMapManager : Singleton<GridMapManager>
             {
                 return true;
             }
+        }
+
+        if (allDisabled)
+        {
+            return true;
         }
 
         return false;

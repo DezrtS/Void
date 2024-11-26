@@ -12,29 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2727eff2645464eb1f51d8584c75b5, type: 3}
   m_Name: Debug Room
   m_EditorClassIdentifier: 
-  GridSize: {x: 5, y: 4}
-  gridSize: {x: 5, y: 4}
-  tilePositions:
-  - {x: 0, y: 0}
-  - {x: 1, y: 0}
-  - {x: 2, y: 0}
-  - {x: 3, y: 0}
-  - {x: 4, y: 0}
-  - {x: 0, y: 1}
-  - {x: 0, y: 2}
-  - {x: 0, y: 3}
-  - {x: 1, y: 3}
-  - {x: 2, y: 3}
-  - {x: 3, y: 3}
-  - {x: 4, y: 3}
-  - {x: 4, y: 2}
-  - {x: 4, y: 1}
-  - {x: 3, y: 1}
-  - {x: 3, y: 2}
-  - {x: 2, y: 2}
-  - {x: 2, y: 1}
-  - {x: 1, y: 1}
-  - {x: 1, y: 2}
+  ChangeGridSize: {x: 5, y: 4}
   connections: []
   SpawnTiles: 1
   HasInterior: 1
