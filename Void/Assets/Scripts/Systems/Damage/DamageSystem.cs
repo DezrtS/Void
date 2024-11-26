@@ -1,53 +1,40 @@
-using System; // For Action delegate
+using System; 
 using UnityEngine;
 using Unity.Netcode;
 
 public class DamageSystem : NetworkBehaviour
 {
-    [SerializeField] private int totalHealth;
-    private NetworkVariable<int> currentHealth = new NetworkVariable<int>();
+    public NetworkVariable<int> currentHealth = new NetworkVariable<int>();
+    public NetworkVariable<int> totalHealth = new NetworkVariable<int>();
 
     public event Action<int, int> OnDamageTaken;
-
     public event Action OnDeath;
 
     private void Start()
     {
         if (IsServer)
         {
-            currentHealth.Value = totalHealth;
+            totalHealth.Value = 100; 
+            currentHealth.Value = totalHealth.Value;
         }
 
-        currentHealth.OnValueChanged += HandleHealthChanged;
-
-        DamageListener damageListener = FindObjectOfType<DamageListener>();
-        if (damageListener != null)
+        currentHealth.OnValueChanged += (oldValue, newValue) =>
         {
-            OnDamageTaken += damageListener.HandleDamageTaken;
-            OnDeath += damageListener.HandleDeath;
-        }
-        else
-        {
-            Debug.LogWarning("No DamageListener found in the scene!");
-        }
+            Debug.Log($"Health updated: {oldValue} -> {newValue}");
+        };
     }
 
     public void Damage(int damage)
     {
-        if (!IsServer)
-        {
-            Debug.LogWarning("Damage should only be applied on the server!");
-            return;
-        }
+        if (!IsServer) return; 
 
-        currentHealth.Value = Mathf.Max(currentHealth.Value - damage, 0);
+        currentHealth.Value -= damage; 
 
-        if (currentHealth.Value > 0)
+        OnDamageTaken?.Invoke(currentHealth.Value, totalHealth.Value);
+
+        if (currentHealth.Value <= 0)
         {
-            OnDamageTaken?.Invoke(currentHealth.Value, totalHealth);
-        }
-        else
-        {
+            currentHealth.Value = 0;
             OnDeath?.Invoke();
             Debug.Log("Player is Dead.");
         }
@@ -55,7 +42,7 @@ public class DamageSystem : NetworkBehaviour
 
     private void HandleHealthChanged(int previousValue, int newValue)
     {
-        OnDamageTaken?.Invoke(newValue, totalHealth);
+        OnDamageTaken?.Invoke(newValue, totalHealth.Value);
 
         if (newValue <= 0)
         {
@@ -67,7 +54,7 @@ public class DamageSystem : NetworkBehaviour
     {
         if (IsServer)
         {
-            currentHealth.Value = totalHealth;
+            currentHealth.Value = totalHealth.Value;
         }
     }
 }

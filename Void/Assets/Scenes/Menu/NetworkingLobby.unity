@@ -822,7 +822,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bf2c7c19de856d4fac6d31b93b66e6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBar: {fileID: 0}
+  healthBar: {fileID: 7238159095500547692, guid: 54612524b5238714f8c2eb785da74cf3,
+    type: 3}
+  damageSystem: {fileID: 0}
 --- !u!1 &296892649
 GameObject:
   m_ObjectHideFlags: 0
@@ -3845,6 +3847,9 @@ MonoBehaviour:
     type: 3}
   playerPre: {fileID: 1575300930724462412, guid: c3fe956afc504604ead5371accbaea4a,
     type: 3}
+  healthBarPrefab: {fileID: 7238159095500547692, guid: 54612524b5238714f8c2eb785da74cf3,
+    type: 3}
+  uiCanvas: {fileID: 794256995298886733}
 --- !u!114 &2000036071
 MonoBehaviour:
   m_ObjectHideFlags: 0

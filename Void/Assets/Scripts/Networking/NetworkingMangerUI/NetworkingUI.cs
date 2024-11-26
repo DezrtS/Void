@@ -10,22 +10,23 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] private Button joinBtn;
     [SerializeField] private GameObject monsterPre;
     [SerializeField] private GameObject playerPre;
-
-    
-    [SerializeField] public Image healthBarPrefab; 
-    [SerializeField] public Transform uiCanvas;    
+    [SerializeField] private Image healthBarPrefab;  
+    [SerializeField] private Transform uiCanvas;     
 
     private void Awake()
     {
+        // Start server only
         serverBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartServer();
         });
 
+        // Host starts server and spawns monster
         hostBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartHost();
             StartCoroutine(ReplaceHostPlayerWithMonster());
         });
 
+        // Clients join the game
         joinBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartClient();
         });
@@ -33,15 +34,14 @@ public class NetworkManagerUI : MonoBehaviour
 
     private IEnumerator ReplaceHostPlayerWithMonster()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.1f); 
 
         if (NetworkManager.Singleton.IsHost)
         {
             var localPlayerObject = NetworkManager.Singleton.LocalClient?.PlayerObject;
-
             if (localPlayerObject != null)
             {
-                localPlayerObject.Despawn(true);
+                localPlayerObject.Despawn(true); 
             }
 
             var monsterInstance = Instantiate(monsterPre, GetRandomSpawnPosition(), Quaternion.identity);
@@ -91,6 +91,11 @@ public class NetworkManagerUI : MonoBehaviour
         }
     }
 
+    private void OnClientDisconnected(ulong clientId)
+    {
+        Debug.Log($"Client {clientId} disconnected");
+    }
+
     private void AssignHealthBarToLocalPlayer(ulong clientId)
     {
         NetworkObject localPlayer = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
@@ -100,14 +105,17 @@ public class NetworkManagerUI : MonoBehaviour
             if (damageListener != null)
             {
                 Image healthBar = Instantiate(healthBarPrefab, uiCanvas);
-                damageListener.SetHealthBar(healthBar);
+                damageListener.SetHealthBar(healthBar); 
+            }
+            else
+            {
+                Debug.LogWarning("DamageListener not found on local player!");
             }
         }
     }
 
     private Vector3 GetRandomSpawnPosition()
     {
-        // Define a spawn area for players
         float randomX = Random.Range(-5f, 5f);
         float randomZ = Random.Range(-5f, 5f);
         return new Vector3(randomX, 3f, randomZ);
