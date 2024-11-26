@@ -12,18 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2727eff2645464eb1f51d8584c75b5, type: 3}
   m_Name: Debug Room
   m_EditorClassIdentifier: 
-  gridSize: {x: 5, y: 5}
-  GridSize: {x: 2, y: 2}
-  tilePositions:
-  - {x: 1, y: 0}
-  - {x: 2, y: 2}
-  - {x: 2, y: 3}
-  - {x: 3, y: 3}
-  - {x: 3, y: 2}
-  - {x: 2, y: 1}
-  - {x: 2, y: 0}
-  - {x: 1, y: 1}
-  - {x: 1, y: 2}
-  SpawnTiles: 0
-  HasInterior: 0
-  RoomPrefab: {fileID: 0}
+  ChangeGridSize: {x: 5, y: 4}
+  connections: []
+  SpawnTiles: 1
+  HasInterior: 1
+  RoomPrefab: {fileID: 5569052224994142265, guid: e370389b57a57994ca011b6719fdeb36,
+    type: 3}

@@ -2,22 +2,22 @@ using UnityEngine;
 
 public class DeselectGridPosition : ICommand
 {
-    private readonly RoomData roomData;
+    private readonly IHoldTilePositions tilePositionsHolder;
     private readonly Vector2Int position;
 
-    public DeselectGridPosition(RoomData roomData, Vector2Int position)
+    public DeselectGridPosition(IHoldTilePositions tilePositionsHolder, Vector2Int position)
     {
-        this.roomData = roomData;
+        this.tilePositionsHolder = tilePositionsHolder;
         this.position = position;
     }
 
     public void Execute()
     {
-        roomData.tilePositions.Remove(position);
+        tilePositionsHolder.tilePositions.Remove(position);
     }
 
     public void Undo()
     {
-        roomData.tilePositions.Add(position);
+        tilePositionsHolder.tilePositions.Add(position);
     }
 }

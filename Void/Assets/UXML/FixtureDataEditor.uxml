@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UXML/FixtureEditor.uss?fileID=7433441132597879392&amp;guid=4e9cbd6adbc59d349837956cc7d126f1&amp;type=3#FixtureEditor" />
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:Button text="Edit Restrictions" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditRestrictionsButton" class="button" />
+        <ui:Button text="Edit Relationships" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditRelationshipsButton" class="button" />
+        <ui:VisualElement name="DataContainer" style="flex-grow: 1;">
+            <ui:TextField picking-mode="Ignore" label="Fixture Name" name="FixtureNameField" class="field" />
+            <ui:DropdownField label="Fixture Tags" name="FixtureTagsField" class="field" />
+            <ui:VisualElement name="TileGridContainer" style="flex-grow: 1;">
+                <ui:Vector2IntField label="Grid Size" name="GridSizeField" class="field" />
+                <ui:Button text="Update Grid Size" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UpdateGridSizeButton" class="button" />
+                <ui:ScrollView name="TileGridScrollView" style="flex-grow: 1;" />
+                <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: auto;">
+                    <ui:Button text="Undo" parse-escape-sequences="true" display-tooltip-when-elided="true" name="UndoButton" class="button" style="flex-grow: 1;" />
+                    <ui:Button text="Redo" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RedoButton" class="button" style="flex-grow: 1;" />
+                </ui:VisualElement>
+                <ui:Button text="Reset" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ResetButton" class="button" style="align-items: stretch;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

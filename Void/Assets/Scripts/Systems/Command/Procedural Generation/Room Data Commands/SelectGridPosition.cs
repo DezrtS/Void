@@ -2,22 +2,22 @@ using UnityEngine;
 
 public class SelectGridPosition : ICommand
 {
-    private readonly RoomData roomData;
+    private readonly IHoldTilePositions tilePositionsHolder;
     private readonly Vector2Int position;
 
-    public SelectGridPosition(RoomData roomData, Vector2Int position)
+    public SelectGridPosition(IHoldTilePositions tilePositionsHolder, Vector2Int position)
     {
-        this.roomData = roomData;
+        this.tilePositionsHolder = tilePositionsHolder;
         this.position = position;
     }
 
     public void Execute()
     {
-        roomData.tilePositions.Add(position);
+        tilePositionsHolder.tilePositions.Add(position);
     }
 
     public void Undo()
     {
-        roomData.tilePositions.Remove(position);
+        tilePositionsHolder.tilePositions.Remove(position);
     }
 }

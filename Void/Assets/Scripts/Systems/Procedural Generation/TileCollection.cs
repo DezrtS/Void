@@ -19,6 +19,8 @@ public class TileCollection
     public int Id;
     public Vector2 AveragePosition;
     public (Vector2Int lowerLeft, Vector2Int upperRight) Bounds;
+
+    public RoomData RoomData;
     
     public readonly List<Vector2Int> mapTilePositions;
     public readonly List<(Vector2Int from, Vector2Int to)> connections;
@@ -31,6 +33,11 @@ public class TileCollection
         Bounds = (new Vector2Int(int.MaxValue, int.MaxValue), new Vector2Int(int.MinValue, int.MinValue));
         mapTilePositions = new List<Vector2Int>();
         connections = new List<(Vector2Int from, Vector2Int to)>();
+    }
+
+    public void InitiatlizeRoom(RoomData roomData)
+    {
+        RoomData = roomData;
     }
 
     public void AddMapTilePosition(Vector2Int position)
@@ -67,30 +74,5 @@ public class TileCollection
     public void AddConnection(Vector2Int from, Vector2Int to)
     {
         connections.Add((from, to));
-    }
-
-    public void PlaceFixtureAnywhere() // FixtureData
-    {
-        
-    }
-
-    public bool PlaceFixture(/*FixtureData data, */Vector2Int position, Vector2Int forward)
-    {
-        return false;
-    }
-
-    public bool CanPlaceFixture(List<Vector2Int> positions)
-    {
-        return false;
-    }
-
-    public void GenerateInterior()
-    {
-
-    }
-
-    public void GenerateWalkways()
-    {
-
     }
 }

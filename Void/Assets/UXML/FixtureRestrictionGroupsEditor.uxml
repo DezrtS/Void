@@ -1,0 +1,47 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UXML/FixtureEditor.uss?fileID=7433441132597879392&amp;guid=4e9cbd6adbc59d349837956cc7d126f1&amp;type=3#FixtureEditor" />
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:Button text="Back to Fixtures" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BackToFixturesButton1" class="button" />
+        <ui:VisualElement name="RestrictionGroupDataContainer" style="flex-grow: 1;">
+            <ui:ProgressBar value="100" title="Create New Restriction Group" name="RestrictionGroupProgressBar" high-value="100" />
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: auto;">
+                <ui:Button text="Remove Restriction Group" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RemoveRestrictionGroupButton" class="button" style="flex-grow: 1;" />
+                <ui:Button text="New Restriction Group" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewRestrictionGroupButton" class="button" style="flex-grow: 1;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; flex-wrap: nowrap; flex-direction: row; justify-content: flex-start; align-items: auto; align-self: auto;">
+                <ui:Button text="Previous Restriction Group" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PreviousRestrictionGroupButton" class="button" style="flex-basis: auto; width: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-grow: 1;" />
+                <ui:Button text="Next Restriction Group" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NextRestrictionGroupButton" class="button" style="width: auto; align-items: stretch; flex-basis: auto; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-grow: 1; flex-shrink: 0;" />
+            </ui:VisualElement>
+            <ui:Toggle label="Enabled" name="RestrictionEnabledField" />
+            <ui:Foldout text="Restriction Room Types" name="RoomTypeFoldout">
+                <ui:ListView name="RoomTypeList" />
+            </ui:Foldout>
+            <ui:VisualElement name="RestrictionContainer" style="flex-grow: 1;">
+                <ui:ProgressBar value="100" title="Create New Restriction" name="RestrictionProgressBar" />
+                <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: auto;">
+                    <ui:Button text="Remove Restriction" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RemoveRestrictionButton" class="button" style="flex-basis: auto; flex-grow: 1;" />
+                    <ui:Button text="New Restriction" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewRestrictionButton" class="button" style="flex-basis: auto; flex-grow: 1;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: auto;">
+                    <ui:Button text="Previous Restriction" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PreviousRestrictionButton" class="button" style="flex-basis: auto; flex-grow: 1;" />
+                    <ui:Button text="Next Restriction" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NextRestrictionButton" class="button" style="flex-basis: auto; flex-grow: 1;" />
+                </ui:VisualElement>
+                <ui:EnumField label="Restriction Type" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="RestrictionTypeField" class="field" />
+                <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: auto;">
+                    <ui:EnumField label="Allowed Interior Type" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="InteriorTileTypeField" class="field" style="flex-grow: 1; flex-basis: 90%; flex-direction: row;" />
+                    <ui:Toggle name="HasInteriorTileTypeToggle" class="field" style="flex-grow: 1; flex-basis: 50px;" />
+                </ui:VisualElement>
+                <ui:Foldout text="Allowed Fixture Types" name="AllowedFixtureTypeFoldout">
+                    <ui:ListView header-title="Allowed Fixture Tags" show-foldout-header="false" selection-type="Multiple" name="AllowedFixtureTypeTagList" style="flex-grow: 1; flex-shrink: 0;" />
+                </ui:Foldout>
+                <ui:Toggle label="Force Walkable Path" name="HasWalkablePathToggle" class="field" />
+                <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: auto;">
+                    <ui:Button text="Remove Position" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RemovePositionButton" class="button" style="flex-grow: 1;" />
+                    <ui:Button text="New Position" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewPositionButton" class="button" style="flex-grow: 1;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="PositionListContainer" style="flex-grow: 1;" />
+                <ui:ListView name="PositionList" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

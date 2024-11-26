@@ -1,8 +1,20 @@
+using System;
 using UnityEngine;
 
-public struct FixtureInstance
+public enum RotationPreset
 {
-    //public FixtureData Data;
-    public Vector2 Position;
-    public Vector2 Forward;
+    Zero,
+    Ninety, 
+    OneEighty, 
+    TwoSeventy
+}
+
+[Serializable]
+public class FixtureInstance
+{
+    public FixtureData Data;
+    public TileCollection ParentCollection;
+    public Vector2Int Position;
+    public Matrix4x4 RotationMatrix;
+    public RotationPreset RotationPreset;
 }

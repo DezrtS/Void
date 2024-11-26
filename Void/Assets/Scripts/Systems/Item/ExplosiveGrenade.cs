@@ -10,12 +10,11 @@ public class ExplosiveGrenade : ThrowableItem
     [SerializeField] private LayerMask effectableLayers;
     [SerializeField] private GameObject explosionEffect;
 
-    private bool isActive = false;
     private float timer = 0;
 
     private void FixedUpdate()
     {
-        if (isActive)
+        if (thrown)
         {
             if (timer <= 0)
             {
@@ -42,11 +41,6 @@ public class ExplosiveGrenade : ThrowableItem
 
     protected override void OnThrow()
     {
-        base.OnThrow();
-        if (!isActive)
-        {
-            isActive = true;
-            timer = timeToActivation;
-        }
+        timer = timeToActivation;
     }
 }

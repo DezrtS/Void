@@ -51,6 +51,15 @@ public class Grid2D<T>
         }
     }
 
+    public T this[Vector2 pos]
+    {
+        get
+        {
+            pos += Offset;
+            return this[(int)pos.x, (int)pos.y];
+        }
+    }
+
     public T this[int index]
     {
         get
