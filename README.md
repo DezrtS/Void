@@ -39,9 +39,6 @@ Michael Atteh Roles and Responsibilities:
 + Aatif Sattaur Contribution Percentage    -->    33.33%
 + Michael Atteh Contribution Percentage    -->    33.33%
 ------------------------------------------------------------------------------
-Video Link: [https://youtu.be/W4lFgs5P2B8](https://youtu.be/6VqM7EuSVRI)
-
-------------------------------------------------------------------------------
 Interactive Media Scenario Information (10/100),
 
 For our scenario we are building foundations for our GDW project made 
@@ -105,5 +102,6 @@ Michael Atteh Roles and Responsibilities:
 + Implemented Dirty Flag Design Pattern
 + Create Diagram on Implementations
 + Write Explaination on Implementations
-+ Record Demo Video on Contributions
 
+------------------------------------------------------------------------------
++ Record Demo Video on ContributionsVideo Link: [https://youtu.be/W4lFgs5P2B8](https://youtu.be/6VqM7EuSVRI)
