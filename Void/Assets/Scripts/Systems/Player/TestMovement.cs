@@ -20,7 +20,6 @@ public class TestMovement : MonoBehaviour
     public Transform playerBody;
     public CharacterController playerController;
 
-    private float speed = 12;
     private float strafeSpeed = 12;
     private float sprintMultiplier;
     private float gravity = -19.62f;
