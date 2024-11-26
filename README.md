@@ -1,10 +1,14 @@
 # Void
 ------------------------------------------------------------------------------
-# FOR GAME ENGINE DESIGN ASSIGNMENT 1-4
+#
+# Course Project is further down...
+#
 ------------------------------------------------------------------------------
 + Denzil Walrond Role     -->     Lead Programmer
 + Aatif Sattaur Role      -->     Programmer (Normally Project Manager)
 + Michael Atteh Role      -->     Programmer (Normally Lead Artist)
+------------------------------------------------------------------------------
+# FOR GAME ENGINE DESIGN ASSIGNMENT 1-4
 ------------------------------------------------------------------------------
 Denzil Walrond Roles and Responsibilities:
 + Implement AudioManager                  [Singleton]
@@ -87,7 +91,6 @@ Denzil Walrond Roles and Responsibilities:
 + Write Explaination on Implementations
 + Record Demo Video on Contributions
 
-
 Aatif Sattaur Roles and Responsibilities:
 + Upgraded factory design pattern
 + Create object pool for player guns     
@@ -102,7 +105,10 @@ Michael Atteh Roles and Responsibilities:
 + Implemented Dirty Flag Design Pattern
 + Create Diagram on Implementations
 + Write Explaination on Implementations
-
+------------------------------------------------------------------------------
++ Denzil Walrond Contribution Percentage   -->    33.33%
++ Aatif Sattaur Contribution Percentage    -->    33.33%
++ Michael Atteh Contribution Percentage    -->    33.33%
 ------------------------------------------------------------------------------
 + Record Demo Video on ContributionsVideo Link: https://drive.google.com/drive/folders/1zyZWXFRNtDis4ngX_xzehD3haltFgCIw?usp=sharing
-  
+  ------------------------------------------------------------------------------
