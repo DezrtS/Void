@@ -1,22 +1,26 @@
-using System; // Add this for the Action delegate
+using System; // For Action delegate
 using UnityEngine;
+using Unity.Netcode;
 
-public class DamageSystem : MonoBehaviour
+public class DamageSystem : NetworkBehaviour
 {
     [SerializeField] private int totalHealth;
-    [SerializeField] private int currentHealth;
+    private NetworkVariable<int> currentHealth = new NetworkVariable<int>();
 
-    // Event triggered when the object takes damage
     public event Action<int, int> OnDamageTaken;
 
-    // Event triggered when the object dies
     public event Action OnDeath;
 
-    void Start()
+    private void Start()
     {
-        currentHealth = totalHealth;
+        if (IsServer)
+        {
+            currentHealth.Value = totalHealth;
+        }
 
-         DamageListener damageListener = FindObjectOfType<DamageListener>();
+        currentHealth.OnValueChanged += HandleHealthChanged;
+
+        DamageListener damageListener = FindObjectOfType<DamageListener>();
         if (damageListener != null)
         {
             OnDamageTaken += damageListener.HandleDamageTaken;
@@ -30,15 +34,40 @@ public class DamageSystem : MonoBehaviour
 
     public void Damage(int damage)
     {
-        currentHealth -= damage;
-
-        OnDamageTaken?.Invoke(currentHealth, totalHealth);
-
-        if (currentHealth <= 0)
+        if (!IsServer)
         {
-            currentHealth = 0;
+            Debug.LogWarning("Damage should only be applied on the server!");
+            return;
+        }
+
+        currentHealth.Value = Mathf.Max(currentHealth.Value - damage, 0);
+
+        if (currentHealth.Value > 0)
+        {
+            OnDamageTaken?.Invoke(currentHealth.Value, totalHealth);
+        }
+        else
+        {
             OnDeath?.Invoke();
             Debug.Log("Player is Dead.");
+        }
+    }
+
+    private void HandleHealthChanged(int previousValue, int newValue)
+    {
+        OnDamageTaken?.Invoke(newValue, totalHealth);
+
+        if (newValue <= 0)
+        {
+            OnDeath?.Invoke();
+        }
+    }
+
+    public void ResetHealth()
+    {
+        if (IsServer)
+        {
+            currentHealth.Value = totalHealth;
         }
     }
 }
