@@ -4,7 +4,7 @@ public static class EventLoggerInterop
 {
     [DllImport("GameAnalyticsLogger.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern void InitializeLogger(string filename);
-
+    
     [DllImport("GameAnalyticsLogger.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern void ShutdownLogger();
 
