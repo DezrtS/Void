@@ -35,6 +35,14 @@ public class BulletSpawner : MonoBehaviour, IProjectileSpawner
         projectile.Fire(transform.forward);
     }
 
+    public void SpawnProjectile(Vector3 position, Quaternion rotation)
+    {
+        GameObject bullet = Instantiate(projectileData.Prefab, position, rotation);
+        IProjectile projectile = bullet.GetComponent<IProjectile>();
+        projectile.Initialize(this, projectileData);
+        projectile.Fire(transform.forward);
+    }
+
     public void OnProjectileHit(IProjectile projectile, GameObject projectileGameObject, Collider hitCollider)
     {
         objectPool.ReturnToPool(projectileGameObject);

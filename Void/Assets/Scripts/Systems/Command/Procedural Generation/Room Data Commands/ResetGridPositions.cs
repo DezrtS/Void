@@ -3,22 +3,22 @@ using UnityEngine;
 
 public class ResetGridPositions : ICommand
 {
-    private readonly TileSection tileSection;
+    private readonly IHoldTilePositions tilePositionsHolder;
     private readonly List<Vector2Int> positions;
 
-    public ResetGridPositions(TileSection tileSection)
+    public ResetGridPositions(IHoldTilePositions tilePositionsHolder)
     {
-        this.tileSection = tileSection;
-        positions = new List<Vector2Int>(tileSection.tilePositions);
+        this.tilePositionsHolder = tilePositionsHolder;
+        positions = new List<Vector2Int>(tilePositionsHolder.tilePositions);
     }
 
     public void Execute()
     {
-        tileSection.tilePositions.Clear();
+        tilePositionsHolder.tilePositions.Clear();
     }
 
     public void Undo()
     {
-        tileSection.tilePositions = new List<Vector2Int>(positions);
+        tilePositionsHolder.tilePositions = new List<Vector2Int>(positions);
     }
 }

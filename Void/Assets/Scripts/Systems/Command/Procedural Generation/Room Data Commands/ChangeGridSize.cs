@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class ChangeGridSize : ICommand
 {
-    private readonly TileSection tileSection;
+    private readonly IHoldTilePositions tilePositionsHolder;
     private readonly List<Vector2Int> removedPositions;
     private readonly Vector2Int previousSize;
     private readonly Vector2Int size;
 
-    public ChangeGridSize(TileSection tileSection, Vector2Int size)
+    public ChangeGridSize(IHoldTilePositions tilePositionsHolder, Vector2Int size)
     {
-        this.tileSection = tileSection;
+        this.tilePositionsHolder = tilePositionsHolder;
         removedPositions = new List<Vector2Int>();
-        foreach (Vector2Int position in tileSection.tilePositions)
+        foreach (Vector2Int position in tilePositionsHolder.tilePositions)
         {
             if (position.x >= size.x || position.y >= size.y)
             {
@@ -20,22 +20,22 @@ public class ChangeGridSize : ICommand
             }
         }
 
-        previousSize = tileSection.gridSize;
+        previousSize = tilePositionsHolder.gridSize;
         this.size = size;
     }
 
     public void Execute()
     {
-        tileSection.gridSize = size;
+        tilePositionsHolder.gridSize = size;
         foreach (var position in removedPositions)
         {
-            tileSection.tilePositions.Remove(position);
+            tilePositionsHolder.tilePositions.Remove(position);
         }
     }
 
     public void Undo()
     {
-        tileSection.gridSize = previousSize;
-        tileSection.tilePositions.AddRange(removedPositions);
+        tilePositionsHolder.gridSize = previousSize;
+        tilePositionsHolder.tilePositions.AddRange(removedPositions);
     }
 }
