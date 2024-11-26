@@ -52,8 +52,4 @@ public class CustomizationManager : MonoBehaviour
         currentIndex = index;
     }
 
-    public void SaveObject(GameObject obj)
-    {
-        sceneObjectManager.SaveActiveObject(obj);
-    }
 }
