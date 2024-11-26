@@ -39,13 +39,13 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         transform.position = Vector3.Lerp(transform.position, target.transform.position, speed * Time.deltaTime);
-        UpdateHeatlh();
+        UpdateHealth();
     }
 
     void spawnEnemy()
     {
         eHealth = enemyFactory.setRandomHealth();
-        UpdateHeatlh();
+        UpdateHealth();
         //transform.localScale = new Vector3(enemyFactory.setRandomScale(),enemyFactory.setRandomScale(),enemyFactory.setRandomScale());
         transform.localScale = new Vector3(eHealth, eHealth, eHealth);
         speed = enemyFactory.setRandomSpeed();
@@ -54,11 +54,11 @@ public class Enemy : MonoBehaviour
 
 
     void destroyEnemy()
-    {
+    {    
         Destroy(gameObject);
     }
 
-    void UpdateHeatlh()
+    void UpdateHealth()
     {
         enemyHealth.text = "Health: " + eHealth.ToString();
     }
