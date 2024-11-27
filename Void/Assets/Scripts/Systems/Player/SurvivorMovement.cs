@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
@@ -11,6 +10,8 @@ public class SurvivorController : NetworkBehaviour
 
     private Camera playerCamera;
     private CharacterController characterController;
+
+    public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     // Movement settings
     private float walkSpeed = 6f;
@@ -27,7 +28,6 @@ public class SurvivorController : NetworkBehaviour
     private float rotationX = 0;
 
     private bool canMove = true;
-    private bool isDead = false; 
 
     private DamageSystem damageSystem;
 
@@ -41,9 +41,16 @@ public class SurvivorController : NetworkBehaviour
         }
 
         damageSystem = GetComponent<DamageSystem>();
+
         if (damageSystem != null)
         {
-            damageSystem.OnDeath += Die; 
+            damageSystem.isDead.OnValueChanged += (oldValue, newValue) =>
+            {
+                if (newValue) 
+                {
+                    Die();
+                }
+            };
         }
         else
         {
@@ -58,9 +65,7 @@ public class SurvivorController : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner || !IsSpawned) return;
-
-        if (isDead)
+        if (!IsOwner || isDead.Value)
         {
             return;
         }
@@ -70,11 +75,7 @@ public class SurvivorController : NetworkBehaviour
 
     private void HandleMovement()
     {
-        if (isDead || !canMove)
-        {
-            Debug.Log("Player is dead or cannot move.");
-            return;
-        }
+        if (!canMove) return;
 
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
@@ -114,7 +115,7 @@ public class SurvivorController : NetworkBehaviour
 
         characterController.Move(moveDirection * Time.deltaTime);
 
-        if (canMove && playerCamera != null)
+        if (playerCamera != null)
         {
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
@@ -149,15 +150,13 @@ public class SurvivorController : NetworkBehaviour
 
     public void Die()
     {
-        Debug.Log("Die method triggered.");
-        isDead = true;
+        Debug.Log("Player died locally.");
         canMove = false;
-        DetachCamera();  
+        DetachCamera();
     }
 
     private void DetachCamera()
     {
-        Debug.Log("Detaching camera...");
         if (playerCamera != null)
         {
             playerCamera.transform.SetParent(null);

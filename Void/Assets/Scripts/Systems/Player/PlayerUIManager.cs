@@ -7,6 +7,8 @@ public class PlayerUIManager : NetworkBehaviour
     [SerializeField] private Image healthBarPrefab; 
     [SerializeField] private Canvas uiCanvas;    
     [SerializeField] private RectTransform targetPosition; 
+    [SerializeField] private RectTransform deathPosition; 
+    [SerializeField] private GameObject deathMessagePrefab;
 
     private Image healthBarInstance;
     private DamageSystem damageSystem;
@@ -46,6 +48,19 @@ public class PlayerUIManager : NetworkBehaviour
                 Debug.LogError("Target UI element not found!");
             }
         }
+
+        if (deathPosition == null)
+        {
+            GameObject targetObject = GameObject.Find("DeathLoc"); 
+            if (targetObject != null)
+            {
+                deathPosition = targetObject.GetComponent<RectTransform>();
+            }
+            else
+            {
+                Debug.LogError("Target UI element not found!");
+            }
+        }
     }
 
     private void Start()
@@ -60,6 +75,7 @@ public class PlayerUIManager : NetworkBehaviour
         if (IsOwner && healthBarInstance != null)
         {
             damageSystem.OnDamageTaken += UpdateHealthBar;
+            damageSystem.OnDeath += DisplayDeathMessage;
         }
     }
 
@@ -105,11 +121,29 @@ public class PlayerUIManager : NetworkBehaviour
         }
     }
 
+    private void DisplayDeathMessage()
+    {
+        if (deathMessagePrefab == null || deathPosition == null)
+        {
+            Debug.LogError("Death message prefab or death position is not assigned!");
+            return;
+        }
+
+        GameObject deathMessage = Instantiate(deathMessagePrefab, deathPosition.position, Quaternion.identity, uiCanvas.transform);
+
+        Text deathMessageText = deathMessage.GetComponent<Text>();
+        if (deathMessageText != null)
+        {
+            deathMessageText.text = "You Died!";
+        }
+    }
+
     private void OnDestroy()
     {
         if (damageSystem != null)
         {
             damageSystem.OnDamageTaken -= UpdateHealthBar;
+            damageSystem.OnDeath -= DisplayDeathMessage;
         }
 
         if (healthBarInstance != null)

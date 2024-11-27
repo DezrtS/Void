@@ -59,18 +59,24 @@ public class NetworkManagerUI : MonoBehaviour
                 localPlayerObject.Despawn(true); 
             }
 
-            var monsterInstance = Instantiate(monsterPre, GetSpawnPosition(), Quaternion.identity);
-            var networkObject = monsterInstance.GetComponent<NetworkObject>();
+            SpawnMonsterServerRpc(NetworkManager.Singleton.LocalClientId, GetSpawnPosition());
+        }
+    }
 
-            if (networkObject != null)
-            {
-                networkObject.SpawnWithOwnership(NetworkManager.Singleton.LocalClientId);
-                NetworkManager.Singleton.LocalClient.PlayerObject = networkObject;
-            }
-            else
-            {
-                Debug.LogError("Monster prefab does not have a NetworkObject component.");
-            }
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnMonsterServerRpc(ulong clientId, Vector3 spawnPosition)
+    {
+        var monsterInstance = Instantiate(monsterPre, spawnPosition, Quaternion.identity);
+        var networkObject = monsterInstance.GetComponent<NetworkObject>();
+
+        if (networkObject != null)
+        {
+            networkObject.SpawnWithOwnership(clientId);
+            NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject = networkObject;
+        }
+        else
+        {
+            Debug.LogError("Monster prefab does not have a NetworkObject component.");
         }
     }
 

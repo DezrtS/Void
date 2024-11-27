@@ -1,33 +1,41 @@
 using UnityEngine;
+using System;
+using Unity.Netcode;
 
-public class CameraController : MonoBehaviour
+public class CameraController : NetworkBehaviour
 {
-    public Camera playerCamera; 
-    public Transform playerTransform; 
+    public Camera playerCamera;
+    public Transform playerTransform;
 
-    private float lookSpeed = 2f; 
-    private float lookXLimit = 45f; 
-    private float rotationX = 0f;  
+    private float lookSpeed = 2f;
+    private float lookXLimit = 45f;
+    private float rotationX = 0f;
 
-    private bool isDetached = false; 
+    private bool isDetached = false;
+
     private DamageSystem damageSystem;
 
-    void Start()
+    private void Start()
     {
-        damageSystem = playerTransform.GetComponent<DamageSystem>();
+        damageSystem = GetComponentInParent<DamageSystem>();
 
-        if (damageSystem != null)
+        if (damageSystem == null)
         {
-            damageSystem.OnDeath += DetachCameraOnDeath; 
-        }
-        else
-        {
-            Debug.LogWarning("DamageSystem not found on player!");
+            Debug.LogWarning("DamageSystem not found on parent!");
         }
     }
 
     void Update()
     {
+        if (damageSystem != null && damageSystem.isDead.Value)
+        {
+            if (isDetached)
+            {
+                HandleIndependentCameraMovement();
+            }
+            return;
+        }
+
         if (playerTransform != null && !isDetached)
         {
             FollowPlayer();
@@ -38,6 +46,7 @@ public class CameraController : MonoBehaviour
             HandleIndependentCameraMovement();
         }
     }
+
 
     private void FollowPlayer()
     {
@@ -69,12 +78,6 @@ public class CameraController : MonoBehaviour
         transform.Rotate(verticalInput * lookSpeed, horizontalInput * lookSpeed, 0);
     }
 
-    private void DetachCameraOnDeath()
-    {
-        DetachCamera();
-        Debug.Log("Player is dead, camera detached.");
-    }
-
     public void DetachCamera()
     {
         playerTransform = null;
@@ -85,13 +88,5 @@ public class CameraController : MonoBehaviour
     {
         playerTransform = player;
         isDetached = false;
-    }
-
-    private void OnDestroy()
-    {
-        if (damageSystem != null)
-        {
-            damageSystem.OnDeath -= DetachCameraOnDeath;
-        }
     }
 }

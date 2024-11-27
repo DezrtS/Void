@@ -132,8 +132,8 @@ MonoBehaviour:
   spawnPoint: {fileID: 3662237747590448752}
   FPSCameraPrefab: {fileID: 1675628873728395439, guid: 9da46762dd5c986409790bb6d4c6c424,
     type: 3}
-  damageSpherePrefab: {fileID: 6368004395190296302, guid: 290337a6f423b8b4ab758b5f19e13e8e,
-    type: 3}
+  isDead:
+    m_InternalValue: 0
 --- !u!114 &2729761942392468743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,6 +150,9 @@ MonoBehaviour:
     type: 3}
   uiCanvas: {fileID: 0}
   targetPosition: {fileID: 0}
+  deathPosition: {fileID: 0}
+  deathMessagePrefab: {fileID: 8749999393589840042, guid: 12642ef6bd27ccc4fad99e57ecb9a797,
+    type: 3}
 --- !u!114 &8406312557854551622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9011a9a417e758344bf1bf0c8643720b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDead:
+    m_InternalValue: 0
   currentHealth:
     m_InternalValue: 0
   totalHealth:
