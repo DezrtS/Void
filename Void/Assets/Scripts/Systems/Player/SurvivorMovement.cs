@@ -1,18 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
 [RequireComponent(typeof(CharacterController))]
 public class SurvivorController : NetworkBehaviour
 {
-    public Transform spawnPoint; 
-    public GameObject FPSCameraPrefab; 
-    public GameObject damageSpherePrefab;
+    public Transform spawnPoint;
+    public GameObject FPSCameraPrefab;
 
-    private CameraController cameraController; 
+    private Camera playerCamera;
     private CharacterController characterController;
-
-    private GameObject playerCameraObject;
-    private bool isCameraDetached = false; 
 
     // Movement settings
     private float walkSpeed = 6f;
@@ -27,7 +25,11 @@ public class SurvivorController : NetworkBehaviour
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
+
     private bool canMove = true;
+    private bool isDead = false; 
+
+    private DamageSystem damageSystem;
 
     public override void OnNetworkSpawn()
     {
@@ -35,7 +37,17 @@ public class SurvivorController : NetworkBehaviour
 
         if (IsOwner)
         {
-            SpawnPlayerCamera(); 
+            SpawnPlayerCamera();
+        }
+
+        damageSystem = GetComponent<DamageSystem>();
+        if (damageSystem != null)
+        {
+            damageSystem.OnDeath += Die; 
+        }
+        else
+        {
+            Debug.LogWarning("DamageSystem not found on player.");
         }
     }
 
@@ -48,16 +60,18 @@ public class SurvivorController : NetworkBehaviour
     {
         if (!IsOwner || !IsSpawned) return;
 
-        HandleMovement(); 
-
-        if (cameraController != null && !isCameraDetached)
+        if (isDead)
         {
-            cameraController.HandleCameraMovement(); 
+            return;
         }
+
+        HandleMovement();
     }
 
     private void HandleMovement()
     {
+        if (isDead) return;
+
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
 
@@ -96,11 +110,11 @@ public class SurvivorController : NetworkBehaviour
 
         characterController.Move(moveDirection * Time.deltaTime);
 
-        if (canMove && playerCameraObject != null)
+        if (canMove && playerCamera != null)
         {
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-            playerCameraObject.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
     }
@@ -113,8 +127,8 @@ public class SurvivorController : NetworkBehaviour
             return;
         }
 
-        playerCameraObject = Instantiate(FPSCameraPrefab, spawnPoint.position, spawnPoint.rotation);
-        cameraController = playerCameraObject.GetComponentInChildren<CameraController>();  
+        GameObject playerCameraObject = Instantiate(FPSCameraPrefab, spawnPoint.position, spawnPoint.rotation);
+        CameraController cameraController = playerCameraObject.GetComponentInChildren<CameraController>();
 
         if (cameraController == null)
         {
@@ -122,28 +136,42 @@ public class SurvivorController : NetworkBehaviour
         }
         else
         {
-            playerCameraObject.transform.SetParent(transform); 
-            cameraController.AttachCamera(transform);  
+            playerCameraObject.transform.SetParent(transform);
+            cameraController.AttachCamera(transform);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
     }
 
-    public void DetachCamera()
+    public void Die()
     {
-        if (cameraController != null)
+        Debug.Log("Die method triggered.");
+        isDead = true;
+        canMove = false;
+        DetachCamera();  
+    }
+
+    private void DetachCamera()
+    {
+        if (playerCamera != null)
         {
-            cameraController.DetachCamera(); 
-            isCameraDetached = true;
+            playerCamera.transform.SetParent(null);  
+            
+            CameraController cameraController = playerCamera.GetComponent<CameraController>();
+            if (cameraController != null)
+            {
+                cameraController.DetachCamera(); 
+            }
+
+            playerCamera = null;  
         }
     }
 
-    public void ReattachCamera()
+    private void OnDestroy()
     {
-        if (cameraController != null)
+        if (damageSystem != null)
         {
-            cameraController.AttachCamera(transform);
-            isCameraDetached = false;
+            damageSystem.OnDeath -= Die;
         }
     }
 }

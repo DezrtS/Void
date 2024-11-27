@@ -4,16 +4,20 @@ using Unity.Netcode;
 
 public class DamageListener : NetworkBehaviour
 {
-    [SerializeField]private Image healthBar;  
-    [SerializeField]private DamageSystem damageSystem;  
+    [SerializeField] private Image healthBar;
+    [SerializeField] private DamageSystem damageSystem;
+    private CameraController cameraController;
 
     private void Start()
     {
         damageSystem = GetComponent<DamageSystem>();
+        
+        cameraController = GetComponentInChildren<CameraController>();
 
         if (damageSystem != null)
         {
             damageSystem.OnDamageTaken += HandleDamageTaken;
+            damageSystem.OnDeath += HandleDeath;
         }
         else
         {
@@ -29,11 +33,17 @@ public class DamageListener : NetworkBehaviour
     public void HandleDeath()
     {
         Debug.Log("Player has died.");
+
+        if (cameraController != null)
+        {
+            cameraController.DetachCamera();
+        }
     }
 
     public void SetHealthBar(Image healthBarPrefab)
     {
         healthBar = healthBarPrefab;
+
         if (damageSystem != null)
         {
             UpdateHealthBar(damageSystem.currentHealth.Value, damageSystem.totalHealth.Value);
@@ -44,7 +54,7 @@ public class DamageListener : NetworkBehaviour
     {
         if (healthBar != null)
         {
-            healthBar.fillAmount = (float)currentHealth / totalHealth; 
+            healthBar.fillAmount = (float)currentHealth / totalHealth;
         }
     }
 
@@ -53,6 +63,7 @@ public class DamageListener : NetworkBehaviour
         if (damageSystem != null)
         {
             damageSystem.OnDamageTaken -= HandleDamageTaken;
+            damageSystem.OnDeath -= HandleDeath;
         }
     }
 }
