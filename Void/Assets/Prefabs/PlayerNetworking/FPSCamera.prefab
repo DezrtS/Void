@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6273410684976788868}
+  - component: {fileID: 3949004080932821970}
   m_Layer: 0
   m_Name: FPSCamera
   m_TagString: Untagged
@@ -32,6 +33,20 @@ Transform:
   - {fileID: 8407088089866580823}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3949004080932821970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675628873728395439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 927d16f4a1570a345bb17df34fd48354, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCamera: {fileID: 9070704265922662216}
+  playerTransform: {fileID: 0}
 --- !u!1 &3408294436306708877
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,7 +59,6 @@ GameObject:
   - component: {fileID: 9070704265922662216}
   - component: {fileID: 801854208263731359}
   - component: {fileID: 2075422878813221954}
-  - component: {fileID: 7037748381346890136}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -255,17 +269,3 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
---- !u!114 &7037748381346890136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3408294436306708877}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 927d16f4a1570a345bb17df34fd48354, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerCamera: {fileID: 9070704265922662216}
-  playerTransform: {fileID: 0}

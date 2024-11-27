@@ -716,6 +716,7 @@ GameObject:
   - component: {fileID: 296113342}
   - component: {fileID: 296113341}
   - component: {fileID: 296113340}
+  - component: {fileID: 296113347}
   - component: {fileID: 296113344}
   - component: {fileID: 296113345}
   - component: {fileID: 296113346}
@@ -870,6 +871,27 @@ MonoBehaviour:
   maxTime: 300
   generalHUD: {fileID: 615928916}
   timerObject: {fileID: 1737999159}
+--- !u!114 &296113347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 296113339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1349536196
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &296892649
 GameObject:
   m_ObjectHideFlags: 0
@@ -4046,10 +4068,10 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1376938872}
   - {fileID: 97515489}
   - {fileID: 296113343}
   - {fileID: 699556568}
-  - {fileID: 1376938872}
   - {fileID: 1176701461}
   - {fileID: 1255329743}
   - {fileID: 1072685085}

@@ -59,7 +59,7 @@ public class NetworkManagerUI : MonoBehaviour
                 localPlayerObject.Despawn(true); 
             }
 
-            var monsterInstance = Instantiate(monsterPre, GetRandomSpawnPosition(), Quaternion.identity);
+            var monsterInstance = Instantiate(monsterPre, GetSpawnPosition(), Quaternion.identity);
             var networkObject = monsterInstance.GetComponent<NetworkObject>();
 
             if (networkObject != null)
@@ -152,11 +152,9 @@ public class NetworkManagerUI : MonoBehaviour
         }
     }
 
-    private Vector3 GetRandomSpawnPosition()
+    private Vector3 GetSpawnPosition()
     {
-        float randomX = Random.Range(-5f, 5f);
-        float randomZ = Random.Range(-5f, 5f);
-        return new Vector3(randomX, 3f, randomZ);
+        return new Vector3(0f, 3f, 0f);
     }
 
     private void OnDestroy()

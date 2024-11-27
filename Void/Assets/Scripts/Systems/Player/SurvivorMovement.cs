@@ -70,7 +70,11 @@ public class SurvivorController : NetworkBehaviour
 
     private void HandleMovement()
     {
-        if (isDead) return;
+        if (isDead || !canMove)
+        {
+            Debug.Log("Player is dead or cannot move.");
+            return;
+        }
 
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
@@ -153,17 +157,17 @@ public class SurvivorController : NetworkBehaviour
 
     private void DetachCamera()
     {
+        Debug.Log("Detaching camera...");
         if (playerCamera != null)
         {
-            playerCamera.transform.SetParent(null);  
-            
+            playerCamera.transform.SetParent(null);
             CameraController cameraController = playerCamera.GetComponent<CameraController>();
             if (cameraController != null)
             {
-                cameraController.DetachCamera(); 
+                cameraController.DetachCamera();
             }
 
-            playerCamera = null;  
+            playerCamera = null;
         }
     }
 
