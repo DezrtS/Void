@@ -13,8 +13,7 @@ public class DamageSystem : NetworkBehaviour
     private void Start()
     {
         if (IsServer)
-        {
-            totalHealth.Value = 100; 
+        { 
             currentHealth.Value = totalHealth.Value;
         }
 

@@ -10,25 +10,40 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] private Button joinBtn;
     [SerializeField] private GameObject monsterPre;
     [SerializeField] private GameObject playerPre;
-    [SerializeField] private Image healthBarPrefab;  
-    [SerializeField] private Transform uiCanvas;     
+    [SerializeField] private Image healthBarPrefab;
+    [SerializeField] private Transform uiCanvas;
+
+    [SerializeField] private GameObject monsterHUD;  
+    [SerializeField] private GameObject playerHUD;   
+    [SerializeField] private GameObject generalHUD;  
+    [SerializeField] private GameObject networkManagerUI; 
+
+    [SerializeField] private GameObject timerObject; 
 
     private void Awake()
     {
+        if (timerObject != null)
+        {
+            timerObject.SetActive(false);
+        }
+
         // Start server only
         serverBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartServer();
+            ActivateHUD("Server");
         });
 
         // Host starts server and spawns monster
         hostBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartHost();
             StartCoroutine(ReplaceHostPlayerWithMonster());
+            ActivateHUD("Host");
         });
 
         // Clients join the game
         joinBtn.onClick.AddListener(() => {
             NetworkManager.Singleton.StartClient();
+            ActivateHUD("Client");
         });
     }
 
@@ -76,7 +91,7 @@ public class NetworkManagerUI : MonoBehaviour
             {
                 var player = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
                 var playerUIManager = player.GetComponent<PlayerUIManager>();
-                
+
                 if (playerUIManager != null)
                 {
                     Debug.Log("Player UI Manager initialized for client.");
@@ -94,20 +109,45 @@ public class NetworkManagerUI : MonoBehaviour
         Debug.Log($"Client {clientId} disconnected");
     }
 
-    private void AssignHealthBarToLocalPlayer(ulong clientId)
+    private void ActivateHUD(string role)
     {
-        NetworkObject localPlayer = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
-        if (localPlayer != null)
+        if (networkManagerUI != null)
         {
-            DamageListener damageListener = localPlayer.GetComponent<DamageListener>();
-            if (damageListener != null)
+            networkManagerUI.SetActive(false);
+        }
+
+        if (role == "Server" || role == "Host")
+        {
+            if (monsterHUD != null)
             {
-                Image healthBar = Instantiate(healthBarPrefab, uiCanvas);
-                damageListener.SetHealthBar(healthBar); 
+                monsterHUD.SetActive(true);  
             }
-            else
+
+            if (generalHUD != null)
             {
-                Debug.LogWarning("DamageListener not found on local player!");
+                generalHUD.SetActive(true);
+
+                if (timerObject != null)
+                {
+                    timerObject.SetActive(true); 
+                    var timeManager = timerObject.GetComponent<TimeManager>();
+                    if (timeManager != null)
+                    {
+                        timeManager.ActivateGeneralHUD(); 
+                        timeManager.StartTimer();        
+                    }
+                    else
+                    {
+                        Debug.LogError("TimeManager script is missing on the TimerObject!");
+                    }
+                }
+            }
+        }
+        else if (role == "Client")
+        {
+            if (playerHUD != null)
+            {
+                playerHUD.SetActive(true);  
             }
         }
     }

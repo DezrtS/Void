@@ -1,19 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
 [RequireComponent(typeof(CharacterController))]
 public class SurvivorController : NetworkBehaviour
 {
-    public Transform spawnPoint;
-    public GameObject FPSCameraPrefab;
+    public Transform spawnPoint; 
+    public GameObject FPSCameraPrefab; 
     public GameObject damageSpherePrefab;
 
-    private NetworkVariable<bool> canDamage = new NetworkVariable<bool>(false);
-
-    private Camera playerCamera;
+    private CameraController cameraController; 
     private CharacterController characterController;
+
+    private GameObject playerCameraObject;
+    private bool isCameraDetached = false; 
 
     // Movement settings
     private float walkSpeed = 6f;
@@ -28,7 +27,6 @@ public class SurvivorController : NetworkBehaviour
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
-
     private bool canMove = true;
 
     public override void OnNetworkSpawn()
@@ -37,7 +35,7 @@ public class SurvivorController : NetworkBehaviour
 
         if (IsOwner)
         {
-            SpawnPlayerCamera();
+            SpawnPlayerCamera(); 
         }
     }
 
@@ -50,7 +48,12 @@ public class SurvivorController : NetworkBehaviour
     {
         if (!IsOwner || !IsSpawned) return;
 
-        HandleMovement();
+        HandleMovement(); 
+
+        if (cameraController != null && !isCameraDetached)
+        {
+            cameraController.HandleCameraMovement(); 
+        }
     }
 
     private void HandleMovement()
@@ -93,11 +96,11 @@ public class SurvivorController : NetworkBehaviour
 
         characterController.Move(moveDirection * Time.deltaTime);
 
-        if (canMove && playerCamera != null)
+        if (canMove && playerCameraObject != null)
         {
             rotationX += -Input.GetAxis("Mouse Y") * lookSpeed;
             rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
-            playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+            playerCameraObject.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
     }
@@ -110,19 +113,37 @@ public class SurvivorController : NetworkBehaviour
             return;
         }
 
-        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position, spawnPoint.rotation);
-        playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
+        playerCameraObject = Instantiate(FPSCameraPrefab, spawnPoint.position, spawnPoint.rotation);
+        cameraController = playerCameraObject.GetComponentInChildren<CameraController>();  
 
-        if (playerCamera == null)
+        if (cameraController == null)
         {
-            Debug.LogError("Camera component not found in FPSCameraPrefab or its children.");
+            Debug.LogError("CameraController component not found in the FPSCameraPrefab.");
         }
         else
         {
-            instantiatedCamera.transform.SetParent(transform);
-
+            playerCameraObject.transform.SetParent(transform); 
+            cameraController.AttachCamera(transform);  
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+    }
+
+    public void DetachCamera()
+    {
+        if (cameraController != null)
+        {
+            cameraController.DetachCamera(); 
+            isCameraDetached = true;
+        }
+    }
+
+    public void ReattachCamera()
+    {
+        if (cameraController != null)
+        {
+            cameraController.AttachCamera(transform);
+            isCameraDetached = false;
         }
     }
 }
