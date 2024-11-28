@@ -10,15 +10,11 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] private Button joinBtn;
     [SerializeField] private GameObject monsterPre;
     [SerializeField] private GameObject playerPre;
-    [SerializeField] private Image healthBarPrefab;
-    [SerializeField] private Transform uiCanvas;
-
-    [SerializeField] private GameObject monsterHUD;  
-    [SerializeField] private GameObject playerHUD;   
-    [SerializeField] private GameObject generalHUD;  
-    [SerializeField] private GameObject networkManagerUI; 
-
-    [SerializeField] private GameObject timerObject; 
+    [SerializeField] private GameObject monsterHUD;
+    [SerializeField] private GameObject playerHUD;
+    [SerializeField] private GameObject generalHUD;
+    [SerializeField] private GameObject networkManagerUI;
+    [SerializeField] private GameObject timerObject;
 
     private void Awake()
     {
@@ -27,36 +23,39 @@ public class NetworkManagerUI : MonoBehaviour
             timerObject.SetActive(false);
         }
 
-        // Start server only
-        serverBtn.onClick.AddListener(() => {
+        serverBtn.onClick.AddListener(() =>
+        {
             NetworkManager.Singleton.StartServer();
             ActivateHUD("Server");
         });
 
-        // Host starts server and spawns monster
-        hostBtn.onClick.AddListener(() => {
+        hostBtn.onClick.AddListener(() =>
+        {
             NetworkManager.Singleton.StartHost();
             StartCoroutine(ReplaceHostPlayerWithMonster());
+            ActivateGeneralHUDServerRpc();  // Activate general HUD for both the host and clients
             ActivateHUD("Host");
         });
 
-        // Clients join the game
-        joinBtn.onClick.AddListener(() => {
+        joinBtn.onClick.AddListener(() =>
+        {
             NetworkManager.Singleton.StartClient();
+            ulong clientId = NetworkManager.Singleton.LocalClientId;
+            StartCoroutine(MovePlayerToSpawnPoint(clientId));
             ActivateHUD("Client");
         });
     }
 
     private IEnumerator ReplaceHostPlayerWithMonster()
     {
-        yield return new WaitForSeconds(0.1f); 
+        yield return new WaitForSeconds(0.1f);
 
         if (NetworkManager.Singleton.IsHost)
         {
             var localPlayerObject = NetworkManager.Singleton.LocalClient?.PlayerObject;
             if (localPlayerObject != null)
             {
-                localPlayerObject.Despawn(true); 
+                localPlayerObject.Despawn(true);
             }
 
             SpawnMonsterServerRpc(NetworkManager.Singleton.LocalClientId, GetSpawnPosition());
@@ -91,28 +90,93 @@ public class NetworkManagerUI : MonoBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        if (NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject != null)
+        Debug.Log($"Client {clientId} connected.");
+        
+        if (NetworkManager.Singleton.IsServer)
         {
-            if (NetworkManager.Singleton.LocalClientId == clientId)
-            {
-                var player = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
-                var playerUIManager = player.GetComponent<PlayerUIManager>();
+            // Set a spawn position for the client using ServerRpc
+            Vector3 spawnPosition = GetRandomSpawnPosition();
+            SetPlayerSpawnPositionServerRpc(clientId, spawnPosition);
+        }
+    }
 
-                if (playerUIManager != null)
-                {
-                    Debug.Log("Player UI Manager initialized for client.");
-                }
-                else
-                {
-                    Debug.LogWarning("Player UI Manager script is missing!");
-                }
+    [ServerRpc]
+    private void SetPlayerSpawnPositionServerRpc(ulong clientId, Vector3 spawnPosition)
+    {
+        if (NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient client))
+        {
+            if (client.PlayerObject != null)
+            {
+                SetPlayerPositionClientRpc(clientId, spawnPosition);
             }
         }
     }
 
+
+    [ClientRpc]
+    private void SetPlayerPositionClientRpc(ulong clientId, Vector3 spawnPosition)
+    {
+        if (NetworkManager.Singleton.LocalClientId == clientId)
+        {
+            var playerObject = NetworkManager.Singleton.LocalClient.PlayerObject;
+            if (playerObject != null)
+            {
+                playerObject.transform.position = spawnPosition;
+            }
+        }
+    }
+
+
+    private IEnumerator MovePlayerToSpawnPoint(ulong clientId)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        // Ensure this is only executed on the server
+        if (NetworkManager.Singleton.IsServer)
+        {
+            NetworkClient client;
+            while (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out client) || client.PlayerObject == null)
+            {
+                yield return null;
+            }
+
+            // Get the player's network object
+            var playerObject = client.PlayerObject;
+            if (playerObject != null)
+            {
+                Vector3 spawnPosition = GetRandomSpawnPosition();
+                playerObject.transform.position = spawnPosition;
+
+                Debug.Log($"Player {clientId} moved to spawn point: {spawnPosition}");
+            }
+            else
+            {
+                Debug.LogError($"Player object for client {clientId} could not be found.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("MovePlayerToSpawnPoint is called on the client, but it should only be called on the server.");
+        }
+    }
+
+
     private void OnClientDisconnected(ulong clientId)
     {
         Debug.Log($"Client {clientId} disconnected");
+    }
+
+    private Vector3 GetSpawnPosition()
+    {
+        return new Vector3(0f, 3f, 0f);
+    }
+
+    private Vector3 GetRandomSpawnPosition()
+    {
+        float x = Random.Range(-2.5f, 2.5f);
+        float z = Random.Range(-2.5f, 2.5f);
+        float y = 1f;
+        return new Vector3(x, y, z);
     }
 
     private void ActivateHUD(string role)
@@ -126,52 +190,56 @@ public class NetworkManagerUI : MonoBehaviour
         {
             if (monsterHUD != null)
             {
-                monsterHUD.SetActive(true);  
-            }
-
-            if (generalHUD != null)
-            {
-                generalHUD.SetActive(true);
-
-                if (timerObject != null)
-                {
-                    timerObject.SetActive(true); 
-                    var timeManager = timerObject.GetComponent<TimeManager>();
-                    if (timeManager != null)
-                    {
-                        timeManager.ActivateGeneralHUD(); 
-                        timeManager.StartTimer();        
-                    }
-                    else
-                    {
-                        Debug.LogError("TimeManager script is missing on the TimerObject!");
-                    }
-                }
+                monsterHUD.SetActive(true);
             }
         }
         else if (role == "Client")
         {
             if (playerHUD != null)
             {
-                playerHUD.SetActive(true);  
+                playerHUD.SetActive(true);
             }
         }
+
+        Debug.Log("General HUD active: " + (generalHUD.activeSelf ? "Yes" : "No"));
     }
 
-    private Vector3 GetSpawnPosition()
+        [ServerRpc]
+        private void ActivateGeneralHUDServerRpc()
+        {
+            // Call the ClientRpc to activate the HUD on all clients (and the server)
+            ActivateGeneralHUDClientRpc();
+        }
+
+        // ClientRpc to activate the generalHUD for all clients
+        [ClientRpc]
+        private void ActivateGeneralHUDClientRpc()
+        {
+            if (generalHUD != null)
+            {
+                generalHUD.SetActive(true);
+            }
+
+            // Optionally, activate the timer on the clients
+            ActivateTimer();
+        }
+
+    private void ActivateTimer()
     {
-        return new Vector3(0f, 3f, 0f);
+        if (timerObject != null)
+        {
+            timerObject.SetActive(true);
+            var timeManager = timerObject.GetComponent<TimeManager>();
+            timeManager?.StartTimer();
+        }
     }
 
     private void OnDestroy()
     {
-        if (NetworkManager.Singleton != null)
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsServer)
         {
-            if (NetworkManager.Singleton.IsServer)
-            {
-                NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
-                NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
-            }
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
     }
 }

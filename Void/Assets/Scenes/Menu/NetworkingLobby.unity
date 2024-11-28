@@ -848,9 +848,6 @@ MonoBehaviour:
     type: 3}
   playerPre: {fileID: 1575300930724462412, guid: c3fe956afc504604ead5371accbaea4a,
     type: 3}
-  healthBarPrefab: {fileID: 7238159095500547692, guid: 54612524b5238714f8c2eb785da74cf3,
-    type: 3}
-  uiCanvas: {fileID: 794256995298886733}
   monsterHUD: {fileID: 1817498560}
   playerHUD: {fileID: 993958473}
   generalHUD: {fileID: 615928916}
@@ -2872,7 +2869,7 @@ MonoBehaviour:
   m_MaxConnectAttempts: 60
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
-    Address: 10.0.0.155
+    Address: 127.0.0.1
     Port: 7777
     ServerListenAddress: 127.0.0.1
   DebugSimulator:
@@ -3899,7 +3896,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2000036069}
-  - component: {fileID: 2000036071}
   m_Layer: 5
   m_Name: NetworkManagerUI
   m_TagString: Untagged
@@ -3929,27 +3925,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2000036071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2000036068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1055510789
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!1 &2030948773
 GameObject:
   m_ObjectHideFlags: 0
