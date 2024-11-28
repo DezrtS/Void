@@ -32,6 +32,8 @@ public class MonsterMovement : NetworkBehaviour
     private CharacterController characterController;
     private bool canMove = true;
 
+    private Animator animator;
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -39,6 +41,7 @@ public class MonsterMovement : NetworkBehaviour
         if (!IsOwner) return;
         
         characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
 
         if (FPSCameraPrefab == null)
         {
@@ -46,7 +49,13 @@ public class MonsterMovement : NetworkBehaviour
             return;
         }
 
-        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, transform.position + Vector3.up * 0.5f, transform.rotation);
+        if (spawnPoint == null)
+        {
+            Debug.LogError("SpawnPoint is not assigned in the Inspector.");
+            return;
+        }
+
+        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position + Vector3.up * 0.5f, spawnPoint.rotation);
         playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
 
         if (playerCamera == null)
@@ -78,6 +87,15 @@ public class MonsterMovement : NetworkBehaviour
         float curSpeedY = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+
+        if(curSpeedX > 0 || curSpeedY > 0)
+        {
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+        }
 
         if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
         {
@@ -129,6 +147,8 @@ public class MonsterMovement : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             AttackServerRpc();
+            animator.SetBool("attack", true);
+
         }
         else if (Input.GetKeyUp(KeyCode.Mouse0))
         {
