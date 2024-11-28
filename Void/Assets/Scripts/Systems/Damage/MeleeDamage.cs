@@ -4,37 +4,27 @@ using Unity.Netcode;
 
 public class MeleeDamage : NetworkBehaviour
 {
-    public int monsterMelee = 25;
-    public int playerMelee = 50;
+    public int monsterMelee = 25;  
     public float despawnDelay = 0.1f;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (IsServer)
         {
-            DamageSystem playerHealth = other.GetComponent<DamageSystem>();
-            if (playerHealth != null)
+            if (other.CompareTag("Player"))
             {
-                playerHealth.Damage(monsterMelee);
+                ApplyDamage(other, monsterMelee);
             }
-
-            if (IsServer)
-            {
-                DespawnSphere();
-            }
+            DespawnSphere();
         }
-        if (other.CompareTag("Monster"))
-        {
-            DamageSystem playerHealth = other.GetComponent<DamageSystem>();
-            if (playerHealth != null)
-            {
-                playerHealth.Damage(playerMelee);
-            }
+    }
 
-            if (IsServer)
-            {
-                DespawnSphere();
-            }
+    private void ApplyDamage(Collider target, int damage)
+    {
+        DamageSystem damageSystem = target.GetComponent<DamageSystem>();
+        if (damageSystem != null)
+        {
+            damageSystem.Damage(damage); 
         }
     }
 
@@ -61,7 +51,7 @@ public class MeleeDamage : NetworkBehaviour
         NetworkObject networkObject = GetComponent<NetworkObject>();
         if (networkObject != null)
         {
-            networkObject.Despawn(); 
+            networkObject.Despawn();
         }
     }
 }
