@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class Inventory : NetworkBehaviour
 {
     [SerializeField] private int hotbarCapacity;
     [SerializeField] private Transform activeTransform;
@@ -27,17 +28,30 @@ public class Inventory : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Drop();
+            Item item = SelectedItem();
+            if (item)
+            {
+                RequestItemDropServerRpc(item.NetworkObjectId, new ServerRpcParams());
+            }
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
             if (!SelectedItem())
             {
-                if (CraftingManager.Instance.GetTestItem())
+                Collider[] hits = Physics.OverlapSphere(transform.position, 1);
+                foreach (Collider hit in hits)
                 {
-                    PickUp(CraftingManager.Instance.GetTestItem());
+                    if (hit.transform.TryGetComponent(out Item item)) {
+                        if (SelectedItem())
+                        {
+                            RequestItemDropServerRpc(SelectedItem().NetworkObjectId, new ServerRpcParams());
+                        }
+                        RequestItemPickUpServerRpc(item.NetworkObjectId, new ServerRpcParams());
+                    }
                 }
             }
         }
@@ -62,21 +76,12 @@ public class Inventory : MonoBehaviour
 
     public void PickUp(Item item)
     {
-        item.PickUp();
-        item.transform.parent = activeTransform;
-        item.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         hotbar[selectedIndex] = item;
     }
 
     public void Drop()
     {
-        Item item = SelectedItem();
-        if (item)
-        {
-            item.Drop();
-            item.transform.parent = null;
-            hotbar[selectedIndex] = null;
-        }
+        hotbar[selectedIndex] = null;
     }
 
     public Item SelectedItem()
@@ -157,5 +162,96 @@ public class Inventory : MonoBehaviour
         {
             inventory.Add(resource, amount);
         }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestItemPickUpServerRpc(ulong itemNetworkObjectId, ServerRpcParams rcpParams = default)
+    {
+        NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
+
+        if (itemNetworkObject != null)
+        {
+            Item item = itemNetworkObject.GetComponent<Item>();
+            if (item != null && item.CanPickUp)
+            {
+                // Assign the ownership to the client who requested the pickup
+                itemNetworkObject.ChangeOwnership(rcpParams.Receive.SenderClientId);
+                ItemManager.Instance.CreateItemPickUpLog(rcpParams.Receive.SenderClientId, item);
+                HandleItemPickUp(item);
+                PickUp(item);
+                HandleItemPickUpClientRpc(itemNetworkObjectId, rcpParams.Receive.SenderClientId);
+            }
+        }
+    }
+
+    [ClientRpc]
+    public void HandleItemPickUpClientRpc(ulong itemNetworkObjectId, ulong clientId)
+    {
+        NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
+
+        if (itemNetworkObject != null)
+        {
+            Item item = itemNetworkObject.GetComponent<Item>();
+            if (item != null && item.CanPickUp)
+            {
+                HandleItemPickUp(item);
+                if (NetworkManager.Singleton.LocalClientId == clientId)
+                {
+                    PickUp(item);
+                }
+            }
+        }
+    }
+
+    public void HandleItemPickUp(Item item)
+    {
+        item.PickUp();
+        item.transform.parent = transform;
+        item.transform.SetLocalPositionAndRotation(Vector3.forward, Quaternion.identity);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestItemDropServerRpc(ulong itemNetworkObjectId, ServerRpcParams rcpParams = default)
+    {
+        NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
+
+        if (itemNetworkObject != null)
+        {
+            Item item = itemNetworkObject.GetComponent<Item>();
+            if (item != null && item.CanDrop)
+            {
+                // Assign the ownership to the client who requested the pickup
+                itemNetworkObject.ChangeOwnership(rcpParams.Receive.SenderClientId);
+                ItemManager.Instance.CreateItemDropLog(rcpParams.Receive.SenderClientId, item);
+                HandleItemDrop(item);
+                Drop();
+                HandleItemDropClientRpc(itemNetworkObjectId, rcpParams.Receive.SenderClientId);
+            }
+        }
+    }
+
+    [ClientRpc]
+    public void HandleItemDropClientRpc(ulong itemNetworkObjectId, ulong clientId)
+    {
+        NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
+
+        if (itemNetworkObject != null)
+        {
+            Item item = itemNetworkObject.GetComponent<Item>();
+            if (item != null && item.CanDrop)
+            {
+                HandleItemDrop(item);
+                if (NetworkManager.Singleton.LocalClientId == clientId)
+                {
+                    Drop();
+                }
+            }
+        }
+    }
+
+    public void HandleItemDrop(Item item)
+    {
+        item.Drop();
+        item.transform.parent = null;
     }
 }

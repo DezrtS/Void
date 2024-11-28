@@ -10,8 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3881246837650636354}
   - component: {fileID: 5708900129364935595}
+  - component: {fileID: -2539449346179503360}
   - component: {fileID: 9106116638687197553}
   - component: {fileID: 3688373138169565638}
+  - component: {fileID: -973645888921241733}
+  - component: {fileID: 5135502783942027889}
   m_Layer: 0
   m_Name: AutomaticGunHolder
   m_TagString: Untagged
@@ -63,6 +66,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-2539449346179503360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159275963486535576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 4025352129
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &9106116638687197553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba6be3bfc7186e47a6ddf3446af6bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
+  itemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
   canPickUp: 1
   canDrop: 1
   projectileSpawnerObject: {fileID: 4735076810010294097}
@@ -111,6 +135,49 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.25, y: 0.7, z: 2.15}
   m_Center: {x: 0, y: 0, z: 0.15}
+--- !u!114 &-973645888921241733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159275963486535576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
+--- !u!114 &5135502783942027889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159275963486535576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4735076810010294097
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,6 +188,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4381912256224793128}
   - component: {fileID: 9082257127205320915}
+  - component: {fileID: 1465321600957527110}
   m_Layer: 0
   m_Name: ProjectileSpawner
   m_TagString: Untagged
@@ -156,6 +224,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: 57765bcfb44dad646b54caad86ddf2a3, type: 2}
+  objectPool: {fileID: 1465321600957527110}
+--- !u!114 &1465321600957527110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4735076810010294097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ff192d9ebb87e40afd1ca4ab8f79fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectPrefab: {fileID: 3948855964855248953, guid: e996c3baede487c44a87403b581c8ab6,
+    type: 3}
 --- !u!1001 &5582098862231754971
 PrefabInstance:
   m_ObjectHideFlags: 0

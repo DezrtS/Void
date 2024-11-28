@@ -1,10 +1,14 @@
 # Void
 ------------------------------------------------------------------------------
-# FOR GAME ENGINE DESIGN ASSIGNMENT 1-4
+#
+# Course Project is further down...
+#
 ------------------------------------------------------------------------------
 + Denzil Walrond Role     -->     Lead Programmer
 + Aatif Sattaur Role      -->     Programmer (Normally Project Manager)
 + Michael Atteh Role      -->     Programmer (Normally Lead Artist)
+------------------------------------------------------------------------------
+# FOR GAME ENGINE DESIGN ASSIGNMENT 1-4
 ------------------------------------------------------------------------------
 Denzil Walrond Roles and Responsibilities:
 + Implement AudioManager                  [Singleton]
@@ -38,8 +42,6 @@ Michael Atteh Roles and Responsibilities:
 + Denzil Walrond Contribution Percentage   -->    33.33%
 + Aatif Sattaur Contribution Percentage    -->    33.33%
 + Michael Atteh Contribution Percentage    -->    33.33%
-------------------------------------------------------------------------------
-Video Link: https://youtu.be/W4lFgs5P2B8
 ------------------------------------------------------------------------------
 Interactive Media Scenario Information (10/100),
 
@@ -80,3 +82,33 @@ have been created to help set the foundations that we will use for
 our game, so stay tuned to see more!
 
 ------------------------------------------------------------------------------
+# FOR GAME ENGINE DESIGN Course Project
+------------------------------------------------------------------------------
+Denzil Walrond Roles and Responsibilities:
++ Created flyweight design pattern in game
++ Created DLL plugin for user testing             
++ Create Diagram on Implementations
++ Write Explaination on Implementations
++ Record Demo Video on Contributions
+
+Aatif Sattaur Roles and Responsibilities:
++ Upgraded factory design pattern
++ Create object pool for player guns     
++ Create Diagram on Implementations
++ Write Explaination on Implementations
++ Record Demo Video on Contributions
++ Edit Together Demo Videos
++ Set up read me file
+
+Michael Atteh Roles and Responsibilities:
++ Upgraded Character Customizer
++ Implemented Dirty Flag Design Pattern
++ Create Diagram on Implementations
++ Write Explaination on Implementations
+------------------------------------------------------------------------------
++ Denzil Walrond Contribution Percentage   -->    33.33%
++ Aatif Sattaur Contribution Percentage    -->    33.33%
++ Michael Atteh Contribution Percentage    -->    33.33%
+------------------------------------------------------------------------------
++ Record Demo Video on ContributionsVideo Link: https://drive.google.com/drive/folders/1zyZWXFRNtDis4ngX_xzehD3haltFgCIw?usp=sharing
+  ------------------------------------------------------------------------------

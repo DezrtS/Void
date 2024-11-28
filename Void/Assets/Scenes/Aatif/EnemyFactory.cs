@@ -16,27 +16,37 @@ public class EnemyFactory : MonoBehaviour
     int fHeatlh;
     float fScale;
     float enemySpeed;
+    
 
-  
+    GameManagerAatifSingleton gameManager;
+
+
+    private void Start()
+    {
+        gameManager = FindObjectOfType<GameManagerAatifSingleton>();
+    }
 
     public int setRandomHealth()
     {
-        fHeatlh = Random.Range(1,5);
+        
+        fHeatlh = gameManager.floorLevel;
         return fHeatlh;
     }
 
     public float setRandomScale()
     {
-        fScale = Random.Range(1f , 3f);
+        fScale = gameManager.floorLevel;
         return fScale;
 
         
     }
+
     public float setRandomSpeed()
     {
         enemySpeed = Random.Range(0.1f,1f);
         return enemySpeed;
     }
-  
+
+    
 
 }

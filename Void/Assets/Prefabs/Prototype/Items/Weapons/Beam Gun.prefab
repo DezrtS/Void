@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3444017396566940289}
   - component: {fileID: 5307645163814568986}
   - component: {fileID: 3826028151340264229}
+  - component: {fileID: -5260592321712391826}
   - component: {fileID: 144618129399634926}
   m_Layer: 0
   m_Name: Beam Gun
@@ -135,6 +136,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-5260592321712391826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57907132256727038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 505029349
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &144618129399634926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,10 +169,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02da3246e52b47444aa18944e75c5826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemData: {fileID: 11400000, guid: 0bce959023d8ce24c97c240eddb33077, type: 2}
+  itemData: {fileID: 0}
   canPickUp: 1
   canDrop: 1
   beam: {fileID: 2737839455934636571}
+  effect: {fileID: 0}
   timeToWindUp: 1
   timeToReachFullPower: 0.25
   timeToOverheat: 4
@@ -376,7 +399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 15
-  damage: 2
+  damagePerFrame: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295

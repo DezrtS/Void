@@ -1,4 +1,5 @@
 using FMODUnity;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Gun : Item, IReload
@@ -76,12 +77,12 @@ public class Gun : Item, IReload
         if (CanFire())
         {
             Fire();
-            fireRateTimer = fireRate;
         }
     }
 
     public void Fire()
     {
+        fireRateTimer = fireRate;
         if (!fireSound.IsNull)
         {
             AudioManager.Instance.PlayOneShot(fireSound, transform.position);
