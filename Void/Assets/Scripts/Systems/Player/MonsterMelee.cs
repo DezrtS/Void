@@ -16,7 +16,6 @@ public class MonsterMelee : NetworkBehaviour
 
     void Update()
     {
-        // Ensure only the owner can control the monster
         if (!IsOwner) return;
 
         HandleAttack();
@@ -98,11 +97,10 @@ public class MonsterMelee : NetworkBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!IsServer) return; // Ensure collision logic is handled server-side
+        if (!IsServer) return;
 
         if (other.CompareTag("Player"))
         {
-            // Damage logic or deactivation logic
             gameObject.SetActive(false);
             Debug.Log($"Monster hit by player {other.name}!");
         }

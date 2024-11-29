@@ -14,15 +14,15 @@ public class SurvivorController : NetworkBehaviour
     public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     // Movement settings
-    private float walkSpeed = 6f;
-    private float runSpeed = 12f;
+    private float walkSpeed = 3f;
+    private float runSpeed = 6f;
     private float jumpPower = 7f;
-    private float gravity = 10f;
+    private float gravity = 13f;
     private float lookSpeed = 2f;
     private float lookXLimit = 45f;
     private float defaultHeight = 2f;
     private float crouchHeight = 1f;
-    private float crouchSpeed = 3f;
+    private float crouchSpeed = 1.5f;
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;

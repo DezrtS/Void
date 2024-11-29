@@ -15,9 +15,9 @@ public class MonsterMovement : NetworkBehaviour
 
     // Monster movement
     private Camera playerCamera;
-    private float walkSpeed = 8f;
-    private float runSpeed = 16f;
-    private float jumpPower = 7f;
+    private float walkSpeed = 4.5f;
+    private float runSpeed = 6.5f;
+    private float jumpPower = 3f;
     private float gravity = 10f;
     private float lookSpeed = 2f;
     private float lookXLimit = 45f;
@@ -32,6 +32,9 @@ public class MonsterMovement : NetworkBehaviour
     private CharacterController characterController;
     private bool canMove = true;
 
+    private Animator animator;
+    private NetworkVariable<bool> isWalking = new NetworkVariable<bool>(false);
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -39,6 +42,7 @@ public class MonsterMovement : NetworkBehaviour
         if (!IsOwner) return;
         
         characterController = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
 
         if (FPSCameraPrefab == null)
         {
@@ -46,7 +50,13 @@ public class MonsterMovement : NetworkBehaviour
             return;
         }
 
-        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, transform.position + Vector3.up * 0.5f, transform.rotation);
+        if (spawnPoint == null)
+        {
+            Debug.LogError("SpawnPoint is not assigned in the Inspector.");
+            return;
+        }
+
+        GameObject instantiatedCamera = Instantiate(FPSCameraPrefab, spawnPoint.position + Vector3.up * 0.5f, spawnPoint.rotation);
         playerCamera = instantiatedCamera.GetComponentInChildren<Camera>();
 
         if (playerCamera == null)
@@ -60,9 +70,20 @@ public class MonsterMovement : NetworkBehaviour
         Cursor.visible = false;
     }
 
+    void Start()
+    {
+        if (animator != null)
+        {
+            animator.applyRootMotion = false;
+        }
+    }
+
     private void Update()
     {
         if (!IsOwner || !IsSpawned) return;
+
+        // Update Animator based on synced variables
+        animator.SetBool("isWalking", isWalking.Value);
 
         HandleMovement();
         HandleAttack();
@@ -78,6 +99,15 @@ public class MonsterMovement : NetworkBehaviour
         float curSpeedY = canMove ? (isRunning ? runSpeed : walkSpeed) * Input.GetAxis("Horizontal") : 0;
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
+
+        if (curSpeedX > 0 || curSpeedY > 0)
+        {
+            SetIsWalkingServerRpc(true);
+        }
+        else
+        {
+            SetIsWalkingServerRpc(false);
+        }
 
         if (Input.GetButton("Jump") && canMove && characterController.isGrounded)
         {
@@ -129,11 +159,31 @@ public class MonsterMovement : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             AttackServerRpc();
+            animator.SetBool("attack", true);
+
         }
         else if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             StopAttackServerRpc();
         }
+    }
+
+    void OnAnimatorMove()
+    {
+        if (animator == null || !IsOwner) return;
+
+        if (animator.applyRootMotion && IsOwner)
+        {
+            Vector3 rootMotionDelta = animator.deltaPosition;
+            rootMotionDelta.y = 0;
+            characterController.Move(rootMotionDelta);
+        }
+    }
+
+    [ServerRpc]
+    private void SetIsWalkingServerRpc(bool value)
+    {
+        isWalking.Value = value;
     }
 
     [ServerRpc]
