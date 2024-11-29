@@ -598,6 +598,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 313158887
       objectReference: {fileID: 0}
+    - target: {fileID: 4579552671847745140, guid: 685463de478fe1f44b881a63d950ea31,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 344332902
+      objectReference: {fileID: 0}
     - target: {fileID: 5088074953100308259, guid: 685463de478fe1f44b881a63d950ea31,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -699,8 +704,40 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2123451178171309863, guid: 3066be180c389f44497aad2726c51e4c,
         type: 3}
+      propertyPath: maxTaskItems
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2123451178171309863, guid: 3066be180c389f44497aad2726c51e4c,
+        type: 3}
       propertyPath: generateOnStart
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2123451178171309863, guid: 3066be180c389f44497aad2726c51e4c,
+        type: 3}
+      propertyPath: fixtures.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2123451178171309863, guid: 3066be180c389f44497aad2726c51e4c,
+        type: 3}
+      propertyPath: fixtures.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 83dda273c58583540a885f9ad2ee3fd5,
+        type: 2}
+    - target: {fileID: 2123451178171309863, guid: 3066be180c389f44497aad2726c51e4c,
+        type: 3}
+      propertyPath: taskFixtures.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2123451178171309863, guid: 3066be180c389f44497aad2726c51e4c,
+        type: 3}
+      propertyPath: taskFixtures.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 83dda273c58583540a885f9ad2ee3fd5,
+        type: 2}
+    - target: {fileID: 2123451178171309863, guid: 3066be180c389f44497aad2726c51e4c,
+        type: 3}
+      propertyPath: maxFixturesPerTileCollection
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
