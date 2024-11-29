@@ -125,6 +125,7 @@ public class NetworkManagerUI : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
+        // Ensure this logic only executes on the host
         if (NetworkManager.Singleton.IsHost)
         {
             var localPlayerObject = NetworkManager.Singleton.LocalClient?.PlayerObject;
@@ -133,13 +134,18 @@ public class NetworkManagerUI : MonoBehaviour
                 localPlayerObject.Despawn(true);
             }
 
-            SpawnMonsterServerRpc(NetworkManager.Singleton.LocalClientId, GridMapManager.Instance.GetMonsterSpawnPosition());
+            // Spawn the monster on the server
+            SpawnMonsterServerRpc(NetworkManager.Singleton.LocalClientId, GridMapManager.Instance.GetElevatorRoomPosition());
         }
     }
+
+
 
     [ServerRpc(RequireOwnership = false)]
     private void SpawnMonsterServerRpc(ulong clientId, Vector3 spawnPosition)
     {
+        if (!NetworkManager.Singleton.IsServer) return;
+
         var monsterInstance = Instantiate(monsterPre, spawnPosition, Quaternion.identity);
         var networkObject = monsterInstance.GetComponent<NetworkObject>();
 
@@ -156,11 +162,13 @@ public class NetworkManagerUI : MonoBehaviour
         }
     }
 
+
     private IEnumerator ReplaceHostTempWithPlayer()
     {
         yield return new WaitForSeconds(0.1f);
 
-        if (NetworkManager.Singleton.IsHost)
+        // Ensure this logic only executes on the client
+        if (NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
         {
             var localPlayerObject = NetworkManager.Singleton.LocalClient?.PlayerObject;
             if (localPlayerObject != null)
@@ -168,17 +176,23 @@ public class NetworkManagerUI : MonoBehaviour
                 localPlayerObject.Despawn(true);
             }
 
-            SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, GridMapManager.Instance.GetElevatorRoomPosition());
+            // Request the server to spawn the player
+            Debug.LogWarning("Client hasn't moved");
+            SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
+            Debug.LogWarning("Client moved! Yippie");
         }
     }
 
+
     [ServerRpc(RequireOwnership = false)]
-    private void SpawnPlayerServerRpc(ulong clientId, Vector3 playerSpawn)
+    private void SpawnPlayerServerRpc(ulong clientId)
     {
-        var playerInstance = Instantiate(playerPre, playerSpawn, Quaternion.identity);
+        if (!NetworkManager.Singleton.IsServer) return; // Ensure only server executes this
+
+        var playerInstance = Instantiate(playerPre, GridMapManager.Instance.GetElevatorRoomPosition(), Quaternion.identity);
         var networkObject = playerInstance.GetComponent<NetworkObject>();
 
-        Debug.Log(playerSpawn + " Player Location");
+        Debug.Log(GridMapManager.Instance.GetElevatorRoomPosition() + " Player Location");
 
         if (networkObject != null)
         {
