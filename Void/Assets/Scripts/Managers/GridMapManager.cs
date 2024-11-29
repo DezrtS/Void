@@ -537,7 +537,9 @@ public class GridMapManager : Singleton<GridMapManager>
                 ItemData itemData = taskItems[index];
                 Vector2 spawnPosition = (fixtureInstance.Position - (interiorTilesPerMapTile / 2) * Vector2.one) / interiorTilesPerMapTile;
                 GameObject spawnedItem = Instantiate(itemData.ItemPrefab, tileSize * new Vector3(spawnPosition.x, 0, spawnPosition.y), Quaternion.identity);
-                spawnedItem.GetComponent<Item>().NetworkObject.Spawn();
+                Item item = spawnedItem.GetComponent<Item>();
+                items.Add(item);
+                item.NetworkObject.Spawn(spawnedItem);
 
                 //foreach (Vector2Int position in fixtureInstance.Data.TilePositions)
                 //{
