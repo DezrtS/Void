@@ -201,7 +201,7 @@ public class GridMapManager : Singleton<GridMapManager>
         GenerateHallways();
 
         InitializeInteriorGridMap();
-        //GenerateTasks();
+        GenerateTasks();
         GenerateInteriors();
 
         SpawnTiles();

@@ -5,16 +5,23 @@ using UnityEngine;
 public class Item : NetworkBehaviour, IUseable
 {
     [SerializeField] private ItemData itemData;
+    [SerializeField] protected bool isPickedUp = false;
+    [SerializeField] protected bool isDropped = false;
     [SerializeField] protected bool canPickUp = true;
     [SerializeField] protected bool canDrop = true;
 
     protected bool isUsing;
     protected Rigidbody rig;
 
+    public delegate void ItemHandler(Item item);
     public event IUseable.UseHandler OnUsed;
+    public event ItemHandler OnPickedUp;
+    public event ItemHandler OnDropped;
 
     public ItemData ItemData => itemData;
     public bool IsUsing => isUsing;
+    public bool IsPickedUp => isPickedUp;
+    public bool IsDropped => isDropped;
     public bool CanPickUp => canPickUp;
     public bool CanDrop => canDrop;
 
@@ -44,9 +51,10 @@ public class Item : NetworkBehaviour, IUseable
 
     public void PickUp()
     {
-        canPickUp = false;
-        canDrop = true;
+        isDropped = false;
+        isPickedUp = true;
         rig.isKinematic = true;
+        OnPickedUp?.Invoke(this);
         OnPickUp();
     }
 
@@ -54,9 +62,10 @@ public class Item : NetworkBehaviour, IUseable
 
     public void Drop()
     {
-        canDrop = false;
-        canPickUp = true;
+        isPickedUp = false;
+        isDropped = true;
         rig.isKinematic = false;
+        OnDropped?.Invoke(this);
         OnDrop();
     }
 

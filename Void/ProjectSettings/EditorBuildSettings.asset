@@ -8,10 +8,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Prototype/Base.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Menu/NetworkingLobby.unity
     guid: edada5c27bb3dee449a27f0a2db20ecd
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Prototype/NetworkingTesting.unity
     guid: 00d207a4e6d1e2e4795317f6a661077e
   - enabled: 0
