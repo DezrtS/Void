@@ -3,7 +3,7 @@ using UnityEngine;
 using Graphs;
 using Unity.Netcode;
 
-public class GridMapManager : Singleton<GridMapManager>
+public class GridMapManager : NetworkSingleton<GridMapManager>
 {
     [Header("Map Generation Parameters")]
     [SerializeField] private bool generateOnStart = true;
@@ -202,7 +202,7 @@ public class GridMapManager : Singleton<GridMapManager>
         GenerateHallways();
 
         InitializeInteriorGridMap();
-        GenerateTasks();
+        if (IsServer) GenerateTasks();
         GenerateInteriors();
 
         SpawnTiles();
