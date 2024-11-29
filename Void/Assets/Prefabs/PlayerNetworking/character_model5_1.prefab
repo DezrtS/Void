@@ -5821,6 +5821,7 @@ GameObject:
   - component: {fileID: 4267811974480616669}
   - component: {fileID: 2830185309991255127}
   - component: {fileID: 855210310585418029}
+  - component: {fileID: -5032094487006929119}
   m_Layer: 0
   m_Name: character_model5_1
   m_TagString: Player
@@ -6082,6 +6083,19 @@ MonoBehaviour:
   deathMessagePrefab: {fileID: 8749999393589840042, guid: 12642ef6bd27ccc4fad99e57ecb9a797,
     type: 3}
   generalHUD: {fileID: 0}
+--- !u!114 &-5032094487006929119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4686512094472241709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1264c752bcd064f9b91472e9b51210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMonster: 0
 --- !u!1 &4693128820231628685
 GameObject:
   m_ObjectHideFlags: 0
