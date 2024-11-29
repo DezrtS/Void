@@ -1605,6 +1605,7 @@ GameObject:
   - component: {fileID: 1521194874580972517}
   - component: {fileID: 1066513650784793636}
   - component: {fileID: 5639913810674957384}
+  - component: {fileID: -8962710632334180593}
   m_Layer: 0
   m_Name: low poly monster
   m_TagString: Monster
@@ -1834,6 +1835,19 @@ MonoBehaviour:
   deathPosition: {fileID: 0}
   deathMessagePrefab: {fileID: 8749999393589840042, guid: 12642ef6bd27ccc4fad99e57ecb9a797,
     type: 3}
+--- !u!114 &-8962710632334180593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3658769570832325595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1264c752bcd064f9b91472e9b51210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMonster: 1
 --- !u!1 &3712618760330661534
 GameObject:
   m_ObjectHideFlags: 0

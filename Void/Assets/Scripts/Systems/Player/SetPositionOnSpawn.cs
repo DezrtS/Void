@@ -7,7 +7,7 @@ public class SetPositionOnSpawn : NetworkBehaviour
 
     private void Awake()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
 
         if (isMonster)
         {
