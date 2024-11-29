@@ -29,7 +29,6 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        //Change this however yall want to start the game.
         Debug.Log("Game Started");
     }
 
