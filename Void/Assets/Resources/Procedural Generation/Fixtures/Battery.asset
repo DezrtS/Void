@@ -10,21 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a373f24dc1b8cea4b91aeb323a70e598, type: 3}
-  m_Name: Industrial Shelf
+  m_Name: Battery
   m_EditorClassIdentifier: 
-  fixtureName: Industrial Shelf
-  fixturePrefab: {fileID: 6721971350154314497, guid: 8168a986aeec84b4e8a96a11530e0804,
+  fixtureName: Battery
+  fixturePrefab: {fileID: 941687137560951099, guid: 877873f02ff48ac4f80154076476ca22,
     type: 3}
-  isTaskFixture: 0
-  gridSize: {x: 4, y: 2}
+  isTaskFixture: 1
+  gridSize: {x: 1, y: 1}
   tilePositions:
-  - {x: 0, y: 1}
   - {x: 0, y: 0}
-  - {x: 1, y: 1}
-  - {x: 1, y: 0}
-  - {x: 2, y: 1}
-  - {x: 2, y: 0}
-  - {x: 3, y: 1}
-  - {x: 3, y: 0}
   restrictions: []
   relationships: []

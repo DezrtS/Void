@@ -39,7 +39,7 @@ public class Gun : Item, IReload
         isFiring = false;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         UpdateTimers();
 
@@ -56,19 +56,20 @@ public class Gun : Item, IReload
 
     protected virtual void UpdateTimers()
     {
+        float deltaTime = Time.deltaTime;
         if (fireRateTimer > 0)
         {
-            fireRateTimer -= Time.fixedDeltaTime;
+            fireRateTimer -= deltaTime;
         }
 
         if (reloadTimer > 0)
         {
-            reloadTimer -= Time.fixedDeltaTime;
+            reloadTimer -= deltaTime;
         }
 
         if (windupTimer > 0)
         {
-            windupTimer -= Time.fixedDeltaTime;
+            windupTimer -= deltaTime;
         }
     }
 

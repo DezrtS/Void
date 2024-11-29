@@ -9,16 +9,16 @@ public class ResetGridPositions : ICommand
     public ResetGridPositions(IHoldTilePositions tilePositionsHolder)
     {
         this.tilePositionsHolder = tilePositionsHolder;
-        positions = new List<Vector2Int>(tilePositionsHolder.tilePositions);
+        positions = new List<Vector2Int>(tilePositionsHolder.TilePositions);
     }
 
     public void Execute()
     {
-        tilePositionsHolder.tilePositions.Clear();
+        tilePositionsHolder.TilePositions.Clear();
     }
 
     public void Undo()
     {
-        tilePositionsHolder.tilePositions = new List<Vector2Int>(positions);
+        tilePositionsHolder.TilePositions = new List<Vector2Int>(positions);
     }
 }

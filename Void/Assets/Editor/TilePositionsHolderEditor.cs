@@ -9,6 +9,7 @@ public class TilePositionsHolderEditor : Editor
     private IHoldTilePositions tilePositionsHolder;
     private CommandInvoker commandInvoker;
     private bool showSettings = false;
+    private Vector2Int gridSize = Vector2Int.one;
 
     public virtual void OnEnable()
     {
@@ -24,47 +25,34 @@ public class TilePositionsHolderEditor : Editor
 
         if (showSettings)
         {
-            if (tilePositionsHolder.gridSize.x <= 0 || tilePositionsHolder.gridSize.y <= 0)
-            {
-                EditorGUILayout.HelpBox("Grid size must be greater than zero.", MessageType.Warning);
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
-                if (GUILayout.Button("Undo"))
-                {
-                    commandInvoker.Undo();
-                }
-                if (GUILayout.Button("Reset"))
-                {
-                    tilePositionsHolder.GridSize = Vector2Int.one;
-                    ICommand command = new ChangeGridSize(tilePositionsHolder, tilePositionsHolder.GridSize);
-                    commandInvoker.ExecuteCommand(command);
-                }
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.EndHorizontal();
-                return;
-            }
-
+            gridSize = EditorGUILayout.Vector2IntField("Grid Size", gridSize);
             float inspectorWidth = EditorGUIUtility.currentViewWidth;
-            float gridButtonSize = Mathf.Min((inspectorWidth - tilePositionsHolder.gridSize.x * 5f) / tilePositionsHolder.gridSize.x, 50f);
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Update Grid Size", GUILayout.Width(inspectorWidth - 26), GUILayout.Height(50f)))
             {
-                ICommand command = new ChangeGridSize(tilePositionsHolder, tilePositionsHolder.GridSize);
+                ICommand command = new ChangeGridSize(tilePositionsHolder, gridSize);
                 commandInvoker.ExecuteCommand(command);
             }
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
 
-            for (int y = 0; y < tilePositionsHolder.gridSize.y; y++)
+            if (tilePositionsHolder.GridSize.x <= 0 || tilePositionsHolder.GridSize.y <= 0)
+            {
+                EditorGUILayout.HelpBox("Grid size must be greater than zero.", MessageType.Warning);
+                return;
+            }
+
+            float gridButtonSize = Mathf.Min((inspectorWidth - tilePositionsHolder.GridSize.x * 5f) / tilePositionsHolder.GridSize.x, 50f);
+            for (int y = 0; y < tilePositionsHolder.GridSize.y; y++)
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                for (int x = 0; x < tilePositionsHolder.gridSize.x; x++)
+                for (int x = 0; x < tilePositionsHolder.GridSize.x; x++)
                 {
                     Vector2Int position = new Vector2Int(x, y);
-                    bool contains = tilePositionsHolder.tilePositions.Contains(position);
+                    bool contains = tilePositionsHolder.TilePositions.Contains(position);
                     GUI.backgroundColor = GetColor(contains);
                     if (GUILayout.Button($"{x},{y}", GUILayout.Width(gridButtonSize), GUILayout.Height(gridButtonSize)))
                     {

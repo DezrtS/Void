@@ -12,15 +12,7 @@ public class GridMapEditor : Editor
         EditorGUI.BeginDisabledGroup(!Application.isPlaying);
         if (GUILayout.Button("GENERATE NEW GRID MAP"))
         {
-            GridMapManager gridMapManagerInstance = GridMapManager.Instance;
-
-            gridMapManagerInstance.InitializeGridMap();
-            gridMapManagerInstance.GenerateRooms();
-            gridMapManagerInstance.GenerateHallways();
-            gridMapManagerInstance.SpawnTiles();
-            gridMapManagerInstance.InitializeInteriorGridMap();
-            gridMapManagerInstance.GenerateTasks();
-            gridMapManagerInstance.GenerateInteriors();
+            GridMapManager.Instance.GenerateNewGridMap();
         }
         EditorGUI.EndDisabledGroup();
     }

@@ -6,8 +6,9 @@ public class TaskManager : Singleton<TaskManager>
 {
     private List<Task> tasks = new List<Task>();
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         foreach (Task task in tasks)
         {
             task.OnTaskCompletion += OnTaskCompletion;
@@ -49,7 +50,7 @@ public class TaskManager : Singleton<TaskManager>
     public void OnTaskCompletion(Task task)
     {
         Debug.Log($"{task.Data.Name} was completed");
-        AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound1);
+        //AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound1);
         // Send Out Event That Other Observers Can Listen To.
     }
 
