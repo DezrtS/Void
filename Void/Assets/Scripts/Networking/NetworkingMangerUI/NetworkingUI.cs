@@ -133,7 +133,7 @@ public class NetworkManagerUI : MonoBehaviour
                 localPlayerObject.Despawn(true);
             }
 
-            SpawnMonsterServerRpc(NetworkManager.Singleton.LocalClientId, GetSpawnPosition());
+            SpawnMonsterServerRpc(NetworkManager.Singleton.LocalClientId, GridMapManager.Instance.GetMonsterSpawnPosition());
         }
     }
 
@@ -142,6 +142,8 @@ public class NetworkManagerUI : MonoBehaviour
     {
         var monsterInstance = Instantiate(monsterPre, spawnPosition, Quaternion.identity);
         var networkObject = monsterInstance.GetComponent<NetworkObject>();
+
+        Debug.Log(spawnPosition + " Monster Location");
 
         if (networkObject != null)
         {
@@ -166,15 +168,19 @@ public class NetworkManagerUI : MonoBehaviour
                 localPlayerObject.Despawn(true);
             }
 
-            SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, GetSpawnPosition());
+            Debug.Log("Player About to be moved");
+            SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, GridMapManager.Instance.GetElevatorRoomPosition());
+            Debug.Log("Player has been moved");
         }
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpawnPlayerServerRpc(ulong clientId, Vector3 spawnPosition)
+    private void SpawnPlayerServerRpc(ulong clientId, Vector3 playerSpawn)
     {
-        var playerInstance = Instantiate(playerPre, spawnPosition, Quaternion.identity);
+        var playerInstance = Instantiate(playerPre, playerSpawn, Quaternion.identity);
         var networkObject = playerInstance.GetComponent<NetworkObject>();
+
+        Debug.Log($"[Server] Player Location " + playerSpawn);
 
         if (networkObject != null)
         {
@@ -185,10 +191,5 @@ public class NetworkManagerUI : MonoBehaviour
         {
             Debug.LogError("Player prefab does not have a NetworkObject component.");
         }
-    }
-
-    private Vector3 GetSpawnPosition()
-    {
-        return new Vector3(0f, 2f, 0f); 
     }
 }
