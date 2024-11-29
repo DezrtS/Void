@@ -36,6 +36,7 @@ public class MonsterUIManager : NetworkBehaviour
             }
         }
 
+
         if (targetPosition == null)
         {
             GameObject targetObject = GameObject.Find("HPFrameM"); 
