@@ -13,11 +13,11 @@ public class DeselectGridPosition : ICommand
 
     public void Execute()
     {
-        tilePositionsHolder.tilePositions.Remove(position);
+        tilePositionsHolder.TilePositions.Remove(position);
     }
 
     public void Undo()
     {
-        tilePositionsHolder.tilePositions.Add(position);
+        tilePositionsHolder.TilePositions.Add(position);
     }
 }

@@ -1175,8 +1175,8 @@ MonoBehaviour:
   seed: 1234
   gridSize: {x: 25, y: 25}
   minRoomSize: 3
-  maxRoomSize: 20
-  roomCount: 10
+  maxRoomSize: 6
+  roomCount: 25
   additionalHallwayChance: 50
   randomRoomChance: 15
   maxRoomAttempts: 100
@@ -1184,13 +1184,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a8b7664e7c9f5034f97f8c2907c15cae, type: 2}
   tileSize: 5
   interiorTilesPerMapTile: 5
-  fixturesPerTileCollection: 25
+  emptySpacePercentage: 85
+  maxFixturesPerTileCollection: 100
+  maxTaskItemsPerTileCollection: 2
   maxFixtureAttempts: 100
   doThroughWallCheck: 1
   fixtures:
   - {fileID: 11400000, guid: 6464df81ce0be8944b52c55f2b76c0df, type: 2}
   - {fileID: 11400000, guid: d06fb754ce3879c42896e0511aa3eb8c, type: 2}
   - {fileID: 11400000, guid: efeb817e866bbc740b6513c8d36844f9, type: 2}
+  taskItems:
+  - {fileID: 11400000, guid: 69af40606c0d78149968119d78aa657d, type: 2}
   spawnCollectionAveragePositions: 0
   spawnFixturePositions: 0
   spawnFixtureRelationships: 0
@@ -1229,7 +1233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &1423483539
 Light:
   m_ObjectHideFlags: 0

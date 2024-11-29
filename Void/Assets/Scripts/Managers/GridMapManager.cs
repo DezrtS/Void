@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Graphs;
+using Unity.Netcode;
 
 public class GridMapManager : Singleton<GridMapManager>
 {
@@ -23,10 +24,15 @@ public class GridMapManager : Singleton<GridMapManager>
     [Space(10)]
     [Header("Interior Generation Parameters")]
     [SerializeField] private int interiorTilesPerMapTile = 3;
-    [SerializeField] private int fixturesPerTileCollection = 25;
+    [Range(0, 100)]
+    [SerializeField] private int emptySpacePercentage = 50;
+    [SerializeField] private int maxFixturesPerTileCollection = 25;
+    [SerializeField] private int maxTaskItemsPerTileCollection = 2;
     [SerializeField] private int maxFixtureAttempts = 100;
     [SerializeField] private bool doThroughWallCheck = true;
     public List<FixtureData> fixtures;
+    public List<ItemData> taskItems;
+    private List<Item> items = new List<Item>();
     [Space(10)]
     [Header("Visualization Options")]
     [SerializeField] private bool spawnCollectionAveragePositions;
@@ -94,17 +100,18 @@ public class GridMapManager : Singleton<GridMapManager>
         };
     }
 
+    public Vector3 GetRandomRoomPosition()
+    {
+        int index = Random.Range(0, tileCollections.Count);
+        Vector2Int position = tileCollections[index].GetRandomMapTilePosition();
+        return new Vector3(position.x, 2, position.y);
+    }
+
     private void Start()
     {
         if (generateOnStart)
         {
-            InitializeGridMap();
-            GenerateRooms();
-            GenerateHallways();
-            SpawnTiles();
-            InitializeInteriorGridMap();
-            GenerateTasks();
-            GenerateInteriors();
+            GenerateNewGridMap();
         }
     }
 
@@ -167,6 +174,20 @@ public class GridMapManager : Singleton<GridMapManager>
         fixtureInstances.Clear();
     }
 
+    public void GenerateNewGridMap()
+    {
+        InitializeGridMap();
+        GenerateRooms();
+        GenerateHallways();
+
+        InitializeInteriorGridMap();
+        //GenerateTasks();
+        GenerateInteriors();
+
+        SpawnTiles();
+        SpawnFixtures();
+    }
+
     public void GenerateRooms()
     {
         PlacePredefinedRooms();
@@ -187,14 +208,14 @@ public class GridMapManager : Singleton<GridMapManager>
     public void PlacePredefinedRooms()
     {
         RoomData roomData = rooms[0];
-        Vector2Int position = new Vector2Int(gridSize.x / 2 - roomData.gridSize.x / 2, gridSize.x / 2 - roomData.gridSize.x / 2);
+        Vector2Int position = new Vector2Int(gridSize.x / 2 - roomData.GridSize.x / 2, gridSize.x / 2 - roomData.GridSize.x / 2);
         TileCollection collection = new TileCollection(TileCollection.TileCollectionType.Room, 0);
-        List<Vector2Int> newPositions = new List<Vector2Int>(roomData.tilePositions);
+        List<Vector2Int> newPositions = new List<Vector2Int>(roomData.TilePositions);
         for (int i = 0; i < newPositions.Count; i++)
         {
             newPositions[i] += position;
         }
-        foreach (Connection connection in roomData.connections)
+        foreach (Connection connection in roomData.Connections)
         {
             collection.AddConnection(connection.from + position, connection.to + position);
         }
@@ -473,18 +494,50 @@ public class GridMapManager : Singleton<GridMapManager>
 
     public void GenerateWalkways()
     {
+        //foreach (TileCollection collection in tileCollections)
+        //{
 
+        //}
     }
 
     public void GenerateTasks()
     {
+        foreach (TileCollection collection in tileCollections)
+        {
+            if (collection.Type == TileCollection.TileCollectionType.Hallway)
+            {
+                continue;
+            }
 
+            RoomData roomData = collection.RoomData;
+            if (roomData)
+            {
+                if (roomData.HasInterior)
+                {
+                    continue;
+                }
+            }
+
+            for (int i = 0; i < maxTaskItemsPerTileCollection; i++)
+            {
+                int index = Random.Range(0, taskItems.Count);
+                ItemData itemData = taskItems[index];
+                Vector2Int position = collection.GetRandomMapTilePosition();
+                GameObject spawnedItem = Instantiate(itemData.ItemPrefab, new Vector3(position.x, 2, position.y), Quaternion.identity);
+                spawnedItem.GetComponent<Item>().NetworkObject.Spawn();
+            }
+        }
     }
 
     public void GenerateInteriors()
     {
         foreach (TileCollection collection in tileCollections)
         {
+            if (collection.Type == TileCollection.TileCollectionType.Hallway)
+            {
+                continue;
+            }
+
             RoomData roomData = collection.RoomData;
             if (roomData)
             {
@@ -496,6 +549,8 @@ public class GridMapManager : Singleton<GridMapManager>
 
             bool establishedOriginFixture = false;
             int attempt = 0;
+            float maxRoomTileCount = collection.mapTilePositions.Count * interiorTilesPerMapTile * interiorTilesPerMapTile;
+            float roomTileCount = maxRoomTileCount;
             while (!establishedOriginFixture && attempt < maxFixtureAttempts)
             {
                 int start = fixtureInstances.Count;
@@ -503,9 +558,15 @@ public class GridMapManager : Singleton<GridMapManager>
                 FixtureInstance originFixture = PlaceRandomFixture(collection, start);
                 if (originFixture != null)
                 {
+                    roomTileCount -= originFixture.Data.GridSize.magnitude;
                     establishedOriginFixture = true;
-                    for (int i = 0; i < fixturesPerTileCollection; i++)
+                    for (int i = 0; i < maxFixturesPerTileCollection; i++)
                     {
+                        if ((roomTileCount / maxRoomTileCount) * 100 < emptySpacePercentage)
+                        {
+                            break;
+                        }
+
                         int range = fixtureInstances.Count - validRelationshipsStart;
                         int selectedFixtureIndex = Random.Range(0, range);
                         int startIndex = selectedFixtureIndex;
@@ -532,6 +593,7 @@ public class GridMapManager : Singleton<GridMapManager>
 
                                         if (originFixture != null)
                                         {
+                                            roomTileCount -= originFixture.Data.GridSize.magnitude;
                                             establishedOriginFixture = true;
                                             break;
                                         }
@@ -549,6 +611,7 @@ public class GridMapManager : Singleton<GridMapManager>
                             }
                             else
                             {
+                                roomTileCount -= placedFixture.Data.GridSize.magnitude;
                                 //Debug.Log("RelationshipFound");
                                 break;
                             }
@@ -560,7 +623,6 @@ public class GridMapManager : Singleton<GridMapManager>
                                 Debug.LogWarning("Reached Max Fixture Place Attepmts, Skipping Over Fixture Placement");
                             }
                         }
-
                     }
                 }
                 //else
@@ -599,7 +661,7 @@ public class GridMapManager : Singleton<GridMapManager>
 
             bool forceQuit = false;
             List<Vector2Int> positions = new List<Vector2Int>();
-            foreach (Vector2Int tilePosition in fixture.tilePositions)
+            foreach (Vector2Int tilePosition in fixture.TilePositions)
             {
                 Vector2 rotatedPosition = rotationMatrix * (Vector2)tilePosition;
                 Vector2Int newPosition = new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y) + randomPosition;
@@ -642,7 +704,7 @@ public class GridMapManager : Singleton<GridMapManager>
 
                     if (!forceQuit)
                     {
-                        SpawnFixture(fixtureInstance);
+                        //SpawnFixture(fixtureInstance);
                         return fixtureInstance;
                     }
                     else
@@ -699,7 +761,7 @@ public class GridMapManager : Singleton<GridMapManager>
 
             bool forceQuit = false;
             List<Vector2Int> positions = new List<Vector2Int>();
-            foreach (Vector2Int tilePosition in fixture.tilePositions)
+            foreach (Vector2Int tilePosition in fixture.TilePositions)
             {
                 Vector2 rotatedPosition = newFixtureInstance.RotationMatrix * (Vector2)tilePosition;
                 Vector2Int newPosition = new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y) + newFixtureInstance.Position;
@@ -747,7 +809,7 @@ public class GridMapManager : Singleton<GridMapManager>
                             Instantiate(debugMarker,  new Vector3(fixtureInstance.Position.x, 3, fixtureInstance.Position.y), Quaternion.identity, debugHolder.transform);
                             relationshipEdges.Add(edge);
                         }
-                        SpawnFixture(newFixtureInstance);
+                        //SpawnFixture(newFixtureInstance);
                         return newFixtureInstance;
                     }
                     else
@@ -924,54 +986,66 @@ public class GridMapManager : Singleton<GridMapManager>
         foreach (TileCollection collection in tileCollections)
         {
             RoomData roomData = collection.RoomData;
+            bool spawnFloors = true;
+            bool spawnWalls = true;
             if (roomData)
             {
-                if (!roomData.SpawnTiles)
+                spawnFloors = roomData.SpawnFloors;
+                spawnWalls = roomData.SpawnWalls;
+
+                if (!spawnFloors && !spawnWalls)
                 {
                     continue;
                 }
+
             }
 
             foreach (Vector2Int position in collection.mapTilePositions)
             {
                 GameObject newTile = new GameObject("Tile");
                 newTile.transform.parent = levelHolder.transform;
-                Instantiate(floor, new Vector3(position.x, 0, position.y), Quaternion.identity, newTile.transform);
-
-                foreach (Vector2Int neighbor in neighbors)
+                if (spawnFloors)
                 {
-                    if (gridMap.InBounds(position + neighbor))
-                    {
-                        if (collection.connections.Contains((position, position + neighbor)))
-                        {
-                            continue;
-                        }
-                        
-                        if (gridMap[position].Collection == gridMap[position + neighbor].Collection)
-                        {
-                            continue;
-                        }
-                    }
+                    Instantiate(floor, new Vector3(position.x, 0, position.y), Quaternion.identity, newTile.transform);
+                }
 
-                    float angle = 0;
-                    if (neighbor == Vector2Int.up)
+                if (spawnWalls)
+                {
+                    foreach (Vector2Int neighbor in neighbors)
                     {
-                        angle = 0;
-                    }
-                    else if (neighbor == Vector2Int.right)
-                    {
-                        angle = 90;
-                    }
-                    else if (neighbor == Vector2Int.down)
-                    {
-                        angle = 180;
-                    }
-                    else
-                    {
-                        angle = 270;
-                    }
+                        if (gridMap.InBounds(position + neighbor))
+                        {
+                            if (collection.connections.Contains((position, position + neighbor)))
+                            {
+                                continue;
+                            }
 
-                    Instantiate(wall, new Vector3(position.x, 0, position.y), Quaternion.Euler(0, angle, 0), newTile.transform);
+                            if (gridMap[position].Collection == gridMap[position + neighbor].Collection)
+                            {
+                                continue;
+                            }
+                        }
+
+                        float angle = 0;
+                        if (neighbor == Vector2Int.up)
+                        {
+                            angle = 0;
+                        }
+                        else if (neighbor == Vector2Int.right)
+                        {
+                            angle = 90;
+                        }
+                        else if (neighbor == Vector2Int.down)
+                        {
+                            angle = 180;
+                        }
+                        else
+                        {
+                            angle = 270;
+                        }
+
+                        Instantiate(wall, new Vector3(position.x, 0, position.y), Quaternion.Euler(0, angle, 0), newTile.transform);
+                    }
                 }
 
                 newTile.transform.localScale = tileSize * Vector3.one;
@@ -984,20 +1058,24 @@ public class GridMapManager : Singleton<GridMapManager>
             }
         }
     }
-    public void SpawnFixture(FixtureInstance fixtureInstance)
+    public void SpawnFixtures()
     {
-        Vector2 spawnPosition = ((Vector2)(fixtureInstance.Position) - (interiorTilesPerMapTile / 2) * Vector2.one) / interiorTilesPerMapTile;
-        float rotation = 90 * (int)fixtureInstance.RotationPreset;
-        /*GameObject fixture = */Instantiate(fixtureInstance.Data.FixturePrefab, tileSize * new Vector3(spawnPosition.x, 0, spawnPosition.y), Quaternion.Euler(0, rotation, 0), levelHolder.transform);
-        //fixture.AddComponent<DebugFixture>().SetupValues(fixtureInstance);
-
-        if (spawnFixturePositions)
+        foreach (FixtureInstance fixtureInstance in fixtureInstances)
         {
-            foreach (Vector2Int position in fixtureInstance.Data.tilePositions)
+            Vector2 spawnPosition = ((Vector2)(fixtureInstance.Position) - (interiorTilesPerMapTile / 2) * Vector2.one) / interiorTilesPerMapTile;
+            float rotation = 90 * (int)fixtureInstance.RotationPreset;
+            /*GameObject fixture = */
+            Instantiate(fixtureInstance.Data.FixturePrefab, tileSize * new Vector3(spawnPosition.x, 0, spawnPosition.y), Quaternion.Euler(0, rotation, 0), levelHolder.transform);
+            //fixture.AddComponent<DebugFixture>().SetupValues(fixtureInstance);
+
+            if (spawnFixturePositions)
             {
-                Vector3 rotatedPosition = fixtureInstance.RotationMatrix * (Vector2)position;
-                Vector2 newSpawnPosition = (((Vector2)rotatedPosition + fixtureInstance.Position) - (interiorTilesPerMapTile / 2) * Vector2.one) / interiorTilesPerMapTile;
-                Instantiate(debugMarker, tileSize * new Vector3(newSpawnPosition.x, 0, newSpawnPosition.y), Quaternion.identity, levelHolder.transform);
+                foreach (Vector2Int position in fixtureInstance.Data.TilePositions)
+                {
+                    Vector3 rotatedPosition = fixtureInstance.RotationMatrix * (Vector2)position;
+                    Vector2 newSpawnPosition = (((Vector2)rotatedPosition + fixtureInstance.Position) - (interiorTilesPerMapTile / 2) * Vector2.one) / interiorTilesPerMapTile;
+                    Instantiate(debugMarker, tileSize * new Vector3(newSpawnPosition.x, 0, newSpawnPosition.y), Quaternion.identity, levelHolder.transform);
+                }
             }
         }
     }

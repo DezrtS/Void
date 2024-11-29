@@ -7,4 +7,5 @@ public interface IProjectileSpawner
     public abstract void SpawnProjectile();
     public abstract void SpawnProjectile(Vector3 position, Quaternion rotation);
     public abstract void OnProjectileHit(IProjectile projectile, GameObject projectileGameObject, Collider hitCollider);
+    public abstract void OnProjectileDestroy(IProjectile projectile, GameObject projectileGameObject);
 }

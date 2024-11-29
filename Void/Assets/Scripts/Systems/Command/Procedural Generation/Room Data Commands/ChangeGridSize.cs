@@ -12,7 +12,7 @@ public class ChangeGridSize : ICommand
     {
         this.tilePositionsHolder = tilePositionsHolder;
         removedPositions = new List<Vector2Int>();
-        foreach (Vector2Int position in tilePositionsHolder.tilePositions)
+        foreach (Vector2Int position in tilePositionsHolder.TilePositions)
         {
             if (position.x >= size.x || position.y >= size.y)
             {
@@ -20,22 +20,22 @@ public class ChangeGridSize : ICommand
             }
         }
 
-        previousSize = tilePositionsHolder.gridSize;
+        previousSize = tilePositionsHolder.GridSize;
         this.size = size;
     }
 
     public void Execute()
     {
-        tilePositionsHolder.gridSize = size;
+        tilePositionsHolder.GridSize = size;
         foreach (var position in removedPositions)
         {
-            tilePositionsHolder.tilePositions.Remove(position);
+            tilePositionsHolder.TilePositions.Remove(position);
         }
     }
 
     public void Undo()
     {
-        tilePositionsHolder.gridSize = previousSize;
-        tilePositionsHolder.tilePositions.AddRange(removedPositions);
+        tilePositionsHolder.GridSize = previousSize;
+        tilePositionsHolder.TilePositions.AddRange(removedPositions);
     }
 }

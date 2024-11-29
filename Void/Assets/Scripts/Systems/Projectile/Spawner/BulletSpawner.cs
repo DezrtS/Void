@@ -9,44 +9,38 @@ public class BulletSpawner : MonoBehaviour, IProjectileSpawner
 
     public event IProjectileSpawner.HitHandler OnHit;
 
-
     private void Start()
     {
         objectPool = gameObject.GetComponent<ObjectPool>();
-        objectPool.InitializePool(projectileData.Prefab, 15, false);
-        
+        objectPool.InitializePool(projectileData.Prefab);
     }
+
     public void SpawnProjectile()
     {
-
-        
-        //GameObject bullet = Instantiate(projectileData.Prefab, transform.position, Quaternion.identity);
-        GameObject bullet = objectPool.GetObject();
-
-        if (bullet == null)
-        {
-            return;
-        }
-
-        bullet.transform.position = transform.position;
-
-        IProjectile projectile = bullet.GetComponent<IProjectile>();
-        projectile.Initialize(this, projectileData);
-        projectile.Fire(transform.forward);
+        SpawnProjectile(transform.position, transform.rotation);
     }
 
     public void SpawnProjectile(Vector3 position, Quaternion rotation)
     {
-        GameObject bullet = Instantiate(projectileData.Prefab, position, rotation);
+        GameObject bullet = objectPool.GetObject();
+        if (bullet == null)
+        {
+            return;
+        }
+        bullet.transform.SetPositionAndRotation(position, rotation);
         IProjectile projectile = bullet.GetComponent<IProjectile>();
-        projectile.Initialize(this, projectileData);
-        projectile.Fire(transform.forward);
+        projectile.InitializeProjectile(this, projectileData);
+        projectile.FireProjectile(transform.forward);
     }
 
     public void OnProjectileHit(IProjectile projectile, GameObject projectileGameObject, Collider hitCollider)
     {
-        objectPool.ReturnToPool(projectileGameObject);
         OnHit?.Invoke(hitCollider);
-        //projectile.Destroy();
+        objectPool.ReturnToPool(projectileGameObject);
+    }
+
+    public void OnProjectileDestroy(IProjectile projectile, GameObject projectileGameObject)
+    {
+        objectPool.ReturnToPool(projectileGameObject);
     }
 }

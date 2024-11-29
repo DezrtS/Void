@@ -12,15 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a373f24dc1b8cea4b91aeb323a70e598, type: 3}
   m_Name: Stool
   m_EditorClassIdentifier: 
-  Name: Stool
-  FixturePrefab: {fileID: 1861900983576766389, guid: 81306ca0f10483346abf36b3f32bdc1b,
+  fixtureName: Stool
+  fixturePrefab: {fileID: 1861900983576766389, guid: 81306ca0f10483346abf36b3f32bdc1b,
     type: 3}
-  tilePositions1:
+  isTaskFixture: 0
+  gridSize: {x: 1, y: 1}
+  tilePositions:
   - {x: 0, y: 0}
-  Restrictions: []
-  RestrictionData: {fileID: 0}
-  Relationships:
-  - {fileID: 11400000, guid: d03ab9f120b8d5c43bb217de58ed3542, type: 2}
-  - {fileID: 11400000, guid: 1c76e0b4d7f83e6448f5ea72e4935449, type: 2}
-  - {fileID: 11400000, guid: b761003c4e8db714cae9c11c2b3503aa, type: 2}
-  - {fileID: 11400000, guid: 7b24773cf21aa4e449c3b928096347f6, type: 2}
+  restrictions: []
+  relationships: []

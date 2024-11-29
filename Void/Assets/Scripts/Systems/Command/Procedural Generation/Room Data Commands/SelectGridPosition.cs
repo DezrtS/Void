@@ -13,11 +13,11 @@ public class SelectGridPosition : ICommand
 
     public void Execute()
     {
-        tilePositionsHolder.tilePositions.Add(position);
+        tilePositionsHolder.TilePositions.Add(position);
     }
 
     public void Undo()
     {
-        tilePositionsHolder.tilePositions.Remove(position);
+        tilePositionsHolder.TilePositions.Remove(position);
     }
 }

@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Battery
   Description: It Charges Stuff
-  ItemPrefab: {fileID: 0}
+  ItemPrefab: {fileID: 941687137560951099, guid: 877873f02ff48ac4f80154076476ca22,
+    type: 3}

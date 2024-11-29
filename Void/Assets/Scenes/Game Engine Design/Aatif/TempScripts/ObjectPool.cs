@@ -3,29 +3,33 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-   
+    [SerializeField] private string objectName = "New Object";
+    [SerializeField] private int poolSize;
+    [SerializeField] private bool dynamicSize;
+    [SerializeField] private bool destroyObjectsOverPoolSize;
+
     private GameObject objectPrefab;
+    private Transform poolContainerTransform;
+
     private readonly Queue<GameObject> pool = new();
     private readonly List<GameObject> activePool = new();
-    private bool spawnNewIfEmpty = false;
-    private GameObject poolContainer;
-    private int spawnCount = 3;
 
-    public void InitializePool(GameObject objectPrefab, int objectCount, bool spawnNewIfEmpty)
+    public int PoolSize => poolSize;
+    public int ActivePoolCount => activePool.Count;
+
+    public void InitializePool(GameObject objectPrefab)
     {
         this.objectPrefab = objectPrefab;
-        poolContainer = new GameObject("Pool Container");
+        GameObject poolContainer = new GameObject($"{objectName} Pool Container");
+        poolContainerTransform = poolContainer.transform;
 
-        for (int i = 0; i < objectCount; i++)
+        for (int i = 0; i < poolSize; i++)
         {
-            GameObject instance = Instantiate(objectPrefab, poolContainer.transform);
-            instance.name = $"New Object {spawnCount}";
-            spawnCount++;
+            GameObject instance = Instantiate(objectPrefab, poolContainerTransform);
+            instance.name = $"{objectName} {i}";
             instance.SetActive(false);
             pool.Enqueue(instance);
         }
-
-        this.spawnNewIfEmpty = spawnNewIfEmpty;
     }
 
     public GameObject GetObject()
@@ -35,17 +39,12 @@ public class ObjectPool : MonoBehaviour
             GameObject activeObject = pool.Dequeue();
             activeObject.SetActive(true);
             activePool.Add(activeObject);
-            if (pool.Contains(activeObject))
-            {
-                Debug.LogError("Object WAS NOT REMOVED");
-            }
             return activeObject;
         }
-        else if (spawnNewIfEmpty)
+        else if (dynamicSize)
         {
-            GameObject instance = Instantiate(objectPrefab, poolContainer.transform);
-            instance.name = $"Chicken {spawnCount}";
-            spawnCount++;
+            GameObject instance = Instantiate(objectPrefab, poolContainerTransform);
+            instance.name = $"Extra {objectName}";
             activePool.Add(instance);
             return instance;
         }
@@ -55,17 +54,18 @@ public class ObjectPool : MonoBehaviour
 
     public void ReturnToPool(GameObject gameObject)
     {
-        if (pool.Contains(gameObject))
-        {
-            Debug.LogError("Object Already In Pool");
-        }
         activePool.Remove(gameObject);
+
+        if (destroyObjectsOverPoolSize)
+        {
+            if (pool.Count > poolSize)
+            {
+                Destroy(gameObject);
+                return;
+            }
+        }
+
         gameObject.SetActive(false);
         pool.Enqueue(gameObject);
-    }
-
-    public List<GameObject> GetActivePool()
-    {
-        return activePool;
     }
 }

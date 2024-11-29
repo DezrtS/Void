@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -7,7 +8,6 @@ public class Inventory : NetworkBehaviour
 {
     [SerializeField] private int hotbarCapacity;
     [SerializeField] private Transform activeTransform;
-    [SerializeField] private Transform[] storageTransforms;
     private int selectedIndex;
     private Item[] hotbar;
     private Dictionary<ResourceData, int> inventory;
@@ -32,10 +32,11 @@ public class Inventory : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Item item = SelectedItem();
-            if (item)
+            Item selectedItem = SelectedItem();
+            if (selectedItem)
             {
-                RequestItemDropServerRpc(item.NetworkObjectId, new ServerRpcParams());
+                selectedItem.StopUsing();
+                RequestItemDropServerRpc(selectedItem.NetworkObjectId, new ServerRpcParams());
             }
         }
         else if (Input.GetKeyDown(KeyCode.E))
@@ -46,11 +47,11 @@ public class Inventory : NetworkBehaviour
                 foreach (Collider hit in hits)
                 {
                     if (hit.transform.TryGetComponent(out Item item)) {
-                        if (SelectedItem())
+                        if (item.CanPickUp)
                         {
-                            RequestItemDropServerRpc(SelectedItem().NetworkObjectId, new ServerRpcParams());
+                            RequestItemPickUpServerRpc(item.NetworkObjectId, new ServerRpcParams());
+                            return;
                         }
-                        RequestItemPickUpServerRpc(item.NetworkObjectId, new ServerRpcParams());
                     }
                 }
             }
@@ -66,22 +67,16 @@ public class Inventory : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            Item selectedItem = SelectedItem();
+            if (selectedItem) selectedItem.StopUsing();
             SwitchItem(true);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            Item selectedItem = SelectedItem();
+            if (selectedItem) selectedItem.StopUsing();
             SwitchItem(false);
         }
-    }
-
-    public void PickUp(Item item)
-    {
-        hotbar[selectedIndex] = item;
-    }
-
-    public void Drop()
-    {
-        hotbar[selectedIndex] = null;
     }
 
     public Item SelectedItem()
@@ -89,67 +84,10 @@ public class Inventory : NetworkBehaviour
         return hotbar[selectedIndex];
     }
 
-    public Item SwitchItem(bool left)
+    public void SwitchItem(bool left)
     {
-        int newIndex = selectedIndex;
-        newIndex += left ? -1 : 1;
-
-        if (newIndex < 0)
-        {
-            newIndex = hotbarCapacity - 1;
-        }
-        else if (newIndex >= hotbarCapacity)
-        {
-            newIndex = 0;
-        }
-
-        SwapAndStore(selectedIndex, newIndex);
-        selectedIndex = newIndex;
-
-        return hotbar[selectedIndex];
-    }
-
-    public Item SwitchItem(int index)
-    {
-        if (index >= 0 && index < hotbarCapacity && index != selectedIndex)
-        {
-            SwapAndStore(selectedIndex, index);
-            selectedIndex = index;
-            return hotbar[selectedIndex];
-        }
-        return null;
-    }
-
-    public void SwapAndStore(int fromIndex, int toIndex)
-    {
-        Item from = hotbar[fromIndex];
-        Item to = hotbar[toIndex];
-
-        if (from)
-        {
-            if (storageTransforms.Length >= fromIndex)
-            {
-                from.transform.parent = storageTransforms[fromIndex];
-                from.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            }
-            else
-            {
-                from.GetComponent<MeshRenderer>().enabled = false;
-            }
-        }
-
-        if (to)
-        {
-            if (storageTransforms.Length >= toIndex)
-            {
-                to.transform.parent = activeTransform;
-                to.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            }
-            else
-            {
-                to.GetComponent<MeshRenderer>().enabled = true;
-            }
-        }
+        int newIndex = (selectedIndex + (left ? -1 : 1) + hotbarCapacity) % hotbarCapacity;
+        RequestSwitchItemServerRpc(selectedIndex, newIndex, new ServerRpcParams());
     }
 
     public void AddResource(ResourceData resource, int amount)
@@ -178,14 +116,13 @@ public class Inventory : NetworkBehaviour
                 itemNetworkObject.ChangeOwnership(rcpParams.Receive.SenderClientId);
                 ItemManager.Instance.CreateItemPickUpLog(rcpParams.Receive.SenderClientId, item);
                 HandleItemPickUp(item);
-                PickUp(item);
-                HandleItemPickUpClientRpc(itemNetworkObjectId, rcpParams.Receive.SenderClientId);
+                HandleItemPickUpClientRpc(itemNetworkObjectId);
             }
         }
     }
 
     [ClientRpc]
-    public void HandleItemPickUpClientRpc(ulong itemNetworkObjectId, ulong clientId)
+    public void HandleItemPickUpClientRpc(ulong itemNetworkObjectId)
     {
         NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
 
@@ -195,10 +132,6 @@ public class Inventory : NetworkBehaviour
             if (item != null && item.CanPickUp)
             {
                 HandleItemPickUp(item);
-                if (NetworkManager.Singleton.LocalClientId == clientId)
-                {
-                    PickUp(item);
-                }
             }
         }
     }
@@ -207,7 +140,8 @@ public class Inventory : NetworkBehaviour
     {
         item.PickUp();
         item.transform.parent = transform;
-        item.transform.SetLocalPositionAndRotation(Vector3.forward, Quaternion.identity);
+        item.transform.SetLocalPositionAndRotation(activeTransform.localPosition, Quaternion.identity);
+        hotbar[selectedIndex] = item;
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -224,14 +158,13 @@ public class Inventory : NetworkBehaviour
                 itemNetworkObject.ChangeOwnership(rcpParams.Receive.SenderClientId);
                 ItemManager.Instance.CreateItemDropLog(rcpParams.Receive.SenderClientId, item);
                 HandleItemDrop(item);
-                Drop();
-                HandleItemDropClientRpc(itemNetworkObjectId, rcpParams.Receive.SenderClientId);
+                HandleItemDropClientRpc(itemNetworkObjectId);
             }
         }
     }
 
     [ClientRpc]
-    public void HandleItemDropClientRpc(ulong itemNetworkObjectId, ulong clientId)
+    public void HandleItemDropClientRpc(ulong itemNetworkObjectId)
     {
         NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
 
@@ -241,17 +174,46 @@ public class Inventory : NetworkBehaviour
             if (item != null && item.CanDrop)
             {
                 HandleItemDrop(item);
-                if (NetworkManager.Singleton.LocalClientId == clientId)
-                {
-                    Drop();
-                }
             }
         }
     }
 
     public void HandleItemDrop(Item item)
     {
+        hotbar[selectedIndex] = null;
         item.Drop();
         item.transform.parent = null;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestSwitchItemServerRpc(int fromIndex, int toIndex, ServerRpcParams rcpParams = default)
+    {
+
+        HandleSwitchItem(fromIndex, toIndex);
+        HandleSwitchItemClientRpc(fromIndex, toIndex);
+    }
+
+    public void HandleSwitchItem(int fromIndex, int toIndex)
+    {
+        Item from = hotbar[fromIndex];
+        Item to = hotbar[toIndex];
+
+        if (from)
+        {
+            from.gameObject.SetActive(false);
+        }
+
+        if (to)
+        {
+            to.gameObject.SetActive(true);
+        }
+
+        selectedIndex = toIndex;
+    }
+
+    [ClientRpc]
+    public void HandleSwitchItemClientRpc(int fromIndex, int toIndex)
+    {
+        HandleSwitchItem(fromIndex, toIndex);
     }
 }
