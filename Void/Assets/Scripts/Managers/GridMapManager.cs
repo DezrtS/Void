@@ -27,10 +27,11 @@ public class GridMapManager : Singleton<GridMapManager>
     [Range(0, 100)]
     [SerializeField] private int emptySpacePercentage = 50;
     [SerializeField] private int maxFixturesPerTileCollection = 25;
-    [SerializeField] private int maxTaskItemsPerTileCollection = 2;
+    [SerializeField] private int maxTaskItems = 2;
     [SerializeField] private int maxFixtureAttempts = 100;
     [SerializeField] private bool doThroughWallCheck = true;
     public List<FixtureData> fixtures;
+    public List<FixtureData> taskFixtures;
     public List<ItemData> taskItems;
     private List<Item> items = new List<Item>();
     [Space(10)]
@@ -522,29 +523,32 @@ public class GridMapManager : Singleton<GridMapManager>
 
     public void GenerateTasks()
     {
-        foreach (TileCollection collection in tileCollections)
+        for (int i = 0; i < maxTaskItems; i++)
         {
-            if (collection.Type == TileCollection.TileCollectionType.Hallway)
-            {
-                continue;
-            }
+            int collectionIndex = Random.Range(0, tileCollections.Count);
+            TileCollection collection = tileCollections[collectionIndex];
+            FixtureInstance fixtureInstance = PlaceFixture(taskFixtures[0], collection, 0);
 
-            RoomData roomData = collection.RoomData;
-            if (roomData)
+            if (fixtureInstance != null)
             {
-                if (roomData.HasInterior)
-                {
-                    continue;
-                }
-            }
+                fixtureInstances.Remove(fixtureInstance);
 
-            for (int i = 0; i < maxTaskItemsPerTileCollection; i++)
-            {
                 int index = Random.Range(0, taskItems.Count);
                 ItemData itemData = taskItems[index];
-                Vector2Int position = collection.GetRandomMapTilePosition();
-                GameObject spawnedItem = Instantiate(itemData.ItemPrefab, new Vector3(position.x, 2, position.y), Quaternion.identity);
+                Vector2 spawnPosition = (fixtureInstance.Position - (interiorTilesPerMapTile / 2) * Vector2.one) / interiorTilesPerMapTile;
+                GameObject spawnedItem = Instantiate(itemData.ItemPrefab, tileSize * new Vector3(spawnPosition.x, 0, spawnPosition.y), Quaternion.identity);
                 spawnedItem.GetComponent<Item>().NetworkObject.Spawn();
+
+                //foreach (Vector2Int position in fixtureInstance.Data.TilePositions)
+                //{
+                //    Vector3 rotatedPosition = fixtureInstance.RotationMatrix * (Vector2)position;
+                //    Vector2 newSpawnPosition = (((Vector2)rotatedPosition + fixtureInstance.Position) - (interiorTilesPerMapTile / 2) * Vector2.one) / interiorTilesPerMapTile;
+                //    Instantiate(debugMarker, tileSize * new Vector3(newSpawnPosition.x, 0, newSpawnPosition.y), Quaternion.identity, levelHolder.transform);
+                //}
+            }
+            else
+            {
+                maxTaskItems--;
             }
         }
     }
@@ -662,11 +666,16 @@ public class GridMapManager : Singleton<GridMapManager>
 
     private FixtureInstance PlaceRandomFixture(TileCollection collection, int verifyFrom)
     {
-        int attempt = 0;
         int selectedFixtureIndex = Random.Range(0, fixtures.Count);
+        FixtureData fixture = fixtures[selectedFixtureIndex];
+        return PlaceFixture(fixture, collection, verifyFrom);
+    }
+
+    private FixtureInstance PlaceFixture(FixtureData fixture, TileCollection collection, int verifyFrom)
+    {
+        int attempt = 0;
         while (attempt < maxFixtureAttempts)
         {
-            FixtureData fixture = fixtures[selectedFixtureIndex];
             Vector2Int randomPosition = interiorTilesPerMapTile * collection.GetRandomMapTilePosition() + new Vector2Int(Random.Range(0, interiorTilesPerMapTile), Random.Range(0, interiorTilesPerMapTile));
             RotationPreset randomRotationPreset = (RotationPreset)Random.Range(0, 4);
 
