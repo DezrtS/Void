@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -25,7 +26,10 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     private Dictionary<ulong, PlayerRole> playerRoleDictionary;
 
     [SerializeField] private GameObject monsterPrefab;
+    [SerializeField] private GameObject monsterUIPrefab;
+
     [SerializeField] private GameObject survivorPrefab;
+    [SerializeField] private GameObject survivorUIPrefab;
 
     private void Awake()
     {
@@ -62,6 +66,8 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
             if (playerRoleDictionary.TryGetValue(clientId, out PlayerRole role)) {
+                HandlePlayerUIClientRpc(role, clientId);
+
                 switch (role)
                 {
                     case PlayerRole.None:
@@ -79,6 +85,8 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
             }
             else
             {
+                HandlePlayerUIClientRpc(PlayerRole.Survivor, clientId);
+
                 SpawnSurvivor(clientId);
             }
         }
@@ -96,10 +104,26 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         survivorGameObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestPlayerRoleServerRpc(PlayerRole playerRole, ServerRpcParams serverRpcParams = default)
+    [ClientRpc]
+    private void HandlePlayerUIClientRpc(PlayerRole playerRole, ulong clientId)
     {
-        playerRoleDictionary[serverRpcParams.Receive.SenderClientId] = playerRole;
+        if (clientId == OwnerClientId)
+        {
+            switch (playerRole)
+            {
+                case PlayerRole.None:
+                    Debug.LogError("Player Has No Role");
+                    break;
+                case PlayerRole.Monster:
+                    Instantiate(monsterUIPrefab);
+                    break;
+                case PlayerRole.Survivor:
+                    Instantiate(survivorUIPrefab);
+                    break;
+                case PlayerRole.Spectator:
+                    break;
+            }
+        }
     }
 
     public void HandleGenerateGridMap()
@@ -111,5 +135,11 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     public void HandleGenerateGridMapClientRpc()
     {
         HandleGenerateGridMap();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestPlayerRoleServerRpc(PlayerRole playerRole, ServerRpcParams serverRpcParams = default)
+    {
+        playerRoleDictionary[serverRpcParams.Receive.SenderClientId] = playerRole;
     }
 }

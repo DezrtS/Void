@@ -35,6 +35,11 @@ public class BulletSpawner : MonoBehaviour, IProjectileSpawner
 
     public void OnProjectileHit(IProjectile projectile, GameObject projectileGameObject, Collider hitCollider)
     {
+        if (hitCollider.TryGetComponent(out DamageSystem damageSystem))
+        {
+            damageSystem.Damage((int)projectile.ProjectileData.Damage);
+        }
+
         OnHit?.Invoke(hitCollider);
         objectPool.ReturnToPool(projectileGameObject);
     }

@@ -68,5 +68,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 3658769570832325595, guid: cf12a98deb846e84ba0e886c08e1584f,
     type: 3}
+  monsterUIPrefab: {fileID: 6001305169260945356, guid: 9f5a2f8afdccc334793bfaee8870cd72,
+    type: 3}
   survivorPrefab: {fileID: 4686512094472241709, guid: 1711056153e3e5145ac07b18d3037dae,
+    type: 3}
+  survivorUIPrefab: {fileID: 7362481398773695719, guid: 886b46c603602fa45958adfa3bc22812,
     type: 3}
