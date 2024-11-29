@@ -60,13 +60,15 @@ MonoBehaviour:
   interiorTilesPerMapTile: 5
   emptySpacePercentage: 85
   maxFixturesPerTileCollection: 100
-  maxTaskItemsPerTileCollection: 2
+  maxTaskItems: 5
   maxFixtureAttempts: 100
   doThroughWallCheck: 1
   fixtures:
   - {fileID: 11400000, guid: 6464df81ce0be8944b52c55f2b76c0df, type: 2}
   - {fileID: 11400000, guid: d06fb754ce3879c42896e0511aa3eb8c, type: 2}
   - {fileID: 11400000, guid: efeb817e866bbc740b6513c8d36844f9, type: 2}
+  taskFixtures:
+  - {fileID: 11400000, guid: 83dda273c58583540a885f9ad2ee3fd5, type: 2}
   taskItems:
   - {fileID: 11400000, guid: 69af40606c0d78149968119d78aa657d, type: 2}
   spawnCollectionAveragePositions: 0
