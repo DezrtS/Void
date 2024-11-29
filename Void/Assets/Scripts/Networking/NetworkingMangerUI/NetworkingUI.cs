@@ -16,8 +16,6 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] private GameObject networkManagerUI;
     [SerializeField] private GameObject timerObject;
 
-    private NetworkVariable<bool> isGeneralHUDActive = new NetworkVariable<bool>(false);
-
     private void Awake()
     {
         if (timerObject != null)
@@ -35,7 +33,7 @@ public class NetworkManagerUI : MonoBehaviour
         {
             NetworkManager.Singleton.StartHost();
             StartCoroutine(ReplaceHostPlayerWithMonster());
-            ActivateGeneralHUDServerRpc();
+            ActivateGeneralHUDServerRpc(); 
             ActivateHUD("Host");
         });
 
@@ -53,8 +51,6 @@ public class NetworkManagerUI : MonoBehaviour
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
         }
-
-        isGeneralHUDActive.OnValueChanged += OnGeneralHUDStateChanged;
     }
 
     private void OnDestroy()
@@ -63,26 +59,11 @@ public class NetworkManagerUI : MonoBehaviour
         {
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
         }
-
-        isGeneralHUDActive.OnValueChanged -= OnGeneralHUDStateChanged;
     }
 
     private void OnClientConnected(ulong clientId)
     {
-        isGeneralHUDActive.Value = generalHUD != null && generalHUD.activeSelf;
-    }
-
-    private void OnGeneralHUDStateChanged(bool oldValue, bool newValue)
-    {
-        if (generalHUD != null)
-        {
-            generalHUD.SetActive(newValue);
-        }
-
-        if (newValue)
-        {
-            ActivateTimer();
-        }
+        ActivateGeneralHUDServerRpc();
     }
 
     private void ActivateTimer()
@@ -118,10 +99,24 @@ public class NetworkManagerUI : MonoBehaviour
         }
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void ActivateGeneralHUDServerRpc()
     {
-        isGeneralHUDActive.Value = true;
+        ActivateGeneralHUDClientRpc(true);
+    }
+
+    [ClientRpc]
+    private void ActivateGeneralHUDClientRpc(bool state)
+    {
+        if (generalHUD != null)
+        {
+            generalHUD.SetActive(state);
+        }
+
+        if (state)
+        {
+            ActivateTimer();
+        }
     }
 
     private IEnumerator ReplaceHostPlayerWithMonster()
@@ -192,6 +187,6 @@ public class NetworkManagerUI : MonoBehaviour
 
     private Vector3 GetSpawnPosition()
     {
-        return new Vector3(0f, 2f, 0f);
+        return new Vector3(0f, 2f, 0f); 
     }
 }
