@@ -1598,12 +1598,13 @@ GameObject:
   - component: {fileID: 5666164460175977229}
   - component: {fileID: 5262183140512328599}
   - component: {fileID: 9053355663728837816}
-  - component: {fileID: 1774220697344706821}
-  - component: {fileID: 1223017161237278915}
+  - component: {fileID: -2944610226592388895}
+  - component: {fileID: -5266008418117136557}
   - component: {fileID: 4313896994134328490}
+  - component: {fileID: 3476553906186042018}
   - component: {fileID: 1521194874580972517}
   - component: {fileID: 1066513650784793636}
-  - component: {fileID: 3476553906186042018}
+  - component: {fileID: 5639913810674957384}
   m_Layer: 0
   m_Name: low poly monster
   m_TagString: Monster
@@ -1669,7 +1670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 10671295
+  GlobalObjectIdHash: 3937129103
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1678,28 +1679,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &1774220697344706821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3658769570832325595}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8718001d087ecb74fbbc4612b97d05fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TransitionStateInfoList:
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: -128360363
-    DestinationState: -388283599
-    TransitionDuration: 0.25
-    TriggerNameHash: 1203776827
-    TransitionIndex: 0
-  m_Animator: {fileID: 5262183140512328599}
---- !u!114 &1223017161237278915
+--- !u!114 &-2944610226592388895
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1730,6 +1710,27 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &-5266008418117136557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3658769570832325595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad8deae8091111f4eb30a56c1f4e0d3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -128360363
+    DestinationState: -388283599
+    TransitionDuration: 0.25
+    TriggerNameHash: 1203776827
+    TransitionIndex: 0
+  m_Animator: {fileID: 5262183140512328599}
 --- !u!143 &4313896994134328490
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1755,6 +1756,29 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!136 &3476553906186042018
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3658769570832325595}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 3.1
+  m_Direction: 1
   m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!114 &1521194874580972517
 MonoBehaviour:
@@ -1791,29 +1815,25 @@ MonoBehaviour:
     m_InternalValue: 0
   totalHealth:
     m_InternalValue: 350
---- !u!136 &3476553906186042018
-CapsuleCollider:
+--- !u!114 &5639913810674957384
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3658769570832325595}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 3.1
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.5, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f47dfd5fa87c104280240ca5f93b8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarPrefab: {fileID: 7238159095500547692, guid: 54612524b5238714f8c2eb785da74cf3,
+    type: 3}
+  uiCanvas: {fileID: 0}
+  targetPosition: {fileID: 0}
+  deathPosition: {fileID: 0}
+  deathMessagePrefab: {fileID: 8749999393589840042, guid: 12642ef6bd27ccc4fad99e57ecb9a797,
+    type: 3}
 --- !u!1 &3712618760330661534
 GameObject:
   m_ObjectHideFlags: 0
