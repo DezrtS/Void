@@ -103,6 +103,7 @@ public class NetworkManagerUI : MonoBehaviour
     private void ActivateGeneralHUDServerRpc()
     {
         ActivateGeneralHUDClientRpc(true);
+        Debug.Log("General HUD is active on Server");
     }
 
     [ClientRpc]
@@ -117,6 +118,7 @@ public class NetworkManagerUI : MonoBehaviour
         {
             ActivateTimer();
         }
+        Debug.Log("General HUD is active on Client");
     }
 
     private IEnumerator ReplaceHostPlayerWithMonster()

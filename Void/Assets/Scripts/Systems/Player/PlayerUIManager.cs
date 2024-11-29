@@ -9,6 +9,7 @@ public class PlayerUIManager : NetworkBehaviour
     [SerializeField] private RectTransform targetPosition; 
     [SerializeField] private RectTransform deathPosition; 
     [SerializeField] private GameObject deathMessagePrefab;
+    [SerializeField] private GameObject generalHUD;
 
     private Image healthBarInstance;
     private DamageSystem damageSystem;
@@ -33,6 +34,16 @@ public class PlayerUIManager : NetworkBehaviour
             else
             {
                 Debug.LogError("UICanvas not found in the scene!");
+            }
+        }
+
+        
+        if (generalHUD == null)
+        {
+            GameObject generalHUDObject = GameObject.Find("GeneralHUD");
+            if (generalHUDObject != null)
+            {
+                generalHUD.SetActive(true);
             }
         }
 
