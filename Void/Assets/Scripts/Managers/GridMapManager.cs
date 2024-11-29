@@ -54,6 +54,8 @@ public class GridMapManager : Singleton<GridMapManager>
     private GameObject debugHolder;
     private GameObject levelHolder;
 
+    private TileCollection elevatorRoom;
+
     public float TileSize { get { return tileSize; } }
     public GameObject Floor { get { return floor; } }
     public GameObject Wall { get { return wall; } }
@@ -100,11 +102,29 @@ public class GridMapManager : Singleton<GridMapManager>
         };
     }
 
-    public Vector3 GetRandomRoomPosition()
+    public Vector3 GetElevatorRoomPosition()
     {
-        int index = Random.Range(0, tileCollections.Count);
-        Vector2Int position = tileCollections[index].GetRandomMapTilePosition();
+        Vector2 position = elevatorRoom.AveragePosition;
         return new Vector3(position.x, 2, position.y);
+    }
+
+    public Vector3 GetMonsterSpawnPosition()
+    {
+        TileCollection maxCollection = elevatorRoom;
+        float distance = float.MinValue;
+        foreach (TileCollection collection in tileCollections)
+        {
+            if (collection.Type == TileCollection.TileCollectionType.Hallway) continue;
+
+            float tempDistance = (collection.AveragePosition - elevatorRoom.AveragePosition).magnitude;
+            if (tempDistance > distance)
+            {
+                distance = tempDistance;
+                maxCollection = collection;
+            }
+        }
+
+        return new Vector3(maxCollection.AveragePosition.x, 2, maxCollection.AveragePosition.y);
     }
 
     private void Start()
@@ -209,7 +229,7 @@ public class GridMapManager : Singleton<GridMapManager>
     {
         RoomData roomData = rooms[0];
         Vector2Int position = new Vector2Int(gridSize.x / 2 - roomData.GridSize.x / 2, gridSize.x / 2 - roomData.GridSize.x / 2);
-        TileCollection collection = new TileCollection(TileCollection.TileCollectionType.Room, 0);
+        elevatorRoom = new TileCollection(TileCollection.TileCollectionType.Room, 0);
         List<Vector2Int> newPositions = new List<Vector2Int>(roomData.TilePositions);
         for (int i = 0; i < newPositions.Count; i++)
         {
@@ -217,11 +237,11 @@ public class GridMapManager : Singleton<GridMapManager>
         }
         foreach (Connection connection in roomData.Connections)
         {
-            collection.AddConnection(connection.from + position, connection.to + position);
+            elevatorRoom.AddConnection(connection.from + position, connection.to + position);
         }
-        collection.InitiatlizeRoom(roomData);
-        tileCollections.Add(collection);
-        PlaceMapTiles(collection, MapTile.MapTileType.Room, newPositions);
+        elevatorRoom.InitiatlizeRoom(roomData);
+        tileCollections.Add(elevatorRoom);
+        PlaceMapTiles(elevatorRoom, MapTile.MapTileType.Room, newPositions);
         Instantiate(roomData.RoomPrefab, interiorTilesPerMapTile * new Vector3(position.x, 0, position.y), Quaternion.identity, levelHolder.transform);
     }
 
