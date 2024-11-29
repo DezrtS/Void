@@ -168,9 +168,7 @@ public class NetworkManagerUI : MonoBehaviour
                 localPlayerObject.Despawn(true);
             }
 
-            Debug.Log("Player About to be moved");
             SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId, GridMapManager.Instance.GetElevatorRoomPosition());
-            Debug.Log("Player has been moved");
         }
     }
 
@@ -180,7 +178,7 @@ public class NetworkManagerUI : MonoBehaviour
         var playerInstance = Instantiate(playerPre, playerSpawn, Quaternion.identity);
         var networkObject = playerInstance.GetComponent<NetworkObject>();
 
-        Debug.Log($"[Server] Player Location " + playerSpawn);
+        Debug.Log(playerSpawn + " Player Location");
 
         if (networkObject != null)
         {
