@@ -20,11 +20,6 @@ public class TaskManager : NetworkSingleton<TaskManager>
         }
     }
 
-    private void Start()
-    {
-        //DisplayTaskUI();
-    }
-
     private void OnDisable()
     {
         foreach (Task task in tasks)
@@ -61,6 +56,8 @@ public class TaskManager : NetworkSingleton<TaskManager>
     public void OnTaskCompletion(Task task)
     {
         Debug.Log($"{task.Data.Name} was completed");
+        TaskList.Instance.ClearTasks();
+        DisplayTaskUI();
         //AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound1);
         // Send Out Event That Other Observers Can Listen To.
     }
@@ -68,13 +65,16 @@ public class TaskManager : NetworkSingleton<TaskManager>
     public void OnSubtaskCompletion(Task task)
     {
         // Send Out Event That Other Observers Can Listen To.
+
+        TaskList.Instance.ClearTasks();
+        DisplayTaskUI();
     }
 
     public void DisplayTaskUI()
     {
         foreach (var task in tasks)
         {
-            taskText.text += task.Data.Name + "\n" + task.Data.Description + "\n\n";
+            TaskList.Instance.AddTask(task);
         }
     }
 }

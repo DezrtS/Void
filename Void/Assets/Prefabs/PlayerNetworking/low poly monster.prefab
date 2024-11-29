@@ -1603,9 +1603,7 @@ GameObject:
   - component: {fileID: 4313896994134328490}
   - component: {fileID: 3476553906186042018}
   - component: {fileID: 1521194874580972517}
-  - component: {fileID: 1066513650784793636}
-  - component: {fileID: 5639913810674957384}
-  - component: {fileID: -8962710632334180593}
+  - component: {fileID: 5225347255423299389}
   m_Layer: 0
   m_Name: low poly monster
   m_TagString: Monster
@@ -1671,7 +1669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 10671295
+  GlobalObjectIdHash: 3937129103
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -1788,7 +1786,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3658769570832325595}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 540d65290feb6f842b61dfafe6114820, type: 3}
   m_Name: 
@@ -1798,56 +1796,19 @@ MonoBehaviour:
   spawnPoint: {fileID: 179735633364685167}
   FPSCameraPrefab: {fileID: 1675628873728395439, guid: 9da46762dd5c986409790bb6d4c6c424,
     type: 3}
---- !u!114 &1066513650784793636
+--- !u!114 &5225347255423299389
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3658769570832325595}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9011a9a417e758344bf1bf0c8643720b, type: 3}
+  m_Script: {fileID: 11500000, guid: 083da3f8534d0d94e85d0deae8df64fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDead:
-    m_InternalValue: 0
-  currentHealth:
-    m_InternalValue: 0
-  totalHealth:
-    m_InternalValue: 350
---- !u!114 &5639913810674957384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3658769570832325595}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f47dfd5fa87c104280240ca5f93b8d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBarPrefab: {fileID: 7238159095500547692, guid: 54612524b5238714f8c2eb785da74cf3,
-    type: 3}
-  uiCanvas: {fileID: 0}
-  targetPosition: {fileID: 0}
-  deathPosition: {fileID: 0}
-  deathMessagePrefab: {fileID: 8749999393589840042, guid: 12642ef6bd27ccc4fad99e57ecb9a797,
-    type: 3}
---- !u!114 &-8962710632334180593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3658769570832325595}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f1264c752bcd064f9b91472e9b51210, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isMonster: 1
+  maxHealth: 350
 --- !u!1 &3712618760330661534
 GameObject:
   m_ObjectHideFlags: 0

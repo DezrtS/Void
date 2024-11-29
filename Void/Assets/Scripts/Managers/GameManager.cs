@@ -58,6 +58,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         HandleGenerateGridMap();
         HandleGenerateGridMapClientRpc();
         GridMapManager.Instance.GenerateTasks();
+        HandleTaskListClientRpc();
         SpawnPlayers();
     }
 
@@ -67,17 +68,19 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         {
             if (playerRoleDictionary.TryGetValue(clientId, out PlayerRole role)) {
                 HandlePlayerUIClientRpc(role, clientId);
-
+                NetworkObject networkObject;
                 switch (role)
                 {
                     case PlayerRole.None:
                         Debug.LogError("Player Has No Role");
                         break;
                     case PlayerRole.Monster:
-                        SpawnMonster(clientId);
+                        networkObject = SpawnMonster(clientId);
+                        HealthBar.Instance.AttachHealthBar(networkObject.GetComponent<IDamageable>());
                         break;
                     case PlayerRole.Survivor:
-                        SpawnSurvivor(clientId);
+                        networkObject = SpawnSurvivor(clientId);
+                        HealthBar.Instance.AttachHealthBar(networkObject.GetComponent<IDamageable>());
                         break;
                     case PlayerRole.Spectator:
                         break;
@@ -87,21 +90,26 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
             {
                 HandlePlayerUIClientRpc(PlayerRole.Survivor, clientId);
 
-                SpawnSurvivor(clientId);
+                NetworkObject networkObject = SpawnSurvivor(clientId);
+                HealthBar.Instance.AttachHealthBar(networkObject.GetComponent<IDamageable>());
             }
         }
     }
 
-    private void SpawnMonster(ulong clientId)
+    private NetworkObject SpawnMonster(ulong clientId)
     {
         GameObject monsterGameObject = Instantiate(monsterPrefab, GridMapManager.Instance.GetMonsterSpawnPosition(), Quaternion.identity);
-        monsterGameObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+        NetworkObject networkObject = monsterGameObject.GetComponent<NetworkObject>();
+        networkObject.SpawnAsPlayerObject(clientId, true);
+        return networkObject;
     }
 
-    private void SpawnSurvivor(ulong clientId)
+    private NetworkObject SpawnSurvivor(ulong clientId)
     {
         GameObject survivorGameObject = Instantiate(survivorPrefab, GridMapManager.Instance.GetElevatorRoomPosition(), Quaternion.identity);
-        survivorGameObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+        NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
+        networkObject.SpawnAsPlayerObject(clientId, true);
+        return networkObject;
     }
 
     [ClientRpc]
@@ -129,12 +137,19 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     public void HandleGenerateGridMap()
     {
         GridMapManager.Instance.GenerateNewGridMap();
+        //TaskManager.Instance.DisplayTaskUI();
     }
 
     [ClientRpc]
     public void HandleGenerateGridMapClientRpc()
     {
         HandleGenerateGridMap();
+    }
+
+    [ClientRpc]
+    public void HandleTaskListClientRpc()
+    {
+        TaskManager.Instance.DisplayTaskUI();
     }
 
     [ServerRpc(RequireOwnership = false)]
