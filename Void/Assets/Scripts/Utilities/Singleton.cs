@@ -21,7 +21,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
 
         instance = this as T;
+        OnSingletonCreated();
     }
+
+    protected virtual void OnSingletonCreated() { }
 }
 
 public abstract class NetworkSingleton<T> : NetworkBehaviour where T : NetworkBehaviour
@@ -44,14 +47,24 @@ public abstract class NetworkSingleton<T> : NetworkBehaviour where T : NetworkBe
         }
 
         instance = this as T;
+        OnSingletonCreated();
     }
+
+    protected virtual void OnSingletonCreated() { }
 }
 
 public abstract class SingletonPersistent<T> : Singleton<T> where T : MonoBehaviour
 {
-    protected override void OnEnable()
+    protected override void OnSingletonCreated()
     {
-        base.OnEnable();
+        DontDestroyOnLoad(gameObject);
+    }
+}
+
+public abstract class NetworkSingletonPersistent<T> : NetworkSingleton<T> where T : NetworkBehaviour
+{
+    protected override void OnSingletonCreated()
+    {
         DontDestroyOnLoad(gameObject);
     }
 }

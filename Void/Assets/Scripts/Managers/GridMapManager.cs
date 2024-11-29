@@ -105,8 +105,8 @@ public class GridMapManager : NetworkSingleton<GridMapManager>
 
     public Vector3 GetElevatorRoomPosition()
     {
-        Vector2 position = (Vector2)elevatorRoom.GetRandomMapTilePosition() * tileSize;
-        return new Vector3(position.x, 2, position.y);
+        Vector2 position = (Vector2)elevatorRoom.GetClosestMapTilePositionToAverage() * tileSize;
+        return new Vector3(position.x, 0.1f, position.y);
     }
 
     public Vector3 GetMonsterSpawnPosition()
@@ -125,7 +125,8 @@ public class GridMapManager : NetworkSingleton<GridMapManager>
             }
         }
 
-        return new Vector3(maxCollection.AveragePosition.x, 2, maxCollection.AveragePosition.y);
+        Vector2 position = (Vector2)maxCollection.GetClosestMapTilePositionToAverage() * tileSize;
+        return new Vector3(position.x, 0.1f, position.y);
     }
 
     private void Start()
@@ -202,7 +203,6 @@ public class GridMapManager : NetworkSingleton<GridMapManager>
         GenerateHallways();
 
         InitializeInteriorGridMap();
-        if (IsServer) GenerateTasks();
         GenerateInteriors();
 
         SpawnTiles();
@@ -525,6 +525,7 @@ public class GridMapManager : NetworkSingleton<GridMapManager>
     {
         for (int i = 0; i < maxTaskItems; i++)
         {
+            Debug.Log("SPAWNED TASK");
             int collectionIndex = Random.Range(0, tileCollections.Count);
             TileCollection collection = tileCollections[collectionIndex];
             FixtureInstance fixtureInstance = PlaceFixture(taskFixtures[0], collection, 0);
@@ -550,7 +551,7 @@ public class GridMapManager : NetworkSingleton<GridMapManager>
             }
             else
             {
-                maxTaskItems--;
+                i--;
             }
         }
     }

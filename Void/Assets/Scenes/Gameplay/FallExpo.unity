@@ -368,6 +368,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -1820, y: -980}
   m_Pivot: {x: 0.5, y: 0.5}
+
 --- !u!1001 &595693073
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2338,3 +2339,4 @@ SceneRoots:
   - {fileID: 2101011128}
   - {fileID: 2087854063}
   - {fileID: 896477782}
+  - {fileID: 385183807}
