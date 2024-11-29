@@ -104,7 +104,7 @@ public class GridMapManager : Singleton<GridMapManager>
 
     public Vector3 GetElevatorRoomPosition()
     {
-        Vector2 position = elevatorRoom.AveragePosition;
+        Vector2 position = (Vector2)elevatorRoom.GetRandomMapTilePosition() * tileSize;
         return new Vector3(position.x, 2, position.y);
     }
 
