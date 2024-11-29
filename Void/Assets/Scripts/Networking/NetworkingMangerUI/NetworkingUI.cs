@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine.UI;
 using System.Collections;
 
-public class NetworkManagerUI : MonoBehaviour
+public class NetworkManagerUI : NetworkBehaviour
 {
     [SerializeField] private Button serverBtn;
     [SerializeField] private Button hostBtn;
@@ -126,7 +126,7 @@ public class NetworkManagerUI : MonoBehaviour
 
     private IEnumerator ReplaceHostPlayerWithMonster()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
 
         // Ensure this logic only executes on the host
         if (NetworkManager.Singleton.IsHost)
@@ -158,6 +158,7 @@ public class NetworkManagerUI : MonoBehaviour
         {
             networkObject.SpawnWithOwnership(clientId);
             NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject = networkObject;
+            networkObject.GetComponent<SetPositionOnSpawn>().RequestMovePlayerServerRpc();
         }
         else
         {
@@ -168,7 +169,7 @@ public class NetworkManagerUI : MonoBehaviour
 
     private IEnumerator ReplaceHostTempWithPlayer()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.4f);
 
         // Ensure this logic only executes on the client
         if (NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
@@ -201,6 +202,7 @@ public class NetworkManagerUI : MonoBehaviour
         {
             networkObject.SpawnWithOwnership(clientId);
             NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject = networkObject;
+            networkObject.GetComponent<SetPositionOnSpawn>().RequestMovePlayerServerRpc();
         }
         else
         {
