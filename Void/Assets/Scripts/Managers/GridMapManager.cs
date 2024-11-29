@@ -106,7 +106,7 @@ public class GridMapManager : NetworkSingleton<GridMapManager>
     public Vector3 GetElevatorRoomPosition()
     {
         Vector2 position = (Vector2)elevatorRoom.GetClosestMapTilePositionToAverage() * tileSize;
-        return new Vector3(position.x, 0.1f, position.y);
+        return new Vector3(position.x, 1.5f, position.y);
     }
 
     public Vector3 GetMonsterSpawnPosition()
@@ -126,7 +126,7 @@ public class GridMapManager : NetworkSingleton<GridMapManager>
         }
 
         Vector2 position = (Vector2)maxCollection.GetClosestMapTilePositionToAverage() * tileSize;
-        return new Vector3(position.x, 0.1f, position.y);
+        return new Vector3(position.x, 1.5f, position.y);
     }
 
     private void Start()
