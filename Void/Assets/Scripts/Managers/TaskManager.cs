@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class TaskManager : NetworkSingleton<TaskManager>
 {
     private NetworkVariable<int> totalTasks = new NetworkVariable<int>(0);
     private List<Task> tasks = new List<Task>();
+    [SerializeField] private TextMeshProUGUI taskText;
 
     protected override void OnEnable()
     {
@@ -16,6 +18,11 @@ public class TaskManager : NetworkSingleton<TaskManager>
             task.OnTaskCompletion += OnTaskCompletion;
             task.OnSubTaskCompletion += OnSubtaskCompletion;
         }
+    }
+
+    private void Start()
+    {
+        //DisplayTaskUI();
     }
 
     private void OnDisable()
@@ -61,5 +68,13 @@ public class TaskManager : NetworkSingleton<TaskManager>
     public void OnSubtaskCompletion(Task task)
     {
         // Send Out Event That Other Observers Can Listen To.
+    }
+
+    public void DisplayTaskUI()
+    {
+        foreach (var task in tasks)
+        {
+            taskText.text += task.Data.Name + "\n" + task.Data.Description + "\n\n";
+        }
     }
 }
