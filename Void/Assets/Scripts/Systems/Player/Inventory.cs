@@ -9,7 +9,7 @@ public class Inventory : NetworkBehaviour
     [SerializeField] private int hotbarCapacity;
     [SerializeField] private Transform activeTransform;
     private int selectedIndex;
-    private Item[] hotbar;
+    public Item[] hotbar;
     private Dictionary<ResourceData, int> inventory;
 
     public delegate void ItemEventHandler(int index, Item item);

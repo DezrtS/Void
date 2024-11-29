@@ -29,7 +29,6 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        //Change this however yall want to start the game.
         Debug.Log("Game Started");
     }
 
@@ -84,6 +83,6 @@ public class MainMenuManager : MonoBehaviour
 
     public void LoadFallExpo()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 }
