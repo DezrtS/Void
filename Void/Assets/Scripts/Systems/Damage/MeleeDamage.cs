@@ -21,7 +21,7 @@ public class MeleeDamage : NetworkBehaviour
 
     private void ApplyDamage(Collider target, int damage)
     {
-        DamageSystem damageSystem = target.GetComponent<DamageSystem>();
+        IDamageable damageSystem = target.GetComponent<IDamageable>();
         if (damageSystem != null)
         {
             damageSystem.Damage(damage); 

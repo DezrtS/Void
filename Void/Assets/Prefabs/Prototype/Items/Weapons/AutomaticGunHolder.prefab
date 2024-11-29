@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
   isPickedUp: 0
-  isDropped: 0
+  isDropped: 1
   canPickUp: 1
   canDrop: 1
   projectileSpawnerObject: {fileID: 4735076810010294097}
