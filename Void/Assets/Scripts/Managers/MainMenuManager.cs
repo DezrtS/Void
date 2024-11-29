@@ -84,6 +84,6 @@ public class MainMenuManager : MonoBehaviour
 
     public void LoadFallExpo()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 }
