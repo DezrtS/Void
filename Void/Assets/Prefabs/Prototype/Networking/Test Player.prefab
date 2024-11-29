@@ -2217,11 +2217,14 @@ GameObject:
   - component: {fileID: 7928993837376897029}
   - component: {fileID: 6813849894115896034}
   - component: {fileID: 4485477558148152696}
+  - component: {fileID: 501313639725404206}
   - component: {fileID: 6235030401920068693}
   - component: {fileID: 6165085840863327359}
   - component: {fileID: 8406312557854551622}
   - component: {fileID: 34801420190533278}
+  - component: {fileID: 4853822947355387191}
   - component: {fileID: 1143342746891114792}
+  - component: {fileID: -8521741176022172656}
   m_Layer: 0
   m_Name: Test Player
   m_TagString: Player
@@ -2286,7 +2289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2632229602
+  GlobalObjectIdHash: 3210001833
   InScenePlacedSourceGlobalObjectIdHash: 1133239272
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -2295,6 +2298,55 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &501313639725404206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575300930724462412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8718001d087ecb74fbbc4612b97d05fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 569745642
+    TransitionDuration: 0.25
+    TriggerNameHash: 1464497218
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -453240694
+    DestinationState: 1520933651
+    TransitionDuration: 0.25
+    TriggerNameHash: -707834555
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 2
+    OriginatingState: -367768302
+    DestinationState: -1089670653
+    TransitionDuration: 0.25
+    TriggerNameHash: 548040190
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 3
+    OriginatingState: -367768302
+    DestinationState: -1762544625
+    TransitionDuration: 0.25
+    TriggerNameHash: 1793123249
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 4
+    OriginatingState: -367768302
+    DestinationState: 1377215829
+    TransitionDuration: 0.25
+    TriggerNameHash: -1945444887
+    TransitionIndex: 0
+  m_Animator: {fileID: 2776671368047593531}
 --- !u!114 &6235030401920068693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2375,6 +2427,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hotbarCapacity: 3
   activeTransform: {fileID: 2598517801597348090}
+--- !u!114 &4853822947355387191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575300930724462412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d564e827d6df06147bbe9ac7837caf3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarPrefab: {fileID: 7238159095500547692, guid: 54612524b5238714f8c2eb785da74cf3,
+    type: 3}
+  uiCanvas: {fileID: 7138240768017094855, guid: 685463de478fe1f44b881a63d950ea31,
+    type: 3}
+  targetPosition: {fileID: 0}
+  deathPosition: {fileID: 0}
+  deathMessagePrefab: {fileID: 8749999393589840042, guid: 12642ef6bd27ccc4fad99e57ecb9a797,
+    type: 3}
+  generalHUD: {fileID: 0}
 --- !u!114 &1143342746891114792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2394,6 +2467,19 @@ MonoBehaviour:
   isDead:
     m_InternalValue: 0
   animator: {fileID: 2776671368047593531}
+--- !u!114 &-8521741176022172656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575300930724462412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1264c752bcd064f9b91472e9b51210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isMonster: 0
 --- !u!1 &1593860356724096751
 GameObject:
   m_ObjectHideFlags: 0

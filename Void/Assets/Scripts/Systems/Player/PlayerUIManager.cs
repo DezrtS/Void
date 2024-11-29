@@ -38,14 +38,14 @@ public class PlayerUIManager : NetworkBehaviour
         }
 
         
-        if (generalHUD == null)
+        /*if (generalHUD == null)
         {
             GameObject generalHUDObject = GameObject.Find("GeneralHUD");
             if (generalHUDObject != null)
             {
                 generalHUD.SetActive(true);
             }
-        }
+        }*/
 
         if (targetPosition == null)
         {
