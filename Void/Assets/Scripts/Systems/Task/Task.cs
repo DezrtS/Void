@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Task : MonoBehaviour
+public abstract class Task : NetworkBehaviour
 {
     [SerializeField] private TaskData task;
     private bool[] completedSubtasks;
@@ -19,6 +20,7 @@ public abstract class Task : MonoBehaviour
 
     private void Start()
     {
+        if (!IsServer) return;
         TaskManager.Instance.AddTask(this);
     }
 
@@ -61,5 +63,41 @@ public abstract class Task : MonoBehaviour
             }
         }
         return true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestCompleteTaskServerRpc(ServerRpcParams rcpParams = default)
+    {
+        HandleCompleteTask();
+        HandleCompleteTaskClientRpc();
+    }
+
+    public void HandleCompleteTask()
+    {
+        CompleteTask();
+    }
+
+    [ClientRpc]
+    public void HandleCompleteTaskClientRpc()
+    {
+        HandleCompleteTask();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RequestCompleteSubTaskServerRpc(int subtaskId, ServerRpcParams rcpParams = default)
+    {
+        HandleCompleteSubTask(subtaskId);
+        HandleCompleteSubTaskClientRpc(subtaskId);
+    }
+
+    public void HandleCompleteSubTask(int subtaskId)
+    {
+        CompleteSubtask(subtaskId);
+    }
+
+    [ClientRpc]
+    public void HandleCompleteSubTaskClientRpc(int subtaskId)
+    {
+        HandleCompleteSubTask(subtaskId);
     }
 }

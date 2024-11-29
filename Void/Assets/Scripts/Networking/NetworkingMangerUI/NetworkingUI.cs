@@ -26,12 +26,14 @@ public class NetworkManagerUI : MonoBehaviour
         serverBtn.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartServer();
+            GridMapManager.Instance.GenerateNewGridMap();
             ActivateHUD("Server");
         });
 
         hostBtn.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartHost();
+            GridMapManager.Instance.GenerateNewGridMap();
             StartCoroutine(ReplaceHostPlayerWithMonster());
             ActivateGeneralHUDServerRpc(); 
             ActivateHUD("Host");
@@ -40,6 +42,7 @@ public class NetworkManagerUI : MonoBehaviour
         joinBtn.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartClient();
+            GridMapManager.Instance.GenerateNewGridMap();
             StartCoroutine(ReplaceHostTempWithPlayer());
             ActivateHUD("Client");
         });

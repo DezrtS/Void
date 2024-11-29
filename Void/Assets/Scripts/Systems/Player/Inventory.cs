@@ -110,7 +110,7 @@ public class Inventory : NetworkBehaviour
         if (itemNetworkObject != null)
         {
             Item item = itemNetworkObject.GetComponent<Item>();
-            if (item != null && item.CanPickUp)
+            if (item != null && item.CanPickUp && !item.IsPickedUp)
             {
                 // Assign the ownership to the client who requested the pickup
                 itemNetworkObject.ChangeOwnership(rcpParams.Receive.SenderClientId);
@@ -171,7 +171,7 @@ public class Inventory : NetworkBehaviour
         if (itemNetworkObject != null)
         {
             Item item = itemNetworkObject.GetComponent<Item>();
-            if (item != null && item.CanDrop)
+            if (item != null && item.CanDrop && !item.IsDropped)
             {
                 HandleItemDrop(item);
             }

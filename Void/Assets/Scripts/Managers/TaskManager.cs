@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class TaskManager : Singleton<TaskManager>
+public class TaskManager : NetworkSingleton<TaskManager>
 {
+    private NetworkVariable<int> totalTasks = new NetworkVariable<int>(0);
     private List<Task> tasks = new List<Task>();
 
     protected override void OnEnable()
@@ -30,6 +32,7 @@ public class TaskManager : Singleton<TaskManager>
         if (!tasks.Contains(task))
         {
             tasks.Add(task);
+            totalTasks.Value++;
             // OnTaskAdded Event
             task.OnTaskCompletion += OnTaskCompletion;
             task.OnSubTaskCompletion += OnSubtaskCompletion;
@@ -41,6 +44,7 @@ public class TaskManager : Singleton<TaskManager>
         if (tasks.Contains(task))
         {
             tasks.Remove(task);
+            totalTasks.Value--;
             // OnTaskRemoved Event
             task.OnTaskCompletion -= OnTaskCompletion;
             task.OnSubTaskCompletion -= OnSubtaskCompletion;
