@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class LobbyUI : MonoBehaviour
 
     [SerializeField] private GameObject playerButtons;
     [SerializeField] private Button changeRoleButton;
+    [SerializeField] private TextMeshProUGUI roleText;
     [SerializeField] private Button readyButton;
 
     private bool monsterSelected = false;
@@ -34,6 +36,7 @@ public class LobbyUI : MonoBehaviour
         changeRoleButton.onClick.AddListener(() =>
         {
             monsterSelected = !monsterSelected;
+            roleText.text = monsterSelected ? "Change To Survivor" : "Change To Monster";
             GameManager.Instance.RequestPlayerRoleServerRpc(monsterSelected ? GameManager.PlayerRole.Monster : GameManager.PlayerRole.Survivor);
         });
 
