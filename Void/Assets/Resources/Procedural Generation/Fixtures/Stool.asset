@@ -20,4 +20,8 @@ MonoBehaviour:
   tilePositions:
   - {x: 0, y: 0}
   restrictions: []
-  relationships: []
+  relationships:
+  - {fileID: 11400000, guid: 5c36baa63b0ba8447b6f6de6506bbae4, type: 2}
+  - {fileID: 11400000, guid: 482768c0155c09c4b99c3b4370f2be68, type: 2}
+  - {fileID: 11400000, guid: e7477710bc62391469eb756b6e40f2ae, type: 2}
+  - {fileID: 11400000, guid: d826db35e58b5c242a2a9f923a298da6, type: 2}

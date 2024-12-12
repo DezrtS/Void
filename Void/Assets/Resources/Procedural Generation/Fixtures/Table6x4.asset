@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a373f24dc1b8cea4b91aeb323a70e598, type: 3}
+  m_Name: Table6x4
+  m_EditorClassIdentifier: 
+  fixtureName: Table 6x4
+  fixturePrefab: {fileID: 7849556016083025773, guid: 0569180e1f85b724bba7481e871628d9,
+    type: 3}
+  isTaskFixture: 0
+  gridSize: {x: 6, y: 4}
+  tilePositions:
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  - {x: 2, y: 1}
+  - {x: 0, y: 1}
+  - {x: 1, y: 1}
+  - {x: 0, y: 2}
+  - {x: 1, y: 2}
+  - {x: 2, y: 2}
+  - {x: 2, y: 3}
+  - {x: 1, y: 3}
+  - {x: 0, y: 3}
+  - {x: 3, y: 3}
+  - {x: 3, y: 2}
+  - {x: 4, y: 2}
+  - {x: 4, y: 3}
+  - {x: 5, y: 3}
+  - {x: 5, y: 2}
+  restrictions:
+  - {fileID: 11400000, guid: 40daca4ee67a0034f8044fbda1bad5d8, type: 2}
+  relationships:
+  - {fileID: 11400000, guid: c6bfd8c0235ff0a4b9700ba568eeca6d, type: 2}
+  - {fileID: 11400000, guid: 1fe389cce2d524c4390ce1f51f7b7bd2, type: 2}
+  - {fileID: 11400000, guid: d27123e4964633f49a09e14218269ec3, type: 2}
+  - {fileID: 11400000, guid: 1ac50c4d39bf27a4b93ac179639c5f52, type: 2}
+  - {fileID: 11400000, guid: ebff5f6bdcf679e458b3fcb7494763be, type: 2}

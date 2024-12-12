@@ -630,9 +630,9 @@ public class FixtureEditorWindow : EditorWindow
         fixtureRelationshipData.OtherRelationship = otherFixtureRelationshipData;
         otherFixtureRelationshipData.OtherRelationship = fixtureRelationshipData;
         string folderPath = "Assets/Resources/Procedural Generation/Fixture Relationships";
-        string assetName = $"{selectedFixture.name}-{subSelectedFixture.name}.asset";
+        string assetName = $"{selectedFixture.name}-{subSelectedFixture.name}-Main.asset";
         string assetPath = $"{folderPath}/{assetName}";
-        string otherAssetName = $"{subSelectedFixture.name}-{selectedFixture.name}.asset";
+        string otherAssetName = $"{subSelectedFixture.name}-{selectedFixture.name}-Sub.asset";
         string otherAssetPath = $"{folderPath}/{otherAssetName}";
         assetPath = AssetDatabase.GenerateUniqueAssetPath(assetPath);
         otherAssetPath = AssetDatabase.GenerateUniqueAssetPath(otherAssetPath);

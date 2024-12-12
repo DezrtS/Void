@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddabc535ca166c84b9c993897a0b5763, type: 3}
+  m_Name: Table6x4-Table6x4-Main
+  m_EditorClassIdentifier: 
+  otherRelationship: {fileID: 0}
+  otherFixture: {fileID: 11400000, guid: ae9d5c2f015726d4a843431a9d5565ad, type: 2}
+  enabled: 1
+  weight: 1
+  position: {x: 0, y: 0}
+  rotationMatrix:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  rotationPreset: 0
+  rotatable: 0
+  rotationAxisPosition: {x: 0, y: 0}
+  mirrorable: 0
+  mirrorAxis: {x: 1, y: 0}
+  mirrorAxisPosition: {x: 0, y: 0}
