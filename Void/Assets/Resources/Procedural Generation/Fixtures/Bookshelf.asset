@@ -22,7 +22,5 @@ MonoBehaviour:
   - {x: 1, y: 0}
   - {x: 2, y: 0}
   - {x: 3, y: 0}
-  restrictions:
-  - {fileID: 11400000, guid: bcf359f9b4f06664b8a2dd4e30cef834, type: 2}
-  relationships:
-  - {fileID: 11400000, guid: f575aed5c219fd743a78544577796d6e, type: 2}
+  restrictions: []
+  relationships: []

@@ -181,7 +181,7 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException e)
         {
-
+            Debug.Log(e);
         }
     }
 }

@@ -100,10 +100,10 @@ public class FixtureEditorWindow : EditorWindow
 
     private void OnEnable()
     {
-        leftArrowSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Arrow_0.png");
-        downArrowSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Arrow_90.png");
-        rightArrowSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Arrow_180.png");
-        upArrowSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Arrow_270.png");
+        leftArrowSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Arrows/Arrow_0.png");
+        downArrowSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Arrows/Arrow_90.png");
+        rightArrowSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Arrows/Arrow_180.png");
+        upArrowSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Arrows/Arrow_270.png");
 
         var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/FixtureEditor.uxml");
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/UXML/FixtureEditor.uss");

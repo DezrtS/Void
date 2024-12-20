@@ -12,7 +12,7 @@ public class Gun : Item, IReload
     [SerializeField] private EventReference fireSound;
 
     protected IProjectileSpawner projectileSpawner;
-    protected bool isFiring;
+    [SerializeField] protected bool isFiring;
     protected int ammo;
     private float fireRateTimer;
     private float reloadTimer;

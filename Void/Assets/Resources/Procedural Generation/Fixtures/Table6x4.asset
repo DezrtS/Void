@@ -36,11 +36,5 @@ MonoBehaviour:
   - {x: 4, y: 3}
   - {x: 5, y: 3}
   - {x: 5, y: 2}
-  restrictions:
-  - {fileID: 11400000, guid: 40daca4ee67a0034f8044fbda1bad5d8, type: 2}
-  relationships:
-  - {fileID: 11400000, guid: c6bfd8c0235ff0a4b9700ba568eeca6d, type: 2}
-  - {fileID: 11400000, guid: 1fe389cce2d524c4390ce1f51f7b7bd2, type: 2}
-  - {fileID: 11400000, guid: d27123e4964633f49a09e14218269ec3, type: 2}
-  - {fileID: 11400000, guid: 1ac50c4d39bf27a4b93ac179639c5f52, type: 2}
-  - {fileID: 11400000, guid: ebff5f6bdcf679e458b3fcb7494763be, type: 2}
+  restrictions: []
+  relationships: []

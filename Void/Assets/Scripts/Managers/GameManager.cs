@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
-
 
 public class GameManager : NetworkSingletonPersistent<GameManager>
 {
@@ -26,10 +24,9 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     private Dictionary<ulong, PlayerRole> playerRoleDictionary;
 
     [SerializeField] private GameObject monsterPrefab;
-    [SerializeField] private GameObject monsterUIPrefab;
-
     [SerializeField] private GameObject survivorPrefab;
-    [SerializeField] private GameObject survivorUIPrefab;
+
+    [SerializeField] public GameObject FirstPersonCamera;
 
     private void Awake()
     {
@@ -66,33 +63,25 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     {
         foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            if (playerRoleDictionary.TryGetValue(clientId, out PlayerRole role)) {
-                HandlePlayerUIClientRpc(role, clientId);
-                NetworkObject networkObject;
-                switch (role)
-                {
-                    case PlayerRole.None:
-                        Debug.LogError("Player Has No Role");
-                        break;
-                    case PlayerRole.Monster:
-                        networkObject = SpawnMonster(clientId);
-                        HealthBar.Instance.AttachHealthBar(networkObject.GetComponent<IDamageable>());
-                        break;
-                    case PlayerRole.Survivor:
-                        networkObject = SpawnSurvivor(clientId);
-                        HealthBar.Instance.AttachHealthBar(networkObject.GetComponent<IDamageable>());
-                        break;
-                    case PlayerRole.Spectator:
-                        break;
-                }
-            }
-            else
+            PlayerRole role = PlayerRole.Survivor;
+            playerRoleDictionary.TryGetValue(clientId, out role);
+            NetworkObject networkObject;
+            switch (role)
             {
-                HandlePlayerUIClientRpc(PlayerRole.Survivor, clientId);
-
-                NetworkObject networkObject = SpawnSurvivor(clientId);
-                HealthBar.Instance.AttachHealthBar(networkObject.GetComponent<IDamageable>());
+                case PlayerRole.Monster:
+                    networkObject = SpawnMonster(clientId);
+                    break;
+                case PlayerRole.Survivor:
+                    networkObject = SpawnSurvivor(clientId);
+                    break;
+                default:
+                    role = PlayerRole.Survivor;
+                    networkObject = SpawnSurvivor(clientId);
+                    break;
             }
+            
+            HandlePlayerUIClientRpc(role, networkObject.NetworkObjectId, clientId);
+
         }
     }
 
@@ -113,24 +102,12 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     }
 
     [ClientRpc]
-    private void HandlePlayerUIClientRpc(PlayerRole playerRole, ulong clientId)
+    private void HandlePlayerUIClientRpc(PlayerRole playerRole, ulong networkObjectId, ulong clientId)
     {
         if (clientId == OwnerClientId)
         {
-            switch (playerRole)
-            {
-                case PlayerRole.None:
-                    Debug.LogError("Player Has No Role");
-                    break;
-                case PlayerRole.Monster:
-                    Instantiate(monsterUIPrefab);
-                    break;
-                case PlayerRole.Survivor:
-                    Instantiate(survivorUIPrefab);
-                    break;
-                case PlayerRole.Spectator:
-                    break;
-            }
+            NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
+            UIManager.Instance.SetupUI(playerRole, networkObject.gameObject);
         }
     }
 
