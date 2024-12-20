@@ -1,28 +1,58 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : Singleton<HealthBar>
+public class HealthBar : MonoBehaviour
 {
     private Image heathbarImage;
-    private IDamageable damageable;
+    private Health health;
+
+    private void OnEnable()
+    {
+        UIManager.OnSetupUI += OnSetupUI;
+
+        if (health)
+        {
+            health.OnHealthChanged += OnHealthBarChange;
+            health.OnDeath += DetachHealthBar;
+        }
+    }
+
+    private void OnDisable()
+    {
+        UIManager.OnSetupUI -= OnSetupUI;
+
+        if (health)
+        {
+            health.OnHealthChanged -= OnHealthBarChange;
+            health.OnDeath -= DetachHealthBar;
+        }
+    }
 
     private void Awake()
     {
         heathbarImage = GetComponent<Image>();
     }
 
-    public void AttachHealthBar(IDamageable damageable)
+    public void OnSetupUI(GameObject player)
     {
-        this.damageable = damageable;
-        damageable.OnDamage += OnHealthBarChange;
-        damageable.OnDie += DetachHealthBar;
+        if (player.TryGetComponent(out Health health))
+        {
+            AttachHealthBar(health);
+        }
+    }
+
+    public void AttachHealthBar(Health health)
+    {
+        this.health = health;
+        health.OnHealthChanged += OnHealthBarChange;
+        health.OnDeath += DetachHealthBar;
     }
 
     public void DetachHealthBar()
     {
-        damageable.OnDamage -= OnHealthBarChange;
-        damageable.OnDie -= DetachHealthBar;
-        damageable = null;
+        health.OnHealthChanged -= OnHealthBarChange;
+        health.OnDeath -= DetachHealthBar;
+        health = null;
     }
 
     public void OnHealthBarChange(float previousValue, float newValue, float maxValue)

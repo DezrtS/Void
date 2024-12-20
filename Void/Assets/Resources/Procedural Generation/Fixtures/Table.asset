@@ -31,6 +31,4 @@ MonoBehaviour:
   - {x: 3, y: 2}
   - {x: 3, y: 0}
   restrictions: []
-  relationships:
-  - {fileID: 11400000, guid: 393578cb1034f7148b1856be64d31736, type: 2}
-  - {fileID: 11400000, guid: 79461ddef92e87b46b5c7419490057f1, type: 2}
+  relationships: []
