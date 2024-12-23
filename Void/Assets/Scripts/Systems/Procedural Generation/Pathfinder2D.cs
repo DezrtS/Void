@@ -21,8 +21,6 @@ public class Pathfinder2D
     {
         public bool traversable;
         public float cost;
-        public bool isGoal;
-        public bool isStart;
     }
 
     static readonly Vector2Int[] neighbors = {
@@ -32,11 +30,10 @@ public class Pathfinder2D
         new Vector2Int(0, -1),
     };
 
-    Grid2D<Node> grid;
-    SimplePriorityQueue<Node, float> queue;
-    HashSet<Node> closed;
-    Stack<Vector2Int> stack;
-    private float straightness = 0.5f;
+    private Grid2D<Node> grid;
+    private SimplePriorityQueue<Node, float> queue;
+    private HashSet<Node> closed;
+    private Stack<Vector2Int> stack;
 
     public Pathfinder2D(Vector2Int size)
     {
@@ -70,7 +67,7 @@ public class Pathfinder2D
         }
     }
 
-    public List<Vector2Int> FindPath(Vector2Int start, Vector2Int end, Func<Node, Node, PathInfo> costFunction)
+    public List<Vector2Int> FindPath(Vector2Int start, Func<Node, Node, PathInfo> pathFunction, Func<Node, bool> goalFunction)
     {
         ResetNodes();
         queue.Clear();
@@ -81,29 +78,13 @@ public class Pathfinder2D
 
         grid[start].Cost = 0;
         queue.Enqueue(grid[start], 0);
-        bool wasHorizontal = end.x -  start.x > end.y - start.y;
-        int horizontalCostFactor = 1;
 
         while (queue.Count > 0)
         {
             Node node = queue.Dequeue();
             closed.Add(node);
 
-            if (node.Previous != null)
-            {
-                bool isHorizontal = node.Position.y == node.Previous.Position.y;
-
-                if (isHorizontal != wasHorizontal)
-                {
-                    wasHorizontal = isHorizontal;
-                    horizontalCostFactor++;
-                }
-            }
-
-            if (node.Position == end)
-            {
-                return ReconstructPath(node);
-            }
+            if (goalFunction(node)) return ReconstructPath(node);
 
             foreach (var offset in neighbors)
             {
@@ -111,41 +92,11 @@ public class Pathfinder2D
                 var neighbor = grid[node.Position + offset];
                 if (closed.Contains(neighbor)) continue;
 
-                bool isHorizontal = node.Position.y == neighbor.Position.y;
-                var pathCost = costFunction(node, neighbor);
-                if (isHorizontal != wasHorizontal)
-                {
-                    pathCost.cost += straightness * horizontalCostFactor;
-                }
-                float newCost;
-                if (pathCost.isGoal) 
-                {
-                    neighbor.Previous = node;
-                    return ReconstructPath(neighbor);    
-                }
-                else if (pathCost.isStart)
-                {
-                    newCost = node.Cost + pathCost.cost;
+                PathInfo pathInfo = pathFunction(node, neighbor);
 
-                    if (newCost < neighbor.Cost)
-                    {
-                        neighbor.Cost = newCost;
+                if (!pathInfo.traversable) continue;
 
-                        if (queue.TryGetPriority(node, out float existingPriority))
-                        {
-                            queue.UpdatePriority(node, newCost);
-                        }
-                        else
-                        {
-                            queue.Enqueue(neighbor, neighbor.Cost);
-                        }
-                    }
-
-                    continue;
-                }
-                if (!pathCost.traversable) continue;
-
-                newCost = node.Cost + pathCost.cost;
+                float newCost = node.Cost + pathInfo.cost;
 
                 if (newCost < neighbor.Cost)
                 {

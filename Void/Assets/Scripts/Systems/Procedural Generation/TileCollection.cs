@@ -23,7 +23,10 @@ public class TileCollection
     public RoomData RoomData;
     
     public readonly List<Vector2Int> mapTilePositions;
-    public readonly List<(Vector2Int from, Vector2Int to)> connections;
+    public readonly List<Connection> connections;
+
+    private readonly List<FixtureInstance> fixtureInstances;
+    public List<FixtureInstance> FixtureInstances => fixtureInstances;
 
     public TileCollection(TileCollectionType type, int id)
     {
@@ -32,7 +35,9 @@ public class TileCollection
         AveragePosition = Vector2.zero;
         Bounds = (new Vector2Int(int.MaxValue, int.MaxValue), new Vector2Int(int.MinValue, int.MinValue));
         mapTilePositions = new List<Vector2Int>();
-        connections = new List<(Vector2Int from, Vector2Int to)>();
+        connections = new List<Connection>();
+
+        fixtureInstances = new List<FixtureInstance>();
     }
 
     public void InitiatlizeRoom(RoomData roomData)
@@ -47,7 +52,12 @@ public class TileCollection
         totalPosition += position;
         AveragePosition = totalPosition / mapTilePositions.Count;
         Bounds = (new Vector2Int(Mathf.Min(position.x, Bounds.lowerLeft.x), Mathf.Min(position.y, Bounds.lowerLeft.y)),
-            new Vector2Int(Mathf.Max(position.x, Bounds.upperRight.x), Mathf.Max(position.y, Bounds.upperRight.y)));
+            new Vector2Int(Mathf.Max(position.x + 1, Bounds.upperRight.x), Mathf.Max(position.y + 1, Bounds.upperRight.y)));
+    }
+
+    public void AddFixtureInstance(FixtureInstance fixtureInstance)
+    {
+        fixtureInstances.Add(fixtureInstance);
     }
 
     public Vector2Int GetRandomMapTilePosition()
@@ -57,11 +67,16 @@ public class TileCollection
 
     public Vector2Int GetClosestMapTilePositionToAverage()
     {
+        return GetClosestMapTileTowardsPosition(AveragePosition);
+    }
+
+    public Vector2Int GetClosestMapTileTowardsPosition(Vector2 setPosition)
+    {
         Vector2Int closestPosition = Vector2Int.zero;
         float minDistance = float.MaxValue;
         foreach (Vector2Int position in mapTilePositions)
         {
-            float distance = Vector2.Distance(position, AveragePosition);
+            float distance = Vector2.Distance(position, setPosition);
             if (distance < minDistance)
             {
                 closestPosition = position;
@@ -73,6 +88,6 @@ public class TileCollection
 
     public void AddConnection(Vector2Int from, Vector2Int to)
     {
-        connections.Add((from, to));
+        connections.Add(new Connection(from, to));
     }
 }

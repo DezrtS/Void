@@ -326,7 +326,7 @@ public class FixtureEditorWindow : EditorWindow
             if (selectedRelationship)
             { 
                 selectedRelationship.RotationPreset = (RotationPreset)evt.newValue;
-                selectedRelationship.RotationMatrix = GridMapManager.GetRotationMatrix(selectedRelationship.RotationPreset);
+                selectedRelationship.RotationMatrix = FacilityGenerationManager.GetRotationMatrix(selectedRelationship.RotationPreset);
                 RecalculateSubFixturePosition();
                 GenerateRelationshipVisualization();
             }

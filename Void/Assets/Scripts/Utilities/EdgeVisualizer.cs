@@ -15,7 +15,7 @@ public class EdgeVisualizer : MonoBehaviour
         {
             foreach (var edge in edges)
             {
-                DrawGridMapLine(edge.U.Position, edge.V.Position);
+                //DrawGridMapLine(edge.U.Position, edge.V.Position);
             }
         }
         else
@@ -40,19 +40,19 @@ public class EdgeVisualizer : MonoBehaviour
         lr.SetPosition(1, p2);
     }
 
-    void DrawGridMapLine(Vector2 p1, Vector2 p2)
-    {
-        float tileSize = GridMapManager.Instance.TileSize;
-        GameObject line = new GameObject("Edge");
-        line.transform.parent = lineHolder.transform;
-        LineRenderer lr = line.AddComponent<LineRenderer>();
-        lr.material = lineMaterial;
-        lr.startWidth = 0.5f;
-        lr.endWidth = 0.5f;
-        lr.positionCount = 2;
-        lr.SetPosition(0, new Vector3(p1.x * tileSize, 0.5f, p1.y * tileSize));
-        lr.SetPosition(1, new Vector3(p2.x * tileSize, 0.5f, p2.y * tileSize));
-    }
+    //void DrawGridMapLine(Vector2 p1, Vector2 p2)
+    //{
+    //    float tileSize = GridMapManager.Instance.TileSize;
+    //    GameObject line = new GameObject("Edge");
+    //    line.transform.parent = lineHolder.transform;
+    //    LineRenderer lr = line.AddComponent<LineRenderer>();
+    //    lr.material = lineMaterial;
+    //    lr.startWidth = 0.5f;
+    //    lr.endWidth = 0.5f;
+    //    lr.positionCount = 2;
+    //    lr.SetPosition(0, new Vector3(p1.x * tileSize, 0.5f, p1.y * tileSize));
+    //    lr.SetPosition(1, new Vector3(p2.x * tileSize, 0.5f, p2.y * tileSize));
+    //}
 
     public void ClearLines()
     {
