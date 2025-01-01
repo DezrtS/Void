@@ -54,7 +54,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     {
         HandleGenerateGridMap();
         HandleGenerateGridMapClientRpc();
-        GridMapManager.Instance.GenerateTasks();
+        //GridMapManager.Instance.GenerateTasks();
         HandleTaskListClientRpc();
         SpawnPlayers();
     }
@@ -87,7 +87,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     private NetworkObject SpawnMonster(ulong clientId)
     {
-        GameObject monsterGameObject = Instantiate(monsterPrefab, GridMapManager.Instance.GetMonsterSpawnPosition(), Quaternion.identity);
+        GameObject monsterGameObject = Instantiate(monsterPrefab, Vector3.zero /*GridMapManager.Instance.GetMonsterSpawnPosition()*/, Quaternion.identity);
         NetworkObject networkObject = monsterGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;
@@ -95,7 +95,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     private NetworkObject SpawnSurvivor(ulong clientId)
     {
-        GameObject survivorGameObject = Instantiate(survivorPrefab, GridMapManager.Instance.GetElevatorRoomPosition(), Quaternion.identity);
+        GameObject survivorGameObject = Instantiate(survivorPrefab, Vector3.zero /*GridMapManager.Instance.GetElevatorRoomPosition()*/, Quaternion.identity);
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;
@@ -113,7 +113,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     public void HandleGenerateGridMap()
     {
-        GridMapManager.Instance.GenerateNewGridMap();
+        //GridMapManager.Instance.GenerateNewGridMap();
         //TaskManager.Instance.DisplayTaskUI();
     }
 

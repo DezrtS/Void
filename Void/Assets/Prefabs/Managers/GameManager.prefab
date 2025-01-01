@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2557701004
+  GlobalObjectIdHash: 562267644
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -68,11 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 1173705057825196843, guid: 8cfc32a23ded537428f2e30e0904a6ad,
     type: 3}
-  monsterUIPrefab: {fileID: 6001305169260945356, guid: 9f5a2f8afdccc334793bfaee8870cd72,
-    type: 3}
-  survivorPrefab: {fileID: 1575300930724462412, guid: ee2c214df340bb64aa539f9895538088,
-    type: 3}
-  survivorUIPrefab: {fileID: 7362481398773695719, guid: 886b46c603602fa45958adfa3bc22812,
+  survivorPrefab: {fileID: 1575300930724462412, guid: ac7b75d41345af34294d3b00de9c4ec4,
     type: 3}
   FirstPersonCamera: {fileID: 1658748320854242559, guid: 6f8b2ced9ca176043835158ec70bcd4d,
     type: 3}

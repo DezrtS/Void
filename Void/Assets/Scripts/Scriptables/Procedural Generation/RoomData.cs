@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Connection
+public struct Connection
 {
     public Vector2Int from;
     public Vector2Int to;
+
+    public Connection(Vector2Int from, Vector2Int to)
+    {
+        this.from = from;
+        this.to = to;
+    }
 }
 
 [CreateAssetMenu(fileName = "RoomData", menuName = "ScriptableObjects/Procedural Generation/RoomData", order = 1)]
