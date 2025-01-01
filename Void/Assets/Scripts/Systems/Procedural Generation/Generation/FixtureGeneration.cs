@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class FixtureGeneration
 {
-    public static List<Vector2Int> GetFixtureInteriorPositions(FixtureInstance fixtureInstance)
+    public static List<Vector2Int> GetFixtureTilePositions(FixtureInstance fixtureInstance)
     {
         List<Vector2Int> positions = new List<Vector2Int>();
 
@@ -21,7 +21,7 @@ public static class FixtureGeneration
 
     public static FixtureInstance RandomlyPlaceFixture(FacilityFloor facilityFloor, FixtureData fixtureData, TileCollection tileCollection)
     {
-        Vector2Int randomPosition = facilityFloor.InteriorTilesPerMapTile * tileCollection.GetRandomMapTilePosition() + new Vector2Int(Random.Range(0, facilityFloor.InteriorTilesPerMapTile), Random.Range(0, facilityFloor.InteriorTilesPerMapTile));
+        Vector2Int randomPosition = tileCollection.GetRandomTilePosition();
         RotationPreset randomRotationPreset = (RotationPreset)Random.Range(0, 4);
         Matrix4x4 rotationMatrix = FacilityGenerationManager.GetRotationMatrix(randomRotationPreset);
 
@@ -32,27 +32,32 @@ public static class FixtureGeneration
         return null;
     }
 
+    public static void PlaceFixture(FacilityFloor facilityFloor, TileCollection tileCollection, FixtureInstance fixtureInstance, IEnumerable<Vector2Int> positions)
+    {
+        foreach (Vector2Int position in positions)
+        {
+            facilityFloor.FixtureMap[position] = fixtureInstance;
+        }
+
+        tileCollection.AddFixtureInstance(fixtureInstance);
+    }
+
     public static bool TryPlaceFixture(FacilityFloor facilityFloor, TileCollection tileCollection, FixtureInstance fixtureInstance)
     {
-        List<Vector2Int> positions = GetFixtureInteriorPositions(fixtureInstance);
+        List<Vector2Int> positions = GetFixtureTilePositions(fixtureInstance);
 
         foreach (Vector2Int position in positions)
         {
-            if (!facilityFloor.InteriorFloorMap.InBounds(position)) return false;
-
-            // TODO - Scaled position sometimes results in out of bounds error (At max X or Y)
-            Vector2Int scaledPosition = position / facilityFloor.InteriorTilesPerMapTile;
-
-            TileCollection otherCollection = facilityFloor.FloorMap[scaledPosition].Collection;
-            if (otherCollection != tileCollection) return false;
+            if (!facilityFloor.TileMap.InBounds(position)) return false;
+            if (facilityFloor.TileMap[position].TileCollection != tileCollection) return false;
         }
 
-        if (!InteriorGeneration.CanPlaceInteriorTiles(facilityFloor, positions)) return false;
+        if (!FacilityGeneration.CheckTiles(facilityFloor, positions, FacilityGeneration.TileType.Room)) return false;
 
         //if (!VerifyFixtureRestrictions(facilityFloor, tileCollection, fixtureInstance, positions)) return false;
 
-        InteriorGeneration.PlaceInteriorTiles(facilityFloor, fixtureInstance, InteriorTile.InteriorTileType.Fixture, positions);
-        tileCollection.AddFixtureInstance(fixtureInstance);
+        PlaceFixture(facilityFloor, tileCollection, fixtureInstance, positions);
+        
         //if (!VerifyAllFixtureRestrictions(facilityFloor, tileCollection, fixtureInstance, positions))
         //{
         //    InteriorGeneration.PlaceInteriorTiles(facilityFloor, null, InteriorTile.InteriorTileType.None, positions);
@@ -85,7 +90,7 @@ public static class FixtureGeneration
     //                {
     //                    Vector3 rotatedPosition = fixtureInstance.RotationMatrix * (Vector2)position;
     //                    Vector2Int offsetPosition = fixtureInstance.Position + new Vector2Int((int)rotatedPosition.x, (int)rotatedPosition.y);
-                        
+
     //                    if (newFixturePositions.Contains(offsetPosition))
     //                    {
     //                        if (restriction.InteriorTileType == InteriorTile.InteriorTileType.Fixture)
@@ -362,7 +367,7 @@ public static class FixtureGeneration
         for (int i = 0; i < fixtureInstance.Data.Relationships.Count; i++)
         {
             FixtureRelationshipData relationshipData = fixtureInstance.Data.Relationships[(randomRelationshipIndex + i) % fixtureInstance.Data.Relationships.Count];
-            
+
             if (!relationshipData.Enabled) continue;
 
             FixtureData fixtureData = relationshipData.OtherFixture;
@@ -372,7 +377,7 @@ public static class FixtureGeneration
             RotationPreset newRotationPreset = (RotationPreset)(((int)relationshipData.RotationPreset + (int)fixtureInstance.RotationPreset) % 4);
 
             FixtureInstance newFixtureInstance = new FixtureInstance(fixtureData, tileCollection, position, FacilityGenerationManager.GetRotationMatrix(newRotationPreset), newRotationPreset);
-            
+
             if (TryPlaceFixture(facilityFloor, tileCollection, newFixtureInstance)) return newFixtureInstance;
         }
 

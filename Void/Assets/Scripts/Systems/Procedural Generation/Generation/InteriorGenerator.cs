@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class InteriorGenerator : MonoBehaviour
 {
     [Header("Interior Tiles")]
-    [SerializeField] private int interiorTilesPerMapTile = 5;
+    [SerializeField] private int walkwaySize = 1;
     [SerializeField] private float straightnessPenalty = 1f;
 
     [Header("Fixture Amount")]
@@ -25,7 +25,6 @@ public class InteriorGenerator : MonoBehaviour
     [SerializeField] private bool drawFixtureRelationships;
     [SerializeField] private bool drawWalkwayPaths;
 
-    public int InteriorTilesPerMapTile => interiorTilesPerMapTile;
 
     public FixtureInstance EstablishNewFixture(FacilityFloor facilityFloor, TileCollection tileCollection)
     {
@@ -41,27 +40,8 @@ public class InteriorGenerator : MonoBehaviour
         return null;
     }
 
-    public void SetupInterior(FacilityFloor facilityFloor)
-    {
-        foreach (TileCollection tileCollection in facilityFloor.TileCollections)
-        {
-            foreach (Vector2Int position in tileCollection.mapTilePositions)
-            {
-                for (int y = 0; y < interiorTilesPerMapTile; y++)
-                {
-                    for (int x = 0; x < interiorTilesPerMapTile; x++)
-                    {
-                        facilityFloor.InteriorFloorMap[interiorTilesPerMapTile * position + new Vector2Int(x, y)] = new InteriorTile(InteriorTile.InteriorTileType.None, null);
-                    }
-                }
-            }
-        }
-    }
-
     public void GenerateInteriors(FacilityFloor facilityFloor)
     {
-        SetupInterior(facilityFloor);
-
         GenerateWalkways(facilityFloor);
 
         foreach (TileCollection tileCollection in facilityFloor.TileCollections)
@@ -69,7 +49,7 @@ public class InteriorGenerator : MonoBehaviour
             if (skipHallways && tileCollection.Type == TileCollection.TileCollectionType.Hallway) continue;
 
             // TODO - Implement support for predefined rooms
-            float maxRoomTileCount = tileCollection.mapTilePositions.Count * interiorTilesPerMapTile * interiorTilesPerMapTile;
+            float maxRoomTileCount = tileCollection.tilePositions.Count;
             float roomTileCount = maxRoomTileCount;
 
             FixtureInstance originFixture = EstablishNewFixture(facilityFloor, tileCollection);
@@ -111,85 +91,93 @@ public class InteriorGenerator : MonoBehaviour
         }
     }
 
+    // Connections are connecting between rooms
+
     private void GenerateWalkways(FacilityFloor facilityFloor)
     {
+        MultiNodePathfinder2D pathfinder2D = new MultiNodePathfinder2D(facilityFloor.Size);
+
         foreach (TileCollection tileCollection in facilityFloor.TileCollections)
         {
-            Pathfinder2D pathfinder2D = new Pathfinder2D(tileCollection.Bounds.upperRight * interiorTilesPerMapTile);
-
             for (int i = 0; i < tileCollection.connections.Count - 1; i++)
             {
-                Vector2Int start = tileCollection.connections[i].from * interiorTilesPerMapTile;
-                Vector2Int end = tileCollection.connections[i + 1].from * interiorTilesPerMapTile;
+                Vector2Int start = tileCollection.connections[i].from;
+                Vector2Int end = tileCollection.connections[i + 1].from;
 
-                List<Vector2Int> path = pathfinder2D.FindPath(start, (Pathfinder2D.Node from, Pathfinder2D.Node to) =>
+                List<Vector2Int> path = pathfinder2D.FindPath(start, walkwaySize, (MultiNodePathfinder2D.Node from, List<MultiNodePathfinder2D.Node> to) =>
                 {
                     return CalculatePathCost(facilityFloor, tileCollection, end, from, to);
                 },
-                (Pathfinder2D.Node node) =>
+                (MultiNodePathfinder2D.Node node) =>
                 {
                     return node.Position == end;
                 });
 
                 if (path != null)
                 {
-                    InteriorGeneration.PlaceInteriorTiles(facilityFloor, null, InteriorTile.InteriorTileType.Walkway, path);
-
-                    if (drawWalkwayPaths)
+                    if (path.Count <= 1)
                     {
-                        foreach (Vector2Int position in path)
-                        {
-                            Vector2 otherPos = (Vector2)(position) * facilityFloor.TileSize / interiorTilesPerMapTile;
-                            Vector3 newPosition = new Vector3(position.x, 1, position.y);
-                            Instantiate(FacilityGenerationManager.Instance.DebugMarker, newPosition, Quaternion.identity);
-                        }
+                        Debug.LogWarning("Walkway Could Not Spawn");
+                        continue;
                     }
+
+                    List<Vector2Int> newPositions = MultiNodePathfinder2D.ExpandPath(path, walkwaySize);
+                    //path.AddRange(newPositions);
+                    //Debug.Log(path.Count);
+
+                    FacilityGeneration.PlaceTiles(facilityFloor, tileCollection, newPositions, new FacilityGeneration.TilePlaceParams(FacilityGeneration.TileType.Walkway, true));
                 }
             }
         }
+
+        DebugManager.Instance.pathDebugging.Add((pathfinder2D.VisualNodeGrid, pathfinder2D.CommandInvoker));
     }
 
-    private Pathfinder2D.PathInfo CalculatePathCost(FacilityFloor facilityFloor, TileCollection tileCollection, Vector2Int end, Pathfinder2D.Node from, Pathfinder2D.Node to)
+    private MultiNodePathfinder2D.EvaluationInfo CalculatePathCost(FacilityFloor facilityFloor, TileCollection tileCollection, Vector2Int end, MultiNodePathfinder2D.Node from, List<MultiNodePathfinder2D.Node> to)
     {
-        Pathfinder2D.PathInfo pathInfo = new Pathfinder2D.PathInfo();
+        MultiNodePathfinder2D.EvaluationInfo evaluationInfo = new MultiNodePathfinder2D.EvaluationInfo();
 
-        Vector2Int scaledPosition = to.Position / facilityFloor.InteriorTilesPerMapTile;
-        if (tileCollection != facilityFloor.FloorMap[scaledPosition].Collection)
-        {
-            pathInfo.traversable = false;
-            return pathInfo;
-        }
+        evaluationInfo.Cost = Mathf.Pow(Vector2Int.Distance(to[0].Position, end), 2);
 
-        pathInfo.cost = Vector2Int.Distance(to.Position, end);
-
-        Pathfinder2D.Node previous = from.Previous;
+        MultiNodePathfinder2D.Node previous = from.Previous;
         if (previous != null)
         {
             Vector2Int previousDifference = previous.Position - from.Position;
-            Vector2Int difference = from.Position - to.Position;
+            Vector2Int difference = from.Position - to[0].Position;
 
             if (previousDifference != difference)
             {
-                pathInfo.cost += straightnessPenalty;
+                evaluationInfo.Cost += straightnessPenalty;
             }
         }
 
-        pathInfo.traversable = true;
-        InteriorTile interiorTile = facilityFloor.InteriorFloorMap[to.Position];
+        evaluationInfo.Traversable = true;
 
-        if (interiorTile.Type == InteriorTile.InteriorTileType.None)
+        FacilityGeneration.Tile tile = facilityFloor.TileMap[to[0].Position];
+
+        if (tile.Type == FacilityGeneration.TileType.Room || tile.Type == FacilityGeneration.TileType.Hallway)
         {
-            pathInfo.cost += 10;
+            evaluationInfo.Cost += 25;
         }
-        else if (interiorTile.Type == InteriorTile.InteriorTileType.Walkway)
+        else if (tile.Type == FacilityGeneration.TileType.Walkway)
         {
-            pathInfo.cost += 5;
+            evaluationInfo.Cost += 5;
         }
         else
         {
-            pathInfo.traversable = false;
+            evaluationInfo.Traversable = false;
+            return evaluationInfo;
         }
 
-        return pathInfo;
+        for (int i = 1; i < to.Count; i++)
+        {
+            if (facilityFloor.TileMap[to[i].Position].Type != tile.Type)
+            {
+                evaluationInfo.Traversable = false;
+                return evaluationInfo;
+            }
+        }
+
+        return evaluationInfo;
     }
 }

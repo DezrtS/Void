@@ -53,7 +53,6 @@ public class PlayerMovement : MovementController
     {
         InputAction jumpInputAction = movementActionMap.FindAction("Jump");
         jumpInputAction.performed -= Jump;
-        jumpInputAction.canceled -= Jump;
 
         InputAction sprintInputAction = movementActionMap.FindAction("Sprint");
         sprintInputAction.performed -= Sprint;

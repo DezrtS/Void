@@ -5,8 +5,9 @@ public class Grid2D<T>
     readonly T[] data;
 
     public Vector2Int Size { get; private set; }
+    public T[] Data => data;
 
-    public Grid2D(Vector2Int size, Vector2Int offset)
+    public Grid2D(Vector2Int size)
     {
         Size = size;
 

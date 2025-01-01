@@ -8,10 +8,9 @@ public class FacilityFloor
     private Vector3 offset;
 
     private readonly float tileSize;
-    private readonly int interiorTilesPerMapTile;
 
-    private readonly Grid2D<MapTile> floorMap;
-    private readonly Grid2D<InteriorTile> interiorFloorMap;
+    private readonly Grid2D<FacilityGeneration.Tile> tileMap;
+    private readonly Grid2D<FixtureInstance> fixtureMap;
 
     private readonly List<TileCollection> tileCollections;
 
@@ -23,27 +22,33 @@ public class FacilityFloor
     public Vector3 Offset => offset;
 
     public float TileSize => tileSize;
-    public int InteriorTilesPerMapTile => interiorTilesPerMapTile;
 
-    public Grid2D<MapTile> FloorMap => floorMap;
-    public Grid2D<InteriorTile> InteriorFloorMap => interiorFloorMap;
+    public Grid2D<FacilityGeneration.Tile> TileMap => tileMap;
+    public Grid2D<FixtureInstance> FixtureMap => fixtureMap;
 
     public List<TileCollection> TileCollections => tileCollections;
 
-    public List <RoomInstance> RoomInstances => roomInstances;
+    public List<RoomInstance> RoomInstances => roomInstances;
     public List<FixtureInstance> FixtureInstances => fixtureInstances;
 
-    public FacilityFloor(int seed, Vector2Int size, Vector3 offset, float tileSize, int interiorTilesPerMapTile)
+    public FacilityFloor(int seed, Vector2Int size, Vector3 offset, float tileSize)
     {
         this.seed = seed;
         this.size = size;
         this.offset = offset;
 
         this.tileSize = tileSize;
-        this.interiorTilesPerMapTile = interiorTilesPerMapTile;
 
-        floorMap = new Grid2D<MapTile>(size, Vector2Int.zero);
-        interiorFloorMap = new Grid2D<InteriorTile> (size * interiorTilesPerMapTile, Vector2Int.zero);
+        tileMap = new Grid2D<FacilityGeneration.Tile>(size);
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                tileMap[x, y] = new FacilityGeneration.Tile();
+            }
+        }
+
+        fixtureMap = new Grid2D<FixtureInstance>(size);
 
         tileCollections = new List<TileCollection>();
 

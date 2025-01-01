@@ -1,13 +1,15 @@
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
 {
     [Header("Facility Generation Parameters")]
     [SerializeField] private bool generateOnStart = true;
     [SerializeField] private int seed = 1234;
-    [SerializeField] private Vector2Int gridSize = new Vector2Int(25, 25);
+    [SerializeField] private Vector2Int size = new Vector2Int(25, 25);
     [SerializeField] private float tileSize = 10;
 
     [Header("Prefabs")]
@@ -22,10 +24,13 @@ public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
     private HallwayGenerator hallwayGenerator;
     private InteriorGenerator interiorGenerator;
 
+    private EdgeVisualizer edgeVisualizer;
+
     private GameObject levelHolder;
 
     public GameObject DebugMarker => debugMarker;
-
+    public EdgeVisualizer EdgeVisualizer => edgeVisualizer;
+         
     // TODO List
     // TODO - Fix fixtures spawn through walls when interior tiles per map tile is even
     // TODO - Fix Generate Walkway method results in out of bounds error for hallway tile collection
@@ -37,6 +42,8 @@ public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
         roomGenerator = GetComponent<RoomGenerator>();
         hallwayGenerator = GetComponent<HallwayGenerator>();
         interiorGenerator = GetComponent<InteriorGenerator>();
+
+        edgeVisualizer = GetComponent<EdgeVisualizer>();
     }
 
     private void Start()
@@ -49,8 +56,9 @@ public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
 
     public void ResetFacilityFloor()
     {
+        edgeVisualizer.ClearLines();
         Destroy(levelHolder);
-        facilityFloor = new FacilityFloor(seed, gridSize, Vector3.zero, tileSize, interiorGenerator.InteriorTilesPerMapTile);
+        facilityFloor = new FacilityFloor(seed, size, Vector3.zero, tileSize);
     }
 
     public void GenerateFacilityFloor()
@@ -61,85 +69,37 @@ public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
 
         roomGenerator.GenerateRooms(facilityFloor);
         hallwayGenerator.GenerateHallways(facilityFloor);
-        SpawnMapTiles();
-
         interiorGenerator.GenerateInteriors(facilityFloor);
+
+        SpawnTiles();
         SpawnInteriors();
     }
 
-    public void SpawnMapTiles()
+    public void SpawnTiles()
     {
-        Vector2Int[] neighbors =
-{
-            Vector2Int.up,
-            Vector2Int.down,
-            Vector2Int.left,
-            Vector2Int.right,
-        };
-
-        foreach (TileCollection tileCollection in facilityFloor.TileCollections)
+        for (int x = 0; x < size.x; x++)
         {
-            RoomData roomData = tileCollection.RoomData;
-            bool spawnFloors = true;
-            bool spawnWalls = true;
-            if (roomData)
+            for (int y = 0; y < size.y; y++)
             {
-                spawnFloors = roomData.SpawnFloors;
-                spawnWalls = roomData.SpawnWalls;
-
-                if (!spawnFloors && !spawnWalls)
-                {
-                    continue;
-                }
-
-            }
-
-            foreach (Vector2Int position in tileCollection.mapTilePositions)
-            {
+                FacilityGeneration.TileType type = facilityFloor.TileMap[x, y].Type;
                 GameObject newTile = new GameObject("Tile");
                 newTile.transform.parent = levelHolder.transform;
-                if (spawnFloors)
+
+                if (type == FacilityGeneration.TileType.Room)
                 {
-                    Instantiate(floor, new Vector3(position.x, 0, position.y), Quaternion.identity, newTile.transform);
+                    Instantiate(floor, new Vector3(x, 0, y), Quaternion.identity, newTile.transform);
                 }
-
-                if (spawnWalls)
+                else if (type == FacilityGeneration.TileType.Hallway)
                 {
-                    foreach (Vector2Int neighbor in neighbors)
-                    {
-                        if (facilityFloor.FloorMap.InBounds(position + neighbor))
-                        {
-                            if (tileCollection.connections.Contains(new Connection(position, position + neighbor)))
-                            {
-                                continue;
-                            }
-
-                            if (facilityFloor.FloorMap[position].Collection == facilityFloor.FloorMap[position + neighbor].Collection)
-                            {
-                                continue;
-                            }
-                        }
-
-                        float angle = 0;
-                        if (neighbor == Vector2Int.up)
-                        {
-                            angle = 0;
-                        }
-                        else if (neighbor == Vector2Int.right)
-                        {
-                            angle = 90;
-                        }
-                        else if (neighbor == Vector2Int.down)
-                        {
-                            angle = 180;
-                        }
-                        else
-                        {
-                            angle = 270;
-                        }
-
-                        Instantiate(wall, new Vector3(position.x, 0, position.y), Quaternion.Euler(0, angle, 0), newTile.transform);
-                    }
+                    Instantiate(floor, new Vector3(x, 0, y), Quaternion.identity, newTile.transform);
+                }
+                else if (type == FacilityGeneration.TileType.Walkway)
+                {
+                    Instantiate(debugMarker, new Vector3(x, 0, y), Quaternion.identity, newTile.transform);
+                }
+                else
+                {
+                    Instantiate(wall, new Vector3(x, 0, y), Quaternion.identity, newTile.transform);
                 }
 
                 newTile.transform.localScale = tileSize * Vector3.one;
@@ -153,10 +113,9 @@ public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
         {
             foreach (FixtureInstance fixtureInstance in tileCollection.FixtureInstances)
             {
-                Vector2 spawnPosition = ((Vector2)(fixtureInstance.Position) - (facilityFloor.InteriorTilesPerMapTile / 2) * Vector2.one) / facilityFloor.InteriorTilesPerMapTile;
                 float rotation = 90 * (int)fixtureInstance.RotationPreset;
                 /*GameObject fixture = */
-                Instantiate(fixtureInstance.Data.FixturePrefab, tileSize * new Vector3(spawnPosition.x, 0, spawnPosition.y), Quaternion.Euler(0, rotation, 0), levelHolder.transform);
+                Instantiate(fixtureInstance.Data.FixturePrefab, tileSize * new Vector3(fixtureInstance.Position.x, 0, fixtureInstance.Position.y), Quaternion.Euler(0, rotation, 0), levelHolder.transform);
                 //fixture.AddComponent<DebugFixture>().SetupValues(fixtureInstance);
 
                 //if (spawnFixturePositions)
@@ -175,6 +134,26 @@ public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
     public static bool Roll(float chance)
     {
         return Random.Range(0, 100) < chance;
+    }
+
+    public static Matrix4x4 GetRotationMatrix(Vector2Int direction)
+    {
+        RotationPreset rotationPreset = RotationPreset.Zero;
+
+        if (direction == Vector2Int.right)
+        {
+            rotationPreset = RotationPreset.Ninety;
+        }
+        else if (direction == Vector2Int.down)
+        {
+            rotationPreset = RotationPreset.OneEighty;
+        }
+        else if (direction == Vector2Int.left)
+        {
+            rotationPreset = RotationPreset.TwoSeventy;
+        }
+
+        return GetRotationMatrix(rotationPreset);
     }
 
     public static Matrix4x4 GetRotationMatrix(RotationPreset rotationPreset)

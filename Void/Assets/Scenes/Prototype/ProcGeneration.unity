@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 41941451}
   - component: {fileID: 41941450}
   - component: {fileID: 41941449}
+  - component: {fileID: 41941453}
   m_Layer: 0
   m_Name: FacilityFloorManager
   m_TagString: Untagged
@@ -166,22 +167,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bbdc1987abdaff42801c6d41bee5cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interiorTilesPerMapTile: 5
+  walkwaySize: 1
   straightnessPenalty: 1
-  emptySpacePercentage: 85
+  emptySpacePercentage: 50
   maxFixturesPerTileCollection: 100
   maxFixtureAttempts: 100
   fixtureDatas:
+  - {fileID: 11400000, guid: a1357ef3c7b20014cb7c44f4b2f64aed, type: 2}
+  - {fileID: 11400000, guid: 47deb56e0c751fb4fa1f640f48468ea1, type: 2}
+  - {fileID: 11400000, guid: 6464df81ce0be8944b52c55f2b76c0df, type: 2}
   - {fileID: 11400000, guid: d06fb754ce3879c42896e0511aa3eb8c, type: 2}
   - {fileID: 11400000, guid: efeb817e866bbc740b6513c8d36844f9, type: 2}
   - {fileID: 11400000, guid: ae9d5c2f015726d4a843431a9d5565ad, type: 2}
-  - {fileID: 11400000, guid: 6464df81ce0be8944b52c55f2b76c0df, type: 2}
-  - {fileID: 11400000, guid: a1357ef3c7b20014cb7c44f4b2f64aed, type: 2}
-  - {fileID: 11400000, guid: 47deb56e0c751fb4fa1f640f48468ea1, type: 2}
   skipHallways: 0
   spawnFixturePositions: 0
   drawFixtureRelationships: 0
-  drawWalkwayPaths: 1
+  drawWalkwayPaths: 0
 --- !u!114 &41941450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,10 +196,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useExactEndPosition: 0
-  straightnessPenalty: 1
+  straightnessPenalty: 30
   additionalHallwayChance: 50
-  drawDelaunayTriangulation: 0
-  drawHallwayConnections: 0
+  minHallwaySize: 1
+  maxHallwaySize: 3
+  drawDelaunayTriangulation: 1
+  drawHallwayConnections: 1
 --- !u!114 &41941451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,11 +214,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7689ee1c52d191046a19a598fd52eee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomCount: 25
+  roomCount: 15
   maxRoomAttempts: 100
-  minRoomSize: 3
-  maxRoomSize: 6
-  randomRoomChance: 15
+  minRoomSize: 10
+  maxRoomSize: 30
+  randomRoomChance: 0
   predefinedRooms: []
   spawnRoomMarkers: 0
 --- !u!114 &41941452
@@ -232,12 +235,73 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   generateOnStart: 1
   seed: 1234
-  gridSize: {x: 25, y: 25}
-  tileSize: 5
+  size: {x: 105, y: 105}
+  tileSize: 1
   floor: {fileID: 5392416673444309645, guid: 9cf00a829defd8d4d83a0816dad7f0b2, type: 3}
   wall: {fileID: 4417452138280026189, guid: 5cbca8cd29492f140902ec61742052cf, type: 3}
   debugMarker: {fileID: 6701413836251729326, guid: cfc14957752c45d4d828602cd5cf7f6c,
     type: 3}
+--- !u!114 &41941453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41941447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 817f243bdf93592459b5cc4f6b181cfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineMaterial: {fileID: 2100000, guid: 64bf73e7ec621b943a1619d82a20ca31, type: 2}
+--- !u!1 &106459348
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 106459350}
+  - component: {fileID: 106459349}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &106459349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106459348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7bb5a2c3dd6a464580797b5d3ee3e96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enablePathVisualization: 0
+  index: 0
+  tileSize: 1
+  scale: 70
+--- !u!4 &106459350
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106459348}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &117912354
 GameObject:
   m_ObjectHideFlags: 0
@@ -2941,3 +3005,4 @@ SceneRoots:
   - {fileID: 481662989}
   - {fileID: 948995771}
   - {fileID: 1021276428}
+  - {fileID: 106459350}
