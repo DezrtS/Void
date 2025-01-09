@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05bbb3c4-6f7c-4865-baf9-5df882d1fd4e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Void/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Void/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CharacterLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/CharacterLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Michael/Command/PeiceCustomizerGUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Michael/Command/PeiceCustomizerGUI.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Michael/Loadcharacter.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Michael/Loadcharacter.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Michael/Singleton/CustomizationManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Michael/Singleton/CustomizationManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Void/.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/SlowField/SlowField.shadergraph" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/SlowField/SlowField.shadergraph" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Systems/Player/Input/UserInputControls.inputactions" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Systems/Player/Input/UserInputControls.inputactions" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,18 +34,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;michael-game-engine-assignment2&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Gun-VFX",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.50f1\Editor\Unity.exe" />
@@ -72,6 +69,9 @@
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
       <option name="projectPathOnTarget" />
+      <option name="runtimes">
+        <list />
+      </option>
       <option name="selectedOptions">
         <list />
       </option>
@@ -82,6 +82,9 @@
       <option name="listenPortForConnections" value="false" />
       <option name="pid" />
       <option name="projectPathOnTarget" />
+      <option name="runtimes">
+        <list />
+      </option>
       <option name="selectedOptions">
         <list />
       </option>
@@ -109,6 +112,7 @@
       <workItem from="1732468051652" duration="12787000" />
       <workItem from="1732587348552" duration="104000" />
       <workItem from="1732587550079" duration="7731000" />
+      <workItem from="1736391627468" duration="8000" />
     </task>
     <servers />
   </component>
@@ -123,7 +127,6 @@
   </component>
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
-    <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
 </project>
