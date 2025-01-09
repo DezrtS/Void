@@ -217,6 +217,45 @@
             ]
         },
         {
+            "name": "SelectionWheel",
+            "id": "090890ca-c2c2-43e4-91dd-836594d539ab",
+            "actions": [
+                {
+                    "name": "Screen Position",
+                    "type": "Value",
+                    "id": "f730eac7-7036-4b31-929f-ef79613b8d75",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "76fc5045-aa65-442e-9bea-34c6267ca21b",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Screen Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "908e184b-646a-4335-92e6-5433fa214f31",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Screen Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "UI",
             "id": "8cc25d2a-672d-4cf1-80d7-80407a28916f",
             "actions": [

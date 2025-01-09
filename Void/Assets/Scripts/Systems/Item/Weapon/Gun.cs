@@ -28,13 +28,14 @@ public class Gun : Item, IReload
         ammo = maxAmmo;
     }
 
-    protected override void OnUse()
+    public override void OnUse()
     {
         isFiring = true;
         windupTimer = timeToWindUp;
+        WindUpServerRpc();
     }
 
-    protected override void OnStopUsing()
+    public override void OnStopUsing()
     {
         isFiring = false;
     }
@@ -78,10 +79,11 @@ public class Gun : Item, IReload
         if (CanFire())
         {
             Fire();
+            FireServerRpc();
         }
     }
 
-    public void Fire()
+    private void FireClientSide()
     {
         fireRateTimer = fireRate;
         if (!fireSound.IsNull)
@@ -97,6 +99,26 @@ public class Gun : Item, IReload
         }
     }
 
+    private void FireServerSide()
+    {
+        fireRateTimer = fireRate;
+
+        OnFire();
+        ammo--;
+    }
+
+    public void Fire()
+    {
+        if (IsServer)
+        {
+            FireServerSide();
+        }
+        else
+        {
+            FireClientSide();
+        }
+    }
+
     protected virtual void OnFire()
     {
         projectileSpawner.SpawnProjectile();
@@ -106,5 +128,36 @@ public class Gun : Item, IReload
     {
         reloadTimer = timeToReload;
         ammo = maxAmmo;
+        ReloadServerRpc();
+    }
+
+    [ServerRpc]
+    private void WindUpServerRpc()
+    {
+        windupTimer = timeToWindUp;
+    }
+
+    [ServerRpc]
+    private void ReloadServerRpc()
+    {
+        reloadTimer = timeToReload;
+        ammo = maxAmmo;
+    }
+
+    [ServerRpc]
+    private void FireServerRpc(ServerRpcParams rpcParams = default)
+    {
+        if (CanFire())
+        {
+            Fire();
+            ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
+            FireClientRpc(clientRpcParams);
+        }
+    }
+
+    [ClientRpc]
+    private void FireClientRpc(ClientRpcParams rpcParams = default)
+    {
+        Fire();
     }
 }

@@ -15,8 +15,9 @@ MonoBehaviour:
   fixtureName: Table 6x4
   fixturePrefab: {fileID: 7849556016083025773, guid: 0569180e1f85b724bba7481e871628d9,
     type: 3}
+  tags: 0200000008000000
   isTaskFixture: 0
-  gridSize: {x: 6, y: 4}
+  size: {x: 6, y: 4}
   tilePositions:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
@@ -27,14 +28,14 @@ MonoBehaviour:
   - {x: 0, y: 2}
   - {x: 1, y: 2}
   - {x: 2, y: 2}
+  - {x: 3, y: 2}
+  - {x: 4, y: 2}
+  - {x: 5, y: 2}
   - {x: 2, y: 3}
   - {x: 1, y: 3}
   - {x: 0, y: 3}
   - {x: 3, y: 3}
-  - {x: 3, y: 2}
-  - {x: 4, y: 2}
   - {x: 4, y: 3}
   - {x: 5, y: 3}
-  - {x: 5, y: 2}
   restrictions: []
   relationships: []

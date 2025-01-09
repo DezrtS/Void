@@ -15,8 +15,9 @@ MonoBehaviour:
   fixtureName: Stool
   fixturePrefab: {fileID: 1861900983576766389, guid: 81306ca0f10483346abf36b3f32bdc1b,
     type: 3}
+  tags: 0200000005000000
   isTaskFixture: 0
-  gridSize: {x: 1, y: 1}
+  size: {x: 1, y: 1}
   tilePositions:
   - {x: 0, y: 0}
   restrictions: []

@@ -239,6 +239,45 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""SelectionWheel"",
+            ""id"": ""090890ca-c2c2-43e4-91dd-836594d539ab"",
+            ""actions"": [
+                {
+                    ""name"": ""Screen Position"",
+                    ""type"": ""Value"",
+                    ""id"": ""f730eac7-7036-4b31-929f-ef79613b8d75"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""76fc5045-aa65-442e-9bea-34c6267ca21b"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Screen Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""908e184b-646a-4335-92e6-5433fa214f31"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Screen Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""UI"",
             ""id"": ""8cc25d2a-672d-4cf1-80d7-80407a28916f"",
             ""actions"": [
@@ -929,6 +968,9 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Look = m_Camera.FindAction("Look", throwIfNotFound: true);
+        // SelectionWheel
+        m_SelectionWheel = asset.FindActionMap("SelectionWheel", throwIfNotFound: true);
+        m_SelectionWheel_ScreenPosition = m_SelectionWheel.FindAction("Screen Position", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -958,6 +1000,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     {
         UnityEngine.Debug.Assert(!m_Movement.enabled, "This will cause a leak and performance issues, UserInputControls.Movement.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Camera.enabled, "This will cause a leak and performance issues, UserInputControls.Camera.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_SelectionWheel.enabled, "This will cause a leak and performance issues, UserInputControls.SelectionWheel.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, UserInputControls.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, UserInputControls.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Survivor.enabled, "This will cause a leak and performance issues, UserInputControls.Survivor.Disable() has not been called.");
@@ -1136,6 +1179,52 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         }
     }
     public CameraActions @Camera => new CameraActions(this);
+
+    // SelectionWheel
+    private readonly InputActionMap m_SelectionWheel;
+    private List<ISelectionWheelActions> m_SelectionWheelActionsCallbackInterfaces = new List<ISelectionWheelActions>();
+    private readonly InputAction m_SelectionWheel_ScreenPosition;
+    public struct SelectionWheelActions
+    {
+        private @UserInputControls m_Wrapper;
+        public SelectionWheelActions(@UserInputControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ScreenPosition => m_Wrapper.m_SelectionWheel_ScreenPosition;
+        public InputActionMap Get() { return m_Wrapper.m_SelectionWheel; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(SelectionWheelActions set) { return set.Get(); }
+        public void AddCallbacks(ISelectionWheelActions instance)
+        {
+            if (instance == null || m_Wrapper.m_SelectionWheelActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_SelectionWheelActionsCallbackInterfaces.Add(instance);
+            @ScreenPosition.started += instance.OnScreenPosition;
+            @ScreenPosition.performed += instance.OnScreenPosition;
+            @ScreenPosition.canceled += instance.OnScreenPosition;
+        }
+
+        private void UnregisterCallbacks(ISelectionWheelActions instance)
+        {
+            @ScreenPosition.started -= instance.OnScreenPosition;
+            @ScreenPosition.performed -= instance.OnScreenPosition;
+            @ScreenPosition.canceled -= instance.OnScreenPosition;
+        }
+
+        public void RemoveCallbacks(ISelectionWheelActions instance)
+        {
+            if (m_Wrapper.m_SelectionWheelActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ISelectionWheelActions instance)
+        {
+            foreach (var item in m_Wrapper.m_SelectionWheelActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_SelectionWheelActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public SelectionWheelActions @SelectionWheel => new SelectionWheelActions(this);
 
     // UI
     private readonly InputActionMap m_UI;
@@ -1440,6 +1529,10 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     public interface ICameraActions
     {
         void OnLook(InputAction.CallbackContext context);
+    }
+    public interface ISelectionWheelActions
+    {
+        void OnScreenPosition(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

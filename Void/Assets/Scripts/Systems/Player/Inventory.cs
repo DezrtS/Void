@@ -4,12 +4,29 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
+public class HotbarSlot
+{
+    public ItemData ItemData;
+    public Item WorldItem;
+
+    public HotbarSlot(ItemData itemData)
+    {
+        ItemData = itemData;
+    }
+
+    public HotbarSlot(Item item)
+    {
+        ItemData = item.ItemData;
+        WorldItem = item;
+    }
+}
+
 public class Inventory : NetworkBehaviour
 {
     [SerializeField] private int hotbarCapacity;
     [SerializeField] private Transform activeTransform;
     private int selectedIndex;
-    public Item[] hotbar;
+    private HotbarSlot[] hotbar;
     private Dictionary<ResourceData, int> inventory;
 
     public delegate void ItemEventHandler(int index, Item item);
@@ -22,7 +39,7 @@ public class Inventory : NetworkBehaviour
 
     public void Awake()
     {
-        hotbar = new Item[hotbarCapacity];
+        hotbar = new HotbarSlot[hotbarCapacity];
         inventory = new Dictionary<ResourceData, int>();
     }
 
@@ -32,7 +49,7 @@ public class Inventory : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Item selectedItem = SelectedItem();
+            Item selectedItem = ActiveHotbarSlot()?.WorldItem;
             if (selectedItem)
             {
                 selectedItem.StopUsing();
@@ -41,12 +58,13 @@ public class Inventory : NetworkBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            if (!SelectedItem())
+            if (!ActiveHotbarSlot()?.WorldItem)
             {
                 Collider[] hits = Physics.OverlapSphere(transform.position, 1);
                 foreach (Collider hit in hits)
                 {
-                    if (hit.transform.TryGetComponent(out Item item)) {
+                    if (hit.transform.TryGetComponent(out Item item))
+                    {
                         if (item.CanPickUp)
                         {
                             RequestItemPickUpServerRpc(item.NetworkObjectId, new ServerRpcParams());
@@ -56,37 +74,16 @@ public class Inventory : NetworkBehaviour
                 }
             }
         }
-        else if (Input.GetKeyDown(KeyCode.F) && SelectedItem())
-        {
-            SelectedItem().Use();
-        }
-        else if (Input.GetKeyUp(KeyCode.F) && SelectedItem())
-        {
-            SelectedItem().StopUsing();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            Item selectedItem = SelectedItem();
-            if (selectedItem) selectedItem.StopUsing();
-            SwitchItem(true);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Item selectedItem = SelectedItem();
-            if (selectedItem) selectedItem.StopUsing();
-            SwitchItem(false);
-        }
     }
 
-    public Item SelectedItem()
+    public HotbarSlot ActiveHotbarSlot()
     {
         return hotbar[selectedIndex];
     }
 
-    public void SwitchItem(bool left)
+    public void SwitchItem(int direction)
     {
-        int newIndex = (selectedIndex + (left ? -1 : 1) + hotbarCapacity) % hotbarCapacity;
+        int newIndex = (selectedIndex + direction + hotbarCapacity) % hotbarCapacity;
         RequestSwitchItemServerRpc(selectedIndex, newIndex, new ServerRpcParams());
     }
 
@@ -141,7 +138,7 @@ public class Inventory : NetworkBehaviour
         item.PickUp();
         item.transform.parent = transform;
         item.transform.SetLocalPositionAndRotation(activeTransform.localPosition, Quaternion.identity);
-        hotbar[selectedIndex] = item;
+        hotbar[selectedIndex] = new HotbarSlot(item);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -195,17 +192,17 @@ public class Inventory : NetworkBehaviour
 
     public void HandleSwitchItem(int fromIndex, int toIndex)
     {
-        Item from = hotbar[fromIndex];
-        Item to = hotbar[toIndex];
+        HotbarSlot from = hotbar[fromIndex];
+        HotbarSlot to = hotbar[toIndex];
 
-        if (from)
+        if (from?.WorldItem)
         {
-            from.gameObject.SetActive(false);
+            from.WorldItem.gameObject.SetActive(false);
         }
 
-        if (to)
+        if (to?.WorldItem)
         {
-            to.gameObject.SetActive(true);
+            to.WorldItem.gameObject.SetActive(true);
         }
 
         selectedIndex = toIndex;

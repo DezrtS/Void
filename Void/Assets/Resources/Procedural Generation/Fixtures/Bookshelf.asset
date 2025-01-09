@@ -15,12 +15,14 @@ MonoBehaviour:
   fixtureName: Bookshelf
   fixturePrefab: {fileID: 8654528345909897551, guid: 058d98fbaccb4af448961b7e40595ca1,
     type: 3}
+  tags: 0200000007000000
   isTaskFixture: 0
-  gridSize: {x: 4, y: 1}
+  size: {x: 4, y: 1}
   tilePositions:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
   - {x: 2, y: 0}
   - {x: 3, y: 0}
-  restrictions: []
+  restrictions:
+  - {fileID: 11400000, guid: e4158ffa3785098459c99c7344b49a99, type: 2}
   relationships: []

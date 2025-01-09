@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="VariableList" src="project://database/Assets/UXML/VariableList.uxml?fileID=9197481963319205126&amp;guid=4c14731c7dddb5149ba2c05db897fd24&amp;type=3#VariableList" />
     <Style src="project://database/Assets/UXML/FixtureEditor.uss?fileID=7433441132597879392&amp;guid=4e9cbd6adbc59d349837956cc7d126f1&amp;type=3#FixtureEditor" />
     <ui:VisualElement style="flex-grow: 1;">
         <ui:Button text="Back to Fixtures" parse-escape-sequences="true" display-tooltip-when-elided="true" name="BackToFixturesButton1" class="button" />
@@ -28,11 +29,12 @@
                 </ui:VisualElement>
                 <ui:EnumField label="Restriction Type" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="RestrictionTypeField" class="field" />
                 <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: auto;">
-                    <ui:EnumField label="Allowed Interior Type" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="InteriorTileTypeField" class="field" style="flex-grow: 1; flex-basis: 90%; flex-direction: row;" />
-                    <ui:Toggle name="HasInteriorTileTypeToggle" class="field" style="flex-grow: 1; flex-basis: 50px;" />
+                    <ui:EnumField label="Allowed Tile Type" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="TileTypeField" class="field" style="flex-grow: 1; flex-basis: 90%; flex-direction: row;" />
+                    <ui:Toggle name="HasTileTypeToggle" class="field" style="flex-grow: 1; flex-basis: 50px;" />
                 </ui:VisualElement>
                 <ui:Foldout text="Allowed Fixture Types" name="AllowedFixtureTypeFoldout">
                     <ui:ListView header-title="Allowed Fixture Tags" show-foldout-header="false" selection-type="Multiple" name="AllowedFixtureTypeTagList" style="flex-grow: 1; flex-shrink: 0;" />
+                    <ui:Instance template="VariableList" name="RestrictionTagList" />
                 </ui:Foldout>
                 <ui:Toggle label="Force Walkable Path" name="HasWalkablePathToggle" class="field" />
                 <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: auto;">

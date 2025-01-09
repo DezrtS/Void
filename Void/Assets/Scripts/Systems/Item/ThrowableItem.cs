@@ -9,12 +9,12 @@ public class ThrowableItem : Item
 
     protected bool thrown = false;
 
-    public override bool CanUse()
+    public bool CanThrow()
     {
-        return (base.CanUse() && !thrown);
+        return (!thrown);
     }
 
-    protected override void OnUse()
+    public override void OnUse()
     {
         Throw();
     }
@@ -32,5 +32,10 @@ public class ThrowableItem : Item
         canPickUp = false;
         canDrop = false;
         thrown = true;
+    }
+
+    public override void OnStopUsing()
+    {
+        throw new System.NotImplementedException();
     }
 }

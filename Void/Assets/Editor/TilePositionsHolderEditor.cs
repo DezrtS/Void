@@ -38,18 +38,18 @@ public class TilePositionsHolderEditor : Editor
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
 
-            if (tilePositionsHolder.GridSize.x <= 0 || tilePositionsHolder.GridSize.y <= 0)
+            if (tilePositionsHolder.Size.x <= 0 || tilePositionsHolder.Size.y <= 0)
             {
                 EditorGUILayout.HelpBox("Grid size must be greater than zero.", MessageType.Warning);
                 return;
             }
 
-            float gridButtonSize = Mathf.Min((inspectorWidth - tilePositionsHolder.GridSize.x * 5f) / tilePositionsHolder.GridSize.x, 50f);
-            for (int y = 0; y < tilePositionsHolder.GridSize.y; y++)
+            float gridButtonSize = Mathf.Min((inspectorWidth - tilePositionsHolder.Size.x * 5f) / tilePositionsHolder.Size.x, 50f);
+            for (int y = tilePositionsHolder.Size.y - 1; y >= 0; y--)
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                for (int x = 0; x < tilePositionsHolder.GridSize.x; x++)
+                for (int x = 0; x < tilePositionsHolder.Size.x; x++)
                 {
                     Vector2Int position = new Vector2Int(x, y);
                     bool contains = tilePositionsHolder.TilePositions.Contains(position);

@@ -5,18 +5,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FixtureData", menuName = "ScriptableObjects/Procedural Generation/FixtureData", order = 1)]
 public class FixtureData : ScriptableObject, IHoldTilePositions
 {
-    public enum FixtureType
+    public enum FixtureTag
     {
         None,
         Structural,
         Decorative,
         Task,
-        Utility
-    }
+        Utility,
 
-    public enum FixtureSubType
-    {
-        None,
         Seating,
         Plant,
         Storage,
@@ -25,8 +21,9 @@ public class FixtureData : ScriptableObject, IHoldTilePositions
 
     [SerializeField] private string fixtureName;
     [SerializeField] private GameObject fixturePrefab;
+    [SerializeField] private List<FixtureTag> tags = new List<FixtureTag>();
     [SerializeField] private bool isTaskFixture = false;
-    [SerializeField] private Vector2Int gridSize = Vector2Int.one;
+    [SerializeField] private Vector2Int size = Vector2Int.one;
     [SerializeField] private List<Vector2Int> tilePositions = new List<Vector2Int>();
     [SerializeField] private List<RestrictionData> restrictions = new List<RestrictionData>();
     [SerializeField] private List<FixtureRelationshipData> relationships = new List<FixtureRelationshipData>();
@@ -41,10 +38,10 @@ public class FixtureData : ScriptableObject, IHoldTilePositions
         get => isTaskFixture;
         set => isTaskFixture = value;
     }
-    public Vector2Int GridSize
+    public Vector2Int Size
     {
-        get => gridSize;
-        set => gridSize = value;
+        get => size;
+        set => size = value;
     }
     public List<Vector2Int> TilePositions
     {
@@ -62,4 +59,5 @@ public class FixtureData : ScriptableObject, IHoldTilePositions
         set => relationships = value;
     }
     public GameObject FixturePrefab => fixturePrefab;
+    public List<FixtureTag> Tags => tags;
 }

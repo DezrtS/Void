@@ -12,6 +12,7 @@ public class PlayerLook : NetworkBehaviour
 
     [Header("Camera")]
     [SerializeField] private bool spawnFirstPersonCamera;
+    [SerializeField] private bool lookPlayerCursor;
     [SerializeField] private Transform cameraRootTransform;
 
     [Header("Y-Axis")]
@@ -48,6 +49,7 @@ public class PlayerLook : NetworkBehaviour
 
     private void Awake()
     {
+        if (!lookPlayerCursor) return;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

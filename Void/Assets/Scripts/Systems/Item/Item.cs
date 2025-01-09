@@ -10,7 +10,7 @@ public class Item : NetworkBehaviour, IUseable
     [SerializeField] protected bool canPickUp = true;
     [SerializeField] protected bool canDrop = true;
 
-    protected bool isUsing;
+    protected NetworkVariable<bool> isUsing = new NetworkVariable<bool>(false);
     protected Rigidbody rig;
 
     public delegate void ItemHandler(Item item);
@@ -19,7 +19,7 @@ public class Item : NetworkBehaviour, IUseable
     public event ItemHandler OnDropped;
 
     public ItemData ItemData => itemData;
-    public bool IsUsing => isUsing;
+    public bool IsUsing => isUsing.Value;
     public bool IsPickedUp => isPickedUp;
     public bool IsDropped => isDropped;
     public bool CanPickUp => canPickUp;
@@ -30,101 +30,42 @@ public class Item : NetworkBehaviour, IUseable
         rig = GetComponent<Rigidbody>();
     }
 
-    public virtual bool CanUse()
+    public bool CanUse()
     {
-        return !isUsing;
+        return !IsUsing;
     }
 
     public void Use()
     {
-        RequestUseServerRpc(new ServerRpcParams());
+        if (!CanUse()) return;
+        isUsing.Value = true;
+        OnUse();
     }
 
-    protected virtual void OnUse() { }
-    
+    public virtual void OnUse() { }
+
     public void StopUsing()
     {
-        RequestStopUsingServerRpc(new ServerRpcParams());
+        if (!IsUsing) return;
+        isUsing.Value = false;
+        OnStopUsing();
     }
 
-    protected virtual void OnStopUsing() { }
+    public virtual void OnStopUsing() { }
 
-    public void PickUp()
+    public virtual void PickUp()
     {
         isDropped = false;
         isPickedUp = true;
         rig.isKinematic = true;
         OnPickedUp?.Invoke(this);
-        OnPickUp();
     }
 
-    protected virtual void OnPickUp() { }
-
-    public void Drop()
+    public virtual void Drop()
     {
         isPickedUp = false;
         isDropped = true;
         rig.isKinematic = false;
         OnDropped?.Invoke(this);
-        OnDrop();
-    }
-
-    protected virtual void OnDrop() { }
-
-    private void HandleUse()
-    {
-        // TODO FIX USING GOING OUT OF SYNC [MAKE USE CHILD USE ACTIONS TRIGGER SERVER RPC]
-        isUsing = true;
-        OnUsed?.Invoke(true);
-        OnUse();
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestUseServerRpc(ServerRpcParams rcpParams = default)
-    {
-        Item item = NetworkObject.GetComponent<Item>();
-        if (item.CanUse())
-        {
-            HandleUse();
-            HandleUseClientRpc(rcpParams.Receive.SenderClientId);
-        }
-    }
-
-    [ClientRpc]
-    public void HandleUseClientRpc(ulong clientId)
-    {
-        Item item = NetworkObject.GetComponent<Item>();
-        if (item != null)
-        {
-            HandleUse();
-        }
-    }
-
-    private void HandleStopUsing()
-    {
-        isUsing = false;
-        OnUsed?.Invoke(false);
-        OnStopUsing();
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestStopUsingServerRpc(ServerRpcParams rcpParams = default)
-    {
-        Item item = NetworkObject.GetComponent<Item>();
-        if (item.IsUsing)
-        {
-            HandleStopUsing();
-            HandleStopUsingClientRpc(rcpParams.Receive.SenderClientId);
-        }
-    }
-
-    [ClientRpc]
-    public void HandleStopUsingClientRpc(ulong clientId)
-    {
-        Item item = NetworkObject.GetComponent<Item>();
-        if (item != null)
-        {
-            HandleStopUsing();
-        }
     }
 }

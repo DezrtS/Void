@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static FacilityGeneration;
 
 [Serializable]
 public class Restriction : ScriptableObject
@@ -12,11 +13,11 @@ public class Restriction : ScriptableObject
     }
 
     [SerializeField] private RestrictionType type;
-    [SerializeField] private bool hasInteriorTileType;
+    [SerializeField] private bool hasTileType;
     [SerializeField] private bool hasFixtureType;
     [SerializeField] private bool hasPathToWalkableTile;
-    [SerializeField] private InteriorTile.InteriorTileType interiorTileType;
-    [SerializeField] private FixtureData.FixtureType fixtureType;
+    [SerializeField] private FacilityGeneration.TileType tileType;
+    [SerializeField] private List<FixtureData.FixtureTag> fixtureTags = new List<FixtureData.FixtureTag>();
     [SerializeField] private List<Vector2Int> positions = new List<Vector2Int>();
 
     public RestrictionType Type
@@ -24,10 +25,10 @@ public class Restriction : ScriptableObject
         get => type; 
         set => type = value;
     }
-    public bool HasInteriorTileType
+    public bool HasTileType
     {
-        get => hasInteriorTileType;
-        set => hasInteriorTileType = value;
+        get => hasTileType;
+        set => hasTileType = value;
     }
     public bool HasFixtureType
     {
@@ -39,19 +40,12 @@ public class Restriction : ScriptableObject
         get => hasPathToWalkableTile;
         set => hasPathToWalkableTile = value;
     }
-    public InteriorTile.InteriorTileType InteriorTileType
+    public FacilityGeneration.TileType TileType
     {
-        get => interiorTileType;
-        set => interiorTileType = value;
+        get => tileType;
+        set => tileType = value;
     }
-    public FixtureData.FixtureType FixtureType
-    {
-        get => fixtureType; 
-        set => fixtureType = value;
-    }
-    public List<Vector2Int> Positions
-    {
-        get => positions; 
-        set => positions = value;
-    }
+
+    public List<FixtureData.FixtureTag> FixtureTags => fixtureTags;
+    public List<Vector2Int> Positions => positions;
 }
