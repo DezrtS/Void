@@ -30,13 +30,13 @@ public class BeamGun : Item
         powerUpTimer = -timeToWindUp;
     }
 
-    protected override void OnUse()
+    public override void OnUse()
     {
         isFiring = true;
         effect.Play();
     }
 
-    protected override void OnStopUsing()
+    public override void OnStopUsing()
     {
         isFiring = false;
     }

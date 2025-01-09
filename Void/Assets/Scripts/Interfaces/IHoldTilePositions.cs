@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IHoldTilePositions
 {
-    public Vector2Int GridSize { get; set; }
+    public Vector2Int Size { get; set; }
     public List<Vector2Int> TilePositions { get; set; }
 }

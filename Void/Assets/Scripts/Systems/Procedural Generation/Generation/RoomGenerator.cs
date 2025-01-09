@@ -25,7 +25,7 @@ public class RoomGenerator : MonoBehaviour
 
     public void GenerateRooms(FacilityFloor facilityFloor)
     {
-        //PlacePredefinedRooms(facilityFloor);
+        PlacePredefinedRooms(facilityFloor);
 
         for (int i = 0; i < roomCount; i++)
         {
@@ -40,25 +40,33 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
-    //public void PlacePredefinedRooms(FacilityFloor facilityFloor)
-    //{
-    //    RoomData roomData = predefinedRooms[0];
-    //    Vector2Int position = new Vector2Int(facilityFloor.Size.x / 2 - roomData.GridSize.x / 2, facilityFloor.Size.x / 2 - roomData.GridSize.x / 2);
-    //    TileCollection elevatorRoom = new TileCollection(TileCollection.TileCollectionType.Room, 0);
-    //    List<Vector2Int> newPositions = new List<Vector2Int>(roomData.TilePositions);
-    //    for (int i = 0; i < newPositions.Count; i++)
-    //    {
-    //        newPositions[i] += position;
-    //    }
-    //    foreach (Connection connection in roomData.Connections)
-    //    {
-    //        elevatorRoom.AddConnection(connection.from + position, connection.to + position);
-    //    }
-    //    elevatorRoom.InitiatlizeRoom(roomData);
-    //    facilityFloor.TileCollections.Add(elevatorRoom);
-    //    MapGeneration.PlaceMapTiles(facilityFloor, elevatorRoom, MapTile.MapTileType.Room, newPositions);
-    //    //Instantiate(roomData.RoomPrefab, interiorTilesPerMapTile * new Vector3(position.x, 0, position.y), Quaternion.identity, levelHolder.transform);
-    //}
+    public void PlacePredefinedRooms(FacilityFloor facilityFloor)
+    {
+        foreach (RoomData roomData in predefinedRooms)
+        {
+            TileCollection tileCollection = new TileCollection(TileCollection.TileCollectionType.Room, facilityFloor.TileCollections.Count);
+
+            for (int attempt = 0; attempt < maxRoomAttempts; attempt++)
+            {
+                Vector2Int randomPosition = new(Random.Range(1, facilityFloor.Size.x - roomData.Size.x - 1), Random.Range(1, facilityFloor.Size.y - roomData.Size.y - 1));
+                List<Vector2Int> newPositions = new List<Vector2Int>(roomData.TilePositions);
+
+                for (int i = 0; i < newPositions.Count; i++)
+                {
+                    newPositions[i] += randomPosition;
+                }
+
+                if (!FacilityGeneration.CanPlaceTiles(facilityFloor, newPositions, new FacilityGeneration.TilePlaceParams(FacilityGeneration.TileType.Room, false))) break;
+
+                tileCollection.InitiatlizeRoom(roomData);
+                facilityFloor.TileCollections.Add(tileCollection);
+
+                FacilityGeneration.PlaceTiles(facilityFloor, tileCollection, newPositions, new FacilityGeneration.TilePlaceParams(FacilityGeneration.TileType.Room, false));
+            }
+        }
+
+        //Instantiate(roomData.RoomPrefab, interiorTilesPerMapTile * new Vector3(position.x, 0, position.y), Quaternion.identity, levelHolder.transform);
+    }
 
     private void GenerateRectangularRoom(FacilityFloor facilityFloor)
     {

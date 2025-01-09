@@ -1,0 +1,12 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement style="flex-grow: 1;">
+        <engine:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; align-items: auto;">
+            <engine:Button text="Remove" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RemoveButton" class="button" style="flex-grow: 1;" />
+            <engine:Button text="Add New" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AddNewButton" class="button" style="flex-grow: 1;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="SelectedItemContainer" style="flex-grow: 1;" />
+        <engine:VisualElement name="ListContainer" style="flex-grow: 1;">
+            <engine:ListView name="ItemList" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

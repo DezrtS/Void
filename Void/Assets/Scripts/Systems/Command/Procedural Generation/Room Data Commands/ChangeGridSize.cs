@@ -20,13 +20,13 @@ public class ChangeGridSize : ICommand
             }
         }
 
-        previousSize = tilePositionsHolder.GridSize;
+        previousSize = tilePositionsHolder.Size;
         this.size = size;
     }
 
     public void Execute()
     {
-        tilePositionsHolder.GridSize = size;
+        tilePositionsHolder.Size = size;
         foreach (var position in removedPositions)
         {
             tilePositionsHolder.TilePositions.Remove(position);
@@ -35,7 +35,7 @@ public class ChangeGridSize : ICommand
 
     public void Undo()
     {
-        tilePositionsHolder.GridSize = previousSize;
+        tilePositionsHolder.Size = previousSize;
         tilePositionsHolder.TilePositions.AddRange(removedPositions);
     }
 }

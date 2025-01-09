@@ -20,6 +20,8 @@ public class FixtureEditorWindow : EditorWindow
 
     private VisualElement positionListContainer;
 
+    
+
     private ProgressBar restrictionGroupProgressBar;
     private ProgressBar restrictionProgressBar;
     private ProgressBar relationshipProgressBar;
@@ -59,8 +61,8 @@ public class FixtureEditorWindow : EditorWindow
     private Toggle restrictionGroupEnabledToggle;
     //private ListView restrictionGroupRoomTypeList;
     private EnumField restrictionTypeField;
-    private Toggle hasInteriorTileTypeToggle;
-    private EnumField interiorTileTypeField;
+    private Toggle hasTileTypeToggle;
+    private EnumField tileTypeField;
     //private ListView allowedFixtureTypeTagList;
     private Toggle hasPathToWalkableTileToggle;
     
@@ -262,22 +264,22 @@ public class FixtureEditorWindow : EditorWindow
             }
         });
 
-        hasInteriorTileTypeToggle = rootVisualElement.Q<Toggle>("HasInteriorTileTypeToggle");
-        hasInteriorTileTypeToggle.RegisterValueChangedCallback(evt =>
+        hasTileTypeToggle = rootVisualElement.Q<Toggle>("HasTileTypeToggle");
+        hasTileTypeToggle.RegisterValueChangedCallback(evt =>
         {
             if (selectedRestriction != null)
             {
-                selectedRestriction.HasInteriorTileType = evt.newValue;
+                selectedRestriction.HasTileType = evt.newValue;
             }
         });
 
-        interiorTileTypeField = rootVisualElement.Q<EnumField>("InteriorTileTypeField");
-        interiorTileTypeField.Init(InteriorTile.InteriorTileType.None);
-        interiorTileTypeField.RegisterValueChangedCallback(evt =>
+        tileTypeField = rootVisualElement.Q<EnumField>("TileTypeField");
+        tileTypeField.Init(FacilityGeneration.TileType.None);
+        tileTypeField.RegisterValueChangedCallback(evt =>
         {
             if (selectedRestriction != null)
             {
-                selectedRestriction.InteriorTileType = (InteriorTile.InteriorTileType)evt.newValue;
+                selectedRestriction.TileType = (FacilityGeneration.TileType)evt.newValue;
             }
         });
 
@@ -771,10 +773,10 @@ public class FixtureEditorWindow : EditorWindow
             return;
         }
 
-        for (int y = selectedFixture.GridSize.y - 1; y >= 0; y--)
+        for (int y = selectedFixture.Size.y - 1; y >= 0; y--)
         {
             var row = new VisualElement { style = { flexDirection = FlexDirection.Row } };
-            for (int x = 0; x < selectedFixture.GridSize.x; x++)
+            for (int x = 0; x < selectedFixture.Size.x; x++)
             {
                 int localX = x;
                 int localY = y;
@@ -856,8 +858,8 @@ public class FixtureEditorWindow : EditorWindow
         selectedRestriction = selectedRestrictionDatas[currentRestriction];
 
         restrictionTypeField.value = selectedRestriction.Type;
-        hasInteriorTileTypeToggle.value = selectedRestriction.HasInteriorTileType;
-        interiorTileTypeField.value = selectedRestriction.InteriorTileType;
+        hasTileTypeToggle.value = selectedRestriction.HasTileType;
+        tileTypeField.value = selectedRestriction.TileType;
         //allowedFixtureTypeTagList.
         hasPathToWalkableTileToggle.value = selectedRestriction.HasPathToWalkableTile;
     }
@@ -941,10 +943,10 @@ public class FixtureEditorWindow : EditorWindow
         positionField.value = selectedRelationship.Position;
         rotationPresetField.value = selectedRelationship.RotationPreset;
 
-        int max = Mathf.Max(selectedRelationship.OtherFixture.GridSize.x, selectedRelationship.OtherFixture.GridSize.y);
+        int max = Mathf.Max(selectedRelationship.OtherFixture.Size.x, selectedRelationship.OtherFixture.Size.y);
 
         Vector2Int minBounds = new Vector2Int(Mathf.Min(0, -max + selectedRelationship.Position.x), Mathf.Min(0, -max + selectedRelationship.Position.y));
-        Vector2Int maxBounds = new Vector2Int(Mathf.Max(selectedFixture.GridSize.x, max + 1 + selectedRelationship.Position.x), Mathf.Max(selectedFixture.GridSize.y, max + 1 + selectedRelationship.Position.y));
+        Vector2Int maxBounds = new Vector2Int(Mathf.Max(selectedFixture.Size.x, max + 1 + selectedRelationship.Position.x), Mathf.Max(selectedFixture.Size.y, max + 1 + selectedRelationship.Position.y));
 
         for (int y = maxBounds.y - 1; y >= minBounds.y; y--)
         {

@@ -8,12 +8,12 @@ public class DeployableItem : Item
     [SerializeField] private LayerMask deployLayers;
     protected bool deployed;
 
-    public override bool CanUse()
+    public bool CanDeploy()
     {
-        return (base.CanUse() && !deployed);
+        return (!deployed);
     }
 
-    protected override void OnUse()
+    public override void OnUse()
     {
         Deploy();
     }
@@ -26,6 +26,11 @@ public class DeployableItem : Item
         }
 
         OnDeploy();
+    }
+
+    public override void OnStopUsing()
+    {
+
     }
 
     protected virtual void OnDeploy()

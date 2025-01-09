@@ -15,8 +15,9 @@ MonoBehaviour:
   fixtureName: Battery
   fixturePrefab: {fileID: 941687137560951099, guid: 877873f02ff48ac4f80154076476ca22,
     type: 3}
+  tags: 03000000
   isTaskFixture: 1
-  gridSize: {x: 1, y: 1}
+  size: {x: 1, y: 1}
   tilePositions:
   - {x: 0, y: 0}
   restrictions: []

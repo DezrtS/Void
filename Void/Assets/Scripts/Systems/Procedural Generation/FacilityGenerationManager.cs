@@ -95,7 +95,7 @@ public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
                 }
                 else if (type == FacilityGeneration.TileType.Walkway)
                 {
-                    Instantiate(debugMarker, new Vector3(x, 0, y), Quaternion.identity, newTile.transform);
+                    Instantiate(floor, new Vector3(x, 0, y), Quaternion.identity, newTile.transform);
                 }
                 else
                 {
