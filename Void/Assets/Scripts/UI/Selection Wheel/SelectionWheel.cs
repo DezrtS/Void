@@ -1,27 +1,38 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SelectionWheel : MonoBehaviour
 {
     [Header("Selection Wheel")]
     [SerializeField] private GameObject sectionPrefab;
-    [Range(0, 360)]
-    [SerializeField] private float wheelOffset;
+    [SerializeField] private GameObject iconPrefab;
     [SerializeField] private float radius;
     [SerializeField] private int count;
     [SerializeField] private float angleMargin;
 
+    [Header("References")]
+    [SerializeField] private GameObject selectionWheelHolder;
+    [SerializeField] private WheelSectionData[] sections = new WheelSectionData[0];
+    [SerializeField] private RectTransform infoHolder;
+    [SerializeField] private TextMeshProUGUI titleHolder;
+    [SerializeField] private TextMeshProUGUI textHolder;
+
     [Header("Options")]
     [SerializeField] private bool allowInnerSelection;
+    [SerializeField] private Color activeTextColor;
+    //[SerializeField] private Color defaultTextColor;
+    [SerializeField] private Color inactiveTextColor;
+    //[SerializeField] private Transform mouseTracker;
+    //[SerializeField] private Transform bestOptionTracker;
 
     private WheelSection[] wheelSections;
     private WheelSection selectedWheelSection;
     private bool active;
-    private RectTransform rectTransform;
 
     private void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
         GenerateSelectionWheel();
         ActivateSelectionWheel();
     }
@@ -29,12 +40,33 @@ public class SelectionWheel : MonoBehaviour
     public void ActivateSelectionWheel()
     {
         active = true;
+        selectionWheelHolder.SetActive(active);
     }
 
     public void DeactivateSelectionWheel()
     {
-        if (selectedWheelSection) selectedWheelSection.Activate();
+        if (selectedWheelSection)
+        {
+            selectedWheelSection.Activate();
+            selectedWheelSection.OnHoverEnd();
+        }
         active = false;
+        selectionWheelHolder.SetActive(active);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (active)
+            {
+                DeactivateSelectionWheel();
+            }
+            else
+            {
+                ActivateSelectionWheel();
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -46,77 +78,111 @@ public class SelectionWheel : MonoBehaviour
 
     private void ResetSelectionWheel()
     {
-        if (wheelSections == null) return;
-
-        for (int i = 0; i < wheelSections.Length; i++)
+        if (wheelSections != null)
         {
-            Destroy(wheelSections[i]);
+            for (int i = 0; i < wheelSections.Length; i++)
+            {
+                Destroy(wheelSections[i].gameObject);
+            }
         }
+
+        selectedWheelSection = null;
+        UpdateInfo();
     }
 
-    [ContextMenu("Generate Selection Wheel")]
     public void GenerateSelectionWheel()
     {
         ResetSelectionWheel();
+        infoHolder.sizeDelta = radius * Vector2.one;
 
         wheelSections = new WheelSection[count];
         float intervalAngle = 360f / count;
         for (int i = 0; i < count; i++)
         {
-            GameObject section = Instantiate(sectionPrefab, transform);
-            wheelSections[i] = section.GetComponent<WheelSection>();
-            wheelSections[i].Initialize(i, intervalAngle, angleMargin);
-        }
+            GameObject section = Instantiate(sectionPrefab, selectionWheelHolder.transform);
+            GameObject icon = Instantiate(iconPrefab, selectionWheelHolder.transform);
 
-        rectTransform.eulerAngles = new Vector3(0, 0, -wheelOffset);
-        rectTransform.localScale = Vector3.one * radius;
+            wheelSections[i] = section.GetComponent<WheelSection>();
+            wheelSections[i].Initialize(i, intervalAngle, angleMargin, radius);
+            if (i < sections.Length)
+            {
+                wheelSections[i].InitializeData(sections[i]);
+                icon.GetComponent<Image>().sprite = sections[i].SectionSprite;
+                icon.transform.position = wheelSections[i].Direction * (radius - radius * 0.13f) + (Vector2)selectionWheelHolder.transform.position;
+                icon.transform.parent = wheelSections[i].transform;
+            }
+        }
     }
 
     public void UpdateCurrentSelection()
     {
-        if (wheelSections == null || wheelSections.Length == 0) return;
-
-        // Get the current mouse position direction relative to the center
         Vector2 mousePos = Input.mousePosition;
-        Vector2 direction = (mousePos - (Vector2)rectTransform.position).normalized;
+        //mouseTracker.position = mousePos;
 
-        float bestMatch = float.MinValue; // For comparing the best section
+        if (!allowInnerSelection)
+        {
+            if (Vector2.Distance(mousePos, transform.position) < radius)
+            {
+                if (selectedWheelSection)
+                {
+                    selectedWheelSection.OnHoverEnd();
+                    selectedWheelSection = null;
+                    UpdateInfo();
+                }
+
+                return;
+            }
+        }
+
+        float bestMatch = float.MinValue;
         WheelSection closestSection = null;
 
         for (int i = 0; i < wheelSections.Length; i++)
         {
-            Vector2 sectionPosition = GetSectionPosition(i);    
+            Vector2 sectionPosition = wheelSections[i].Direction * radius + (Vector2)transform.position;
 
-            float angleDifference = Vector2.Angle(direction, sectionPosition.normalized);
-            float similarity = -angleDifference;
+            float distanceDifference = Vector2.Distance(mousePos, sectionPosition);
+            float similarity = -distanceDifference;
 
             if (similarity > bestMatch)
             {
                 bestMatch = similarity;
                 closestSection = wheelSections[i];
+                //bestOptionTracker.position = sectionPosition;
             }
         }
 
-        // Update only if the selection changes
         if (closestSection != selectedWheelSection)
         {
-            if (selectedWheelSection != null) selectedWheelSection.OnHoverEnd(); // Deactivate previous
-            selectedWheelSection = closestSection; // Update selected
-            if (selectedWheelSection != null) selectedWheelSection.OnHoverStart(); // Highlight new
+            if (selectedWheelSection != null) selectedWheelSection.OnHoverEnd();
+            selectedWheelSection = closestSection;
+            if (selectedWheelSection != null) selectedWheelSection.OnHoverStart();
+
+            UpdateInfo();
         }
     }
 
-    public Vector2 GetSectionPosition(int index)
+    public void UpdateInfo()
     {
-        float intervalAngle = 360f / count;
-        float halfInterval = intervalAngle / 2f;
-        float sectionMiddleAngle = -(intervalAngle * index - halfInterval + angleMargin / 2f);
+        if (!selectedWheelSection || !selectedWheelSection.Data)
+        {
+            titleHolder.text = string.Empty;
+            textHolder.text = string.Empty;
+            return;
+        }
 
-        Vector2 sectionDirection = new Vector2(
-            Mathf.Cos(sectionMiddleAngle * Mathf.Deg2Rad),
-            Mathf.Sin(sectionMiddleAngle * Mathf.Deg2Rad)
-        );
+        if (selectedWheelSection.Active)
+        {
+            titleHolder.color = activeTextColor;
+            textHolder.color = activeTextColor;
+        }
+        else
+        {
+            titleHolder.color = inactiveTextColor;
+            textHolder.color = inactiveTextColor;
+        }
 
-        return sectionDirection * radius;
+        titleHolder.text = selectedWheelSection.Data.GetFormattedTitle();
+        textHolder.text = selectedWheelSection.Data.GetFormattedDescription();
     }
 }

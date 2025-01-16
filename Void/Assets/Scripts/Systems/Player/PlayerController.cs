@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public abstract class PlayerController : MonoBehaviour
 {
     private InputActionMap playerActionMap;
+    protected PlayerLook playerLook;
 
     private void OnEnable()
     {
@@ -20,6 +21,12 @@ public abstract class PlayerController : MonoBehaviour
 
         InputAction switchInputAction = playerActionMap.FindAction("Switch");
         switchInputAction.performed += OnSwitch;
+
+        InputAction interactInputAction = playerActionMap.FindAction("Interact");
+        interactInputAction.performed += OnInteract;
+
+        InputAction dropInputAction = playerActionMap.FindAction("Drop");
+        dropInputAction.performed += OnDrop;
     }
 
     private void OnDisable()
@@ -35,10 +42,28 @@ public abstract class PlayerController : MonoBehaviour
         InputAction switchInputAction = playerActionMap.FindAction("Switch");
         switchInputAction.performed -= OnSwitch;
 
+        InputAction interactInputAction = playerActionMap.FindAction("Interact");
+        interactInputAction.performed -= OnInteract;
+
+        InputAction dropInputAction = playerActionMap.FindAction("Drop");
+        dropInputAction.performed -= OnDrop;
+
         playerActionMap.Disable();
+    }
+
+    protected virtual void Awake()
+    {
+        playerLook = GetComponent<PlayerLook>();
     }
 
     public abstract void OnPrimaryAction(InputAction.CallbackContext context);
     public abstract void OnSecondaryAction(InputAction.CallbackContext context);
     public abstract void OnSwitch(InputAction.CallbackContext context);
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.performed) playerLook.InteractWithObject();
+    }
+
+    public abstract void OnDrop(InputAction.CallbackContext context);
 }

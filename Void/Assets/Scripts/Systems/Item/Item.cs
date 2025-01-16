@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Item : NetworkBehaviour, IUseable
+public class Item : NetworkBehaviour, IUseable, IInteractable
 {
     [SerializeField] private ItemData itemData;
     [SerializeField] protected bool isPickedUp = false;
@@ -22,8 +22,6 @@ public class Item : NetworkBehaviour, IUseable
     public bool IsUsing => isUsing.Value;
     public bool IsPickedUp => isPickedUp;
     public bool IsDropped => isDropped;
-    public bool CanPickUp => canPickUp;
-    public bool CanDrop => canDrop;
 
     private void Awake()
     {
@@ -53,6 +51,11 @@ public class Item : NetworkBehaviour, IUseable
 
     public virtual void OnStopUsing() { }
 
+    public bool CanPickUp()
+    {
+        return (canPickUp && !isPickedUp);
+    }
+
     public virtual void PickUp()
     {
         isDropped = false;
@@ -61,11 +64,24 @@ public class Item : NetworkBehaviour, IUseable
         OnPickedUp?.Invoke(this);
     }
 
+    public bool CanDrop()
+    {
+        return (canDrop && !isDropped);
+    }
+
     public virtual void Drop()
     {
         isPickedUp = false;
         isDropped = true;
         rig.isKinematic = false;
         OnDropped?.Invoke(this);
+    }
+
+    public void Interact(GameObject interactor)
+    {
+        if (interactor.TryGetComponent(out Hotbar hotbar))
+        {
+            hotbar.PickUpItem(this);
+        }
     }
 }

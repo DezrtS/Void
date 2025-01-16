@@ -2229,6 +2229,7 @@ GameObject:
   - component: {fileID: 501313639725404206}
   - component: {fileID: 6165085840863327359}
   - component: {fileID: 6520429672133352350}
+  - component: {fileID: -2631507004156795439}
   - component: {fileID: 34801420190533278}
   - component: {fileID: 7404814519426578536}
   - component: {fileID: 7118429186014383028}
@@ -2374,6 +2375,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2631507004156795439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575300930724462412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e125b31bf50fd8478da4f0c600dd545, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activeTransform: {fileID: 5687760543961267115}
+  hotbarCapacity: 3
+  hotbarDisplays: {fileID: 0}
 --- !u!114 &34801420190533278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2386,8 +2402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3b8c4e733c1b22428da66327418d39e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotbarCapacity: 3
-  activeTransform: {fileID: 5687760543961267115}
 --- !u!54 &7404814519426578536
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2448,7 +2462,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnFirstPersonCamera: 1
+  lookPlayerCursor: 0
   cameraRootTransform: {fileID: 3662237747590448752}
+  canInteract: 1
+  interactRange: 5
+  interactLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   maxYRotation: 80
   invertY: 0
   xSensitivity: 0.02
@@ -2688,7 +2708,7 @@ Transform:
   m_GameObject: {fileID: 1731880506800288069}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.25, z: 1}
+  m_LocalPosition: {x: 0.5, y: 1.25, z: 1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
