@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerReadyManager : NetworkSingletonPersistent<PlayerReadyManager>
 {
@@ -18,13 +21,14 @@ public class PlayerReadyManager : NetworkSingletonPersistent<PlayerReadyManager>
     [ServerRpc(RequireOwnership = false)]
     public void RequestPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
-        playerReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
-        OnPlayerReady?.Invoke(serverRpcParams.Receive.SenderClientId);
+        ulong clientId = serverRpcParams.Receive.SenderClientId;
+        playerReadyDictionary[clientId] = true;
+        OnPlayerReady?.Invoke(clientId);
 
         bool allClientsReady = true;
-        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        foreach (ulong id in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            if (!playerReadyDictionary.ContainsKey(clientId) || !playerReadyDictionary[clientId])
+            if (!playerReadyDictionary.ContainsKey(id) || !playerReadyDictionary[id])
             {
                 allClientsReady = false;
                 break;
@@ -34,6 +38,12 @@ public class PlayerReadyManager : NetworkSingletonPersistent<PlayerReadyManager>
         if (allClientsReady)
         {
             OnAllPlayersReady?.Invoke();
+            ChangeSceneAsync("GameScene");
         }
+    }
+
+    private async void ChangeSceneAsync(string sceneName)
+    {
+        await NetworkManager.Singleton.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
     }
 }

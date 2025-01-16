@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -26,8 +26,6 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     [SerializeField] private GameObject monsterPrefab;
     [SerializeField] private GameObject survivorPrefab;
 
-    [SerializeField] public GameObject FirstPersonCamera;
-
     private void Awake()
     {
         playerRoleDictionary = new Dictionary<ulong, PlayerRole>();
@@ -37,24 +35,26 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     {
         if (IsServer)
         {
-            PlayerReadyManager.Instance.OnAllPlayersReady += () => Loader.LoadNetwork(Loader.Scene.GameplayScene);
+            PlayerReadyManager.Instance.OnAllPlayersReady += StartGame; 
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnSceneManagerLoadEventCompleted;
         }
     }
 
-    private void OnSceneManagerLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadScene, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    private async void StartGame()
     {
-        if (sceneName == Loader.Scene.GameplayScene.ToString())
-        {
-            StartGame();
-        }
+        await LoadGameplaySceneAsync(); 
+        StartGameInternal(); 
     }
 
-    public void StartGame()
+    static async Task LoadGameplaySceneAsync()
+    {
+        await NetworkManager.Singleton.SceneManager.LoadSceneAsync(Loader.Scene.GameplayScene.ToString(), UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
+
+    private void StartGameInternal()
     {
         HandleGenerateGridMap();
         HandleGenerateGridMapClientRpc();
-        //GridMapManager.Instance.GenerateTasks();
         HandleTaskListClientRpc();
         SpawnPlayers();
     }
@@ -81,7 +81,6 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
             }
             
             HandlePlayerUIClientRpc(role, networkObject.NetworkObjectId, clientId);
-
         }
     }
 
@@ -126,7 +125,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     [ClientRpc]
     public void HandleTaskListClientRpc()
     {
-        TaskManager.Instance.DisplayTaskUI();
+        TaskManager.Instance.Display TaskUI();
     }
 
     [ServerRpc(RequireOwnership = false)]
