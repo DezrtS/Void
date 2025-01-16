@@ -434,7 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1127425563
+  GlobalObjectIdHash: 3567632822
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -567,7 +567,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnFirstPersonCamera: 1
+  lookPlayerCursor: 0
   cameraRootTransform: {fileID: 3675063504680320199}
+  canInteract: 1
+  interactRange: 5
+  interactLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   maxYRotation: 80
   invertY: 0
   xSensitivity: 0.02

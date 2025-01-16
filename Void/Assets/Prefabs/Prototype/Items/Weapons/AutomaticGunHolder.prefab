@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3688373138169565638}
   - component: {fileID: -973645888921241733}
   - component: {fileID: 5135502783942027889}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: AutomaticGunHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,6 +116,7 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  isFiring: 0
 --- !u!65 &3688373138169565638
 BoxCollider:
   m_ObjectHideFlags: 0

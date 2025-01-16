@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 457341660016506390}
   - component: {fileID: 2914617284578575158}
   - component: {fileID: 6037107565617996804}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Battery Item
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,6 +121,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 69af40606c0d78149968119d78aa657d, type: 2}
+  isPickedUp: 0
+  isDropped: 0
   canPickUp: 1
   canDrop: 1
 --- !u!114 &457341660016506390

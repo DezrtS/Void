@@ -15,6 +15,11 @@ public class PlayerLook : NetworkBehaviour
     [SerializeField] private bool lookPlayerCursor;
     [SerializeField] private Transform cameraRootTransform;
 
+    [Header("Interaction")]
+    [SerializeField] private bool canInteract = true;
+    [SerializeField] private float interactRange = 5;
+    [SerializeField] private LayerMask interactLayerMask;
+
     [Header("Y-Axis")]
     [SerializeField] private float maxYRotation = 90f;
     [SerializeField] private bool invertY = false;
@@ -22,6 +27,8 @@ public class PlayerLook : NetworkBehaviour
     [Header("Sensitivity")]
     [SerializeField] private float xSensitivity = 0.02f;
     [SerializeField] private float ySensitivity = 0.01f;
+
+    private IInteractable interactable; 
 
     private void OnEnable()
     {
@@ -65,6 +72,28 @@ public class PlayerLook : NetworkBehaviour
 
         cameraRootTransform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
 
-        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y + rotationInput.x * xSensitivity, 0);
+        Quaternion newRotation = Quaternion.Euler(0, transform.eulerAngles.y + rotationInput.x * xSensitivity, 0);
+
+        if (transform.rotation != newRotation)
+        {
+            transform.rotation = newRotation;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (canInteract)
+        {
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                hitInfo.collider.TryGetComponent(out IInteractable interactable);
+                this.interactable = interactable;
+            }
+        }
+    }
+
+    public void InteractWithObject()
+    {
+        interactable?.Interact(gameObject);
     }
 }

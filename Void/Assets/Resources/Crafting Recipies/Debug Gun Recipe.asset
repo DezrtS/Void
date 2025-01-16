@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50661ca42a33494681ab509eb8d96b1, type: 3}
   m_Name: Debug Gun Recipe
   m_EditorClassIdentifier: 
-  ResourceRequirements: []
+  ResourceRequirements:
+  - Resource: {fileID: 11400000, guid: 17c678a753e10ac48a2421c8ef306e39, type: 2}
+    Amount: 0
   Item: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}

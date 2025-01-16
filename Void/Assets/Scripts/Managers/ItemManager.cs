@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ItemManager : NetworkSingleton<ItemManager>
 {
+
     private void Start()
     {
         string logFilePath = System.IO.Path.Combine(Application.persistentDataPath, "AnalyticsLog.csv");
@@ -25,5 +26,13 @@ public class ItemManager : NetworkSingleton<ItemManager>
     private void OnDisable()
     {
         EventLoggerInterop.ShutdownLogger();
+    }
+
+    public static Item SpawnItem(ItemData itemData)
+    {
+        GameObject spawnedItem = Instantiate(itemData.ItemPrefab);
+        Item item = spawnedItem.GetComponent<Item>();
+        item.NetworkObject.Spawn();
+        return item;
     }
 }

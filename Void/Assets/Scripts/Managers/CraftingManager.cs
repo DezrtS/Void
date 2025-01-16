@@ -1,63 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CraftingManager : Singleton<CraftingManager>
+public class CraftingManager : NetworkSingleton<CraftingManager>
 {
-    [SerializeField] private List<RecipeData> recipes;
-    private Item testItem;
-
-    public Item CraftItem(RecipeData recipe)
+    public void TryCraftItem(RecipeData recipeData, Inventory inventory)
     {
-        ItemData itemData = recipe.Item;
-        GameObject spawnedItem = Instantiate(itemData.ItemPrefab, Vector3.up, Quaternion.identity);
-        spawnedItem.TryGetComponent(out Item item);
-        return item;
+        if (CanCraftItem(recipeData, inventory)) CraftItem(recipeData, inventory);
     }
 
-    public Item CraftItem(RecipeData recipe, Dictionary<ResourceData, int> inventory)
+    public void CraftItem(RecipeData recipeData, Inventory inventory)
     {
-        foreach (ResourceRequirement resourceRequirement in recipe.ResourceRequirements)
+        foreach (ResourceRequirement resourceRequirement in recipeData.ResourceRequirements)
         {
-            if (inventory.TryGetValue(resourceRequirement.Resource, out int amount))
+            if (resourceRequirement.Amount <= 0) continue;
+            inventory.RemoveResource(resourceRequirement.Resource, resourceRequirement.Amount);
+        }
+
+        CraftItemServerRpc(GameDataManager.Instance.GetRecipeDataIndex(recipeData), inventory.NetworkObjectId);
+    }
+
+    public static bool CanCraftItem(RecipeData recipeData, Inventory inventory)
+    {
+        foreach (ResourceRequirement resourceRequirement in recipeData.ResourceRequirements)
+        {
+            if (resourceRequirement.Amount <= 0) continue;
+
+            if (inventory.Resources.TryGetValue(resourceRequirement.Resource, out int amount))
             {
-                if (amount >= resourceRequirement.Amount)
-                {
-                    int newAmount = amount - resourceRequirement.Amount;
-                    if (newAmount <= 0)
-                    {
-                        inventory.Remove(resourceRequirement.Resource);
-                    }
-                    else
-                    {
-                        inventory[resourceRequirement.Resource] = amount - resourceRequirement.Amount;
-                    }
-                }
-                else
-                {
-                    return null;
-                }
+                if (amount < resourceRequirement.Amount) return false;
             }
             else
             {
-                return null;
+                return false;
             }
         }
 
-        return CraftItem(recipe);
+        return true;
     }
 
-    public Item GetTestItem()
+    [ServerRpc(RequireOwnership = false)]
+    public void CraftItemServerRpc(int recipeIndex, ulong networkObjectId, ServerRpcParams rpcParams = default)
     {
-        return testItem;
-    }
+        RecipeData recipeData = GameDataManager.Instance.GetRecipeData(recipeIndex);
+        NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
+        Inventory inventory = networkObject.GetComponent<Inventory>();
+        Hotbar hotbar = networkObject.GetComponent<Hotbar>();
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (CanCraftItem(recipeData, inventory))
         {
-            //testItem = CraftItem(recipes[Random.Range(0, recipes.Count)]); Aatif Change
-            testItem = CraftItem(recipes[0]);
+            hotbar.PickUpItem(recipeData.Item);
         }
     }
 }

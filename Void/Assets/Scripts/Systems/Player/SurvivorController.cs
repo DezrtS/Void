@@ -3,10 +3,13 @@ using UnityEngine.InputSystem;
 
 public class SurvivorController : PlayerController
 {
+    private Hotbar hotbar;
     private Inventory inventory;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        hotbar = GetComponent<Hotbar>();
         inventory = GetComponent<Inventory>();
     }
 
@@ -14,11 +17,13 @@ public class SurvivorController : PlayerController
     {
         if (context.performed)
         {
-            inventory.ActiveHotbarSlot()?.WorldItem.Use();
+            Item activeItem = hotbar.GetActiveItem();
+            if (activeItem != null) activeItem.Use();
         }
         else if (context.canceled)
         {
-            inventory.ActiveHotbarSlot()?.WorldItem.StopUsing();
+            Item activeItem = hotbar.GetActiveItem();
+            if (activeItem != null) activeItem.StopUsing();
         }
     }
 
@@ -30,6 +35,12 @@ public class SurvivorController : PlayerController
     public override void OnSwitch(InputAction.CallbackContext context)
     {
         int direction = (int)context.ReadValue<float>();
-        inventory.SwitchItem(direction);
+        Debug.Log("Switching In Direction " + direction);
+        hotbar.SwitchItem(direction);
+    }
+
+    public override void OnDrop(InputAction.CallbackContext context)
+    {
+        hotbar.DropItem();
     }
 }

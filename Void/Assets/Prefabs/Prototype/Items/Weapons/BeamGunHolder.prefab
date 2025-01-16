@@ -89,6 +89,9 @@ VFXRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_StaticBatchInfo:
@@ -124,7 +127,7 @@ GameObject:
   - component: {fileID: -4094151236822204787}
   - component: {fileID: 1885186142189974327}
   - component: {fileID: 7447885900623946521}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BeamGunHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 798487604
+  GlobalObjectIdHash: 1119001813
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -210,6 +213,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 0bce959023d8ce24c97c240eddb33077, type: 2}
+  isPickedUp: 0
+  isDropped: 0
   canPickUp: 1
   canDrop: 1
   beam: {fileID: 3133317790554719160}

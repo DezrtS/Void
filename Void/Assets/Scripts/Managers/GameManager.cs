@@ -23,6 +23,8 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     private NetworkVariable<GameState> state = new NetworkVariable<GameState>(GameState.WaitingToStart);
     private Dictionary<ulong, PlayerRole> playerRoleDictionary;
 
+    [SerializeField] private bool startGameOnStart;
+
     [SerializeField] private GameObject monsterPrefab;
     [SerializeField] private GameObject survivorPrefab;
 
@@ -37,6 +39,12 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     {
         if (IsServer)
         {
+            if (startGameOnStart)
+            {
+                StartGame();
+                return;
+            }
+
             PlayerReadyManager.Instance.OnAllPlayersReady += () => Loader.LoadNetwork(Loader.Scene.GameplayScene);
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnSceneManagerLoadEventCompleted;
         }
@@ -52,17 +60,19 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     public void StartGame()
     {
-        HandleGenerateGridMap();
-        HandleGenerateGridMapClientRpc();
+        //HandleGenerateGridMap();
+        //HandleGenerateGridMapClientRpc();
         //GridMapManager.Instance.GenerateTasks();
-        HandleTaskListClientRpc();
+        //HandleTaskListClientRpc();
         SpawnPlayers();
     }
 
     private void SpawnPlayers()
     {
+        Debug.Log("Spawning Players");
         foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
+            Debug.Log($"Spawning Player [{clientId}]");
             PlayerRole role = PlayerRole.Survivor;
             playerRoleDictionary.TryGetValue(clientId, out role);
             NetworkObject networkObject;

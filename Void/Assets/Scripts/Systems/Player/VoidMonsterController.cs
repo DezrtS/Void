@@ -5,8 +5,9 @@ public class VoidMonsterController : PlayerController
 {
     private BasicAttack basicAttack;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         basicAttack = GetComponent<BasicAttack>();
     }
 
@@ -25,6 +26,11 @@ public class VoidMonsterController : PlayerController
     }
 
     public override void OnSwitch(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public override void OnDrop(InputAction.CallbackContext context)
     {
         //throw new System.NotImplementedException();
     }
