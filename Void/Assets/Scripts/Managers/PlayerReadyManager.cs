@@ -38,17 +38,6 @@ public class PlayerReadyManager : NetworkSingletonPersistent<PlayerReadyManager>
         if (allClientsReady)
         {
             OnAllPlayersReady?.Invoke();
-            StartSceneChange("GameplayScene");
         }
-    }
-
-    private void StartSceneChange(string sceneName)
-    {
-        _ = ChangeSceneAsync(sceneName);
-    }
-
-    private async Task ChangeSceneAsync(string sceneName)
-    {
-        await NetworkManager.Singleton.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
     }
 }

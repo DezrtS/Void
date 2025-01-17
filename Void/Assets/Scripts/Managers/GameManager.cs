@@ -38,28 +38,14 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     {
         if (IsServer)
         {
-            PlayerReadyManager.Instance.OnAllPlayersReady += async () => await StartGameAsync();
-            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnSceneManagerLoadEventCompleted;
+            
         }
     }
 
-    private void OnSceneManagerLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadScene, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
-    {
-        if (sceneName == Loader.Scene.GameplayScene.ToString())
-        {
-            // You can handle any additional logic here if needed
-        }
-    }
 
-    private async Task StartGameAsync()
+    private void StartGameAsync()
     {
-        await LoadGameplaySceneAsync();
         StartGame();
-    }
-
-    private async Task LoadGameplaySceneAsync()
-    {
-        await NetworkManager.Singleton.SceneManager.LoadSceneAsync(Loader.Scene.GameplayScene.ToString(), UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
     public void StartGame()
