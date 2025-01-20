@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "WheelSectionData", menuName = "Scriptable Objects/WheelSectionData")]
+[CreateAssetMenu(fileName = "WheelSectionData", menuName = "ScriptableObjects/SelectionWheel/WheelSectionData")]
 public class WheelSectionData : ScriptableObject
 {
     [SerializeField] private Sprite sectionSprite;

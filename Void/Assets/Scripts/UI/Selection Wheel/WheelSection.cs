@@ -19,12 +19,12 @@ public abstract class WheelSection : MonoBehaviour
 
     private void OnEnable()
     {
-        UIManager.OnSetupUI += OnSetupUI;
+        //UIManager.OnSetupUI += OnSetupUI;
     }
 
     private void OnDisable()
     {
-        UIManager.OnSetupUI -= OnSetupUI;
+        //UIManager.OnSetupUI -= OnSetupUI;
     }
 
     public abstract void OnSetupUI(GameObject player);

@@ -1,6 +1,6 @@
-using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SelectionWheel : MonoBehaviour
@@ -31,16 +31,77 @@ public class SelectionWheel : MonoBehaviour
     private WheelSection selectedWheelSection;
     private bool active;
 
+    private PlayerController playerController;
+    private InputActionMap selectionInputAction;
+    private InputAction mousePositionInputAction;
+
+    private void OnEnable()
+    {
+        UIManager.OnSetupUI += OnSetupUI;
+
+        if (playerController)
+        {
+            playerController.OnSelectionWheel += OnSelectionWheel;
+        }
+
+        selectionInputAction ??= InputSystem.actions.FindActionMap("SelectionWheel");
+        mousePositionInputAction = selectionInputAction.FindAction("Screen Position");
+    }
+
+    private void OnDisable()
+    {
+        UIManager.OnSetupUI -= OnSetupUI;
+
+        if (playerController)
+        {
+            playerController.OnSelectionWheel -= OnSelectionWheel;
+        }
+    }
+
+    public void OnSetupUI(GameObject player)
+    {
+        if (player.TryGetComponent(out PlayerController playerController))
+        {
+            AttachSelectionWheel(playerController);
+        }
+    }
+
+    public void AttachSelectionWheel(PlayerController playerController)
+    {
+        this.playerController = playerController;
+        playerController.OnSelectionWheel += OnSelectionWheel;
+
+        foreach (var wheel in wheelSections)
+        {
+            if (wheel) wheel.OnSetupUI(playerController.gameObject);
+        }
+    }
+
+    public void OnSelectionWheel(bool enable)
+    {
+        if (enable && !active)
+        {
+            ActivateSelectionWheel();
+        }
+        else if (!enable && active)
+        {
+            DeactivateSelectionWheel();
+        }
+    }
+
     private void Awake()
     {
         GenerateSelectionWheel();
-        ActivateSelectionWheel();
     }
 
     public void ActivateSelectionWheel()
     {
         active = true;
         selectionWheelHolder.SetActive(active);
+
+        selectionInputAction.Enable();
+        playerController.PlayerLook.LockCamera(false);
+        playerController.PlayerLook.EnableDisableCameraControls(false);
     }
 
     public void DeactivateSelectionWheel()
@@ -52,21 +113,10 @@ public class SelectionWheel : MonoBehaviour
         }
         active = false;
         selectionWheelHolder.SetActive(active);
-    }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            if (active)
-            {
-                DeactivateSelectionWheel();
-            }
-            else
-            {
-                ActivateSelectionWheel();
-            }
-        }
+        selectionInputAction.Disable();
+        playerController.PlayerLook.LockCamera(true);
+        playerController.PlayerLook.EnableDisableCameraControls(true);
     }
 
     private void FixedUpdate()
@@ -104,6 +154,8 @@ public class SelectionWheel : MonoBehaviour
 
             wheelSections[i] = section.GetComponent<WheelSection>();
             wheelSections[i].Initialize(i, intervalAngle, angleMargin, radius);
+            if (playerController) wheelSections[i].OnSetupUI(playerController.gameObject);
+
             if (i < sections.Length)
             {
                 wheelSections[i].InitializeData(sections[i]);
@@ -116,7 +168,7 @@ public class SelectionWheel : MonoBehaviour
 
     public void UpdateCurrentSelection()
     {
-        Vector2 mousePos = Input.mousePosition;
+        Vector2 mousePos = mousePositionInputAction.ReadValue<Vector2>();
         //mouseTracker.position = mousePos;
 
         if (!allowInnerSelection)

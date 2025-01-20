@@ -24,6 +24,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     private Dictionary<ulong, PlayerRole> playerRoleDictionary;
 
     [SerializeField] private bool startGameOnStart;
+    [SerializeField] private PlayerRole defaultPlayerRole;
 
     [SerializeField] private GameObject monsterPrefab;
     [SerializeField] private GameObject survivorPrefab;
@@ -73,8 +74,9 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
             Debug.Log($"Spawning Player [{clientId}]");
-            PlayerRole role = PlayerRole.Survivor;
-            playerRoleDictionary.TryGetValue(clientId, out role);
+            PlayerRole role = defaultPlayerRole;
+            playerRoleDictionary.TryGetValue(clientId, out PlayerRole playerRole);
+            if (playerRole != PlayerRole.None) role = playerRole;
             NetworkObject networkObject;
             switch (role)
             {

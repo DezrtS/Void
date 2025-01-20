@@ -2,28 +2,70 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Health : NetworkBehaviour
+public abstract class Health : NetworkBehaviour
 {
-    [SerializeField] private float maxHealth;
-    private float health;
+    [SerializeField] private bool canRegenerateHealth;
+    [SerializeField] private Stat healthRegenerationRate;
+    [SerializeField] private float healthRegenerationDelay;
 
     public delegate void HealthHandler(float previousValue, float newValue, float maxValue);
     public event HealthHandler OnHealthChanged;
     public event Action OnDeath;
 
-    private void Awake()
+    private float healthRegenerationDelayTimer;
+    private bool healthChanged = false;
+
+    public Stat HealthRegenerationRate => healthRegenerationRate;
+
+    public abstract float GetMaxHealth();
+    public abstract float GetHealth();
+    public abstract void SetHealth(float value);
+
+    protected virtual void Awake()
     {
-        health = maxHealth;
+        if (TryGetComponent(out PlayerStats playerStats)) healthRegenerationRate = playerStats.HealthRegenerationRate;
+    }
+
+    private void FixedUpdate()
+    {
+        if (canRegenerateHealth && healthChanged)
+        {
+            float deltaTime = Time.deltaTime;
+            if (healthRegenerationDelayTimer <= 0)
+            {
+                float maxHealth = GetMaxHealth();
+                float previousHealth = GetHealth();
+                float newHealth = previousHealth + healthRegenerationRate.Value * deltaTime;
+
+                if (newHealth >= maxHealth)
+                {
+                    healthChanged = false;
+                    OnHealthChanged?.Invoke(previousHealth, maxHealth, GetMaxHealth());
+                }
+                else
+                {
+                    OnHealthChanged?.Invoke(previousHealth, newHealth, GetMaxHealth());
+                }
+
+                SetHealth(newHealth);
+            }
+            else
+            {
+                healthRegenerationDelayTimer -= deltaTime;
+            }
+        }
     }
 
     public void Damage(float amount)
     {
-        RequestHealthChangeServerRpc(-amount);
+        UpdateHealthClientServerSide(-amount);
+        UpdateHealthServerRpc(-amount);
     }
 
     public void Heal(float amount)
     {
-        RequestHealthChangeServerRpc(amount);
+        UpdateHealthClientServerSide(amount);
+        UpdateHealthServerRpc(amount);
     }
 
     public void Die()
@@ -32,29 +74,36 @@ public class Health : NetworkBehaviour
         NetworkObject.Despawn();
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestHealthChangeServerRpc(float amount, ServerRpcParams serverRpcParams = default)
+    public void UpdateHealthClientServerSide(float amount)
     {
-        HandleHealthChange(amount);
-        HandleHealthChangeClientRpc(health);
+        if (amount < 0)
+        {
+            healthChanged = true;
+            healthRegenerationDelayTimer = healthRegenerationDelay;
+        }
 
-        if (health == 0)
+        float previousHealth = GetHealth();
+        float newHealth = previousHealth + amount;
+        OnHealthChanged?.Invoke(previousHealth, newHealth, GetMaxHealth());
+        SetHealth(newHealth);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdateHealthServerRpc(float amount, ServerRpcParams serverRpcParams = default)
+    {
+        UpdateHealthClientServerSide(amount);
+        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(serverRpcParams);
+        UpdateHealthClientRpc(amount, clientRpcParams);
+
+        if (GetHealth() <= 0)
         {
             Die();
         }
     }
 
-    public void HandleHealthChange(float amount)
+    [ClientRpc(RequireOwnership = false)]
+    public void UpdateHealthClientRpc(float amount, ClientRpcParams clientRpcParams = default)
     {
-        float newHealth = Mathf.Clamp(health + amount, 0, maxHealth);
-        OnHealthChanged?.Invoke(health, newHealth, maxHealth);
-        health = Mathf.Clamp(newHealth, 0, maxHealth);
-    }
-
-    [ClientRpc]
-    public void HandleHealthChangeClientRpc(float newHealth)
-    {
-        OnHealthChanged?.Invoke(health, newHealth, maxHealth);
-        health = Mathf.Clamp(newHealth, 0, maxHealth);
+        UpdateHealthClientServerSide(amount);
     }
 }

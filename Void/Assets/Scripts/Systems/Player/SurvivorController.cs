@@ -35,7 +35,6 @@ public class SurvivorController : PlayerController
     public override void OnSwitch(InputAction.CallbackContext context)
     {
         int direction = (int)context.ReadValue<float>();
-        Debug.Log("Switching In Direction " + direction);
         hotbar.SwitchItem(direction);
     }
 

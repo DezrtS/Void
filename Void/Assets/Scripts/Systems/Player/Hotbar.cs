@@ -38,17 +38,17 @@ public class Hotbar : NetworkBehaviour
 
     public void SwitchItem(int direction)
     {
-        int newIndex = (selectedIndex + direction + hotbarCapacity) % hotbarCapacity;
+        int newIndex = (Mathf.Abs(selectedIndex + direction)) % hotbarCapacity;
         SwitchToItem(newIndex);
     }
 
     public void SwitchToItem(int index)
     {
-        SwitchToItemClientSide(index);
+        SwitchToItemClientServerSide(index);
         SwitchToItemServerRpc(index);
     }
 
-    public void SwitchToItemClientSide(int index)
+    public void SwitchToItemClientServerSide(int index)
     {
         OnSwitchItem?.Invoke(selectedIndex, index);
 
@@ -60,6 +60,7 @@ public class Hotbar : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SwitchToItemServerRpc(int index, ServerRpcParams rpcParams = default)
     {
+        SwitchToItemClientServerSide(index);
         ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
         SwitchToItemClientRpc(index, clientRpcParams);
     }
@@ -67,7 +68,7 @@ public class Hotbar : NetworkBehaviour
     [ClientRpc(RequireOwnership = false)]
     public void SwitchToItemClientRpc(int index, ClientRpcParams clientRpcParams = default)
     {
-        SwitchToItemClientSide(index);
+        SwitchToItemClientServerSide(index);
     }
 
     public void PickUpItem(ItemData itemData)

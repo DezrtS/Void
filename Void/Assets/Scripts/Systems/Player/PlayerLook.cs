@@ -12,7 +12,7 @@ public class PlayerLook : NetworkBehaviour
 
     [Header("Camera")]
     [SerializeField] private bool spawnFirstPersonCamera;
-    [SerializeField] private bool lookPlayerCursor;
+    [SerializeField] private bool lockPlayerCursor;
     [SerializeField] private Transform cameraRootTransform;
 
     [Header("Interaction")]
@@ -56,9 +56,7 @@ public class PlayerLook : NetworkBehaviour
 
     private void Awake()
     {
-        if (!lookPlayerCursor) return;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        LockCamera(true);
     }
 
     private void Update()
@@ -89,6 +87,33 @@ public class PlayerLook : NetworkBehaviour
                 hitInfo.collider.TryGetComponent(out IInteractable interactable);
                 this.interactable = interactable;
             }
+        }
+    }
+
+    public void EnableDisableCameraControls(bool enabled)
+    {
+        if (enabled)
+        {
+            cameraActionMap.Enable();
+        }
+        else
+        {
+            cameraActionMap.Disable();
+        }
+    }
+
+    public void LockCamera(bool locked)
+    {
+        if (locked)
+        {
+            if (!lockPlayerCursor) return;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 

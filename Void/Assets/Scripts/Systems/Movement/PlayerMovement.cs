@@ -16,19 +16,30 @@ public class PlayerMovement : MovementController
     [SerializeField] private Transform orientationTransform;
 
     [Header("Acceleration")]
-    [SerializeField] private float timeToAccelerate = 0.25f;
-    [SerializeField] private float timeToDeaccelerate = 0.25f;
+    [SerializeField] private Stat timeToAccelerate = new Stat(0.25f);
+    [SerializeField] private Stat timeToDeaccelerate = new Stat(0.25f);
 
     [Header("Speed")]
-    [SerializeField] private float walkSpeed = 4;
-    [SerializeField] private float sprintSpeed = 7;
-    [SerializeField] private float crouchSpeed = 2;
+    [SerializeField] private Stat walkSpeed = new Stat(4);
+    [SerializeField] private Stat sprintSpeed = new Stat(7);
+    [SerializeField] private Stat crouchSpeed = new Stat(2);
 
     [Header("Jump")]
-    [SerializeField] private float jumpPower = 7;
+    [SerializeField] private Stat jumpPower = new Stat(7);
 
     [Header("Crouch")]
-    [SerializeField] private float crouchHeight = 1;
+    [SerializeField] private Stat crouchHeight = new Stat(1);
+
+    public Stat TimeToAccelerate => timeToAccelerate;
+    public Stat TimeToDeacclerate => timeToDeaccelerate;
+
+    public Stat WalkSpeed => walkSpeed;
+    public Stat SprintSpeed => sprintSpeed;
+    public Stat CrouchSpeed => crouchSpeed;
+
+    public Stat JumpPower => jumpPower;
+
+    public Stat CrouchHeight => crouchHeight;
 
     private void OnEnable()
     {
@@ -70,6 +81,20 @@ public class PlayerMovement : MovementController
         rig = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         defaultColliderHeight = capsuleCollider.height;
+
+        if (TryGetComponent(out PlayerStats playerStats))
+        {
+            timeToAccelerate = playerStats.TimeToAccelerate;
+            timeToDeaccelerate = playerStats.TimeToDeacclerate;
+
+            walkSpeed = playerStats.WalkSpeed;
+            sprintSpeed = playerStats.SprintSpeed;
+            crouchSpeed = playerStats.CrouchSpeed;
+
+            jumpPower = playerStats.JumpPower;
+
+            crouchHeight = playerStats.CrouchHeight;
+        }
     }
 
     private void FixedUpdate()
@@ -85,14 +110,14 @@ public class PlayerMovement : MovementController
         Vector3 move = orientationTransform.forward * moveInput.y + orientationTransform.right * moveInput.x;
         move.y = 0;
 
-        float speed = walkSpeed;
+        float speed = walkSpeed.Value;
         if (isCrouched)
         {
-            speed = crouchSpeed;
+            speed = crouchSpeed.Value;
         }
         else if (isSprinting)
         {
-            speed = sprintSpeed;
+            speed = sprintSpeed.Value;
         }
 
         Vector3 targetVelocity = move.normalized * speed;
@@ -106,11 +131,11 @@ public class PlayerMovement : MovementController
 
         if (rig.linearVelocity.magnitude <= targetSpeed)
         {
-            accelerationIncrement = GetAcceleration(sprintSpeed, timeToAccelerate) * Time.deltaTime;
+            accelerationIncrement = GetAcceleration(sprintSpeed.Value, timeToAccelerate.Value) * Time.deltaTime;
         }
         else
         {
-            accelerationIncrement = GetAcceleration(sprintSpeed, timeToDeaccelerate) * Time.deltaTime;
+            accelerationIncrement = GetAcceleration(sprintSpeed.Value, timeToDeaccelerate.Value) * Time.deltaTime;
         }
 
         if (velocityDifference.magnitude < accelerationIncrement)
@@ -125,7 +150,7 @@ public class PlayerMovement : MovementController
 
     private void Jump(InputAction.CallbackContext context)
     {
-        rig.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
+        rig.AddForce(Vector3.up * jumpPower.Value, ForceMode.VelocityChange);
     }
 
     private void Sprint(InputAction.CallbackContext context)
@@ -139,7 +164,7 @@ public class PlayerMovement : MovementController
         
         if (isCrouched)
         {
-            capsuleCollider.height = crouchHeight;
+            capsuleCollider.height = crouchHeight.Value;
         }
         else
         {

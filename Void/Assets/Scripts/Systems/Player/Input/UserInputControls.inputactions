@@ -794,6 +794,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Open Selection",
+                    "type": "Button",
+                    "id": "66f55ecf-eed4-46ca-b852-a65b07e5b2ea",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Switch",
                     "type": "Button",
                     "id": "b3f77419-59e0-4dce-8c11-ff5d752c8e02",
@@ -841,6 +850,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Primary Action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cedda1af-b555-4395-9bd5-1c78d0faf84b",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open Selection",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RecipeWheelSectionData", menuName = "Scriptable Objects/RecipeWheelSectionData")]
+[CreateAssetMenu(fileName = "RecipeWheelSectionData", menuName = "ScriptableObjects/SelectionWheel/RecipeWheelSectionData")]
 public class RecipeWheelSectionData : WheelSectionData
 {
     [SerializeField] private bool overrideSectionTitle;
