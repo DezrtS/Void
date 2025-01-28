@@ -8,6 +8,7 @@ public class MutationSelection : MonoBehaviour
     [SerializeField] private MutationOption[] mutationOptions;
 
     private VoidMonsterController voidMonsterController;
+    private bool active = false;
 
     private void OnEnable()
     {
@@ -37,8 +38,17 @@ public class MutationSelection : MonoBehaviour
         RandomizeMutationOptions(new MutationData[0]);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            EnableDisableMutationSelection(!active);
+        }
+    }
+
     public void EnableDisableMutationSelection(bool enabled)
     {
+        active = enabled;
         if (enabled)
         {
             ActivateMutationSelection();

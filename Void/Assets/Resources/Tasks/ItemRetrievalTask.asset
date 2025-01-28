@@ -10,16 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a0225aef8813364fa7e41c5884a3dbe, type: 3}
-  m_Name: Battery Collection Task
+  m_Name: ItemRetrievalTask
   m_EditorClassIdentifier: 
-  Name: 'Battery Collection '
-  CompletionType: 1
-  Description: Collect the battery.
-  IsGlobal: 0
-  Subtasks:
-  - Id: 0
-    Name: Find the Battery.
-    Instructions: Look around the map for the battery.
-  - Id: 1
-    Name: Head Back.
-    Instructions: Bring the Battery back to the Elevator.
+  taskName: Retrieve Item
+  taskCompletionType: 0
+  taskInstructions: Retrieve the specified item.
+  subtasks:
+  - {fileID: 11400000, guid: 94c1ce83ac81ce042809d836ec64e8cb, type: 2}
+  taskPrefabs:
+  - {fileID: 4352985685612846072, guid: 973fb660516ac14478edbdb77d427757, type: 3}

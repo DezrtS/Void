@@ -1023,8 +1023,30 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         {
             ""name"": ""Survivor"",
             ""id"": ""99701372-8947-4532-8391-313a9798a306"",
-            ""actions"": [],
-            ""bindings"": []
+            ""actions"": [
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e91d87b-5783-43e1-a2f3-7cabf8201375"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c9213ec6-f8f6-4ec6-bb1f-4cf35508df5d"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         },
         {
             ""name"": ""VoidMonster"",
@@ -1103,6 +1125,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
         // Survivor
         m_Survivor = asset.FindActionMap("Survivor", throwIfNotFound: true);
+        m_Survivor_Reload = m_Survivor.FindAction("Reload", throwIfNotFound: true);
         // VoidMonster
         m_VoidMonster = asset.FindActionMap("VoidMonster", throwIfNotFound: true);
         // Spectator
@@ -1550,10 +1573,12 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     // Survivor
     private readonly InputActionMap m_Survivor;
     private List<ISurvivorActions> m_SurvivorActionsCallbackInterfaces = new List<ISurvivorActions>();
+    private readonly InputAction m_Survivor_Reload;
     public struct SurvivorActions
     {
         private @UserInputControls m_Wrapper;
         public SurvivorActions(@UserInputControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Reload => m_Wrapper.m_Survivor_Reload;
         public InputActionMap Get() { return m_Wrapper.m_Survivor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1563,10 +1588,16 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_SurvivorActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_SurvivorActionsCallbackInterfaces.Add(instance);
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
         }
 
         private void UnregisterCallbacks(ISurvivorActions instance)
         {
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
         }
 
         public void RemoveCallbacks(ISurvivorActions instance)
@@ -1745,6 +1776,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     }
     public interface ISurvivorActions
     {
+        void OnReload(InputAction.CallbackContext context);
     }
     public interface IVoidMonsterActions
     {

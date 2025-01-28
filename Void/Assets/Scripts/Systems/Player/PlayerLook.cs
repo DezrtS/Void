@@ -82,10 +82,15 @@ public class PlayerLook : NetworkBehaviour
     {
         if (canInteract)
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Ignore))
+            Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 10);
+            if (Physics.Raycast(cameraRootTransform.position, cameraRootTransform.forward, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Ignore))
             {
                 hitInfo.collider.TryGetComponent(out IInteractable interactable);
                 this.interactable = interactable;
+            }
+            else
+            {
+                interactable = null;
             }
         }
     }

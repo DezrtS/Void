@@ -10,7 +10,7 @@ public class TaskList : Singleton<TaskList>
     public void AddTask(Task task)
     {
         Debug.Log("ADDED TEXT");
-        taskText.text += task.Data.Name + "\n" + task.Data.Description + "\n\n";
+        taskText.text += task.GetInstructions(); //+= task.TaskData.TaskName + "\n" + task.TaskData.TaskInstructions + "\n\n";
     }
 
     public void ClearTasks()

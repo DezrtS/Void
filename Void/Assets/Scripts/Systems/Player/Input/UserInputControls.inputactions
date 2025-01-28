@@ -1001,8 +1001,30 @@
         {
             "name": "Survivor",
             "id": "99701372-8947-4532-8391-313a9798a306",
-            "actions": [],
-            "bindings": []
+            "actions": [
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "0e91d87b-5783-43e1-a2f3-7cabf8201375",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c9213ec6-f8f6-4ec6-bb1f-4cf35508df5d",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         },
         {
             "name": "VoidMonster",

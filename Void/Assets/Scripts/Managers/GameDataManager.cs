@@ -8,12 +8,14 @@ public class GameDataManager : Singleton<GameDataManager>
     [SerializeField] private List<ResourceData> resources = new List<ResourceData>();
 
     [SerializeField] private List<MutationData> mutations = new List<MutationData>();
+    [SerializeField] private List<TaskData> tasks = new List<TaskData>();
 
     public List<ItemData> Items => items;
     public List<RecipeData> Recipes => recipes;
     public List<ResourceData> Resources => resources;
 
     public List<MutationData> Mutations => mutations;
+    public List<TaskData> Tasks => tasks;
 
     public int GetItemDataIndex(ItemData itemData)
     {
@@ -53,5 +55,15 @@ public class GameDataManager : Singleton<GameDataManager>
     public MutationData GetMutationData(int index)
     {
         return mutations[index];
+    }
+
+    public int GetTaskDataIndex(TaskData taskData)
+    {
+        return tasks.IndexOf(taskData);
+    }
+
+    public TaskData GetTaskData(int index)
+    {
+        return tasks[index];
     }
 }

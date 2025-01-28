@@ -10,7 +10,7 @@ public abstract class PlayerController : MonoBehaviour
     public event Action<bool> OnSelectionWheel;
     public PlayerLook PlayerLook => playerLook;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         playerActionMap ??= InputSystem.actions.FindActionMap("Player");
         playerActionMap.Enable();
@@ -37,7 +37,7 @@ public abstract class PlayerController : MonoBehaviour
         dropInputAction.performed += OnDrop;
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         InputAction primaryActionInputAction = playerActionMap.FindAction("Primary Action");
         primaryActionInputAction.performed -= OnPrimaryAction;

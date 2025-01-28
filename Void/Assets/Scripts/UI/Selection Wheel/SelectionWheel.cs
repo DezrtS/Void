@@ -161,7 +161,7 @@ public class SelectionWheel : MonoBehaviour
                 wheelSections[i].InitializeData(sections[i]);
                 icon.GetComponent<Image>().sprite = sections[i].SectionSprite;
                 icon.transform.position = wheelSections[i].Direction * (radius - radius * 0.13f) + (Vector2)selectionWheelHolder.transform.position;
-                icon.transform.parent = wheelSections[i].transform;
+                icon.transform.SetParent(wheelSections[i].transform, false);
             }
         }
     }

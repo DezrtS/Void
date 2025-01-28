@@ -7,7 +7,7 @@ public class TaskDropOff : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Task task)) {
-            task.RequestCompleteTaskServerRpc(new Unity.Netcode.ServerRpcParams());
+            //task.RequestCompleteTaskServerRpc(new Unity.Netcode.ServerRpcParams());
         }
     }
 }

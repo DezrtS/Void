@@ -71,7 +71,6 @@ public abstract class Health : NetworkBehaviour
     public void Die()
     {
         OnDeath?.Invoke();
-        NetworkObject.Despawn();
     }
 
     public void UpdateHealthClientServerSide(float amount)
@@ -98,6 +97,7 @@ public abstract class Health : NetworkBehaviour
         if (GetHealth() <= 0)
         {
             Die();
+            DieClientRpc();
         }
     }
 
@@ -105,5 +105,11 @@ public abstract class Health : NetworkBehaviour
     public void UpdateHealthClientRpc(float amount, ClientRpcParams clientRpcParams = default)
     {
         UpdateHealthClientServerSide(amount);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void DieClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        Die();
     }
 }

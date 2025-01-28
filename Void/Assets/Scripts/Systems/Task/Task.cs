@@ -3,10 +3,11 @@ using UnityEngine;
 
 public abstract class Task : NetworkBehaviour
 {
-    [SerializeField] private TaskData task;
-    private bool[] completedSubtasks;
+    [SerializeField] private TaskData taskData;
 
-    public TaskData Data {  get { return task; } } 
+    protected ISubtask[] subtasks;
+
+    public TaskData TaskData {  get { return taskData; } } 
 
     public delegate void TaskProgressHandler(Task task);
 
@@ -15,89 +16,31 @@ public abstract class Task : NetworkBehaviour
 
     private void Awake()
     {
-        completedSubtasks = new bool[task.Subtasks.Count];
+        subtasks = new ISubtask[taskData.Subtasks.Count];
+        for (int i = 0; i < subtasks.Length; i++)
+        {
+            subtasks[i] = taskData.Subtasks[i].CreateSubtaskInstance(this, taskData);
+            subtasks[i].OnUpdateSubtaskInstructions += () =>
+            {
+                TaskList.Instance.AddTask(this);
+            };
+        }
+
+        //completedSubtasks = new bool[taskData.Subtasks.Count];
     }
 
     private void Start()
     {
-        if (!IsServer) return;
         TaskManager.Instance.AddTask(this);
     }
 
-    public virtual void CompleteTask()
+    public string GetInstructions()
     {
-        OnTaskCompletion?.Invoke(this);
-    }
-
-    public virtual void CompleteSubtask(int id)
-    {
-        for (int i = 0; i < task.Subtasks.Count; i++)
+        string instructions = $"{taskData.TaskName} - {taskData.TaskInstructions}\n";
+        foreach (ISubtask subtask in subtasks)
         {
-            if (task.Subtasks[i].Id == id)
-            {
-                if (completedSubtasks[i])
-                {
-                    return;
-                }
-
-                completedSubtasks[i] = true;
-            }
+            instructions += subtask.GetSubtaskInstructions() + "\n\n";
         }
-        if (IsTaskIsComplete())
-        {
-            CompleteTask();
-        }
-        else
-        {
-            OnSubTaskCompletion?.Invoke(this);
-        }
-    }
-
-    public bool IsTaskIsComplete()
-    {
-        foreach (bool complete in completedSubtasks)
-        {
-            if (!complete)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestCompleteTaskServerRpc(ServerRpcParams rcpParams = default)
-    {
-        HandleCompleteTask();
-        HandleCompleteTaskClientRpc();
-    }
-
-    public void HandleCompleteTask()
-    {
-        CompleteTask();
-    }
-
-    [ClientRpc]
-    public void HandleCompleteTaskClientRpc()
-    {
-        HandleCompleteTask();
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestCompleteSubTaskServerRpc(int subtaskId, ServerRpcParams rcpParams = default)
-    {
-        HandleCompleteSubTask(subtaskId);
-        HandleCompleteSubTaskClientRpc(subtaskId);
-    }
-
-    public void HandleCompleteSubTask(int subtaskId)
-    {
-        CompleteSubtask(subtaskId);
-    }
-
-    [ClientRpc]
-    public void HandleCompleteSubTaskClientRpc(int subtaskId)
-    {
-        HandleCompleteSubTask(subtaskId);
+        return instructions;
     }
 }
