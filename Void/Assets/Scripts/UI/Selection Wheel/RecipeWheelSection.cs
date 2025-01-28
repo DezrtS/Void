@@ -29,6 +29,9 @@ public class RecipeWheelSection : WheelSection
 
     public override void OnSetupUI(GameObject player)
     {
-        player.TryGetComponent(out inventory);
+        if (player.TryGetComponent(out Inventory inventory))
+        {
+            this.inventory = inventory;
+        }
     }
 }

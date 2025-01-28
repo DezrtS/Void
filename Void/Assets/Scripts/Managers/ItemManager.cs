@@ -28,6 +28,12 @@ public class ItemManager : NetworkSingleton<ItemManager>
         EventLoggerInterop.ShutdownLogger();
     }
 
+    public static ulong SpawnNetworkedItem(ItemData itemData)
+    {
+        Item item = SpawnItem(itemData);
+        return item.NetworkObjectId;
+    }
+
     public static Item SpawnItem(ItemData itemData)
     {
         GameObject spawnedItem = Instantiate(itemData.ItemPrefab);

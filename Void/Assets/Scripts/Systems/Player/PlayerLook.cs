@@ -12,7 +12,7 @@ public class PlayerLook : NetworkBehaviour
 
     [Header("Camera")]
     [SerializeField] private bool spawnFirstPersonCamera;
-    [SerializeField] private bool lookPlayerCursor;
+    [SerializeField] private bool lockPlayerCursor;
     [SerializeField] private Transform cameraRootTransform;
 
     [Header("Interaction")]
@@ -56,9 +56,7 @@ public class PlayerLook : NetworkBehaviour
 
     private void Awake()
     {
-        if (!lookPlayerCursor) return;
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        LockCamera(true);
     }
 
     private void Update()
@@ -84,11 +82,43 @@ public class PlayerLook : NetworkBehaviour
     {
         if (canInteract)
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Ignore))
+            Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 10);
+            if (Physics.Raycast(cameraRootTransform.position, cameraRootTransform.forward, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Ignore))
             {
                 hitInfo.collider.TryGetComponent(out IInteractable interactable);
                 this.interactable = interactable;
             }
+            else
+            {
+                interactable = null;
+            }
+        }
+    }
+
+    public void EnableDisableCameraControls(bool enabled)
+    {
+        if (enabled)
+        {
+            cameraActionMap.Enable();
+        }
+        else
+        {
+            cameraActionMap.Disable();
+        }
+    }
+
+    public void LockCamera(bool locked)
+    {
+        if (locked)
+        {
+            if (!lockPlayerCursor) return;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 

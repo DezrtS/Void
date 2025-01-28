@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,7 +7,10 @@ public abstract class PlayerController : MonoBehaviour
     private InputActionMap playerActionMap;
     protected PlayerLook playerLook;
 
-    private void OnEnable()
+    public event Action<bool> OnSelectionWheel;
+    public PlayerLook PlayerLook => playerLook;
+
+    protected virtual void OnEnable()
     {
         playerActionMap ??= InputSystem.actions.FindActionMap("Player");
         playerActionMap.Enable();
@@ -19,6 +23,10 @@ public abstract class PlayerController : MonoBehaviour
         secondaryActionInputAction.performed += OnSecondaryAction;
         secondaryActionInputAction.canceled += OnSecondaryAction;
 
+        InputAction openSelectionInputAction = playerActionMap.FindAction("Open Selection");
+        openSelectionInputAction.performed += OnOpenSelection;
+        openSelectionInputAction.canceled += OnOpenSelection;
+
         InputAction switchInputAction = playerActionMap.FindAction("Switch");
         switchInputAction.performed += OnSwitch;
 
@@ -29,7 +37,7 @@ public abstract class PlayerController : MonoBehaviour
         dropInputAction.performed += OnDrop;
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         InputAction primaryActionInputAction = playerActionMap.FindAction("Primary Action");
         primaryActionInputAction.performed -= OnPrimaryAction;
@@ -38,6 +46,10 @@ public abstract class PlayerController : MonoBehaviour
         InputAction secondaryActionInputAction = playerActionMap.FindAction("Secondary Action");
         secondaryActionInputAction.performed -= OnSecondaryAction;
         secondaryActionInputAction.canceled -= OnSecondaryAction;
+
+        InputAction openSelectionInputAction = playerActionMap.FindAction("Open Selection");
+        openSelectionInputAction.performed -= OnOpenSelection;
+        openSelectionInputAction.canceled -= OnOpenSelection;
 
         InputAction switchInputAction = playerActionMap.FindAction("Switch");
         switchInputAction.performed -= OnSwitch;
@@ -58,6 +70,21 @@ public abstract class PlayerController : MonoBehaviour
 
     public abstract void OnPrimaryAction(InputAction.CallbackContext context);
     public abstract void OnSecondaryAction(InputAction.CallbackContext context);
+    public void OnOpenSelection(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            OnSelectionWheel?.Invoke(true);
+            return;
+        }
+
+        if (context.canceled)
+        {
+            OnSelectionWheel?.Invoke(false);
+            return;
+        }
+    }
+
     public abstract void OnSwitch(InputAction.CallbackContext context);
 
     public void OnInteract(InputAction.CallbackContext context)

@@ -17,6 +17,9 @@ public class Hotbar : NetworkBehaviour
     private Item[] hotbar;
     private int selectedIndex;
 
+    private bool isDragging = false;
+    private Dragable dragable;
+
     private void Awake()
     {
         hotbar = new Item[hotbarCapacity];
@@ -38,17 +41,17 @@ public class Hotbar : NetworkBehaviour
 
     public void SwitchItem(int direction)
     {
-        int newIndex = (selectedIndex + direction + hotbarCapacity) % hotbarCapacity;
+        int newIndex = (Mathf.Abs(selectedIndex + direction)) % hotbarCapacity;
         SwitchToItem(newIndex);
     }
 
     public void SwitchToItem(int index)
     {
-        SwitchToItemClientSide(index);
+        SwitchToItemClientServerSide(index);
         SwitchToItemServerRpc(index);
     }
 
-    public void SwitchToItemClientSide(int index)
+    public void SwitchToItemClientServerSide(int index)
     {
         OnSwitchItem?.Invoke(selectedIndex, index);
 
@@ -60,6 +63,7 @@ public class Hotbar : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SwitchToItemServerRpc(int index, ServerRpcParams rpcParams = default)
     {
+        SwitchToItemClientServerSide(index);
         ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
         SwitchToItemClientRpc(index, clientRpcParams);
     }
@@ -67,7 +71,7 @@ public class Hotbar : NetworkBehaviour
     [ClientRpc(RequireOwnership = false)]
     public void SwitchToItemClientRpc(int index, ClientRpcParams clientRpcParams = default)
     {
-        SwitchToItemClientSide(index);
+        SwitchToItemClientServerSide(index);
     }
 
     public void PickUpItem(ItemData itemData)
@@ -166,6 +170,7 @@ public class Hotbar : NetworkBehaviour
         if (item == null) return;
         if (!item.CanDrop()) return;
 
+        DropItemClientServerSide(index);
         DropItemServerRpc(index);
     }
 
@@ -198,5 +203,45 @@ public class Hotbar : NetworkBehaviour
     public void DropItemClientRpc(int index, ClientRpcParams clientRpcParams = default)
     {
         DropItemClientServerSide(index);
+    }
+
+    public void StartDragging(Dragable dragable)
+    {
+        if (isDragging) return;
+
+        StartDraggingClientServerSide(dragable);
+        StartDraggingServerRpc(dragable.NetworkObjectId);
+    }
+
+    public void StopDragging()
+    {
+        if (!isDragging) return;
+
+    }
+
+    public void StartDraggingClientServerSide(Dragable dragable)
+    {
+        isDragging = true;
+        dragable.Drag();
+        dragable.transform.SetParent(transform);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void StartDraggingServerRpc(ulong networkObjectId, ServerRpcParams rpcParams = default)
+    {
+        if (isDragging) return;
+
+        NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
+        StartDraggingClientServerSide(networkObject.GetComponent<Dragable>());
+
+        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
+        StartDraggingClientRpc(networkObjectId, clientRpcParams);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void StartDraggingClientRpc(ulong networkObjectId, ClientRpcParams clientRpcParams = default)
+    {
+        NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
+        StartDraggingClientServerSide(networkObject.GetComponent<Dragable>());
     }
 }
