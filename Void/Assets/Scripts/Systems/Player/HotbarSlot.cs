@@ -4,9 +4,13 @@ using UnityEngine.UI;
 public class HotbarSlot : MonoBehaviour
 {
     [SerializeField] private int slotIndex;
+    [SerializeField] private Image hotbarImage;
+    [SerializeField] private float transitionDuration = 1;
 
-    private Image hotbarImage;
     private Hotbar hotbar;
+    private Animator animator;
+    private bool active;
+    private float activeValue;
 
     private void OnEnable()
     {
@@ -34,7 +38,7 @@ public class HotbarSlot : MonoBehaviour
 
     private void Awake()
     {
-        hotbarImage = GetComponent<Image>();
+        animator = GetComponent<Animator>();
     }
 
     public void OnSetupUI(GameObject player)
@@ -65,28 +69,45 @@ public class HotbarSlot : MonoBehaviour
     {
         if (fromIndex == slotIndex)
         {
+            active = false;
             // Deactivate
         } 
         else if (toIndex == slotIndex)
         {
+            active = true;
             // Activate
         }
+    }
+
+    private void FixedUpdate()
+    {
+        float fixedDeltaTime = (active) ? Time.fixedDeltaTime : -Time.fixedDeltaTime;
+        activeValue = Mathf.Clamp(activeValue += fixedDeltaTime / transitionDuration, 0, 1);
+        animator.SetFloat("Active", activeValue);
     }
 
     public void OnPickUpItem(int index, Item item)
     {
         if (index != slotIndex) return;
         UpdateHotbarImage(item.ItemData.ItemSprite);
+        EnableDisableHotbarImage(true);
+        active = true;
     }
 
     public void OnDropItem(int index, Item item)
     {
         if (index != slotIndex) return;
         UpdateHotbarImage(null);
+        EnableDisableHotbarImage(false);
     }
 
     public void UpdateHotbarImage(Sprite sprite)
     {
         hotbarImage.sprite = sprite;
+    }
+
+    public void EnableDisableHotbarImage(bool enable)
+    {
+        hotbarImage.enabled = enable;
     }
 }

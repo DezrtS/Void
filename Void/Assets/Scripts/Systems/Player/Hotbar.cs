@@ -6,7 +6,6 @@ public class Hotbar : NetworkBehaviour
 {
     [SerializeField] private Transform activeTransform;
     [SerializeField] private int hotbarCapacity;
-    [SerializeField] private HotbarSlot[] hotbarSlots;
 
     public delegate void ItemEventHandler(int index, Item item);
     public delegate void ItemSwitchEventHandler(int fromIndex, int toIndex);
@@ -41,20 +40,19 @@ public class Hotbar : NetworkBehaviour
 
     public void SwitchItem(int direction)
     {
-        int newIndex = (Mathf.Abs(selectedIndex + direction)) % hotbarCapacity;
+        int newIndex = (selectedIndex + direction + hotbarCapacity) % hotbarCapacity;
         SwitchToItem(newIndex);
     }
 
     public void SwitchToItem(int index)
     {
+        OnSwitchItem?.Invoke(selectedIndex, index);
         SwitchToItemClientServerSide(index);
         SwitchToItemServerRpc(index);
     }
 
     public void SwitchToItemClientServerSide(int index)
     {
-        OnSwitchItem?.Invoke(selectedIndex, index);
-
         SetEnabledActiveItem(false);
         selectedIndex = index;
         SetEnabledActiveItem(true);
@@ -63,7 +61,7 @@ public class Hotbar : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SwitchToItemServerRpc(int index, ServerRpcParams rpcParams = default)
     {
-        SwitchToItemClientServerSide(index);
+        if (!IsHost) SwitchToItemClientServerSide(index);
         ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
         SwitchToItemClientRpc(index, clientRpcParams);
     }
@@ -86,7 +84,7 @@ public class Hotbar : NetworkBehaviour
 
         if (GetActiveItem() == null)
         {
-            PickUpItemClientServerSide(selectedIndex, item);
+            if (!IsServer) PickUpItemClientServerSide(selectedIndex, item);
             PickUpItemServerRpc(selectedIndex, item.NetworkObjectId);
             return;
         }
@@ -95,14 +93,14 @@ public class Hotbar : NetworkBehaviour
         {
             if (hotbar[i] == null)
             {
-                PickUpItemClientServerSide(i, item);
+                if (!IsServer) PickUpItemClientServerSide(i, item);
                 PickUpItemServerRpc(i, item.NetworkObjectId);
                 return;
             }
         }
 
         DropItem();
-        PickUpItemClientServerSide(selectedIndex, item);
+        if (!IsServer) PickUpItemClientServerSide(selectedIndex, item);
         PickUpItemServerRpc(selectedIndex, item.NetworkObjectId);
     }
 
@@ -120,24 +118,25 @@ public class Hotbar : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void PickUpItemServerRpc(int index, ulong itemNetworkObjectId, ServerRpcParams rpcParams = default)
     {
-        NetworkObject itemNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[itemNetworkObjectId];
-
-        if (itemNetworkObject.TryGetComponent(out Item item))
+        NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
+        Item item = itemNetworkObject.GetComponent<Item>();
+        if (item.CanPickUp())
         {
-            if (item.CanPickUp())
+            if (itemNetworkObject.OwnerClientId != rpcParams.Receive.SenderClientId)
             {
-                if (itemNetworkObject.OwnerClientId != rpcParams.Receive.SenderClientId)
-                {
-                    itemNetworkObject.ChangeOwnership(rpcParams.Receive.SenderClientId);
-                }
-
-                ItemManager.Instance.CreateItemPickUpLog(rpcParams.Receive.SenderClientId, item);
-                PickUpItemClientServerSide(index, item);
-
-                ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-                PickUpItemClientRpc(index, item.NetworkObjectId, clientRpcParams);
+                itemNetworkObject.ChangeOwnership(rpcParams.Receive.SenderClientId);
             }
+
+            ItemManager.CreateItemPickUpLog(rpcParams.Receive.SenderClientId, item);
+            PickUpItemClientServerSide(index, item);
+
+            ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
+            PickUpItemClientRpc(index, item.NetworkObjectId, clientRpcParams);
         }
+        //else
+        //{
+        //    ItemManager.CreateSimpleEventLog("ItemPickUpFailed", $"{item.ItemData.Name} - IsPickedUp: {item.IsPickedUp} - CanPickUp: {item.CanPickUp()}");
+        //}
     }
 
     [ClientRpc(RequireOwnership = false)]
@@ -170,7 +169,7 @@ public class Hotbar : NetworkBehaviour
         if (item == null) return;
         if (!item.CanDrop()) return;
 
-        DropItemClientServerSide(index);
+        if (!IsServer) DropItemClientServerSide(index);
         DropItemServerRpc(index);
     }
 
@@ -191,7 +190,7 @@ public class Hotbar : NetworkBehaviour
 
         if (item.CanDrop())
         {
-            ItemManager.Instance.CreateItemDropLog(rpcParams.Receive.SenderClientId, item);
+            ItemManager.CreateItemDropLog(rpcParams.Receive.SenderClientId, item);
             DropItemClientServerSide(index);
 
             ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
@@ -209,7 +208,7 @@ public class Hotbar : NetworkBehaviour
     {
         if (isDragging) return;
 
-        StartDraggingClientServerSide(dragable);
+        if (!IsServer) StartDraggingClientServerSide(dragable);
         StartDraggingServerRpc(dragable.NetworkObjectId);
     }
 
@@ -231,8 +230,11 @@ public class Hotbar : NetworkBehaviour
     {
         if (isDragging) return;
 
-        NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
-        StartDraggingClientServerSide(networkObject.GetComponent<Dragable>());
+        if (!IsHost)
+        {
+            NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
+            StartDraggingClientServerSide(networkObject.GetComponent<Dragable>());
+        }
 
         ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
         StartDraggingClientRpc(networkObjectId, clientRpcParams);

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class ItemManager : NetworkSingleton<ItemManager>
@@ -13,12 +14,17 @@ public class ItemManager : NetworkSingleton<ItemManager>
         Debug.Log("Log File Path: " + logFilePath);
     }
 
-    public void CreateItemPickUpLog(ulong clientId, Item item)
+    public static void CreateSimpleEventLog(string eventName, string eventValue)
+    {
+        EventLoggerInterop.CreateEventLog("SimpleEvent:Event", new string[] { "EventName", "EventValue" }, new string[] { eventName, eventValue }, 2);
+    }
+
+    public static void CreateItemPickUpLog(ulong clientId, Item item)
     {
         EventLoggerInterop.CreateEventLog("ItemEvent:PickUp", new string[] { "ClientId", "ItemName", "ItemDescription" }, new string[] { clientId.ToString(), item.ItemData.Name, item.ItemData.Description }, 3);
     }
 
-    public void CreateItemDropLog(ulong clientId, Item item)
+    public static void CreateItemDropLog(ulong clientId, Item item)
     {
         EventLoggerInterop.CreateEventLog("ItemEvent:Drop", new string[] { "ClientId", "ItemName", "ItemDescription" }, new string[] { clientId.ToString(), item.ItemData.Name, item.ItemData.Description }, 3);
     }

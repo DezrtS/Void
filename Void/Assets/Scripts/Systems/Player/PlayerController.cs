@@ -1,8 +1,9 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class PlayerController : MonoBehaviour
+public abstract class PlayerController : NetworkBehaviour
 {
     private InputActionMap playerActionMap;
     protected PlayerLook playerLook;
@@ -87,6 +88,7 @@ public abstract class PlayerController : MonoBehaviour
 
     public abstract void OnSwitch(InputAction.CallbackContext context);
 
+    // May be being run by the server
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (context.performed) playerLook.InteractWithObject();

@@ -50,9 +50,18 @@ public class DeliverItemSubtask : Subtask
         return newInstructions;
     }
 
+    public void OnItemDropOff(Item item, ItemDropOff itemDropOff)
+    {
+        if (this.item == item)
+        {
+            Execute();
+        }
+    }
+
     public void OnItem(Item item)
     {
         this.item = item;
+        ItemDropOff.OnDropOff += OnItemDropOff;
         UpdateSubtaskInstructions();
     }
 }

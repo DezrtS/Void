@@ -13,6 +13,7 @@ public class SurvivorController : PlayerController
 
     protected override void OnEnable()
     {
+        //if (!IsOwner) return;
         base.OnEnable();
 
         survivorActionMap ??= InputSystem.actions.FindActionMap("Survivor");
@@ -62,12 +63,13 @@ public class SurvivorController : PlayerController
 
     public override void OnSwitch(InputAction.CallbackContext context)
     {
-        int direction = (int)context.ReadValue<float>();
+        int direction = (int)Mathf.Sign(context.ReadValue<float>());
         hotbar.SwitchItem(direction);
     }
 
     public override void OnDrop(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         hotbar.DropItem();
     }
 
@@ -78,8 +80,11 @@ public class SurvivorController : PlayerController
             Item activeItem = hotbar.GetActiveItem();
             if (activeItem != null)
             {
-                activeItem.TryGetComponent(out IReload reload);
-                reload?.Reload();
+                if (activeItem.TryGetComponent(out IReload reload))
+                {
+                    reload.Reload();
+                }
+                
             }
         }
     }

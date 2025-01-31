@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   subtaskName: Pick Up Item
   subtaskInstructions: Pick up the {ITEM}
-  undoOnDrop: 1
+  displayCompletionState: 1
+  undoOnDrop: 0

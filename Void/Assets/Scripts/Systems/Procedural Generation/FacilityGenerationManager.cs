@@ -37,8 +37,9 @@ public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
     // TODO - Uncomment and fix fixture restriction verification
     // TODO - Create debugging functionality with procedurally generation
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         roomGenerator = GetComponent<RoomGenerator>();
         hallwayGenerator = GetComponent<HallwayGenerator>();
         interiorGenerator = GetComponent<InteriorGenerator>();

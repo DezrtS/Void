@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,9 +11,8 @@ public abstract class Task : NetworkBehaviour
     public TaskData TaskData {  get { return taskData; } } 
 
     public delegate void TaskProgressHandler(Task task);
-
     public event TaskProgressHandler OnTaskCompletion;
-    public event TaskProgressHandler OnSubTaskCompletion;
+    public event Action OnUpdateTaskInstructions;
 
     private void Awake()
     {
@@ -20,9 +20,10 @@ public abstract class Task : NetworkBehaviour
         for (int i = 0; i < subtasks.Length; i++)
         {
             subtasks[i] = taskData.Subtasks[i].CreateSubtaskInstance(this, taskData);
+            subtasks[i].OnSubtaskStateUpdate += OnSubtaskUpdate;
             subtasks[i].OnUpdateSubtaskInstructions += () =>
             {
-                TaskList.Instance.AddTask(this);
+                OnUpdateTaskInstructions?.Invoke();
             };
         }
 
@@ -42,5 +43,25 @@ public abstract class Task : NetworkBehaviour
             instructions += subtask.GetSubtaskInstructions() + "\n\n";
         }
         return instructions;
+    }
+
+    public void OnSubtaskUpdate(ISubtask subtask, bool completed)
+    {
+        if (completed)
+        {
+            if (IsTaskComplete())
+            {
+                OnTaskCompletion?.Invoke(this);
+            }
+        }
+    }
+
+    public bool IsTaskComplete()
+    {
+        foreach (ISubtask subtask in subtasks)
+        {
+            if (!subtask.IsCompleted) return false;
+        }
+        return true;
     }
 }

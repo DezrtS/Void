@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class GameManager : NetworkSingletonPersistent<GameManager>
@@ -10,6 +12,13 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         WaitingToStart,
         GamePlaying,
         GameOver
+    }
+
+    public enum PlayerRelationship
+    {
+        Host,
+        Client,
+        Server
     }
 
     public enum PlayerRole
@@ -23,6 +32,9 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     private NetworkVariable<GameState> state = new NetworkVariable<GameState>(GameState.WaitingToStart);
     private Dictionary<ulong, PlayerRole> playerRoleDictionary;
 
+    [SerializeField] private bool initializeNetworkingOnStart;
+    [SerializeField] private PlayerRelationship defaultPlayerRelationship;
+
     [SerializeField] private bool startGameOnStart;
     [SerializeField] private PlayerRole defaultPlayerRole;
 
@@ -31,9 +43,29 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     [SerializeField] public GameObject FirstPersonCamera;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         playerRoleDictionary = new Dictionary<ulong, PlayerRole>();
+    }
+
+    private void Start()
+    {
+        if (initializeNetworkingOnStart)
+        {
+            switch (defaultPlayerRelationship)
+            {
+                case PlayerRelationship.Host:
+                    GameMultiplayer.Instance.StartHost();
+                    break;
+                case PlayerRelationship.Client:
+                    GameMultiplayer.Instance.StartClient();
+                    break;
+                default:
+                    GameMultiplayer.Instance.StartHost();
+                    break;
+            }
+        }
     }
 
     public override void OnNetworkSpawn()
@@ -138,7 +170,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     [ClientRpc]
     public void HandleTaskListClientRpc()
     {
-        TaskManager.Instance.DisplayTaskUI();
+        TaskManager.Instance.RegenerateTaskInstructions();
     }
 
     [ServerRpc(RequireOwnership = false)]

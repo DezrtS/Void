@@ -10,8 +10,9 @@ public class PlayerReadyManager : NetworkSingletonPersistent<PlayerReadyManager>
     public event PlayerReadyHandler OnPlayerReady;
     public event Action OnAllPlayersReady;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         playerReadyDictionary = new Dictionary<ulong, bool>();
     }
 

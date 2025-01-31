@@ -126,6 +126,8 @@ public class Gun : Item, IReload
 
     public void Reload()
     {
+        Debug.Log("Reloading");
+        ItemManager.CreateSimpleEventLog("Reload", $"IsServer: {IsServer}");
         reloadTimer = timeToReload;
         ammo = maxAmmo;
         ReloadServerRpc();
