@@ -21,10 +21,7 @@ public abstract class Task : NetworkBehaviour
         {
             subtasks[i] = taskData.Subtasks[i].CreateSubtaskInstance(this, taskData);
             subtasks[i].OnSubtaskStateUpdate += OnSubtaskUpdate;
-            subtasks[i].OnUpdateSubtaskInstructions += () =>
-            {
-                OnUpdateTaskInstructions?.Invoke();
-            };
+            subtasks[i].OnUpdateSubtaskInstructions += UpdateTaskInstructions;
         }
 
         //completedSubtasks = new bool[taskData.Subtasks.Count];
@@ -43,6 +40,11 @@ public abstract class Task : NetworkBehaviour
             instructions += subtask.GetSubtaskInstructions() + "\n\n";
         }
         return instructions;
+    }
+
+    public void UpdateTaskInstructions()
+    {
+        OnUpdateTaskInstructions?.Invoke();
     }
 
     public void OnSubtaskUpdate(ISubtask subtask, bool completed)

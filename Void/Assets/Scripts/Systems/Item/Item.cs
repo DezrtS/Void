@@ -12,6 +12,7 @@ public class Item : NetworkBehaviour, IUseable, IInteractable
 
     protected NetworkVariable<bool> isUsing = new NetworkVariable<bool>(false);
     protected Rigidbody rig;
+    protected Collider col;
 
     public delegate void ItemHandler(Item item);
     public event IUseable.UseHandler OnUsed;
@@ -26,6 +27,7 @@ public class Item : NetworkBehaviour, IUseable, IInteractable
     private void Awake()
     {
         rig = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
     }
 
     public bool CanUse()
@@ -61,6 +63,7 @@ public class Item : NetworkBehaviour, IUseable, IInteractable
         isDropped = false;
         isPickedUp = true;
         rig.isKinematic = true;
+        col.enabled = false;
         OnPickedUp?.Invoke(this);
     }
 
@@ -73,6 +76,7 @@ public class Item : NetworkBehaviour, IUseable, IInteractable
     {
         isPickedUp = false;
         isDropped = true;
+        col.enabled = true;
         rig.isKinematic = false;
         OnDropped?.Invoke(this);
     }

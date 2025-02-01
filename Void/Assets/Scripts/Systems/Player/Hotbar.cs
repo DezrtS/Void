@@ -216,6 +216,7 @@ public class Hotbar : NetworkBehaviour
     {
         if (!isDragging) return;
 
+
     }
 
     public void StartDraggingClientServerSide(Dragable dragable)
@@ -230,11 +231,8 @@ public class Hotbar : NetworkBehaviour
     {
         if (isDragging) return;
 
-        if (!IsHost)
-        {
-            NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
-            StartDraggingClientServerSide(networkObject.GetComponent<Dragable>());
-        }
+        NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
+        StartDraggingClientServerSide(networkObject.GetComponent<Dragable>());
 
         ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
         StartDraggingClientRpc(networkObjectId, clientRpcParams);

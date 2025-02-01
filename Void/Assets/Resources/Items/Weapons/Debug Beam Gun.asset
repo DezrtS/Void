@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7328d77b7b3b6f4bbfb09374ad1b9bb, type: 3}
   m_Name: Debug Beam Gun
   m_EditorClassIdentifier: 
-  Name: Debug Gun
+  Name: Beam Gun
   Description: It's a gun
   ItemSprite: {fileID: 1208872289, guid: e6e34c0e053e8834fac1a4bc6529a83d, type: 3}
   ItemPrefab: {fileID: 5793455159812539837, guid: 7e2b407959f71ac4ea300d90365ce3e1,
