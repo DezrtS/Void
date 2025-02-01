@@ -11,6 +11,7 @@ public class SelectionWheel : MonoBehaviour
     [SerializeField] private float radius;
     [SerializeField] private int count;
     [SerializeField] private float angleMargin;
+    [SerializeField] private float selectionOffset = 0;
 
     [Header("References")]
     [SerializeField] private GameObject selectionWheelHolder;
@@ -24,8 +25,9 @@ public class SelectionWheel : MonoBehaviour
     [SerializeField] private Color activeTextColor;
     //[SerializeField] private Color defaultTextColor;
     [SerializeField] private Color inactiveTextColor;
-    //[SerializeField] private Transform mouseTracker;
-    //[SerializeField] private Transform bestOptionTracker;
+    
+    [SerializeField] private Transform mouseTracker;
+    [SerializeField] private Transform bestOptionTracker;
 
     private WheelSection[] wheelSections;
     private WheelSection selectedWheelSection;
@@ -94,6 +96,7 @@ public class SelectionWheel : MonoBehaviour
         GenerateSelectionWheel();
     }
 
+    [ContextMenu("Activate Selection Wheel")]
     public void ActivateSelectionWheel()
     {
         active = true;
@@ -168,12 +171,12 @@ public class SelectionWheel : MonoBehaviour
 
     public void UpdateCurrentSelection()
     {
-        Vector2 mousePos = mousePositionInputAction.ReadValue<Vector2>();
-        //mouseTracker.position = mousePos;
+        Vector2 mousePos = mousePositionInputAction.ReadValue<Vector2>() - new Vector2(Screen.width, Screen.height) * 0.5f; //* 0.1069167f;
+        //mouseTracker.localPosition = mousePos;
 
         if (!allowInnerSelection)
         {
-            if (Vector2.Distance(mousePos, transform.position) < radius)
+            if (Vector2.Distance(mousePos, transform.position) < radius - selectionOffset)
             {
                 if (selectedWheelSection)
                 {
@@ -200,7 +203,7 @@ public class SelectionWheel : MonoBehaviour
             {
                 bestMatch = similarity;
                 closestSection = wheelSections[i];
-                //bestOptionTracker.position = sectionPosition;
+                //bestOptionTracker.localPosition = sectionPosition;
             }
         }
 

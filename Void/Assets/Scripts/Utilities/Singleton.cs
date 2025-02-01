@@ -7,9 +7,14 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     private static T instance;
 
     // Creates a static generic field to retrieve the private instance variable
-    public static T Instance { get { return instance; } }
+    public static T Instance { 
+        get 
+        {
+            return instance; 
+        } 
+    }
 
-    protected virtual void OnEnable()
+    protected virtual void Awake()
     {
         // Destroys the current instance that runs this Awake() function if there is another instance of this class in the scene
         if (instance != null)
@@ -35,7 +40,7 @@ public abstract class NetworkSingleton<T> : NetworkBehaviour where T : NetworkBe
     // Creates a static generic field to retrieve the private instance variable
     public static T Instance { get { return instance; } }
 
-    protected virtual void OnEnable()
+    protected virtual void Awake()
     {
         // Destroys the current instance that runs this Awake() function if there is another instance of this class in the scene
         if (instance != null)

@@ -17,7 +17,7 @@ public class PickUpItemSubtaskData : SubtaskData
 
 public class PickUpItemSubtask : Subtask
 {
-    private bool undoOnDrop;
+    private readonly bool undoOnDrop;
     private Item item;
 
     public PickUpItemSubtask(TaskData taskData, SubtaskData subtaskData, bool undoOnDrop) : base(taskData, subtaskData)

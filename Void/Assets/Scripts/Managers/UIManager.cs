@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
@@ -9,7 +10,11 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject survivorUI;
     [SerializeField] private GameObject spectatorUI;
 
+    [SerializeField] private TextMeshProUGUI taskText;
+
     public static event Action<GameObject> OnSetupUI;
+
+    public TextMeshProUGUI TaskText => taskText;
 
     public void SetupUI(GameManager.PlayerRole playerRole, GameObject player)
     {

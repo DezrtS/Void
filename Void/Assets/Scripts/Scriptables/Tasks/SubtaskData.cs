@@ -6,9 +6,11 @@ public abstract class SubtaskData : ScriptableObject
 {
     [SerializeField] private string subtaskName;
     [SerializeField] private string subtaskInstructions;
+    [SerializeField] private bool displayCompletionState;
 
     public string SubtaskName => subtaskName;
     public string SubtaskInstructions => subtaskInstructions;
+    public bool DisplayCompletionState => displayCompletionState;
 
     public abstract ISubtask CreateSubtaskInstance(Task task, TaskData taskData);
 }
@@ -25,14 +27,14 @@ public abstract class Subtask : ISubtask
     public SubtaskData SubtaskData => subtaskData;
     public bool IsCompleted => isCompleted;
 
-    public event ISubtask.SubtaskHandler OnSubtaskCompletion;
+    public event ISubtask.SubtaskHandler OnSubtaskStateUpdate;
     public event Action OnUpdateSubtaskInstructions;
 
     public virtual void Execute()
     {
-        Debug.Log("TASK COMPLETED");
         isCompleted = true;
-        OnSubtaskCompletion?.Invoke(this, isCompleted);
+        OnSubtaskStateUpdate?.Invoke(this, isCompleted);
+        UpdateSubtaskInstructions();
     }
 
     public Subtask(TaskData taskData, SubtaskData subtaskData)
@@ -48,6 +50,11 @@ public abstract class Subtask : ISubtask
 
     protected (string newInstructions, Dictionary<int, string> keys) GetFormatInstructions(string instructions)
     {
+        if (subtaskData.DisplayCompletionState)
+        {
+            instructions = instructions.Insert(0, $"[{isCompleted}]");
+        }
+
         int index = 0;
         string data = "";
         Dictionary<int, string> keys = new Dictionary<int, string>();
@@ -90,6 +97,7 @@ public abstract class Subtask : ISubtask
     public virtual void Undo()
     {
         isCompleted = false;
-        OnSubtaskCompletion?.Invoke(this, isCompleted);
+        OnSubtaskStateUpdate?.Invoke(this, isCompleted);
+        UpdateSubtaskInstructions();
     }
 }

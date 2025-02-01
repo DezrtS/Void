@@ -9,15 +9,13 @@ public class TaskManager : NetworkSingleton<TaskManager>
     private NetworkVariable<int> totalTasks = new NetworkVariable<int>(0);
     private List<Task> tasks = new List<Task>();
     [SerializeField] private int tasksCount = 1;
-    [SerializeField] private TextMeshProUGUI taskText;
 
-    protected override void OnEnable()
+    private void OnEnable()
     {
-        base.OnEnable();
         foreach (Task task in tasks)
         {
             task.OnTaskCompletion += OnTaskCompletion;
-            task.OnSubTaskCompletion += OnSubtaskCompletion;
+            task.OnUpdateTaskInstructions += RegenerateTaskInstructions;
         }
     }
 
@@ -26,7 +24,7 @@ public class TaskManager : NetworkSingleton<TaskManager>
         foreach (Task task in tasks)
         {
             task.OnTaskCompletion -= OnTaskCompletion;
-            task.OnSubTaskCompletion -= OnSubtaskCompletion;
+            task.OnUpdateTaskInstructions -= RegenerateTaskInstructions;
         }
     }
 
@@ -55,7 +53,7 @@ public class TaskManager : NetworkSingleton<TaskManager>
             totalTasks.Value++;
             // OnTaskAdded Event
             task.OnTaskCompletion += OnTaskCompletion;
-            task.OnSubTaskCompletion += OnSubtaskCompletion;
+            task.OnUpdateTaskInstructions += RegenerateTaskInstructions;
         }
     }
 
@@ -67,33 +65,23 @@ public class TaskManager : NetworkSingleton<TaskManager>
             totalTasks.Value--;
             // OnTaskRemoved Event
             task.OnTaskCompletion -= OnTaskCompletion;
-            task.OnSubTaskCompletion -= OnSubtaskCompletion;
+            task.OnUpdateTaskInstructions -= RegenerateTaskInstructions;
         }
     }
 
     public void OnTaskCompletion(Task task)
     {
-        Debug.Log($"{task.TaskData.TaskName} was completed");
-        TaskList.Instance.ClearTasks();
-        DisplayTaskUI();
-        //AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound1);
-        // Send Out Event That Other Observers Can Listen To.
+        Debug.Log($"{task.TaskData.TaskName} task was completed");
     }
 
-    public void OnSubtaskCompletion(Task task)
+    public void RegenerateTaskInstructions()
     {
-        // Send Out Event That Other Observers Can Listen To.
-
-        TaskList.Instance.ClearTasks();
-        DisplayTaskUI();
-    }
-
-    public void DisplayTaskUI()
-    {
-        foreach (var task in tasks)
+        string instructions = "";
+        foreach (Task task in tasks)
         {
-            TaskList.Instance.AddTask(task);
+            instructions += $"{task.GetInstructions()}\n\n";
         }
+        UIManager.Instance.TaskText.text = instructions;
     }
 
     [ServerRpc(RequireOwnership = false)]

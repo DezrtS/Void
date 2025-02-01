@@ -66,6 +66,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 543f6a5db30b9ba4ba8f8d8dc1d82a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initializeNetworkingOnStart: 0
+  defaultPlayerRelationship: 0
+  startGameOnStart: 0
+  defaultPlayerRole: 2
   monsterPrefab: {fileID: 1173705057825196843, guid: 8cfc32a23ded537428f2e30e0904a6ad,
     type: 3}
   survivorPrefab: {fileID: 1575300930724462412, guid: ac7b75d41345af34294d3b00de9c4ec4,

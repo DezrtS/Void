@@ -17,5 +17,6 @@ MonoBehaviour:
   taskInstructions: Retrieve the specified item.
   subtasks:
   - {fileID: 11400000, guid: 94c1ce83ac81ce042809d836ec64e8cb, type: 2}
+  - {fileID: 11400000, guid: 9b789ea947acb6c45ab1d2ca701bd58e, type: 2}
   taskPrefabs:
   - {fileID: 4352985685612846072, guid: 973fb660516ac14478edbdb77d427757, type: 3}
