@@ -10,7 +10,7 @@ public class ExplosiveGrenade : ThrowableItem
     [SerializeField] private LayerMask effectableLayers;
     [SerializeField] private GameObject explosionEffect;
 
-    private float timer = 0;
+    [SerializeField]private float timer = 0;
 
     private void FixedUpdate()
     {
@@ -19,6 +19,7 @@ public class ExplosiveGrenade : ThrowableItem
             if (timer <= 0)
             {
                 Activate();
+                thrown = false;
             }
             else
             {

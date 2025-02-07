@@ -16,6 +16,7 @@ public class ThrowableItem : Item
 
     public override void OnUse()
     {
+        Drop();
         Throw();
     }
 
@@ -34,8 +35,8 @@ public class ThrowableItem : Item
         thrown = true;
     }
 
-    public override void OnStopUsing()
+    /*public override void OnStopUsing()
     {
         throw new System.NotImplementedException();
-    }
+    }*/
 }
