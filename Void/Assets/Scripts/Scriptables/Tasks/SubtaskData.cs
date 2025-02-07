@@ -77,7 +77,7 @@ public abstract class Subtask : ISubtask
                 }
 
                 int count = i - index;
-                instructions = instructions.Remove(index, count);
+                instructions = instructions.Remove(index, count + 1);
                 i = index;
 
                 keys.Add(i, data);

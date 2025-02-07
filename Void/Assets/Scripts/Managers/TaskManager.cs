@@ -6,12 +6,17 @@ using UnityEngine;
 
 public class TaskManager : NetworkSingleton<TaskManager>
 {
+    [SerializeField] private bool generateTasksOnSpawn;
     private NetworkVariable<int> totalTasks = new NetworkVariable<int>(0);
     private List<Task> tasks = new List<Task>();
     [SerializeField] private int tasksCount = 1;
 
-    private void OnEnable()
+    [SerializeField] private List<TaskObjectSpawnPoint> taskObjectSpawnPoints = new List<TaskObjectSpawnPoint>();
+
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         foreach (Task task in tasks)
         {
             task.OnTaskCompletion += OnTaskCompletion;
@@ -32,8 +37,11 @@ public class TaskManager : NetworkSingleton<TaskManager>
     {
         base.OnNetworkSpawn();
 
-        if (!IsServer) return;
-        
+        if (IsServer && generateTasksOnSpawn) GenerateTasks();
+    }
+
+    public void GenerateTasks()
+    {
         List<TaskData> taskDatas = GameDataManager.Instance.Tasks;
         for (int i = 0; i < tasksCount; i++)
         {
@@ -43,6 +51,28 @@ public class TaskManager : NetworkSingleton<TaskManager>
             int randomTaskIndex = Random.Range(0, taskPrefabs.Count);
             SpawnTaskServerRpc(randomTaskDataIndex, randomTaskIndex);
         }
+    }
+
+    public void AddTaskObjectSpawnPoint(TaskObjectSpawnPoint taskObjectSpawnPoint)
+    {
+        if (!taskObjectSpawnPoints.Contains(taskObjectSpawnPoint))
+        {
+            taskObjectSpawnPoints.Add(taskObjectSpawnPoint);
+        }
+    }
+
+    public TaskObjectSpawnPoint GetAvailableTaskObjectSpawnPoint(TaskObjectSpawnPoint.TaskObjectType objectType)
+    {
+        List<TaskObjectSpawnPoint> possibleSpawnPoints = taskObjectSpawnPoints.FindAll(x => !x.IsOccupied && x.ObjectType == objectType);
+
+        if (possibleSpawnPoints.Count > 0)
+        {
+            int index = Random.Range(0, possibleSpawnPoints.Count);
+            return possibleSpawnPoints[index];
+        }
+
+        Debug.LogWarning("No Suitable Task Object Spawn Points were Found");
+        return null;
     }
 
     public void AddTask(Task task)
@@ -79,7 +109,7 @@ public class TaskManager : NetworkSingleton<TaskManager>
         string instructions = "";
         foreach (Task task in tasks)
         {
-            instructions += $"{task.GetInstructions()}\n\n";
+            instructions += $"{task.GetInstructions()}\n";
         }
         UIManager.Instance.TaskText.text = instructions;
     }

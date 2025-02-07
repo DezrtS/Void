@@ -69,6 +69,8 @@ public abstract class PlayerController : NetworkBehaviour
         playerLook = GetComponent<PlayerLook>();
     }
 
+    public abstract void Die(Health health);
+
     public abstract void OnPrimaryAction(InputAction.CallbackContext context);
     public abstract void OnSecondaryAction(InputAction.CallbackContext context);
     public void OnOpenSelection(InputAction.CallbackContext context)

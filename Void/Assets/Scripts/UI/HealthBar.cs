@@ -48,7 +48,7 @@ public class HealthBar : MonoBehaviour
         health.OnDeath += DetachHealthBar;
     }
 
-    public void DetachHealthBar()
+    public void DetachHealthBar(Health health)
     {
         health.OnHealthChanged -= OnHealthBarChange;
         health.OnDeath -= DetachHealthBar;

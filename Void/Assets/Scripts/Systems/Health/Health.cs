@@ -8,14 +8,14 @@ public abstract class Health : NetworkBehaviour
     [SerializeField] private Stat healthRegenerationRate;
     [SerializeField] private float healthRegenerationDelay;
 
+    [SerializeField] private Stat damageResistance;
+
     public delegate void HealthHandler(float previousValue, float newValue, float maxValue);
     public event HealthHandler OnHealthChanged;
-    public event Action OnDeath;
+    public event Action<Health> OnDeath;
 
     private float healthRegenerationDelayTimer;
     private bool healthChanged = false;
-
-    public Stat HealthRegenerationRate => healthRegenerationRate;
 
     public abstract float GetMaxHealth();
     public abstract float GetHealth();
@@ -23,7 +23,11 @@ public abstract class Health : NetworkBehaviour
 
     protected virtual void Awake()
     {
-        if (TryGetComponent(out PlayerStats playerStats)) healthRegenerationRate = playerStats.HealthRegenerationRate;
+        if (TryGetComponent(out PlayerStats playerStats))
+        {
+            healthRegenerationRate = playerStats.HealthRegenerationRate;
+            damageResistance = playerStats.DamageResistance;
+        }
     }
 
     private void FixedUpdate()
@@ -58,6 +62,9 @@ public abstract class Health : NetworkBehaviour
 
     public void Damage(float amount)
     {
+        amount = amount * Mathf.Clamp(1 - damageResistance.Value, 0, 1);
+        if (amount <= 0) return;
+
         UpdateHealthClientServerSide(-amount);
         UpdateHealthServerRpc(-amount);
     }
@@ -70,7 +77,7 @@ public abstract class Health : NetworkBehaviour
 
     public void Die()
     {
-        OnDeath?.Invoke();
+        OnDeath?.Invoke(this);
     }
 
     public void UpdateHealthClientServerSide(float amount)

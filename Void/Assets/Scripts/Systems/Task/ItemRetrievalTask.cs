@@ -22,6 +22,12 @@ public class ItemRetrievalTask : Task
     public void SpawnItemServerRpc()
     {
         Item item = ItemManager.SpawnItem(itemData);
+        TaskObjectSpawnPoint taskObjectSpawnPoint = TaskManager.Instance.GetAvailableTaskObjectSpawnPoint(TaskObjectSpawnPoint.TaskObjectType.Item);
+        if (taskObjectSpawnPoint != null)
+        {
+            item.transform.position = taskObjectSpawnPoint.transform.position;
+            taskObjectSpawnPoint.AddObject(item.gameObject);
+        }
         OnItem?.Invoke(item);
 
         SpawnItemClientRpc(item.NetworkObjectId);
@@ -34,7 +40,4 @@ public class ItemRetrievalTask : Task
         Item item = networkObject.GetComponent<Item>();
         OnItem?.Invoke(item);
     }
-
-
-
 }

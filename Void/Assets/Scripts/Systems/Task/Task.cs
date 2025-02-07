@@ -27,17 +27,12 @@ public abstract class Task : NetworkBehaviour
         //completedSubtasks = new bool[taskData.Subtasks.Count];
     }
 
-    private void Start()
-    {
-        TaskManager.Instance.AddTask(this);
-    }
-
     public string GetInstructions()
     {
-        string instructions = $"{taskData.TaskName} - {taskData.TaskInstructions}\n";
+        string instructions = $"{taskData.TaskName}\n";
         foreach (ISubtask subtask in subtasks)
         {
-            instructions += subtask.GetSubtaskInstructions() + "\n\n";
+            instructions += $" - {subtask.GetSubtaskInstructions()}\n";
         }
         return instructions;
     }

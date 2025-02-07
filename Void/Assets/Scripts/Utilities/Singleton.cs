@@ -1,22 +1,21 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class Singleton<T> : MonoBehaviour, ISingleton<T> where T : MonoBehaviour
 {
-    // Creates a private static generic variable for the instance of the singleton
     private static T instance;
+    public static T Instance => instance;
 
-    // Creates a static generic field to retrieve the private instance variable
-    public static T Instance { 
-        get 
-        {
-            return instance; 
-        } 
+    public static event Action<T> OnSingletonInitialized;
+
+    protected virtual void OnEnable()
+    {
+        InitializeSingleton();
     }
 
-    protected virtual void Awake()
+    public virtual void InitializeSingleton()
     {
-        // Destroys the current instance that runs this Awake() function if there is another instance of this class in the scene
         if (instance != null)
         {
             Debug.LogWarning($"There were multiple instances of {name} in the scene");
@@ -26,23 +25,24 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
 
         instance = this as T;
-        OnSingletonCreated();
+        OnSingletonInitialized?.Invoke(instance);
     }
-
-    protected virtual void OnSingletonCreated() { }
 }
 
-public abstract class NetworkSingleton<T> : NetworkBehaviour where T : NetworkBehaviour
+public abstract class NetworkSingleton<T> : NetworkBehaviour, ISingleton<T> where T : NetworkBehaviour
 {
-    // Creates a private static generic variable for the instance of the singleton
     private static T instance;
+    public static T Instance => instance;
 
-    // Creates a static generic field to retrieve the private instance variable
-    public static T Instance { get { return instance; } }
+    public static event Action<T> OnSingletonInitialized;
 
-    protected virtual void Awake()
+    protected virtual void OnEnable()
     {
-        // Destroys the current instance that runs this Awake() function if there is another instance of this class in the scene
+        InitializeSingleton();
+    }
+
+    public virtual void InitializeSingleton()
+    {
         if (instance != null)
         {
             Debug.LogWarning($"There were multiple instances of {name} in the scene");
@@ -52,24 +52,24 @@ public abstract class NetworkSingleton<T> : NetworkBehaviour where T : NetworkBe
         }
 
         instance = this as T;
-        OnSingletonCreated();
+        OnSingletonInitialized?.Invoke(instance);
     }
-
-    protected virtual void OnSingletonCreated() { }
 }
 
-public abstract class SingletonPersistent<T> : Singleton<T> where T : MonoBehaviour
+public abstract class SingletonPersistent<T> : Singleton<T> where T : MonoBehaviour, ISingleton<T>
 {
-    protected override void OnSingletonCreated()
+    public override void InitializeSingleton()
     {
+        base.InitializeSingleton();
         DontDestroyOnLoad(gameObject);
     }
 }
 
-public abstract class NetworkSingletonPersistent<T> : NetworkSingleton<T> where T : NetworkBehaviour
+public abstract class NetworkSingletonPersistent<T> : NetworkSingleton<T> where T : NetworkBehaviour, ISingleton<T>
 {
-    protected override void OnSingletonCreated()
+    public override void InitializeSingleton()
     {
+        base.InitializeSingleton();
         DontDestroyOnLoad(gameObject);
     }
 }

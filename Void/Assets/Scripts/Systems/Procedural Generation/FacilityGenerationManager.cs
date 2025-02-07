@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
+public class FacilityGenerationManager : Singleton<FacilityGenerationManager>, ISingleton<FacilityGenerationManager>
 {
     [Header("Facility Generation Parameters")]
     [SerializeField] private bool generateOnStart = true;
@@ -37,9 +37,8 @@ public class FacilityGenerationManager : Singleton<FacilityGenerationManager>
     // TODO - Uncomment and fix fixture restriction verification
     // TODO - Create debugging functionality with procedurally generation
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         roomGenerator = GetComponent<RoomGenerator>();
         hallwayGenerator = GetComponent<HallwayGenerator>();
         interiorGenerator = GetComponent<InteriorGenerator>();

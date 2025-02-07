@@ -39,7 +39,17 @@ public class SurvivorController : PlayerController
         hotbar = GetComponent<Hotbar>();
         inventory = GetComponent<Inventory>();
 
-        if (TryGetComponent(out Health health)) health.OnDeath += hotbar.DropAllItems;
+        if (TryGetComponent(out Health health)) health.OnDeath += Die;
+    }
+
+    public override void Die(Health health)
+    {
+        health.SetHealth(health.GetMaxHealth());
+        hotbar.DropAllItems();
+        PlayerSpawnPoint playerSpawnPoint = GameManager.Instance.GetAvailablePlayerSpawnPoint(GameManager.PlayerRole.Survivor);
+        Vector3 spawnPosition = Vector3.zero;
+        if (playerSpawnPoint != null) spawnPosition = playerSpawnPoint.transform.position;
+        transform.position = spawnPosition;
     }
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)
@@ -70,7 +80,15 @@ public class SurvivorController : PlayerController
     public override void OnDrop(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;
-        hotbar.DropItem();
+
+        if (hotbar.IsDragging)
+        {
+            hotbar.StopDragging();
+        }
+        else
+        {
+            hotbar.DropItem();
+        }
     }
 
     public void OnReload(InputAction.CallbackContext context)

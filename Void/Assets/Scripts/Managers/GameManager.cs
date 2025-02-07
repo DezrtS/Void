@@ -43,9 +43,10 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     [SerializeField] public GameObject FirstPersonCamera;
 
-    protected override void Awake()
+    private List<PlayerSpawnPoint> playerSpawnPoints = new List<PlayerSpawnPoint>();
+
+    private void Awake()
     {
-        base.Awake();
         playerRoleDictionary = new Dictionary<ulong, PlayerRole>();
     }
 
@@ -78,7 +79,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
                 return;
             }
 
-            PlayerReadyManager.Instance.OnAllPlayersReady += () => Loader.LoadNetwork(Loader.Scene.GameplayScene);
+            PlayerReadyManager.OnAllPlayersReady += () => Loader.LoadNetwork(Loader.Scene.GameplayScene);
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnSceneManagerLoadEventCompleted;
         }
     }
@@ -89,6 +90,28 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         {
             StartGame();
         }
+    }
+
+    public void AddSpawnPoint(PlayerSpawnPoint playerSpawnPoint)
+    {
+        if (!playerSpawnPoints.Contains(playerSpawnPoint))
+        {
+            playerSpawnPoints.Add(playerSpawnPoint);
+        }
+    }
+
+    public PlayerSpawnPoint GetAvailablePlayerSpawnPoint(PlayerRole playerRole)
+    {
+        List<PlayerSpawnPoint> possibleSpawnPoints = playerSpawnPoints.FindAll(x => x.CanSpawn());
+
+        if (possibleSpawnPoints.Count > 0)
+        {
+            int index = Random.Range(0, possibleSpawnPoints.Count);
+            return possibleSpawnPoints[index];
+        }
+
+        Debug.LogWarning("No Player Spawn Point was Found");
+        return null;
     }
 
     public void StartGame()
@@ -131,7 +154,11 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     private NetworkObject SpawnMonster(ulong clientId)
     {
-        GameObject monsterGameObject = Instantiate(monsterPrefab, Vector3.zero /*GridMapManager.Instance.GetMonsterSpawnPosition()*/, Quaternion.identity);
+        Vector3 spawnPosition = Vector3.zero;
+        PlayerSpawnPoint spawnPoint = GetAvailablePlayerSpawnPoint(PlayerRole.Monster);
+        if (spawnPoint != null) spawnPosition = spawnPoint.transform.position;
+
+        GameObject monsterGameObject = Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
         NetworkObject networkObject = monsterGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;
@@ -139,7 +166,11 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     private NetworkObject SpawnSurvivor(ulong clientId)
     {
-        GameObject survivorGameObject = Instantiate(survivorPrefab, Vector3.zero /*GridMapManager.Instance.GetElevatorRoomPosition()*/, Quaternion.identity);
+        Vector3 spawnPosition = Vector3.zero;
+        PlayerSpawnPoint spawnPoint = GetAvailablePlayerSpawnPoint(PlayerRole.Survivor);
+        if (spawnPoint != null) spawnPosition = spawnPoint.transform.position;
+
+        GameObject survivorGameObject = Instantiate(survivorPrefab, spawnPosition, Quaternion.identity);
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;

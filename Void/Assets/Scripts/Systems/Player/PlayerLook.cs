@@ -28,7 +28,7 @@ public class PlayerLook : NetworkBehaviour
     [SerializeField] private float xSensitivity = 0.02f;
     [SerializeField] private float ySensitivity = 0.01f;
 
-    private IInteractable interactable; 
+    private IInteractable interactable;
 
     private void OnEnable()
     {
@@ -82,7 +82,7 @@ public class PlayerLook : NetworkBehaviour
     {
         if (canInteract)
         {
-            //Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 1);
+            Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 1);
             if (Physics.Raycast(cameraRootTransform.position, cameraRootTransform.forward, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Collide))
             {
                 hitInfo.collider.TryGetComponent(out IInteractable interactable);

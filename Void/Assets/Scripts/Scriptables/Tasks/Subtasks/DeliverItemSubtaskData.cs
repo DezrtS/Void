@@ -55,6 +55,7 @@ public class DeliverItemSubtask : Subtask
         if (this.item == item)
         {
             Execute();
+            itemDropOff.AcceptItem();
         }
     }
 
