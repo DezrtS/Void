@@ -69,10 +69,14 @@ public abstract class PlayerController : NetworkBehaviour
         playerLook = GetComponent<PlayerLook>();
     }
 
+    public abstract void Die(Health health);
+
     public abstract void OnPrimaryAction(InputAction.CallbackContext context);
     public abstract void OnSecondaryAction(InputAction.CallbackContext context);
     public void OnOpenSelection(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
+
         if (context.performed)
         {
             OnSelectionWheel?.Invoke(true);
@@ -91,6 +95,7 @@ public abstract class PlayerController : NetworkBehaviour
     // May be being run by the server
     public void OnInteract(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         if (context.performed) playerLook.InteractWithObject();
     }
 

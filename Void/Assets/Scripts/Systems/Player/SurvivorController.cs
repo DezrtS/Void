@@ -13,7 +13,6 @@ public class SurvivorController : PlayerController
 
     protected override void OnEnable()
     {
-        //if (!IsOwner) return;
         base.OnEnable();
 
         survivorActionMap ??= InputSystem.actions.FindActionMap("Survivor");
@@ -39,30 +38,44 @@ public class SurvivorController : PlayerController
         hotbar = GetComponent<Hotbar>();
         inventory = GetComponent<Inventory>();
 
-        if (TryGetComponent(out Health health)) health.OnDeath += hotbar.DropAllItems;
+        if (TryGetComponent(out Health health)) health.OnDeath += Die;
+    }
+
+    public override void Die(Health health)
+    {
+        health.SetHealth(health.GetMaxHealth());
+        hotbar.DropAllItems();
+        PlayerSpawnPoint playerSpawnPoint = GameManager.Instance.GetAvailablePlayerSpawnPoint(GameManager.PlayerRole.Survivor);
+        Vector3 spawnPosition = Vector3.zero;
+        if (playerSpawnPoint != null) spawnPosition = playerSpawnPoint.transform.position;
+        transform.position = spawnPosition;
     }
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
+
         if (context.performed)
         {
-            Item activeItem = hotbar.GetActiveItem();
+            Item activeItem = hotbar.GetItem();
             if (activeItem != null) activeItem.Use();
         }
         else if (context.canceled)
         {
-            Item activeItem = hotbar.GetActiveItem();
+            Item activeItem = hotbar.GetItem();
             if (activeItem != null) activeItem.StopUsing();
         }
     }
 
     public override void OnSecondaryAction(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         //throw new System.NotImplementedException();
     }
 
     public override void OnSwitch(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         int direction = (int)Mathf.Sign(context.ReadValue<float>());
         hotbar.SwitchItem(direction);
     }
@@ -70,14 +83,24 @@ public class SurvivorController : PlayerController
     public override void OnDrop(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;
-        hotbar.DropItem();
+
+        if (hotbar.IsDragging)
+        {
+            hotbar.StopDragging();
+        }
+        else
+        {
+            hotbar.DropItem();
+        }
     }
 
     public void OnReload(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
+
         if (context.performed)
         {
-            Item activeItem = hotbar.GetActiveItem();
+            Item activeItem = hotbar.GetItem();
             if (activeItem != null)
             {
                 if (activeItem.TryGetComponent(out IReload reload))

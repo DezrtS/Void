@@ -171,7 +171,7 @@ public class SelectionWheel : MonoBehaviour
 
     public void UpdateCurrentSelection()
     {
-        Vector2 mousePos = mousePositionInputAction.ReadValue<Vector2>() - new Vector2(Screen.width, Screen.height) * 0.5f; //* 0.1069167f;
+        Vector2 mousePos = mousePositionInputAction.ReadValue<Vector2>();// - new Vector2(Screen.width, Screen.height) * 0.5f; //* 0.1069167f;
         //mouseTracker.localPosition = mousePos;
 
         if (!allowInnerSelection)

@@ -16,14 +16,14 @@ public class GameMultiplayer : Singleton<GameMultiplayer>
         NetworkManager.Singleton.StartClient();
     }
 
-    public static ClientRpcParams GenerateClientRpcParams(ServerRpcParams rpcParams)
+    public static ClientRpcParams GenerateClientRpcParams(ServerRpcParams rpcParams, bool reverse = false)
     {
         ulong callingClientId = rpcParams.Receive.SenderClientId;
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
             {
-                TargetClientIds = NetworkManager.Singleton.ConnectedClientsIds.Where(id => id != callingClientId).ToArray()
+                TargetClientIds = (reverse) ? NetworkManager.Singleton.ConnectedClientsIds.Where(id => id == callingClientId).ToArray() : NetworkManager.Singleton.ConnectedClientsIds.Where(id => id != callingClientId).ToArray()
             }
         };
         return clientRpcParams;

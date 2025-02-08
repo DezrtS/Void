@@ -30,14 +30,16 @@ public class BeamGun : Item
         powerUpTimer = -timeToWindUp;
     }
 
-    public override void OnUse()
+    protected override void UseServerSide()
     {
+        base.UseServerSide();
         isFiring = true;
         effect.Play();
     }
 
-    public override void OnStopUsing()
+    protected override void StopUsingServerSide()
     {
+        base.StopUsingServerSide();
         isFiring = false;
     }
 

@@ -13,8 +13,9 @@ public class DeployableItem : Item
         return (!deployed);
     }
 
-    public override void OnUse()
+    protected override void StopUsingServerSide()
     {
+        base.StopUsingServerSide();
         Deploy();
     }
 
@@ -26,11 +27,6 @@ public class DeployableItem : Item
         }
 
         OnDeploy();
-    }
-
-    public override void OnStopUsing()
-    {
-
     }
 
     protected virtual void OnDeploy()

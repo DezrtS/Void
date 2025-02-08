@@ -18,12 +18,12 @@ MonoBehaviour:
   mutationPrefab: {fileID: 2402010164325770602, guid: 20bd6c9866cb7c147b5ae29b34b77ec7,
     type: 3}
   cooldown: 2
+  key: 1
   duration: 5
   statChanges:
-  - stats:
-    - statName: walkSpeed
-      modifier: 1
-      isPercentage: 1
-    - statName: sprintSpeed
-      modifier: 1
-      isPercentage: 1
+  - statName: sprintSpeed
+    modifier: 2
+    modifierType: 1
+  - statName: walkSpeed
+    modifier: 2
+    modifierType: 1

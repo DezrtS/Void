@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TaskList : Singleton<TaskList>
+public class TaskList : Singleton<TaskList>, ISingleton<TaskList>
 {
     [SerializeField] private TextMeshProUGUI taskText;
 

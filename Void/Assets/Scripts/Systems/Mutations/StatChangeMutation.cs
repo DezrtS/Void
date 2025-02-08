@@ -24,8 +24,9 @@ public class StatChangeMutation : Mutation
         return durationTimer <= 0;
     }
 
-    public override void OnUse()
+    protected override void UseClientServerSide()
     {
+        base.UseClientServerSide();
         if (!CanActivate()) return;
 
         durationTimer = statChangeMutationData.Duration;
@@ -49,30 +50,21 @@ public class StatChangeMutation : Mutation
         }
     }
 
-    public override void OnStopUsing()
-    {
-        //throw new System.NotImplementedException();
-    }
-
     private void AddStats()
     {
-        foreach (StatChangeMutationData.StatChange statChange in statChangeMutationData.StatChanges)
+        for (int i = 0; i < statChangeMutationData.StatChanges.Count; i++)
         {
-            foreach (StatChangeMutationData.StatChange.Stat stat in statChange.Stats)
-            {
-                playerStats.ApplyModifier(stat.statName, stat.modifier, stat.isPercentage);
-            }
+            StatChangeMutationData.StatChange statChange = statChangeMutationData.StatChanges[i];
+            playerStats.ApplyModifier(statChange.StatName, statChangeMutationData.Key * 100 + i, statChange.Modifier, statChange.ModifierType);
         }
     }
 
     private void RemoveStats()
     {
-        foreach (StatChangeMutationData.StatChange statChange in statChangeMutationData.StatChanges)
+        for (int i = 0; i < statChangeMutationData.StatChanges.Count; i++)
         {
-            foreach (StatChangeMutationData.StatChange.Stat stat in statChange.Stats)
-            {
-                playerStats.RemoveModifier(stat.statName, stat.modifier, stat.isPercentage);
-            }
+            StatChangeMutationData.StatChange statChange = statChangeMutationData.StatChanges[i];
+            playerStats.RemoveModifier(statChange.StatName, statChangeMutationData.Key * 100 + i);
         }
     }
 }

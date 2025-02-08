@@ -8,21 +8,20 @@ public class StatChangeMutationData : MutationData
     [Serializable]
     public class StatChange
     {
-        [Serializable]
-        public struct Stat
-        {
-            public string statName;
-            public float modifier;
-            public bool isPercentage;
-        }
+        [SerializeField] private string statName;
+        [SerializeField] private float modifier;
+        [SerializeField] private StatModifier.StatModifierType modifierType;
 
-        [SerializeField] private List<Stat> stats = new List<Stat>();
-        public List<Stat> Stats => stats;
+        public string StatName => statName;
+        public float Modifier => modifier;
+        public StatModifier.StatModifierType ModifierType => modifierType;
     };
 
+    [SerializeField] private int key;
     [SerializeField] private float duration;
     [SerializeField] private List<StatChange> statChanges;
 
+    public int Key => key; 
     public float Duration => duration;
     public List<StatChange> StatChanges => statChanges;
 }

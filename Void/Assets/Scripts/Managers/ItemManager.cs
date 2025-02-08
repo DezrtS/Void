@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class ItemManager : NetworkSingleton<ItemManager>
+public class ItemManager : Singleton<ItemManager>
 {
 
     private void Start()

@@ -4,6 +4,6 @@ public interface IUseable
     public event UseHandler OnUsed;
     public bool IsUsing {  get; }
     public abstract bool CanUse();
-    public abstract void Use();
-    public abstract void StopUsing();
+    public abstract bool Use();
+    public abstract bool StopUsing();
 }

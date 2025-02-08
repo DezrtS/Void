@@ -7,12 +7,11 @@ public class PlayerReadyManager : NetworkSingletonPersistent<PlayerReadyManager>
     private Dictionary<ulong, bool> playerReadyDictionary;
 
     public delegate void PlayerReadyHandler(ulong clientId);
-    public event PlayerReadyHandler OnPlayerReady;
-    public event Action OnAllPlayersReady;
+    public static event PlayerReadyHandler OnPlayerReady;
+    public static event Action OnAllPlayersReady;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         playerReadyDictionary = new Dictionary<ulong, bool>();
     }
 

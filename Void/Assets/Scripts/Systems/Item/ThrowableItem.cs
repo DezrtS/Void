@@ -14,8 +14,9 @@ public class ThrowableItem : Item
         return (!thrown);
     }
 
-    public override void OnUse()
+    protected override void StopUsingServerSide()
     {
+        base.StopUsingServerSide();
         Throw();
     }
 
@@ -32,10 +33,5 @@ public class ThrowableItem : Item
         canPickUp = false;
         canDrop = false;
         thrown = true;
-    }
-
-    public override void OnStopUsing()
-    {
-        throw new System.NotImplementedException();
     }
 }
