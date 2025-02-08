@@ -99,6 +99,7 @@ public class PlayerMovement : MovementController
 
     private void FixedUpdate()
     {
+        if (!IsOwner) return;
         HandleMovement();
     }
 
@@ -150,16 +151,19 @@ public class PlayerMovement : MovementController
 
     private void Jump(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         rig.AddForce(Vector3.up * jumpPower.Value, ForceMode.VelocityChange);
     }
 
     private void Sprint(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         isSprinting = context.performed;
     }
 
     private void Crouch(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         isCrouched = context.performed;
         
         if (isCrouched)

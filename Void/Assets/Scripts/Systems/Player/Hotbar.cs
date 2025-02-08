@@ -1,7 +1,5 @@
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
-using UnityEngine.UI;
 
 public class Hotbar : NetworkBehaviour
 {
@@ -22,6 +20,7 @@ public class Hotbar : NetworkBehaviour
 
     private PlayerLook playerLook;
 
+    public int SelectedIndex => selectedIndex;
     public bool IsDragging => isDragging;
 
     private void Awake()
@@ -33,16 +32,21 @@ public class Hotbar : NetworkBehaviour
 
     private void Update()
     {
-        Item item = GetActiveItem();
+        Item item = GetItem();
         if (item != null)
         {
             item.transform.SetPositionAndRotation(activeTransform.position, activeTransform.rotation);
         }
     }
 
-    public Item GetActiveItem()
+    public Item GetItem()
     {
-        return hotbar[selectedIndex];
+        return GetItem(selectedIndex);
+    }
+
+    public Item GetItem(int index)
+    {
+        return hotbar[index];
     }
 
     public void SetEnabledItem(bool enabled)
@@ -101,33 +105,33 @@ public class Hotbar : NetworkBehaviour
 
     public void PickUpItem(Item item)
     {
-        if (!item.CanPickUp()) return;
-
-        if (GetActiveItem() == null)
+        if (item.PickUp())
         {
-            if (!IsServer) PickUpItemClientServerSide(selectedIndex, item);
-            PickUpItemServerRpc(selectedIndex, item.NetworkObjectId);
-            return;
-        }
-
-        for (int i = 0; i < hotbarCapacity; i++)
-        {
-            if (hotbar[i] == null)
+            if (GetItem() == null)
             {
-                if (!IsServer) PickUpItemClientServerSide(i, item);
-                PickUpItemServerRpc(i, item.NetworkObjectId);
+                if (!IsServer) PickUpItemClientServerSide(selectedIndex, item);
+                PickUpItemServerRpc(selectedIndex, item.NetworkObjectId);
                 return;
             }
-        }
 
-        DropItem();
-        if (!IsServer) PickUpItemClientServerSide(selectedIndex, item);
-        PickUpItemServerRpc(selectedIndex, item.NetworkObjectId);
+            for (int i = 0; i < hotbarCapacity; i++)
+            {
+                if (hotbar[i] == null)
+                {
+                    if (!IsServer) PickUpItemClientServerSide(i, item);
+                    PickUpItemServerRpc(i, item.NetworkObjectId);
+                    return;
+                }
+            }
+
+            DropItem();
+            if (!IsServer) PickUpItemClientServerSide(selectedIndex, item);
+            PickUpItemServerRpc(selectedIndex, item.NetworkObjectId);
+        }
     }
 
     public void PickUpItemClientServerSide(int index, Item item)
     {
-        item.PickUp();
         item.transform.parent = transform;
         item.transform.SetLocalPositionAndRotation(activeTransform.localPosition, Quaternion.identity);
         hotbar[index] = item;
@@ -141,23 +145,17 @@ public class Hotbar : NetworkBehaviour
     {
         NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
         Item item = itemNetworkObject.GetComponent<Item>();
-        if (item.CanPickUp())
+        if (itemNetworkObject.OwnerClientId != rpcParams.Receive.SenderClientId)
         {
-            if (itemNetworkObject.OwnerClientId != rpcParams.Receive.SenderClientId)
-            {
-                itemNetworkObject.ChangeOwnership(rpcParams.Receive.SenderClientId);
-            }
-
-            ItemManager.CreateItemPickUpLog(rpcParams.Receive.SenderClientId, item);
-            PickUpItemClientServerSide(index, item);
-
-            ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-            PickUpItemClientRpc(index, item.NetworkObjectId, clientRpcParams);
+            Debug.Log("Changed Ownership");
+            itemNetworkObject.ChangeOwnership(rpcParams.Receive.SenderClientId);
         }
-        //else
-        //{
-        //    ItemManager.CreateSimpleEventLog("ItemPickUpFailed", $"{item.ItemData.Name} - IsPickedUp: {item.IsPickedUp} - CanPickUp: {item.CanPickUp()}");
-        //}
+
+        ItemManager.CreateItemPickUpLog(rpcParams.Receive.SenderClientId, item);
+        PickUpItemClientServerSide(index, item);
+
+        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
+        PickUpItemClientRpc(index, item.NetworkObjectId, clientRpcParams);
     }
 
     [ClientRpc(RequireOwnership = false)]
@@ -200,10 +198,12 @@ public class Hotbar : NetworkBehaviour
         Item item = hotbar[index];
 
         if (item == null) return;
-        if (!item.CanDrop()) return;
-
-        if (!IsServer) DropItemClientServerSide(index);
-        DropItemServerRpc(index);
+        
+        if (item.Drop())
+        {
+            if (!IsServer) DropItemClientServerSide(index);
+            DropItemServerRpc(index);
+        }
     }
 
     public void DropItemClientServerSide(int index)
@@ -212,7 +212,6 @@ public class Hotbar : NetworkBehaviour
         SetEnabledItem(index, true);
 
         hotbar[index] = null;
-        item.Drop();
         item.transform.parent = null;
         OnDropItem?.Invoke(index, item);
     }
@@ -222,14 +221,11 @@ public class Hotbar : NetworkBehaviour
     {
         Item item = hotbar[index];
 
-        if (item.CanDrop())
-        {
-            ItemManager.CreateItemDropLog(rpcParams.Receive.SenderClientId, item);
-            DropItemClientServerSide(index);
+        ItemManager.CreateItemDropLog(rpcParams.Receive.SenderClientId, item);
+        DropItemClientServerSide(index);
 
-            ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-            DropItemClientRpc(index, clientRpcParams);
-        }
+        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
+        DropItemClientRpc(index, clientRpcParams);
     }
 
     [ClientRpc(RequireOwnership = false)]

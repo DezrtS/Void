@@ -18,7 +18,7 @@ public class ItemDropOff : MonoBehaviour, IInteractable
 
         if (interactor.TryGetComponent(out SurvivorController survivorController))
         {
-            Item item = survivorController.Hotbar.GetActiveItem();
+            Item item = survivorController.Hotbar.GetItem();
             if (item != null)
             {
                 if (!item.CanDrop()) return;

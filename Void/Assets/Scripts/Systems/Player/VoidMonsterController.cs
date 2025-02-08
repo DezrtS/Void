@@ -22,7 +22,7 @@ public class VoidMonsterController : PlayerController
     public override void Die(Health health)
     {
         health.SetHealth(health.GetMaxHealth());
-        PlayerSpawnPoint playerSpawnPoint = GameManager.Instance.GetAvailablePlayerSpawnPoint(GameManager.PlayerRole.Survivor);
+        PlayerSpawnPoint playerSpawnPoint = GameManager.Instance.GetAvailablePlayerSpawnPoint(GameManager.PlayerRole.Monster);
         Vector3 spawnPosition = Vector3.zero;
         if (playerSpawnPoint != null) spawnPosition = playerSpawnPoint.transform.position;
         transform.position = spawnPosition;
@@ -30,6 +30,8 @@ public class VoidMonsterController : PlayerController
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
+
         if (context.performed)
         {
             basicAttack.Use();
@@ -39,6 +41,8 @@ public class VoidMonsterController : PlayerController
 
     public override void OnSecondaryAction(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
+
         if (context.performed)
         {
             Mutation activeMutation = mutationHotbar.GetActiveMutation();
@@ -53,11 +57,13 @@ public class VoidMonsterController : PlayerController
 
     public override void OnSwitch(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         //throw new System.NotImplementedException();
     }
 
     public override void OnDrop(InputAction.CallbackContext context)
     {
+        if (!IsOwner) return;
         //throw new System.NotImplementedException();
     }
 }

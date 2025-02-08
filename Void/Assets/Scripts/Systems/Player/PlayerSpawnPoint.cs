@@ -3,13 +3,21 @@ using UnityEngine;
 public class PlayerSpawnPoint : MonoBehaviour
 {
     [SerializeField] private GameManager.PlayerRole playerRole;
+    public GameManager.PlayerRole PlayerRole => playerRole;
 
     private void Awake()
     {
-        GameManager.OnSingletonInitialized += (GameManager gameManager) =>
+        if (GameManager.Instance)
         {
-            gameManager.AddSpawnPoint(this);
-        };
+            GameManager.Instance.AddSpawnPoint(this);
+        }
+        else
+        {
+            GameManager.OnSingletonInitialized += (GameManager gameManager) =>
+            {
+                gameManager.AddSpawnPoint(this);
+            };
+        }
     }
 
     public bool CanSpawn()

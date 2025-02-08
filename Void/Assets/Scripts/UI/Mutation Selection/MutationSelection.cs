@@ -25,6 +25,17 @@ public class MutationSelection : MonoBehaviour
         if (player.TryGetComponent(out VoidMonsterController voidMonsterController))
         {
             AttachMutationSelection(voidMonsterController);
+            //if (GameDataManager.Instance)
+            //{
+            //    RandomizeMutationOptions(new MutationData[0]);
+            //}
+            //else
+            //{
+            //    GameDataManager.OnSingletonInitialized += (GameDataManager gameDataManager) =>
+            //    {
+            //        RandomizeMutationOptions(new MutationData[0]);
+            //    };
+            //}
         }
     }
 
@@ -78,6 +89,7 @@ public class MutationSelection : MonoBehaviour
 
     public void RandomizeMutationOptions(MutationData[] avoidMutations)
     {
+        Debug.Log("Randomizing Mutations");
         List<MutationData> mutations = GameDataManager.Instance.Mutations;
         List<int> indexOptions = new List<int>();
 

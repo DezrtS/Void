@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +11,8 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private GameObject createJoinButtons;
     [SerializeField] private Button createGameButton;
     [SerializeField] private Button joinGameButton;
+
+    [SerializeField] private TMP_InputField IPAddressInputField;
 
     [SerializeField] private GameObject playerButtons;
     [SerializeField] private Button changeRoleButton;
@@ -21,6 +25,9 @@ public class LobbyUI : MonoBehaviour
     {
         createGameButton.onClick.AddListener(() =>
         {
+            string ipAddress = "127.0.0.1";
+            if (IPAddressInputField.text != string.Empty) ipAddress = IPAddressInputField.text;
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(ipAddress, 7777);
             GameMultiplayer.Instance.StartHost();
             createJoinButtons.SetActive(false);
             playerButtons.SetActive(true);
@@ -28,6 +35,9 @@ public class LobbyUI : MonoBehaviour
 
         joinGameButton.onClick.AddListener(() =>
         {
+            string ipAddress = "127.0.0.1";
+            if (IPAddressInputField.text != string.Empty) ipAddress = IPAddressInputField.text;
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(ipAddress, 7777);
             GameMultiplayer.Instance.StartClient();
             createJoinButtons.SetActive(false);
             playerButtons.SetActive(true);

@@ -2900,6 +2900,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7411661572304534672, guid: a853efa7001395d46bb27b32b1c88a66,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8022189280066547071, guid: a853efa7001395d46bb27b32b1c88a66,
         type: 3}
       propertyPath: m_IsActive
@@ -4701,7 +4706,7 @@ PrefabInstance:
     - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
         type: 3}
       propertyPath: defaultPlayerRole
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
         type: 3}

@@ -17,10 +17,17 @@ public class TaskObjectSpawnPoint : MonoBehaviour
 
     private void Awake()
     {
-        TaskManager.OnSingletonInitialized += (TaskManager taskManager) =>
+        if (TaskManager.Instance)
         {
-            taskManager.AddTaskObjectSpawnPoint(this);
-        };
+            TaskManager.Instance.AddTaskObjectSpawnPoint(this);
+        }
+        else
+        {
+            TaskManager.OnSingletonInitialized += (TaskManager taskManager) =>
+            {
+                taskManager.AddTaskObjectSpawnPoint(this);
+            };
+        }
     }
 
     public void AddObject(GameObject gameObject)

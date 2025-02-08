@@ -61,6 +61,8 @@ public class PlayerLook : NetworkBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
+
         Vector2 rotationInput = lookInputAction.ReadValue<Vector2>();
 
         float deltaYRotation = rotationInput.y * (invertY ? 1 : -1) * ySensitivity;
@@ -80,6 +82,8 @@ public class PlayerLook : NetworkBehaviour
 
     private void FixedUpdate()
     {
+        if (!IsOwner) return;
+
         if (canInteract)
         {
             Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 1);

@@ -15,10 +15,10 @@ public class BasicAttack : NetworkBehaviour, IUseable
     private float cooldownTimer;
     private float durationTimer;
 
-    private bool isAttacking = false;
+    private bool isUsing = false;
     private List<Collider> hitColliders = new List<Collider>();
 
-    public bool IsUsing => throw new System.NotImplementedException();
+    public bool IsUsing => isUsing;
 
     public event IUseable.UseHandler OnUsed;
 
@@ -27,62 +27,76 @@ public class BasicAttack : NetworkBehaviour, IUseable
         return cooldownTimer <= 0 && durationTimer <= 0;
     }
 
-    public void Use()
+    public bool Use()
     {
-        RequestUseServerRpc(new ServerRpcParams());
+        if (!CanUse()) return false;
+        if (!IsServer) UseClientSide();
+        UseServerRpc();
+        return true;
     }
 
-    public void StopUsing() { }
-
-    private void HandleServerUse()
+    private void UseClientSide()
     {
-        isAttacking = true;
+        UseClientServerSide();
+    }
+
+    private void UseServerSide()
+    {
+        UseClientServerSide();
+    }
+
+    private void UseClientServerSide()
+    {
+        isUsing = true;
         durationTimer = duration;
-        //OnUsed?.Invoke(true);
-    }
-
-    private void HandleClientUse()
-    {
-        //Debug.Log("Attack Started");
-        OnUsed?.Invoke(true);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void RequestUseServerRpc(ServerRpcParams rcpParams = default)
+    private void UseServerRpc(ServerRpcParams rpcParams = default)
     {
-        if (CanUse())
-        {
-            HandleServerUse();
-            HandleUseClientRpc(rcpParams.Receive.SenderClientId);
-        }
+        if (!CanUse()) return;
+        UseServerSide();
+        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
+        UseClientRpc(clientRpcParams);
     }
 
-    [ClientRpc]
-    public void HandleUseClientRpc(ulong clientId)
+    [ClientRpc(RequireOwnership = false)]
+    private void UseClientRpc(ClientRpcParams rpcParams = default)
     {
-        HandleClientUse();
+        UseClientSide();
     }
 
-    private void Update()
+    public bool StopUsing()
     {
+        return true;
+    }
+
+    private void UpdateTimers()
+    {
+        float deltaTime = Time.deltaTime;
         if (cooldownTimer > 0)
         {
-            cooldownTimer -= Time.deltaTime;
+            cooldownTimer -= deltaTime;
         }
 
         if (durationTimer > 0)
         {
-            durationTimer -= Time.deltaTime;
+            durationTimer -= deltaTime;
 
             if (durationTimer < 0)
             {
-                isAttacking = false;
+                isUsing = false;
                 hitColliders.Clear();
                 cooldownTimer = cooldown;
             }
         }
+    }
 
-        if (isAttacking)
+    private void Update()
+    {
+        UpdateTimers();
+
+        if (isUsing)
         {
             Collider[] results = new Collider[10];
             Physics.OverlapSphereNonAlloc(transform.position + offset, size, results, layerMask, QueryTriggerInteraction.Ignore);
@@ -91,11 +105,11 @@ public class BasicAttack : NetworkBehaviour, IUseable
             {
                 foreach (Collider collider in results)
                 {
-                    if (!collider || hitColliders.Contains(collider)) continue;
+                    if (!collider || collider.gameObject == gameObject || hitColliders.Contains(collider)) continue;
 
                     hitColliders.Add(collider);
                     if (collider.TryGetComponent(out Health health)) {
-                        health.Damage(damage);
+                        if (IsServer) health.Damage(damage);
                     }
                 }
             }

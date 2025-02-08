@@ -402,7 +402,7 @@ GameObject:
   - component: {fileID: 2703649929741312374}
   m_Layer: 0
   m_Name: Void Monster
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -551,32 +551,18 @@ MonoBehaviour:
   orientationTransform: {fileID: 6754419075927096011}
   timeToAccelerate:
     baseValue: 0.25
-    flatModifiers: []
-    percentModifiers: []
   timeToDeaccelerate:
     baseValue: 0.25
-    flatModifiers: []
-    percentModifiers: []
   walkSpeed:
     baseValue: 6
-    flatModifiers: []
-    percentModifiers: []
   sprintSpeed:
     baseValue: 10
-    flatModifiers: []
-    percentModifiers: []
   crouchSpeed:
     baseValue: 4
-    flatModifiers: []
-    percentModifiers: []
   jumpPower:
     baseValue: 7
-    flatModifiers: []
-    percentModifiers: []
   crouchHeight:
     baseValue: 1
-    flatModifiers: []
-    percentModifiers: []
 --- !u!114 &8838867607122126362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -683,13 +669,11 @@ MonoBehaviour:
   canRegenerateHealth: 1
   healthRegenerationRate:
     baseValue: 10
-    flatModifiers: []
-    percentModifiers: []
   healthRegenerationDelay: 2
+  damageResistance:
+    baseValue: 0
   maxHealth:
     baseValue: 350
-    flatModifiers: []
-    percentModifiers: []
 --- !u!114 &2703649929741312374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,40 +688,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth:
     baseValue: 350
-    flatModifiers: []
-    percentModifiers: []
   healthRegenerationRate:
     baseValue: 10
-    flatModifiers: []
-    percentModifiers: []
+  damageResistance:
+    baseValue: 0
   timeToAccelerate:
     baseValue: 0.25
-    flatModifiers: []
-    percentModifiers: []
   timeToDeaccelerate:
     baseValue: 0.25
-    flatModifiers: []
-    percentModifiers: []
   walkSpeed:
     baseValue: 6
-    flatModifiers: []
-    percentModifiers: []
   sprintSpeed:
     baseValue: 10
-    flatModifiers: []
-    percentModifiers: []
   crouchSpeed:
     baseValue: 4
-    flatModifiers: []
-    percentModifiers: []
   jumpPower:
     baseValue: 7
-    flatModifiers: []
-    percentModifiers: []
   crouchHeight:
     baseValue: 1
-    flatModifiers: []
-    percentModifiers: []
 --- !u!1 &1186201246963802096
 GameObject:
   m_ObjectHideFlags: 0

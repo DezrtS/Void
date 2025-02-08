@@ -28,15 +28,17 @@ public class Gun : Item, IReload
         ammo = maxAmmo;
     }
 
-    public override void OnUse()
+    protected override void UseClientServerSide()
     {
+        base.UseClientServerSide();
         isFiring = true;
         windupTimer = timeToWindUp;
         WindUpServerRpc();
     }
 
-    public override void OnStopUsing()
+    protected override void StopUsingClientServerSide()
     {
+        base.StopUsingClientServerSide();
         isFiring = false;
     }
 
@@ -79,7 +81,7 @@ public class Gun : Item, IReload
         if (CanFire())
         {
             Fire();
-            FireServerRpc();
+            //FireServerRpc();
         }
     }
 
@@ -93,10 +95,6 @@ public class Gun : Item, IReload
 
         OnFire();
         ammo--;
-        if (ammo <= 0)
-        {
-            Reload();
-        }
     }
 
     private void FireServerSide()
@@ -133,20 +131,20 @@ public class Gun : Item, IReload
         ReloadServerRpc();
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void WindUpServerRpc()
     {
         windupTimer = timeToWindUp;
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void ReloadServerRpc()
     {
         reloadTimer = timeToReload;
         ammo = maxAmmo;
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void FireServerRpc(ServerRpcParams rpcParams = default)
     {
         if (CanFire())
@@ -157,7 +155,7 @@ public class Gun : Item, IReload
         }
     }
 
-    [ClientRpc]
+    [ClientRpc(RequireOwnership = false)]
     private void FireClientRpc(ClientRpcParams rpcParams = default)
     {
         Fire();

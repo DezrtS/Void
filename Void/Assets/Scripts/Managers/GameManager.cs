@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
+using System.Linq;
 using Unity.Netcode;
-using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class GameManager : NetworkSingletonPersistent<GameManager>
@@ -102,7 +100,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     public PlayerSpawnPoint GetAvailablePlayerSpawnPoint(PlayerRole playerRole)
     {
-        List<PlayerSpawnPoint> possibleSpawnPoints = playerSpawnPoints.FindAll(x => x.CanSpawn());
+        List<PlayerSpawnPoint> possibleSpawnPoints = playerSpawnPoints.FindAll(x => x.PlayerRole == playerRole && x.CanSpawn());
 
         if (possibleSpawnPoints.Count > 0)
         {
@@ -120,10 +118,11 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         //HandleGenerateGridMapClientRpc();
         //GridMapManager.Instance.GenerateTasks();
         //HandleTaskListClientRpc();
-        SpawnPlayers();
+        SpawnPlayersServerRpc();
     }
 
-    private void SpawnPlayers()
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnPlayersServerRpc(ServerRpcParams rpcParams = default)
     {
         Debug.Log("Spawning Players");
         foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
@@ -146,8 +145,15 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
                     networkObject = SpawnSurvivor(clientId);
                     break;
             }
-            
-            HandlePlayerUIClientRpc(role, networkObject.NetworkObjectId, clientId);
+
+            ClientRpcParams clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new List<ulong> { clientId },
+                }
+            };
+            HandlePlayerUIClientRpc(role, networkObject.NetworkObjectId, clientId, clientRpcParams);
 
         }
     }
@@ -173,17 +179,19 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         GameObject survivorGameObject = Instantiate(survivorPrefab, spawnPosition, Quaternion.identity);
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
+
+        SurvivorController survivorController = survivorGameObject.GetComponent<SurvivorController>();
+        survivorController.Hotbar.PickUpItem(ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0)));
         return networkObject;
     }
 
-    [ClientRpc]
-    private void HandlePlayerUIClientRpc(PlayerRole playerRole, ulong networkObjectId, ulong clientId)
+    [ClientRpc(RequireOwnership = false)]
+    private void HandlePlayerUIClientRpc(PlayerRole playerRole, ulong networkObjectId, ulong clientId, ClientRpcParams rpcParams = default)
     {
-        if (clientId == OwnerClientId)
-        {
-            NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
-            UIManager.Instance.SetupUI(playerRole, networkObject.gameObject);
-        }
+        ItemManager.CreateSimpleEventLog("HandlePlayerUIEvent", $"PlayerRole: {playerRole}, NetworkObjectId: {networkObjectId}, ClientId: {clientId}");
+
+        NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
+        UIManager.Instance.SetupUI(playerRole, networkObject.gameObject);
     }
 
     public void HandleGenerateGridMap()
@@ -192,13 +200,13 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         //TaskManager.Instance.DisplayTaskUI();
     }
 
-    [ClientRpc]
+    [ClientRpc(RequireOwnership = false)]
     public void HandleGenerateGridMapClientRpc()
     {
         HandleGenerateGridMap();
     }
 
-    [ClientRpc]
+    [ClientRpc(RequireOwnership = false)]
     public void HandleTaskListClientRpc()
     {
         TaskManager.Instance.RegenerateTaskInstructions();
@@ -208,5 +216,6 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     public void RequestPlayerRoleServerRpc(PlayerRole playerRole, ServerRpcParams serverRpcParams = default)
     {
         playerRoleDictionary[serverRpcParams.Receive.SenderClientId] = playerRole;
+        ItemManager.CreateSimpleEventLog("Player Join", $"{serverRpcParams.Receive.SenderClientId} : {playerRole}");
     }
 }

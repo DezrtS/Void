@@ -55,10 +55,10 @@ public class TaskManager : NetworkSingleton<TaskManager>
 
     public void AddTaskObjectSpawnPoint(TaskObjectSpawnPoint taskObjectSpawnPoint)
     {
-        if (!taskObjectSpawnPoints.Contains(taskObjectSpawnPoint))
-        {
+        //if (!taskObjectSpawnPoints.Contains(taskObjectSpawnPoint))
+        //{
             taskObjectSpawnPoints.Add(taskObjectSpawnPoint);
-        }
+        //}
     }
 
     public TaskObjectSpawnPoint GetAvailableTaskObjectSpawnPoint(TaskObjectSpawnPoint.TaskObjectType objectType)

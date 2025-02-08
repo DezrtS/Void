@@ -24,8 +24,9 @@ public class StatChangeMutation : Mutation
         return durationTimer <= 0;
     }
 
-    public override void OnUse()
+    protected override void UseClientServerSide()
     {
+        base.UseClientServerSide();
         if (!CanActivate()) return;
 
         durationTimer = statChangeMutationData.Duration;
@@ -47,11 +48,6 @@ public class StatChangeMutation : Mutation
                 cooldownTimer = mutationData.Cooldown;
             }
         }
-    }
-
-    public override void OnStopUsing()
-    {
-        //throw new System.NotImplementedException();
     }
 
     private void AddStats()

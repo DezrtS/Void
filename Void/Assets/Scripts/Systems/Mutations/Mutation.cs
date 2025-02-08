@@ -5,12 +5,12 @@ public abstract class Mutation : NetworkBehaviour, IUseable
 {
     [SerializeField] protected MutationData mutationData;
 
-    protected NetworkVariable<bool> isUsing = new NetworkVariable<bool>(false);
+    protected bool isUsing = false;
     protected float cooldownTimer;
 
 
     public event IUseable.UseHandler OnUsed;
-    public bool IsUsing => isUsing.Value;
+    public bool IsUsing => isUsing;
     public MutationData MutationData => mutationData;
 
     public abstract void SetupMutation(GameObject player);
@@ -20,23 +20,91 @@ public abstract class Mutation : NetworkBehaviour, IUseable
         return !IsUsing && cooldownTimer <= 0;
     }
 
-    public void Use()
+    public bool Use()
+    {
+        if (!CanUse()) return false;
+        ForceUse();
+        return true;
+    }
+
+    public void ForceUse()
+    {
+        if (!IsServer) UseClientSide();
+        UseServerRpc();
+    }
+
+    protected virtual void UseClientSide()
+    {
+        UseClientServerSide();
+    }
+
+    protected virtual void UseServerSide()
+    {
+        UseClientServerSide();
+    }
+
+    protected virtual void UseClientServerSide()
+    {
+        isUsing = true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void UseServerRpc(ServerRpcParams rpcParams = default)
     {
         if (!CanUse()) return;
-        isUsing.Value = true;
-        OnUse();
+        UseServerSide();
+        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
+        UseClientRpc(clientRpcParams);
     }
 
-    public abstract void OnUse();
+    [ClientRpc(RequireOwnership = false)]
+    private void UseClientRpc(ClientRpcParams rpcParams = default)
+    {
+        UseClientSide();
+    }
 
-    public void StopUsing()
+    public bool StopUsing()
+    {
+        if (!IsUsing) return false;
+        ForceStopUsing();
+        return true;
+    }
+
+    public void ForceStopUsing()
+    {
+        if (!IsServer) StopUsingClientSide();
+        StopUsingServerRpc();
+    }
+
+    protected virtual void StopUsingClientSide()
+    {
+        StopUsingClientServerSide();
+    }
+
+    protected virtual void StopUsingServerSide()
+    {
+        StopUsingClientServerSide();
+    }
+
+    private void StopUsingClientServerSide()
+    {
+        isUsing = false;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void StopUsingServerRpc(ServerRpcParams rpcParams = default)
     {
         if (!IsUsing) return;
-        isUsing.Value = false;
-        OnStopUsing();
+        StopUsingServerSide();
+        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
+        StopUsingClientRpc(clientRpcParams);
     }
 
-    public abstract void OnStopUsing();
+    [ClientRpc(RequireOwnership = false)]
+    private void StopUsingClientRpc(ClientRpcParams rpcParams = default)
+    {
+        StopUsingClientSide();
+    }
 
     private void FixedUpdate()
     {

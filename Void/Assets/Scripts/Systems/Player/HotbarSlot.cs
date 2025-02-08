@@ -55,6 +55,15 @@ public class HotbarSlot : MonoBehaviour
         hotbar.OnSwitchItem += OnSwitchItem;
         hotbar.OnPickUpItem += OnPickUpItem;
         hotbar.OnDropItem += OnDropItem;
+
+        if (hotbar.SelectedIndex == slotIndex) active = true;
+
+        Item item = hotbar.GetItem(slotIndex);
+        if (item != null)
+        {
+            UpdateHotbarImage(item.ItemData.ItemSprite);
+            EnableDisableHotbarImage(true);
+        }
     }
 
     public void DetachHotbarSlot()
