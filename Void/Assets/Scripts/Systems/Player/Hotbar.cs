@@ -109,7 +109,7 @@ public class Hotbar : NetworkBehaviour
         {
             if (GetItem() == null)
             {
-                if (!IsServer) PickUpItemClientServerSide(selectedIndex, item);
+                if (!IsServer) PickUpItemClientSide(selectedIndex, item);
                 PickUpItemServerRpc(selectedIndex, item.NetworkObjectId);
                 return;
             }
@@ -118,25 +118,34 @@ public class Hotbar : NetworkBehaviour
             {
                 if (hotbar[i] == null)
                 {
-                    if (!IsServer) PickUpItemClientServerSide(i, item);
+                    if (!IsServer) PickUpItemClientSide(i, item);
                     PickUpItemServerRpc(i, item.NetworkObjectId);
                     return;
                 }
             }
 
             DropItem();
-            if (!IsServer) PickUpItemClientServerSide(selectedIndex, item);
+            if (!IsServer) PickUpItemClientSide(selectedIndex, item);
             PickUpItemServerRpc(selectedIndex, item.NetworkObjectId);
         }
     }
 
-    public void PickUpItemClientServerSide(int index, Item item)
+    public void PickUpItemClientSide(int index, Item item)
     {
+        PickUpItemClientServerSide(index, item);
+    }
+
+    public void PickUpItemServerSide(int index, Item item)
+    {
+        PickUpItemClientServerSide(index, item);
         item.transform.parent = transform;
         item.transform.SetLocalPositionAndRotation(activeTransform.localPosition, Quaternion.identity);
+    }
+
+    public void PickUpItemClientServerSide(int index, Item item)
+    {
         hotbar[index] = item;
         OnPickUpItem?.Invoke(index, item);
-
         if (selectedIndex != index) SwitchToItem(index);
     }
 
@@ -152,7 +161,7 @@ public class Hotbar : NetworkBehaviour
         }
 
         ItemManager.CreateItemPickUpLog(rpcParams.Receive.SenderClientId, item);
-        PickUpItemClientServerSide(index, item);
+        PickUpItemServerSide(index, item);
 
         ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
         PickUpItemClientRpc(index, item.NetworkObjectId, clientRpcParams);
@@ -162,7 +171,7 @@ public class Hotbar : NetworkBehaviour
     public void PickUpItemClientRpc(int index, ulong itemNetworkObjectId, ClientRpcParams clientRpcParams = default)
     {
         NetworkObject itemNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[itemNetworkObjectId];
-        PickUpItemClientServerSide(index, itemNetworkObject.GetComponent<Item>());
+        PickUpItemClientSide(index, itemNetworkObject.GetComponent<Item>());
     }
 
     public void DropItem()
@@ -201,9 +210,22 @@ public class Hotbar : NetworkBehaviour
         
         if (item.Drop())
         {
-            if (!IsServer) DropItemClientServerSide(index);
+            if (!IsServer) DropItemClientSide(index);
             DropItemServerRpc(index);
         }
+    }
+
+    public void DropItemClientSide(int index)
+    {
+        DropItemClientServerSide(index);
+    }
+
+    public void DropItemServerSide(int index)
+    {
+        Item item = hotbar[index];
+        item.transform.parent = null;
+
+        DropItemClientServerSide(index);
     }
 
     public void DropItemClientServerSide(int index)
@@ -212,7 +234,7 @@ public class Hotbar : NetworkBehaviour
         SetEnabledItem(index, true);
 
         hotbar[index] = null;
-        item.transform.parent = null;
+        
         OnDropItem?.Invoke(index, item);
     }
 
@@ -222,7 +244,7 @@ public class Hotbar : NetworkBehaviour
         Item item = hotbar[index];
 
         ItemManager.CreateItemDropLog(rpcParams.Receive.SenderClientId, item);
-        DropItemClientServerSide(index);
+        DropItemServerSide(index);
 
         ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
         DropItemClientRpc(index, clientRpcParams);
@@ -231,7 +253,7 @@ public class Hotbar : NetworkBehaviour
     [ClientRpc(RequireOwnership = false)]
     public void DropItemClientRpc(int index, ClientRpcParams clientRpcParams = default)
     {
-        DropItemClientServerSide(index);
+        DropItemClientSide(index);
     }
 
     public void StartDragging(Draggable draggable)

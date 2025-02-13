@@ -257,6 +257,34 @@
         },
         {
             "name": "UI",
+            "id": "999d118e-1fd8-4cc6-b27f-2cd5ecf2a09d",
+            "actions": [
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "9435ceed-41e0-45f1-9e4d-8928d916bc66",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "32b4891b-a6ad-4499-b117-56f13a297aed",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UIMenu",
             "id": "8cc25d2a-672d-4cf1-80d7-80407a28916f",
             "actions": [
                 {

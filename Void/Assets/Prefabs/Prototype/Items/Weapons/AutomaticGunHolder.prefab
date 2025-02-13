@@ -105,17 +105,31 @@ MonoBehaviour:
   canPickUp: 1
   canDrop: 1
   projectileSpawnerObject: {fileID: 4735076810010294097}
-  fireRate: 0.25
-  maxAmmo: 10
-  timeToReload: 0
+  fireRate: 0.1
+  maxAmmo: 30
+  timeToReload: 1
   timeToWindUp: 0
   fireSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -684993448
+      Data2: 1175587486
+      Data3: -1799640938
+      Data4: 163685428
+    Path: event:/Prototype/Weapons/Gunshot
+  emptySound:
+    Guid:
+      Data1: -1004645374
+      Data2: 1272235516
+      Data3: -19849312
+      Data4: -757541644
+    Path: event:/Prototype/Weapons/EmptyClick
+  reloadSound:
+    Guid:
+      Data1: -295241387
+      Data2: 1339901559
+      Data3: -1381415759
+      Data4: -750953849
+    Path: event:/Prototype/Weapons/Reload
   isFiring: 0
 --- !u!65 &3688373138169565638
 BoxCollider:

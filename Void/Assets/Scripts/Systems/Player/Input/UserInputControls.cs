@@ -279,6 +279,34 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         },
         {
             ""name"": ""UI"",
+            ""id"": ""999d118e-1fd8-4cc6-b27f-2cd5ecf2a09d"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""9435ceed-41e0-45f1-9e4d-8928d916bc66"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""32b4891b-a6ad-4499-b117-56f13a297aed"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""UIMenu"",
             ""id"": ""8cc25d2a-672d-4cf1-80d7-80407a28916f"",
             ""actions"": [
                 {
@@ -1105,16 +1133,19 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         m_SelectionWheel_ScreenPosition = m_SelectionWheel.FindAction("Screen Position", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
-        m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
-        m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
-        m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
-        m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
-        m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
-        m_UI_MiddleClick = m_UI.FindAction("MiddleClick", throwIfNotFound: true);
-        m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
-        m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
-        m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+        // UIMenu
+        m_UIMenu = asset.FindActionMap("UIMenu", throwIfNotFound: true);
+        m_UIMenu_Navigate = m_UIMenu.FindAction("Navigate", throwIfNotFound: true);
+        m_UIMenu_Submit = m_UIMenu.FindAction("Submit", throwIfNotFound: true);
+        m_UIMenu_Cancel = m_UIMenu.FindAction("Cancel", throwIfNotFound: true);
+        m_UIMenu_Point = m_UIMenu.FindAction("Point", throwIfNotFound: true);
+        m_UIMenu_Click = m_UIMenu.FindAction("Click", throwIfNotFound: true);
+        m_UIMenu_RightClick = m_UIMenu.FindAction("RightClick", throwIfNotFound: true);
+        m_UIMenu_MiddleClick = m_UIMenu.FindAction("MiddleClick", throwIfNotFound: true);
+        m_UIMenu_ScrollWheel = m_UIMenu.FindAction("ScrollWheel", throwIfNotFound: true);
+        m_UIMenu_TrackedDevicePosition = m_UIMenu.FindAction("TrackedDevicePosition", throwIfNotFound: true);
+        m_UIMenu_TrackedDeviceOrientation = m_UIMenu.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_PrimaryAction = m_Player.FindAction("Primary Action", throwIfNotFound: true);
@@ -1141,6 +1172,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Camera.enabled, "This will cause a leak and performance issues, UserInputControls.Camera.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_SelectionWheel.enabled, "This will cause a leak and performance issues, UserInputControls.SelectionWheel.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, UserInputControls.UI.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_UIMenu.enabled, "This will cause a leak and performance issues, UserInputControls.UIMenu.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, UserInputControls.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Survivor.enabled, "This will cause a leak and performance issues, UserInputControls.Survivor.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_VoidMonster.enabled, "This will cause a leak and performance issues, UserInputControls.VoidMonster.Disable() has not been called.");
@@ -1369,30 +1401,12 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     // UI
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
-    private readonly InputAction m_UI_Navigate;
-    private readonly InputAction m_UI_Submit;
-    private readonly InputAction m_UI_Cancel;
-    private readonly InputAction m_UI_Point;
-    private readonly InputAction m_UI_Click;
-    private readonly InputAction m_UI_RightClick;
-    private readonly InputAction m_UI_MiddleClick;
-    private readonly InputAction m_UI_ScrollWheel;
-    private readonly InputAction m_UI_TrackedDevicePosition;
-    private readonly InputAction m_UI_TrackedDeviceOrientation;
+    private readonly InputAction m_UI_Pause;
     public struct UIActions
     {
         private @UserInputControls m_Wrapper;
         public UIActions(@UserInputControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
-        public InputAction @Submit => m_Wrapper.m_UI_Submit;
-        public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
-        public InputAction @Point => m_Wrapper.m_UI_Point;
-        public InputAction @Click => m_Wrapper.m_UI_Click;
-        public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
-        public InputAction @MiddleClick => m_Wrapper.m_UI_MiddleClick;
-        public InputAction @ScrollWheel => m_Wrapper.m_UI_ScrollWheel;
-        public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
-        public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+        public InputAction @Pause => m_Wrapper.m_UI_Pause;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1402,6 +1416,70 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
+
+    // UIMenu
+    private readonly InputActionMap m_UIMenu;
+    private List<IUIMenuActions> m_UIMenuActionsCallbackInterfaces = new List<IUIMenuActions>();
+    private readonly InputAction m_UIMenu_Navigate;
+    private readonly InputAction m_UIMenu_Submit;
+    private readonly InputAction m_UIMenu_Cancel;
+    private readonly InputAction m_UIMenu_Point;
+    private readonly InputAction m_UIMenu_Click;
+    private readonly InputAction m_UIMenu_RightClick;
+    private readonly InputAction m_UIMenu_MiddleClick;
+    private readonly InputAction m_UIMenu_ScrollWheel;
+    private readonly InputAction m_UIMenu_TrackedDevicePosition;
+    private readonly InputAction m_UIMenu_TrackedDeviceOrientation;
+    public struct UIMenuActions
+    {
+        private @UserInputControls m_Wrapper;
+        public UIMenuActions(@UserInputControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Navigate => m_Wrapper.m_UIMenu_Navigate;
+        public InputAction @Submit => m_Wrapper.m_UIMenu_Submit;
+        public InputAction @Cancel => m_Wrapper.m_UIMenu_Cancel;
+        public InputAction @Point => m_Wrapper.m_UIMenu_Point;
+        public InputAction @Click => m_Wrapper.m_UIMenu_Click;
+        public InputAction @RightClick => m_Wrapper.m_UIMenu_RightClick;
+        public InputAction @MiddleClick => m_Wrapper.m_UIMenu_MiddleClick;
+        public InputAction @ScrollWheel => m_Wrapper.m_UIMenu_ScrollWheel;
+        public InputAction @TrackedDevicePosition => m_Wrapper.m_UIMenu_TrackedDevicePosition;
+        public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UIMenu_TrackedDeviceOrientation;
+        public InputActionMap Get() { return m_Wrapper.m_UIMenu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIMenuActions set) { return set.Get(); }
+        public void AddCallbacks(IUIMenuActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIMenuActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIMenuActionsCallbackInterfaces.Add(instance);
             @Navigate.started += instance.OnNavigate;
             @Navigate.performed += instance.OnNavigate;
             @Navigate.canceled += instance.OnNavigate;
@@ -1434,7 +1512,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
         }
 
-        private void UnregisterCallbacks(IUIActions instance)
+        private void UnregisterCallbacks(IUIMenuActions instance)
         {
             @Navigate.started -= instance.OnNavigate;
             @Navigate.performed -= instance.OnNavigate;
@@ -1468,21 +1546,21 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
         }
 
-        public void RemoveCallbacks(IUIActions instance)
+        public void RemoveCallbacks(IUIMenuActions instance)
         {
-            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_UIMenuActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IUIActions instance)
+        public void SetCallbacks(IUIMenuActions instance)
         {
-            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_UIMenuActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_UIMenuActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public UIActions @UI => new UIActions(this);
+    public UIMenuActions @UIMenu => new UIMenuActions(this);
 
     // Player
     private readonly InputActionMap m_Player;
@@ -1753,6 +1831,10 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         void OnScreenPosition(InputAction.CallbackContext context);
     }
     public interface IUIActions
+    {
+        void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IUIMenuActions
     {
         void OnNavigate(InputAction.CallbackContext context);
         void OnSubmit(InputAction.CallbackContext context);

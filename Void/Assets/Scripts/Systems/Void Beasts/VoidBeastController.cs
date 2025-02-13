@@ -1,0 +1,30 @@
+using UnityEngine;
+
+public class VoidBeastController : MonoBehaviour
+{
+    private NavMeshMovement navMeshMovement;
+    private Health health;
+
+    public NavMeshMovement NavMeshMovement => navMeshMovement;
+    public Health Health => health;
+
+    private void Awake()
+    {
+        navMeshMovement = GetComponent<NavMeshMovement>();
+        health = GetComponent<Health>();
+        health.OnDeath += (Health health) =>
+        {
+            Die();
+        };
+    }
+
+    private void FixedUpdate()
+    {
+        
+    }
+
+    public void Die()
+    {
+
+    }
+}

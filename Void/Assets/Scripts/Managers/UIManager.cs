@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIManager : Singleton<UIManager>
 {
     [SerializeField] private GameObject pauseMenuUI;
+    [SerializeField] private GameObject settingsUI;
 
     [SerializeField] private GameObject voidMonsterUI;
     [SerializeField] private GameObject survivorUI;
@@ -13,7 +14,9 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TextMeshProUGUI taskText;
 
     public static event Action<GameObject> OnSetupUI;
+    public static event Action<bool> OnPause;
 
+    private bool paused;
     public TextMeshProUGUI TaskText => taskText;
 
     public void SetupUI(GameManager.PlayerRole playerRole, GameObject player)
@@ -49,8 +52,27 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void PauseUnpauseGame()
+    {
+        Debug.Log("PAUSING GAME");
+        PauseGame(!paused);
+    }
+
     public void PauseGame(bool paused)
     {
+        Debug.Log($"PAUSING GAME: {paused}");
+        this.paused = paused;
+        OnPause?.Invoke(paused);
         pauseMenuUI.SetActive(paused);
+    }
+
+    public void OpenSettings(bool open)
+    {
+        settingsUI.SetActive(open);
+    }
+
+    public void QuitGame()
+    {
+        GameManager.Instance.QuitGame();
     }
 }

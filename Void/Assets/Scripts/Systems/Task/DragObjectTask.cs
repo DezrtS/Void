@@ -22,12 +22,7 @@ public class DragObjectTask : Task
     public void SpawnDraggableServerRpc()
     {
         Draggable draggable = Draggable.SpawnDraggable(draggablePrefab);
-        TaskObjectSpawnPoint taskObjectSpawnPoint = TaskManager.Instance.GetAvailableTaskObjectSpawnPoint(TaskObjectSpawnPoint.TaskObjectType.Draggable);
-        if (taskObjectSpawnPoint != null)
-        {
-            draggable.transform.position = taskObjectSpawnPoint.transform.position;
-            taskObjectSpawnPoint.AddObject(draggable.gameObject);
-        }
+        draggable.transform.position = SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Draggable);
         OnDraggable?.Invoke(draggable);
 
         SpawnItemClientRpc(draggable.NetworkObjectId);
