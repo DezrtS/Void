@@ -95,7 +95,7 @@ public class PlayerLook : NetworkBehaviour
 
         if (canInteract)
         {
-            Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 1);
+            //Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 1);
             if (Physics.Raycast(cameraRootTransform.position, cameraRootTransform.forward, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Collide))
             {
                 hitInfo.collider.TryGetComponent(out IInteractable interactable);

@@ -35,9 +35,11 @@ public class BulletSpawner : MonoBehaviour, IProjectileSpawner
 
     public void OnProjectileHit(IProjectile projectile, GameObject projectileGameObject, Collider hitCollider)
     {
+        Debug.Log($"Projectile Hit {hitCollider.name}");
         if (hitCollider.TryGetComponent(out Health health))
         {
             health.Damage(projectile.ProjectileData.Damage);
+            Debug.Log("Damage Taken");
         }
 
         OnHit?.Invoke(hitCollider);

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8850181546297574353}
-  - component: {fileID: 6904815460558369236}
+  - component: {fileID: 2297544702119221178}
   m_Layer: 0
   m_Name: Void Beast Spawn Point
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 6173194837808834671}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6904815460558369236
+--- !u!114 &2297544702119221178
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,10 +42,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3333349041615599913}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 687175ded9ee0f64185a6500d795eba2, type: 3}
+  m_Script: {fileID: 11500000, guid: 5530a57c4806cef4181f88ba66af5af7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   allowedSpawnpointTypes: 06000000
+  delayAfterSpawn: 4
 --- !u!1 &4638749562554590128
 GameObject:
   m_ObjectHideFlags: 0
