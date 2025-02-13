@@ -15,17 +15,18 @@ public class VoidMonsterController : PlayerController
         base.Awake();
         basicAttack = GetComponent<BasicAttack>();
         mutationHotbar = GetComponent<MutationHotbar>();
-
-        if (TryGetComponent(out Health health)) health.OnDeath += Die;
     }
 
-    public override void Die(Health health)
+    public override void Die()
+    {
+        if (!IsServer) return;
+        Respawn();
+    }
+
+    public override void Respawn()
     {
         health.SetHealth(health.GetMaxHealth());
-        PlayerSpawnPoint playerSpawnPoint = GameManager.Instance.GetAvailablePlayerSpawnPoint(GameManager.PlayerRole.Monster);
-        Vector3 spawnPosition = Vector3.zero;
-        if (playerSpawnPoint != null) spawnPosition = playerSpawnPoint.transform.position;
-        transform.position = spawnPosition;
+        movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster));
     }
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)

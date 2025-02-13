@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -20,8 +18,15 @@ public abstract class MovementController : NetworkBehaviour
 
     public abstract Vector3 GetVelocity();
     public abstract void SetVelocity(Vector3 velocity);
-    public abstract Quaternion GetRotation();
-    public abstract void SetRotation(Quaternion rotation);
+    public virtual Quaternion GetRotation()
+    {
+        return transform.rotation;
+    }
+
+    public virtual void SetRotation(Quaternion rotation)
+    {
+        transform.rotation = rotation;
+    }
 
     public abstract void ApplyForce(Vector3 force, ForceMode forceMode);
 

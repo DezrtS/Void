@@ -2,13 +2,16 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Health : NetworkBehaviour
+public class Health : NetworkBehaviour
 {
-    [SerializeField] private bool canRegenerateHealth;
-    [SerializeField] private Stat healthRegenerationRate;
-    [SerializeField] private float healthRegenerationDelay;
+    [SerializeField] protected Stat maxHealth = new Stat(100);
+    protected Stat health = new Stat(0);
 
-    [SerializeField] private Stat damageResistance;
+    [SerializeField] private bool canRegenerateHealth;
+    [SerializeField] protected Stat healthRegenerationRate;
+    [SerializeField] protected float healthRegenerationDelay;
+
+    [SerializeField] protected Stat damageResistance;
 
     public delegate void HealthHandler(float previousValue, float newValue, float maxValue);
     public event HealthHandler OnHealthChanged;
@@ -17,17 +20,9 @@ public abstract class Health : NetworkBehaviour
     private float healthRegenerationDelayTimer;
     private bool healthChanged = false;
 
-    public abstract float GetMaxHealth();
-    public abstract float GetHealth();
-    public abstract void SetHealth(float value);
-
     protected virtual void Awake()
     {
-        if (TryGetComponent(out PlayerStats playerStats))
-        {
-            healthRegenerationRate = playerStats.HealthRegenerationRate;
-            damageResistance = playerStats.DamageResistance;
-        }
+        health.SetBaseValue(maxHealth.Value);
     }
 
     private void FixedUpdate()
@@ -58,6 +53,21 @@ public abstract class Health : NetworkBehaviour
                 healthRegenerationDelayTimer -= deltaTime;
             }
         }
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth.Value;
+    }
+
+    public float GetHealth()
+    {
+        return Mathf.Clamp(health.Value, 0, maxHealth.Value);
+    }
+
+    public void SetHealth(float value)
+    {
+        health.SetBaseValue(Mathf.Min(value, maxHealth.Value));
     }
 
     public void Damage(float amount)

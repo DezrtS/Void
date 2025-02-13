@@ -58,6 +58,18 @@ public class PlayerMovement : MovementController
         InputAction crouchInputAction = movementActionMap.FindAction("Crouch");
         crouchInputAction.performed += Crouch;
         crouchInputAction.canceled += Crouch;
+
+        UIManager.OnPause += (bool paused) =>
+        {
+            if (paused)
+            {
+                movementActionMap.Disable();
+            }
+            else
+            {
+                movementActionMap.Enable();
+            }
+        };
     }
 
     private void OnDisable()
@@ -184,16 +196,6 @@ public class PlayerMovement : MovementController
     public override void SetVelocity(Vector3 velocity)
     {
         rig.linearVelocity = velocity;
-    }
-
-    public override Quaternion GetRotation()
-    {
-        return transform.rotation;
-    }
-
-    public override void SetRotation(Quaternion rotation)
-    {
-        transform.rotation = rotation;
     }
 
     public override void ApplyForce(Vector3 force, ForceMode forceMode)

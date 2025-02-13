@@ -39,7 +39,7 @@ public class HealthBar : MonoBehaviour
         {
             AttachHealthBar(health);
         }
-    }
+    } 
 
     public void AttachHealthBar(Health health)
     {
@@ -52,7 +52,7 @@ public class HealthBar : MonoBehaviour
     {
         health.OnHealthChanged -= OnHealthBarChange;
         //health.OnDeath -= DetachHealthBar;
-        health = null;
+        this.health = null;
     }
 
     public void OnHealthBarChange(float previousValue, float newValue, float maxValue)

@@ -7,11 +7,8 @@ using UnityEngine;
 public class TaskManager : NetworkSingleton<TaskManager>
 {
     [SerializeField] private bool generateTasksOnSpawn;
-    private NetworkVariable<int> totalTasks = new NetworkVariable<int>(0);
     private List<Task> tasks = new List<Task>();
     [SerializeField] private int tasksCount = 1;
-
-    [SerializeField] private List<TaskObjectSpawnPoint> taskObjectSpawnPoints = new List<TaskObjectSpawnPoint>();
 
     protected override void OnEnable()
     {
@@ -53,34 +50,11 @@ public class TaskManager : NetworkSingleton<TaskManager>
         }
     }
 
-    public void AddTaskObjectSpawnPoint(TaskObjectSpawnPoint taskObjectSpawnPoint)
-    {
-        //if (!taskObjectSpawnPoints.Contains(taskObjectSpawnPoint))
-        //{
-            taskObjectSpawnPoints.Add(taskObjectSpawnPoint);
-        //}
-    }
-
-    public TaskObjectSpawnPoint GetAvailableTaskObjectSpawnPoint(TaskObjectSpawnPoint.TaskObjectType objectType)
-    {
-        List<TaskObjectSpawnPoint> possibleSpawnPoints = taskObjectSpawnPoints.FindAll(x => !x.IsOccupied && x.ObjectType == objectType);
-
-        if (possibleSpawnPoints.Count > 0)
-        {
-            int index = Random.Range(0, possibleSpawnPoints.Count);
-            return possibleSpawnPoints[index];
-        }
-
-        Debug.LogWarning("No Suitable Task Object Spawn Points were Found");
-        return null;
-    }
-
     public void AddTask(Task task)
     {
         if (!tasks.Contains(task))
         {
             tasks.Add(task);
-            totalTasks.Value++;
             // OnTaskAdded Event
             task.OnTaskCompletion += OnTaskCompletion;
             task.OnUpdateTaskInstructions += RegenerateTaskInstructions;
@@ -92,7 +66,6 @@ public class TaskManager : NetworkSingleton<TaskManager>
         if (tasks.Contains(task))
         {
             tasks.Remove(task);
-            totalTasks.Value--;
             // OnTaskRemoved Event
             task.OnTaskCompletion -= OnTaskCompletion;
             task.OnUpdateTaskInstructions -= RegenerateTaskInstructions;

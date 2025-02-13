@@ -41,7 +41,9 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     [SerializeField] public GameObject FirstPersonCamera;
 
-    private List<PlayerSpawnPoint> playerSpawnPoints = new List<PlayerSpawnPoint>();
+    private PlayerRole localPlayerRole;
+
+    public PlayerRole LocalPlayerRole => localPlayerRole;
 
     private void Awake()
     {
@@ -88,28 +90,6 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         {
             StartGame();
         }
-    }
-
-    public void AddSpawnPoint(PlayerSpawnPoint playerSpawnPoint)
-    {
-        if (!playerSpawnPoints.Contains(playerSpawnPoint))
-        {
-            playerSpawnPoints.Add(playerSpawnPoint);
-        }
-    }
-
-    public PlayerSpawnPoint GetAvailablePlayerSpawnPoint(PlayerRole playerRole)
-    {
-        List<PlayerSpawnPoint> possibleSpawnPoints = playerSpawnPoints.FindAll(x => x.PlayerRole == playerRole && x.CanSpawn());
-
-        if (possibleSpawnPoints.Count > 0)
-        {
-            int index = Random.Range(0, possibleSpawnPoints.Count);
-            return possibleSpawnPoints[index];
-        }
-
-        Debug.LogWarning("No Player Spawn Point was Found");
-        return null;
     }
 
     public void StartGame()
@@ -160,11 +140,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     private NetworkObject SpawnMonster(ulong clientId)
     {
-        Vector3 spawnPosition = Vector3.zero;
-        PlayerSpawnPoint spawnPoint = GetAvailablePlayerSpawnPoint(PlayerRole.Monster);
-        if (spawnPoint != null) spawnPosition = spawnPoint.transform.position;
-
-        GameObject monsterGameObject = Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
+        GameObject monsterGameObject = Instantiate(monsterPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster), Quaternion.identity);
         NetworkObject networkObject = monsterGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;
@@ -172,16 +148,14 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     private NetworkObject SpawnSurvivor(ulong clientId)
     {
-        Vector3 spawnPosition = Vector3.zero;
-        PlayerSpawnPoint spawnPoint = GetAvailablePlayerSpawnPoint(PlayerRole.Survivor);
-        if (spawnPoint != null) spawnPosition = spawnPoint.transform.position;
-
-        GameObject survivorGameObject = Instantiate(survivorPrefab, spawnPosition, Quaternion.identity);
+        GameObject survivorGameObject = Instantiate(survivorPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Survivor), Quaternion.identity);
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
 
         SurvivorController survivorController = survivorGameObject.GetComponent<SurvivorController>();
-        survivorController.Hotbar.PickUpItem(ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0)));
+        Item item = ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
+        survivorController.Hotbar.PickUpItem(item);
+        item.NetworkObject.ChangeOwnership(clientId);
         return networkObject;
     }
 
@@ -190,6 +164,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     {
         ItemManager.CreateSimpleEventLog("HandlePlayerUIEvent", $"PlayerRole: {playerRole}, NetworkObjectId: {networkObjectId}, ClientId: {clientId}");
 
+        localPlayerRole = playerRole;
         NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
         UIManager.Instance.SetupUI(playerRole, networkObject.gameObject);
     }
@@ -217,5 +192,10 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     {
         playerRoleDictionary[serverRpcParams.Receive.SenderClientId] = playerRole;
         ItemManager.CreateSimpleEventLog("Player Join", $"{serverRpcParams.Receive.SenderClientId} : {playerRole}");
+    }
+
+    public void QuitGame()
+    {
+
     }
 }

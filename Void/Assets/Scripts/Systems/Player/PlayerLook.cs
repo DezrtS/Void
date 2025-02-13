@@ -36,6 +36,18 @@ public class PlayerLook : NetworkBehaviour
         cameraActionMap.Enable();
 
         lookInputAction = cameraActionMap.FindAction("Look");
+
+        UIManager.OnPause += (bool paused) =>
+        {
+            if (paused)
+            {
+                LockCamera(false);
+            }
+            else
+            {
+                LockCamera(true);
+            }
+        };
     }
 
     private void OnDisable()
@@ -52,10 +64,7 @@ public class PlayerLook : NetworkBehaviour
             GameObject camera = Instantiate(GameManager.Instance.FirstPersonCamera);
             camera.GetComponentInChildren<CinemachineCamera>().Follow = cameraRootTransform;
         }
-    }
 
-    private void Awake()
-    {
         LockCamera(true);
     }
 
@@ -115,12 +124,16 @@ public class PlayerLook : NetworkBehaviour
     {
         if (locked)
         {
+            cameraActionMap.Enable();
+
             if (!lockPlayerCursor) return;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
         else
         {
+            cameraActionMap.Disable();
+
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
