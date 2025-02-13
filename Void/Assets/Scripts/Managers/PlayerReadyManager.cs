@@ -4,7 +4,8 @@ using Unity.Netcode;
 
 public class PlayerReadyManager : NetworkSingletonPersistent<PlayerReadyManager>
 {
-    private Dictionary<ulong, bool> playerReadyDictionary;
+    private Dictionary<ulong, bool> playerReadyDictionary = new Dictionary<ulong, bool>();
+    
 
     public delegate void PlayerReadyHandler(ulong clientId);
     public static event PlayerReadyHandler OnPlayerReady;
@@ -12,7 +13,7 @@ public class PlayerReadyManager : NetworkSingletonPersistent<PlayerReadyManager>
 
     private void Awake()
     {
-        playerReadyDictionary = new Dictionary<ulong, bool>();
+        
     }
 
     [ServerRpc(RequireOwnership = false)]
