@@ -69,6 +69,14 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Comma))
+        {
+            Time.timeScale = Mathf.Max(Time.timeScale - 0.25f, 0);
+        }
+    }
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)

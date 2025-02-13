@@ -5,15 +5,16 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
     [SerializeField] private GameObject voidBeastPrefab;
     [SerializeField] private float spawnNewEnemyAfter;
 
-    private ObjectPool voidBeastObjectPool;
+    private NetworkedObjectPool voidBeastObjectPool;
     private float spawnEnemyTimer = 0;
 
     public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
-            voidBeastObjectPool = GetComponent<ObjectPool>();
+            voidBeastObjectPool = GetComponent<NetworkedObjectPool>();
             voidBeastObjectPool.InitializePool(voidBeastPrefab);
+            spawnEnemyTimer = spawnNewEnemyAfter;
         }
     }
 

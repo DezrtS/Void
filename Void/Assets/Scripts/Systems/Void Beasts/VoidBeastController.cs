@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class VoidBeastController : MonoBehaviour
+public class VoidBeastController : NetworkBehaviour
 {
     private NavMeshMovement navMeshMovement;
     private Health health;
@@ -20,11 +21,11 @@ public class VoidBeastController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+        if (!IsServer) return;
     }
 
     public void Die()
     {
-
+        if (!IsServer) return;
     }
 }

@@ -16,6 +16,7 @@ public class Bullet : MonoBehaviour, IProjectile
         if (isFired)
         {
             float deltaTime = Time.deltaTime;
+            Debug.DrawLine(transform.position, transform.position + velocity * deltaTime, Color.red);
             if (Physics.Raycast(transform.position, velocity.normalized, out RaycastHit hitInfo, velocity.magnitude * deltaTime, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
             {
                 spawner?.OnProjectileHit(this, gameObject, hitInfo.collider);
