@@ -106,6 +106,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private Stat damageResistance = new Stat(0);
 
     [Header("Acceleration")]
+    [SerializeField] private Stat acceleration = new Stat(4);
     [SerializeField] private Stat timeToAccelerate = new Stat(0.25f);
     [SerializeField] private Stat timeToDeaccelerate = new Stat(0.25f);
 
@@ -124,6 +125,7 @@ public class PlayerStats : MonoBehaviour
     public Stat HealthRegenerationRate => healthRegenerationRate;
     public Stat DamageResistance => damageResistance;
 
+    public Stat Acceleration => acceleration;
     public Stat TimeToAccelerate => timeToAccelerate;
     public Stat TimeToDeacclerate => timeToDeaccelerate;
 

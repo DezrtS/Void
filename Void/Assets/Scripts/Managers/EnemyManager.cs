@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class EnemyManager : NetworkSingleton<EnemyManager>
@@ -39,17 +40,28 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
         if (voidBeast == null) return;
 
         VoidBeastController voidBeastController = voidBeast.GetComponent<VoidBeastController>();
+        EnableDisableEnemyClientRpc(voidBeastController.NetworkObjectId, true);
         voidBeastController.Health.OnDeath += OnEnemyDeath;
 
         Spawnpoint spawnpoint = SpawnManager.Instance.GetRandomSpawnpoint(Spawnpoint.SpawnpointType.VoidBeast);
         if (spawnpoint == null) return;
 
         voidBeastController.NavMeshMovement.Teleport(spawnpoint.Spawn());
+        voidBeastController.Activate();
     }
 
     public void OnEnemyDeath(Health health)
     {
+        health.OnDeath -= OnEnemyDeath;
         health.SetHealth(health.GetMaxHealth());
         voidBeastObjectPool.ReturnToPool(health.gameObject);
+        EnableDisableEnemyClientRpc(health.gameObject.GetComponent<NetworkObject>().NetworkObjectId, false);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void EnableDisableEnemyClientRpc(ulong networkObjectId, bool enable)
+    {
+        NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
+        networkObject.gameObject.SetActive(enable);
     }
 }

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ResourceRequirements:
   - Resource: {fileID: 11400000, guid: 17c678a753e10ac48a2421c8ef306e39, type: 2}
-    Amount: 2
+    Amount: 0
   Item: {fileID: 11400000, guid: 015dc5a18587f6448b49122dfb8f4d13, type: 2}

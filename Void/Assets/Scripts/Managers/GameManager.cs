@@ -41,8 +41,10 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
 
     [SerializeField] public GameObject FirstPersonCamera;
 
+    private List<GameObject> playerObjects = new List<GameObject>();
     private PlayerRole localPlayerRole;
 
+    public List<GameObject> PlayerObjects => playerObjects;
     public PlayerRole LocalPlayerRole => localPlayerRole;
 
     private void Awake()
@@ -153,6 +155,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     private NetworkObject SpawnMonster(ulong clientId)
     {
         GameObject monsterGameObject = Instantiate(monsterPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster), Quaternion.identity);
+        playerObjects.Add(monsterGameObject);
         NetworkObject networkObject = monsterGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;
@@ -161,6 +164,7 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     private NetworkObject SpawnSurvivor(ulong clientId)
     {
         GameObject survivorGameObject = Instantiate(survivorPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Survivor), Quaternion.identity);
+        playerObjects.Add(survivorGameObject);
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;

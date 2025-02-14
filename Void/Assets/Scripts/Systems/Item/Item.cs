@@ -19,6 +19,7 @@ public class Item : NetworkBehaviour, IUseable, IInteractable
     public event IUseable.UseHandler OnUsed;
     public event ItemHandler OnPickedUp;
     public event ItemHandler OnDropped;
+    public event ItemHandler OnRequestForceDrop;
 
     public ItemData ItemData => itemData;
     public bool IsUsing => isUsing;
@@ -172,6 +173,11 @@ public class Item : NetworkBehaviour, IUseable, IInteractable
     private void PickUpClientRpc(ClientRpcParams rpcParams = default)
     {
         PickUpClientSide();
+    }
+
+    protected void DropItem()
+    {
+        OnRequestForceDrop?.Invoke(this);
     }
 
     public bool CanDrop()

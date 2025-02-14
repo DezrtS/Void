@@ -436,7 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3567632822
+  GlobalObjectIdHash: 1127425563
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -548,7 +548,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0650c88644d4ec4595a615c53a1c4b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
   orientationTransform: {fileID: 6754419075927096011}
+  acceleration:
+    baseValue: 4
   timeToAccelerate:
     baseValue: 0.25
   timeToDeaccelerate:
@@ -622,6 +625,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2370f6cde6f3949b3d84c90accc6bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disableForOwner:
+  - {fileID: 4325003418474132758}
+  - {fileID: 6242903475209775372}
+  - {fileID: 49258284827619517}
 --- !u!114 &-8319115179264410832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -666,14 +673,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffe3acf90f2ee145b1c08afd693c880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth:
+    baseValue: 350
   canRegenerateHealth: 1
   healthRegenerationRate:
     baseValue: 10
   healthRegenerationDelay: 2
   damageResistance:
     baseValue: 0
-  maxHealth:
-    baseValue: 350
 --- !u!114 &2703649929741312374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -692,6 +699,8 @@ MonoBehaviour:
     baseValue: 10
   damageResistance:
     baseValue: 0
+  acceleration:
+    baseValue: 4
   timeToAccelerate:
     baseValue: 0.25
   timeToDeaccelerate:

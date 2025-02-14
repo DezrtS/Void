@@ -12,6 +12,8 @@ public abstract class PlayerController : NetworkBehaviour
     protected PlayerLook playerLook;
     protected Health health;
 
+    [SerializeField] private GameObject[] disableForOwner;
+
     public event Action<bool> OnSelectionWheel;
     public PlayerLook PlayerLook => playerLook;
 
@@ -99,6 +101,15 @@ public abstract class PlayerController : NetworkBehaviour
         {
             Die();
         };
+    }
+
+    private void Start()
+    {
+        if (!IsOwner) return;
+        foreach (GameObject gameObject in disableForOwner)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     public abstract void Die();

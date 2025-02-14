@@ -69,7 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   voidBeastPrefab: {fileID: 8643636204953852213, guid: eaa8cb80cc1c6ff47b2557c68612f6b4,
     type: 3}
-  spawnNewEnemyAfter: 5
+  spawnNewEnemyAfter: 3
 --- !u!114 &985274310202198337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,6 +83,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Void Beast Pool
-  poolSize: 10
+  poolSize: 25
   dynamicSize: 0
   destroyObjectsOverPoolSize: 0

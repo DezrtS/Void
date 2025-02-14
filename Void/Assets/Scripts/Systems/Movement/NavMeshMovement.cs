@@ -8,6 +8,8 @@ public class NavMeshMovement : MovementController
     private NavMeshAgent navMeshAgent;
     private Rigidbody rig;
 
+    [SerializeField] private Animator animator;
+
     private bool isPathfinding;
     private Vector3 pathfindingDestination;
 
@@ -26,6 +28,15 @@ public class NavMeshMovement : MovementController
         if (!IsServer) return;
 
         if (isPathfinding) UpdatePathfinding();
+    }
+
+    private void Update()
+    {
+        if (!IsServer) return;
+
+        Vector3 velocity = GetVelocity();
+        velocity.y = 0;
+        animator.SetFloat("Speed", velocity.magnitude / navMeshAgent.speed);
     }
 
     public override void ApplyForce(Vector3 force, ForceMode forceMode)
@@ -77,7 +88,7 @@ public class NavMeshMovement : MovementController
         if (CanPathfind())
         {
             navMeshAgent.enabled = true;
-            navMeshAgent.updatePosition = false;
+            //navMeshAgent.updatePosition = false;
             navMeshAgent.isStopped = false;
             navMeshAgent.SetDestination(pathfindingDestination);
             navMeshAgent.velocity = GetVelocity();
@@ -93,10 +104,10 @@ public class NavMeshMovement : MovementController
     {
         if (navMeshAgent.destination != pathfindingDestination) navMeshAgent.SetDestination(pathfindingDestination);
 
-        if (navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid || (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending))
-        {
-            StopPathfinding();
-        }
+        //if (navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid || (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending))
+        //{
+        //    StopPathfinding();
+        //}
     }
 
     public void StopPathfinding()
@@ -104,7 +115,7 @@ public class NavMeshMovement : MovementController
         if (!isPathfinding) return;
 
         navMeshAgent.isStopped = true;
-        navMeshAgent.updatePosition = true;
+        //navMeshAgent.updatePosition = true;
 
         rig.isKinematic = false;
 

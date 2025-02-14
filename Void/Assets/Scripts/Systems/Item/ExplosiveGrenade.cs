@@ -32,15 +32,20 @@ public class ExplosiveGrenade : ThrowableItem
         RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, radius, Vector3.forward, 10, effectableLayers);
         foreach (RaycastHit hit in raycastHits)
         {
-            Debug.Log(hit.collider.gameObject.name);
+            if (hit.collider.TryGetComponent(out Health health))
+            {
+                health.Damage(damage);
+                Debug.Log(hit.collider.gameObject.name);
+            }
         }
         Instantiate(explosionEffect, transform.position, Quaternion.identity);
-        AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound2);
+        //AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound2);
         Destroy(gameObject);
     }
 
     protected override void OnThrow()
     {
+        base.OnThrow();
         timer = timeToActivation;
     }
 }

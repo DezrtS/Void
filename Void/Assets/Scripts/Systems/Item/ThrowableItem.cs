@@ -22,6 +22,7 @@ public class ThrowableItem : Item
 
     private void Throw()
     {
+        DropItem();
         rig.AddForce(thowSpeed * transform.forward, ForceMode.Impulse);
         rig.angularVelocity = spinSpeed * Vector3.right;
 

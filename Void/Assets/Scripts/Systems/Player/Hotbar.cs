@@ -139,6 +139,7 @@ public class Hotbar : NetworkBehaviour
     public void PickUpItemServerSide(int index, Item item)
     {
         PickUpItemClientServerSide(index, item);
+        item.OnRequestForceDrop += OnRequestForceDrop;
         //item.transform.parent = transform;
         item.transform.SetLocalPositionAndRotation(activeTransform.localPosition, Quaternion.identity);
     }
@@ -173,6 +174,12 @@ public class Hotbar : NetworkBehaviour
     {
         NetworkObject itemNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[itemNetworkObjectId];
         PickUpItemClientSide(index, itemNetworkObject.GetComponent<Item>());
+    }
+
+    private void OnRequestForceDrop(Item item)
+    {
+        item.OnRequestForceDrop -= OnRequestForceDrop;
+        DropItem(item);
     }
 
     public void DropItem()

@@ -6,6 +6,9 @@ public class PlayerMovement : MovementController
 {
     private Rigidbody rig;
     private CapsuleCollider capsuleCollider;
+
+    [SerializeField] private Animator animator;
+
     private InputActionMap movementActionMap;
     private InputAction movementInputAction;
 
@@ -16,6 +19,7 @@ public class PlayerMovement : MovementController
     [SerializeField] private Transform orientationTransform;
 
     [Header("Acceleration")]
+    [SerializeField] private Stat acceleration = new Stat(4);
     [SerializeField] private Stat timeToAccelerate = new Stat(0.25f);
     [SerializeField] private Stat timeToDeaccelerate = new Stat(0.25f);
 
@@ -96,6 +100,7 @@ public class PlayerMovement : MovementController
 
         if (TryGetComponent(out PlayerStats playerStats))
         {
+            acceleration = playerStats.Acceleration;
             timeToAccelerate = playerStats.TimeToAccelerate;
             timeToDeaccelerate = playerStats.TimeToDeacclerate;
 
@@ -113,6 +118,14 @@ public class PlayerMovement : MovementController
     {
         if (!IsOwner) return;
         HandleMovement();
+    }
+
+    private void Update()
+    {
+        if (!IsOwner) return;
+        Vector3 localVelocity = WorldToLocalVelocity(GetVelocity(), orientationTransform.rotation);
+        animator.SetFloat("xinput", localVelocity.x);
+        animator.SetFloat("yinput", localVelocity.z);
     }
 
     private void HandleMovement()
@@ -133,32 +146,8 @@ public class PlayerMovement : MovementController
             speed = sprintSpeed.Value;
         }
 
-        Vector3 targetVelocity = move.normalized * speed;
-        float targetSpeed = targetVelocity.magnitude;
-
-        Vector3 velocityDifference = targetVelocity - rig.linearVelocity;
-        velocityDifference.y = 0;
-        Vector3 differenceDirection = velocityDifference.normalized;
-
-        float accelerationIncrement;
-
-        if (rig.linearVelocity.magnitude <= targetSpeed)
-        {
-            accelerationIncrement = GetAcceleration(sprintSpeed.Value, timeToAccelerate.Value) * Time.deltaTime;
-        }
-        else
-        {
-            accelerationIncrement = GetAcceleration(sprintSpeed.Value, timeToDeaccelerate.Value) * Time.deltaTime;
-        }
-
-        if (velocityDifference.magnitude < accelerationIncrement)
-        {
-            rig.AddForce(velocityDifference, ForceMode.VelocityChange);
-        }
-        else
-        {
-            rig.AddForce(differenceDirection * accelerationIncrement, ForceMode.VelocityChange);
-        }
+        Vector3 velocityChange = HandleMovement(move, speed, acceleration.Value, timeToAccelerate.Value, timeToDeaccelerate.Value, rig.linearVelocity);
+        ApplyForce(velocityChange, ForceMode.VelocityChange);
     }
 
     private void Jump(InputAction.CallbackContext context)

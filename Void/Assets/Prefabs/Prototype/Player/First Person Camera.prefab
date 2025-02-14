@@ -67,7 +67,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60.000004
   orthographic: 0
@@ -365,7 +365,7 @@ MonoBehaviour:
   Lens:
     FieldOfView: 60.000004
     OrthographicSize: 5
-    NearClipPlane: 0.3
+    NearClipPlane: 0.1
     FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
@@ -475,6 +475,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_DynamicOccludee
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7869136987164812951, guid: 976caa97487a0984991b6fa1db1befe4,
+        type: 3}
+      propertyPath: m_RendererPriority
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8397989169175800959, guid: 976caa97487a0984991b6fa1db1befe4,
         type: 3}

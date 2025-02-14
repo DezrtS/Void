@@ -3,6 +3,10 @@ using UnityEngine.InputSystem;
 
 public class SurvivorController : PlayerController
 {
+    [SerializeField] private Transform leftHandTarget;
+    [SerializeField] private Transform rightHandTarget;
+    private InverseKinematicsObject inverseKinematicsObject;
+
     private Hotbar hotbar;
     private Inventory inventory;
 
@@ -45,7 +49,27 @@ public class SurvivorController : PlayerController
     {
         base.Awake();
         hotbar = GetComponent<Hotbar>();
+        hotbar.OnPickUpItem += OnPickUpItem;
         inventory = GetComponent<Inventory>();
+    }
+
+    private void OnPickUpItem(int index, Item item)
+    {
+        if (item.TryGetComponent(out InverseKinematicsObject inverseKinematicsObject))
+        {
+            this.inverseKinematicsObject = inverseKinematicsObject;
+            leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
+            rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
+        }
+    }
+
+    private void Update()
+    {
+        if (inverseKinematicsObject != null)
+        {
+            leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
+            rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
+        }
     }
 
     public override void Die()
