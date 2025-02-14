@@ -32,6 +32,7 @@ public class Hotbar : NetworkBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
         Item item = GetItem();
         if (item != null)
         {
@@ -138,7 +139,7 @@ public class Hotbar : NetworkBehaviour
     public void PickUpItemServerSide(int index, Item item)
     {
         PickUpItemClientServerSide(index, item);
-        item.transform.parent = transform;
+        //item.transform.parent = transform;
         item.transform.SetLocalPositionAndRotation(activeTransform.localPosition, Quaternion.identity);
     }
 

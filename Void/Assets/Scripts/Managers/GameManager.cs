@@ -159,11 +159,6 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         GameObject survivorGameObject = Instantiate(survivorPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Survivor), Quaternion.identity);
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
-
-        SurvivorController survivorController = survivorGameObject.GetComponent<SurvivorController>();
-        Item item = ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
-        survivorController.Hotbar.PickUpItem(item);
-        item.NetworkObject.ChangeOwnership(clientId);
         return networkObject;
     }
 

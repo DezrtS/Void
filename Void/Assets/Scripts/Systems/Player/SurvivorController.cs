@@ -32,6 +32,15 @@ public class SurvivorController : PlayerController
         survivorActionMap.Disable();
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (!IsServer) return;
+        Item item = ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
+        hotbar.PickUpItem(item);
+    }
+
     protected override void Awake()
     {
         base.Awake();

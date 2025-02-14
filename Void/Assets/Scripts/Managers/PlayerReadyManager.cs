@@ -5,16 +5,10 @@ using Unity.Netcode;
 public class PlayerReadyManager : NetworkSingletonPersistent<PlayerReadyManager>
 {
     private Dictionary<ulong, bool> playerReadyDictionary = new Dictionary<ulong, bool>();
-    
 
     public delegate void PlayerReadyHandler(ulong clientId);
     public static event PlayerReadyHandler OnPlayerReady;
     public static event Action OnAllPlayersReady;
-
-    private void Awake()
-    {
-        
-    }
 
     [ServerRpc(RequireOwnership = false)]
     public void RequestPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
