@@ -73,7 +73,11 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
     {
         if (Input.GetKeyDown(KeyCode.Comma))
         {
-            Time.timeScale = Mathf.Max(Time.timeScale - 0.25f, 0);
+            Time.timeScale = Mathf.Max(Time.timeScale - 0.05f, 0);
+        }
+        if (Input.GetKeyDown(KeyCode.Period))
+        {
+            Time.timeScale += 0.05f;
         }
     }
 

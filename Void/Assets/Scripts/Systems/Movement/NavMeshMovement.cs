@@ -17,6 +17,7 @@ public class NavMeshMovement : MovementController
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.enabled = false;
         rig = GetComponent<Rigidbody>();
     }
 
@@ -75,6 +76,7 @@ public class NavMeshMovement : MovementController
         pathfindingDestination = position;
         if (CanPathfind())
         {
+            navMeshAgent.enabled = true;
             navMeshAgent.updatePosition = false;
             navMeshAgent.isStopped = false;
             navMeshAgent.SetDestination(pathfindingDestination);
@@ -110,5 +112,6 @@ public class NavMeshMovement : MovementController
         SetVelocity(Vector3.zero);
 
         isPathfinding = false;
+        navMeshAgent.enabled = false;
     }
 }
