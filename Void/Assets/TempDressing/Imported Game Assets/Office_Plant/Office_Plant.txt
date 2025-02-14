@@ -1,0 +1,15 @@
+Office Plant - 1.674m x 1.624m x 4.786m
+
+Vertices = 49282
+Edges = 102913
+Polygons = 55592
+
+ Used software and 3d-model creator.
+
+    This model was created by 3DHaupt (https://sketchfab.com/dennish2010/models) for the Software-Service John GmbH (http://www.john-software.de)
+    Modeled in Blender-2.90.1 (https://www.blender.org/)
+
+ Verwendete Software und 3d-Modellersteller.
+ 
+    Das Modell wurden von 3DHaupt (https://sketchfab.com/dennish2010/models) für die Software-Service John GmbH (https://www.john-software.de) erstellt.
+    Modelliert und texturiert in Blender-3D (https://www.blender.org/)
