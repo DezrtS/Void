@@ -1,0 +1,369 @@
+{
+    "asset" : {
+        "copyright" : "Software-Service John GmbH - Oehrenstoecker Str. 39, 98693 Ilmenau",
+        "generator" : "Khronos glTF Blender I/O v1.3.48",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Office Plant"
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0,
+                0,
+                0
+            ],
+            "name" : "Pot",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.07323573529720306,
+                    0.02259787544608116,
+                    0.009445973671972752,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0,
+                0,
+                0
+            ],
+            "name" : "Material.001",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.004895646590739489,
+                    0.001998068066313863,
+                    0.0015789686003699899,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0,
+                0,
+                0
+            ],
+            "name" : "Green Plant",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.07609444111585617,
+                    0.17335528135299683,
+                    0.03446749597787857,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0,
+                0,
+                0
+            ],
+            "name" : "Material.002",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.031063778325915337,
+                    0.021517513319849968,
+                    0.009148786775767803,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Office Plant",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                },
+                {
+                    "attributes" : {
+                        "POSITION" : 4,
+                        "NORMAL" : 5,
+                        "TEXCOORD_0" : 6
+                    },
+                    "indices" : 7,
+                    "material" : 1
+                },
+                {
+                    "attributes" : {
+                        "POSITION" : 8,
+                        "NORMAL" : 9,
+                        "TEXCOORD_0" : 10
+                    },
+                    "indices" : 11,
+                    "material" : 2
+                },
+                {
+                    "attributes" : {
+                        "POSITION" : 12,
+                        "NORMAL" : 13,
+                        "TEXCOORD_0" : 14
+                    },
+                    "indices" : 15,
+                    "material" : 3
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 1307,
+            "max" : [
+                0.35063496232032776,
+                0.5329506397247314,
+                0.35063493251800537
+            ],
+            "min" : [
+                -0.35063523054122925,
+                -0.01572987250983715,
+                -0.35063523054122925
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 1307,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 1307,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 4800,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 525,
+            "max" : [
+                0.3056076765060425,
+                0.4840525984764099,
+                0.3056073486804962
+            ],
+            "min" : [
+                -0.3056073784828186,
+                0.461060106754303,
+                -0.30560770630836487
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5126,
+            "count" : 525,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 6,
+            "componentType" : 5126,
+            "count" : 525,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 7,
+            "componentType" : 5123,
+            "count" : 1728,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 8,
+            "componentType" : 5126,
+            "count" : 40038,
+            "max" : [
+                0.8684320449829102,
+                4.770770072937012,
+                0.8224766254425049
+            ],
+            "min" : [
+                -0.8057075142860413,
+                0.36610138416290283,
+                -0.8016687035560608
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 9,
+            "componentType" : 5126,
+            "count" : 40038,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 10,
+            "componentType" : 5126,
+            "count" : 40038,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 11,
+            "componentType" : 5123,
+            "count" : 189888,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 12,
+            "componentType" : 5126,
+            "count" : 13105,
+            "max" : [
+                0.3367686867713928,
+                0.5448465943336487,
+                0.32468628883361816
+            ],
+            "min" : [
+                -0.33454108238220215,
+                0.4429689943790436,
+                -0.32799437642097473
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 13,
+            "componentType" : 5126,
+            "count" : 13105,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 14,
+            "componentType" : 5126,
+            "count" : 13105,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 15,
+            "componentType" : 5123,
+            "count" : 25488,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 15684,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 15684,
+            "byteOffset" : 15684
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 10456,
+            "byteOffset" : 31368
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 9600,
+            "byteOffset" : 41824
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 6300,
+            "byteOffset" : 51424
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 6300,
+            "byteOffset" : 57724
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 4200,
+            "byteOffset" : 64024
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 3456,
+            "byteOffset" : 68224
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 480456,
+            "byteOffset" : 71680
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 480456,
+            "byteOffset" : 552136
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 320304,
+            "byteOffset" : 1032592
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 379776,
+            "byteOffset" : 1352896
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 157260,
+            "byteOffset" : 1732672
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 157260,
+            "byteOffset" : 1889932
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 104840,
+            "byteOffset" : 2047192
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 50976,
+            "byteOffset" : 2152032
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 2203008,
+            "uri" : "Office_Plant.bin"
+        }
+    ]
+}
