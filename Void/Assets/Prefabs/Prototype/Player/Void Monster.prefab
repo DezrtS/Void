@@ -438,7 +438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3567632822
+  GlobalObjectIdHash: 1127425563
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -502,14 +502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad8deae8091111f4eb30a56c1f4e0d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TransitionStateInfoList:
-  - IsCrossFadeExit: 0
-    Layer: 0
-    OriginatingState: -128360363
-    DestinationState: -388283599
-    TransitionDuration: 0.25
-    TriggerNameHash: 1203776827
-    TransitionIndex: 0
+  TransitionStateInfoList: []
   m_Animator: {fileID: 2492221161476043742}
 --- !u!54 &6877649724186844683
 Rigidbody:
@@ -550,7 +543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0650c88644d4ec4595a615c53a1c4b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 2492221161476043742}
   orientationTransform: {fileID: 6754419075927096011}
   acceleration:
     baseValue: 4
@@ -655,6 +648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42edffd9e1bff41498b39592ac7bf815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 2492221161476043742}
   offset: {x: 0, y: 0, z: 1}
   size: 2
   layerMask:
@@ -1617,7 +1611,7 @@ Animator:
   m_GameObject: {fileID: 3570833094775301265}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9b717bb373edf864b90dcc84a7db5d1f, type: 3}
-  m_Controller: {fileID: 9100000, guid: dc0565e5c192ae247aa5a4cea7f1bd61, type: 2}
+  m_Controller: {fileID: 9100000, guid: dc8b6098fdb28d74aa46291212e2d725, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
