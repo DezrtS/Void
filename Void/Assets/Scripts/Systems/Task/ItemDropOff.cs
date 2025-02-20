@@ -1,85 +1,105 @@
-using System;
-using Unity.Netcode;
 using UnityEngine;
 
-public class ItemDropOff : MonoBehaviour, IInteractable
+public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
 {
-    public delegate void ItemDropOffHandler(Item item, ItemDropOff itemDropOff);
+    public event IUseable.UseHandler OnUsed;
+
+    public delegate void ItemDropOffHandler(Item item, ItemDropOff itemDropOff, bool isAdded);
     public static event ItemDropOffHandler OnDropOff;
 
     [SerializeField] private float processingTime;
     [SerializeField] private float ejectionPower;
-    private float processingTimer;
+
+    private NetworkItemDropOff networkItemDropOff;
+    private bool isUsing;
+
     private Item item;
+    private float processingTimer;
 
-    public void Interact(GameObject interactor)
+    public bool IsUsing => isUsing;
+
+    public bool CanUse() => !isUsing;
+    public bool CanStopUsing() => isUsing;
+    public bool HasItem() => item != null;
+    public bool CanEjectItem() => processingTimer <= 0;
+
+    public void RequestUse() => networkItemDropOff.UseServerRpc();
+    public void RequestStopUsing() => networkItemDropOff.StopUsingServerRpc();
+    public void RequestProcessItem(Item item) => networkItemDropOff.ProcessItemServerRpc(item.NetworkItem.NetworkObjectId);
+    public void RequestAcceptItem() => networkItemDropOff.AcceptItemServerRpc();
+    public void RequestEjectItem() => networkItemDropOff.EjectItemServerRpc();
+
+    private void Awake()
     {
-        if (item != null) return;
-
-        if (interactor.TryGetComponent(out SurvivorController survivorController))
-        {
-            Item item = survivorController.Hotbar.GetItem();
-            if (item != null)
-            {
-                if (!item.CanDrop()) return;
-                survivorController.Hotbar.RequestDropItem();
-                ProcessItemServerRpc(item.NetworkItem.NetworkObjectId);
-            }
-        }
+        networkItemDropOff = GetComponent<NetworkItemDropOff>();
     }
 
     private void FixedUpdate()
     {
-        if (processingTimer > 0)
+        UpdateTimers();
+
+        if (networkItemDropOff.IsServer && isUsing)
         {
-            processingTimer -= Time.fixedDeltaTime;
-            if (processingTimer <= 0)
-            {
-                processingTimer = 0;
-                EjectItem();
-            }
+            RequestEjectItem();
         }
     }
 
-    public void ProcessItemClientServerSide(Item item)
+    public void Use()
     {
-        this.item = item;
-        item.transform.position = transform.position;
-        OnDropOff?.Invoke(item, this);
+        isUsing = true;
         processingTimer = processingTime;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void ProcessItemServerRpc(ulong networkObjectId)
+    public void StopUsing()
     {
-        NetworkObject networkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
-        Item item = networkObject.GetComponent<Item>();
-        item.RequestPickUp();
-        ProcessItemClientRpc(item.NetworkItem.NetworkObjectId);
+        isUsing = false;
+        processingTimer = 0;
+        item = null;
     }
 
-    [ClientRpc(RequireOwnership = false)]
-    public void ProcessItemClientRpc(ulong networkObjectId, ClientRpcParams clientRpcParams = default)
+    public void ProcessItem(Item item)
     {
-        NetworkObject networkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
-        Item item = networkObject.GetComponent<Item>();
-        ProcessItemClientServerSide(item);
+        this.item = item;
+        if (item.NetworkItem.IsOwner) item.transform.position = transform.position;
+        OnDropOff?.Invoke(item, this, true);
     }
 
     public void AcceptItem()
     {
-        if (item == null) return;
-
         Debug.Log("Item Accepted");
-        item = null;
+        StopUsing();
     }
 
     public void EjectItem()
     {
-        if (item == null) return;
-        item.RequestDrop();
-        Rigidbody rig = item.GetComponent<Rigidbody>();
-        rig.AddForce(transform.rotation * new Vector3(0, 1, 1) * ejectionPower, ForceMode.Impulse);
-        item = null;
+        OnDropOff?.Invoke(item, this, false);
+        if (networkItemDropOff.IsServer)
+        {
+            item.RequestDrop();
+            Rigidbody rig = item.GetComponent<Rigidbody>();
+            rig.AddForce(transform.rotation * new Vector3(0, 1, 1) * ejectionPower, ForceMode.Impulse);
+            RequestStopUsing();
+        }
+    }
+
+    public void Interact(GameObject interactor)
+    {
+        if (HasItem()) return;
+
+        if (interactor.TryGetComponent(out SurvivorController survivorController))
+        {
+            Item item = survivorController.Hotbar.GetItem();
+            if (item != null) RequestProcessItem(item);
+        }
+    }
+
+    private void UpdateTimers()
+    {
+        float fixedDeltaTime = Time.fixedDeltaTime;
+
+        if (processingTimer > 0)
+        {
+            processingTimer -= fixedDeltaTime;
+        }
     }
 }

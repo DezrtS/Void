@@ -5,6 +5,7 @@ public class SurvivorController : PlayerController
 {
     [SerializeField] private Transform leftHandTarget;
     [SerializeField] private Transform rightHandTarget;
+    [SerializeField] private Transform lookAtTarget;
     private InverseKinematicsObject inverseKinematicsObject;
 
     private Hotbar hotbar;
@@ -60,6 +61,7 @@ public class SurvivorController : PlayerController
             this.inverseKinematicsObject = inverseKinematicsObject;
             leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
             rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
+            lookAtTarget.position = inverseKinematicsObject.LookAtTarget.position;
         }
     }
 
@@ -69,6 +71,7 @@ public class SurvivorController : PlayerController
         {
             leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
             rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
+            lookAtTarget.position = inverseKinematicsObject.LookAtTarget.position;
         }
     }
 
