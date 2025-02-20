@@ -1,242 +1,82 @@
-using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Item : NetworkBehaviour, IUseable, IInteractable
+public class Item : MonoBehaviour, INetworkUseable, IInteractable
 {
-    [SerializeField] private ItemData itemData;
-    [SerializeField] protected bool isPickedUp = false;
-    [SerializeField] protected bool isDropped = false;
-    [SerializeField] protected bool canPickUp = true;
-    [SerializeField] protected bool canDrop = true;
-
-    protected bool isUsing;
-    protected Rigidbody rig;
-    protected Collider col;
-
-    public delegate void ItemHandler(Item item);
     public event IUseable.UseHandler OnUsed;
-    public event ItemHandler OnPickedUp;
-    public event ItemHandler OnDropped;
-    public event ItemHandler OnRequestForceDrop;
+    public delegate void ItemPickUpHandler(Item item, bool pickedUp);
+    public event ItemPickUpHandler OnPickUp;
+
+    [SerializeField] private ItemData itemData;
+    [SerializeField] private bool canPickUp = true;
+    [SerializeField] private bool canDrop = true;
+    
+    protected NetworkItem networkItem;
+
+    protected Rigidbody rig;
+    private Collider col;
+    private bool isPickedUp;
+    private bool isUsing;
 
     public ItemData ItemData => itemData;
-    public bool IsUsing => isUsing;
+    public NetworkItem NetworkItem => networkItem;
     public bool IsPickedUp => isPickedUp;
-    public bool IsDropped => isDropped;
+    public bool IsUsing => isUsing;
+
+    public bool CanPickUp() => !isPickedUp && canPickUp;
+    public bool CanDrop() => isPickedUp && canDrop;
+    public bool CanUse() => !isUsing;
+    public bool CanStopUsing() => isUsing;
 
     private void Awake()
     {
+        networkItem = GetComponent<NetworkItem>();
         rig = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
     }
 
-    public bool CanUse()
-    {
-        return !IsUsing;
-    }
+    public void RequestUse() => networkItem.UseServerRpc();
+    public void RequestStopUsing() => networkItem.StopUsingServerRpc();
+    public void RequestPickUp() => networkItem.PickUpServerRpc();
+    public void RequestDrop() => networkItem.DropServerRpc();
 
-    public bool Use()
-    {
-        if (!CanUse()) return false;
-        ForceUse();
-        return true;
-    }
-
-    public void ForceUse()
-    {
-        if (!IsServer) UseClientSide();
-        UseServerRpc();
-    }
-
-    protected virtual void UseClientSide()
-    {
-        UseClientServerSide();
-    }
-
-    protected virtual void UseServerSide()
-    {
-        UseClientServerSide();
-    }
-
-    protected virtual void UseClientServerSide()
+    public virtual void Use()
     {
         isUsing = true;
+        OnUsed?.Invoke(this, isUsing);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void UseServerRpc(ServerRpcParams rpcParams = default)
-    {
-        if (!CanUse()) return;
-        UseServerSide();
-        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-        UseClientRpc(clientRpcParams);
-    }
-
-    [ClientRpc(RequireOwnership = false)]
-    private void UseClientRpc(ClientRpcParams rpcParams = default)
-    {
-        UseClientSide();
-    }
-
-    public bool StopUsing()
-    {
-        if (!IsUsing) return false;
-        ForceStopUsing();
-        return true;
-    }
-
-    public void ForceStopUsing()
-    {
-        if (!IsServer) StopUsingClientSide();
-        StopUsingServerRpc();
-    }
-
-    protected virtual void StopUsingClientSide()
-    {
-        StopUsingClientServerSide();
-    }
-
-    protected virtual void StopUsingServerSide()
-    {
-        StopUsingClientServerSide();
-    }
-
-    protected virtual void StopUsingClientServerSide()
+    public virtual void StopUsing()
     {
         isUsing = false;
+        OnUsed?.Invoke(this, isUsing);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void StopUsingServerRpc(ServerRpcParams rpcParams = default)
+    public virtual void PickUp()
     {
-        if (!IsUsing) return;
-        StopUsingServerSide();
-        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-        StopUsingClientRpc(clientRpcParams);
-    }
-
-    [ClientRpc(RequireOwnership = false)]
-    private void StopUsingClientRpc(ClientRpcParams rpcParams = default)
-    {
-        StopUsingClientSide();
-    }
-
-    public bool CanPickUp()
-    {
-        return (canPickUp && !isPickedUp);
-    }
-
-    public bool PickUp()
-    {
-        if (!CanPickUp()) return false;
-        ForcePickUp();
-        return true;
-    }
-
-    public void ForcePickUp()
-    {
-        if (!IsServer) PickUpClientSide();
-        PickUpServerRpc();
-    }
-
-    protected virtual void PickUpClientSide()
-    {
-        PickUpClientServerSide();
-    }
-
-    protected virtual void PickUpServerSide()
-    {
-        PickUpClientServerSide();
-    }
-
-    protected virtual void PickUpClientServerSide()
-    {
-        isDropped = false;
         isPickedUp = true;
-        rig.isKinematic = true;
-        col.enabled = false;
-        OnPickedUp?.Invoke(this);
+        OnPickUp?.Invoke(this, isPickedUp);
+        UpdateItemState(true);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void PickUpServerRpc(ServerRpcParams rpcParams = default)
-    {
-        if (!CanPickUp()) return;
-        PickUpServerSide();
-        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-        PickUpClientRpc(clientRpcParams);
-    }
-
-    [ClientRpc(RequireOwnership = false)]
-    private void PickUpClientRpc(ClientRpcParams rpcParams = default)
-    {
-        PickUpClientSide();
-    }
-
-    protected void DropItem()
-    {
-        OnRequestForceDrop?.Invoke(this);
-    }
-
-    public bool CanDrop()
-    {
-        return (canDrop && !isDropped);
-    }
-
-    public bool Drop()
-    {
-        if (!CanDrop()) return false;
-        ForceDrop();
-        return true;
-    }
-
-    public void ForceDrop()
-    {
-        if (!IsServer) DropClientSide();
-        DropServerRpc();
-    }
-
-    protected virtual void DropClientSide()
-    {
-        DropClientServerSide();
-    }
-
-    protected virtual void DropServerSide()
-    {
-        DropClientServerSide();
-    }
-
-    protected virtual void DropClientServerSide()
+    public virtual void Drop()
     {
         isPickedUp = false;
-        isDropped = true;
-        col.enabled = true;
-        rig.isKinematic = false;
-        OnDropped?.Invoke(this);
+        OnPickUp?.Invoke(this, isPickedUp);
+        UpdateItemState(false);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void DropServerRpc(ServerRpcParams rpcParams = default)
+    private void UpdateItemState(bool isPickedUp)
     {
-        if (!CanDrop()) return;
-        DropServerSide();
-        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-        DropClientRpc(clientRpcParams);
-    }
-
-    [ClientRpc(RequireOwnership = false)]
-    private void DropClientRpc(ClientRpcParams rpcParams = default)
-    {
-        DropClientSide();
+        rig.isKinematic = isPickedUp;
+        col.enabled = !isPickedUp;
     }
 
     public void Interact(GameObject interactor)
     {
         if (interactor.TryGetComponent(out Hotbar hotbar))
         {
-            hotbar.PickUpItem(this);
+            hotbar.RequestPickUpItem(this);
         }
     }
 }

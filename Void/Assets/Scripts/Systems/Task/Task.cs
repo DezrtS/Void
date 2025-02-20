@@ -1,30 +1,35 @@
-using System;
-using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Task : NetworkBehaviour
+public abstract class Task : MonoBehaviour
 {
+    public delegate void TaskStateHandler(Task task, bool completed);
+    public event TaskStateHandler OnTaskStateChanged;
+
     [SerializeField] private TaskData taskData;
 
+    private NetworkTask networkTask;
+
+    private bool isCompleted;
     protected ISubtask[] subtasks;
 
-    public TaskData TaskData {  get { return taskData; } } 
+    public TaskData TaskData => taskData;
+    public NetworkTask NetworkTask => networkTask;
+    public bool IsCompleted => isCompleted;
 
-    public delegate void TaskProgressHandler(Task task);
-    public event TaskProgressHandler OnTaskCompletion;
-    public event Action OnUpdateTaskInstructions;
+    public void RequestUpdateTaskState(bool state) => networkTask.UpdateTaskStateServerRpc(state);
+    public void RequestUpdateSubtaskState(int index, bool state) => networkTask.UpdateSubtaskStateServerRpc(index, state);
+    
 
     private void Awake()
     {
+        networkTask = GetComponent<NetworkTask>();
+
         subtasks = new ISubtask[taskData.Subtasks.Count];
         for (int i = 0; i < subtasks.Length; i++)
         {
             subtasks[i] = taskData.Subtasks[i].CreateSubtaskInstance(this, taskData);
-            subtasks[i].OnSubtaskStateUpdate += OnSubtaskUpdate;
-            subtasks[i].OnUpdateSubtaskInstructions += UpdateTaskInstructions;
+            subtasks[i].OnSubtaskStateChanged += OnSubtaskStateChanged;
         }
-
-        //completedSubtasks = new bool[taskData.Subtasks.Count];
     }
 
     public string GetInstructions()
@@ -37,20 +42,21 @@ public abstract class Task : NetworkBehaviour
         return instructions;
     }
 
-    public void UpdateTaskInstructions()
+    public void OnSubtaskStateChanged(ISubtask subtask, bool completed)
     {
-        OnUpdateTaskInstructions?.Invoke();
-    }
-
-    public void OnSubtaskUpdate(ISubtask subtask, bool completed)
-    {
-        if (completed)
+        for (int i = 0; i < subtasks.Length; i++)
         {
-            if (IsTaskComplete())
+            if (subtask == subtasks[i])
             {
-                OnTaskCompletion?.Invoke(this);
+                RequestUpdateSubtaskState(i, completed);
             }
         }
+    }
+
+    public void UpdateTaskState(bool completed)
+    {
+        isCompleted = completed;
+        TaskManager.Instance.RegenerateTaskInstructions();
     }
 
     public bool IsTaskComplete()

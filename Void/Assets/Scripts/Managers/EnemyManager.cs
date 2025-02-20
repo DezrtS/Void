@@ -41,7 +41,7 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
 
         VoidBeastController voidBeastController = voidBeast.GetComponent<VoidBeastController>();
         EnableDisableEnemyClientRpc(voidBeastController.NetworkObjectId, true);
-        voidBeastController.Health.OnDeath += OnEnemyDeath;
+        voidBeastController.Health.OnDeathStateChanged += OnEnemyDeath;
 
         Spawnpoint spawnpoint = SpawnManager.Instance.GetRandomSpawnpoint(Spawnpoint.SpawnpointType.VoidBeast);
         if (spawnpoint == null) return;
@@ -50,12 +50,15 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
         voidBeastController.Activate();
     }
 
-    public void OnEnemyDeath(Health health)
+    public void OnEnemyDeath(Health health, bool isDead)
     {
-        health.OnDeath -= OnEnemyDeath;
-        health.SetHealth(health.GetMaxHealth());
-        voidBeastObjectPool.ReturnToPool(health.gameObject);
-        EnableDisableEnemyClientRpc(health.gameObject.GetComponent<NetworkObject>().NetworkObjectId, false);
+        if (isDead)
+        {
+            health.OnDeathStateChanged -= OnEnemyDeath;
+            health.RequestRespawn();
+            voidBeastObjectPool.ReturnToPool(health.gameObject);
+            EnableDisableEnemyClientRpc(health.gameObject.GetComponent<NetworkObject>().NetworkObjectId, false);
+        }
     }
 
     [ClientRpc(RequireOwnership = false)]

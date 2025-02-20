@@ -63,6 +63,6 @@ public class DeliverItemSubtask : Subtask
     {
         this.item = item;
         ItemDropOff.OnDropOff += OnItemDropOff;
-        UpdateSubtaskInstructions();
+        RequestRegenerateTaskInstructions();
     }
 }

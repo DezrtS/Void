@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -973645888921241733}
   - component: {fileID: 5135502783942027889}
   - component: {fileID: 5267211849770304791}
+  - component: {fileID: -3593698300735499805}
   m_Layer: 6
   m_Name: AutomaticGunHolder
   m_TagString: Untagged
@@ -34,7 +35,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3652338635341722388}
   - {fileID: 4381912256224793128}
@@ -82,7 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4025352129
+  GlobalObjectIdHash: 374236993
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -104,8 +105,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
-  isPickedUp: 0
-  isDropped: 1
   canPickUp: 1
   canDrop: 1
   projectileSpawnerObject: {fileID: 4735076810010294097}
@@ -134,7 +133,6 @@ MonoBehaviour:
       Data3: -1381415759
       Data4: -750953849
     Path: event:/Prototype/Weapons/Reload
-  isFiring: 0
 --- !u!65 &3688373138169565638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -213,6 +211,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHandTarget: {fileID: 3890978826423210217}
   rightHandTarget: {fileID: 99772846327228237}
+--- !u!114 &-3593698300735499805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159275963486535576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d01a42045b12b54e869f01f054dae66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &634787540617914726
 GameObject:
   m_ObjectHideFlags: 0

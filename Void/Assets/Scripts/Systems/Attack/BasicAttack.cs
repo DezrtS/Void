@@ -1,9 +1,10 @@
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
-public class BasicAttack : NetworkBehaviour, IUseable
+public class BasicAttack : MonoBehaviour, INetworkUseable
 {
+    public event IUseable.UseHandler OnUsed;
+
     [SerializeField] private Vector3 offset;
     [SerializeField] private float size;
     [SerializeField] private LayerMask layerMask;
@@ -12,63 +13,65 @@ public class BasicAttack : NetworkBehaviour, IUseable
 
     [SerializeField] private float cooldown;
     [SerializeField] private float duration;
+
+    protected NetworkUseable networkUseable;
+
     private float cooldownTimer;
     private float durationTimer;
-
-    private bool isUsing = false;
     private List<Collider> hitColliders = new List<Collider>();
 
+    private bool isAttacking;
+    private bool isUsing;
+
+    public bool IsAttacking => isAttacking;
     public bool IsUsing => isUsing;
 
-    public event IUseable.UseHandler OnUsed;
+    public bool CanUse() => !isUsing && !isAttacking && cooldownTimer <= 0 && durationTimer <= 0;
+    public bool CanStopUsing() => isUsing;
 
-    public virtual bool CanUse()
+    public void RequestUse() => networkUseable.UseServerRpc();
+    public void RequestStopUsing() => networkUseable.StopUsingServerRpc();
+
+    private void Awake()
     {
-        return cooldownTimer <= 0 && durationTimer <= 0;
+        networkUseable = GetComponent<NetworkUseable>();
     }
 
-    public bool Use()
+    private void Update()
     {
-        if (!CanUse()) return false;
-        if (!IsServer) UseClientSide();
-        UseServerRpc();
-        return true;
+        UpdateTimers();
+
+        if (networkUseable.IsServer && isAttacking)
+        {
+            Collider[] results = new Collider[10];
+            Physics.OverlapSphereNonAlloc(transform.position + offset, size, results, layerMask, QueryTriggerInteraction.Ignore);
+
+            if (results.Length > 0)
+            {
+                foreach (Collider collider in results)
+                {
+                    if (!collider || collider.gameObject == gameObject || hitColliders.Contains(collider)) continue;
+
+                    hitColliders.Add(collider);
+                    if (collider.TryGetComponent(out Health health))
+                    {
+                        health.RequestDamage(damage);
+                    }
+                }
+            }
+        }
     }
 
-    private void UseClientSide()
-    {
-        UseClientServerSide();
-    }
-
-    private void UseServerSide()
-    {
-        UseClientServerSide();
-    }
-
-    private void UseClientServerSide()
+    public void Use()
     {
         isUsing = true;
+        isAttacking = true;
         durationTimer = duration;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void UseServerRpc(ServerRpcParams rpcParams = default)
+    public void StopUsing()
     {
-        if (!CanUse()) return;
-        UseServerSide();
-        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-        UseClientRpc(clientRpcParams);
-    }
-
-    [ClientRpc(RequireOwnership = false)]
-    private void UseClientRpc(ClientRpcParams rpcParams = default)
-    {
-        UseClientSide();
-    }
-
-    public bool StopUsing()
-    {
-        return true;
+        isUsing = false;
     }
 
     private void UpdateTimers()
@@ -85,33 +88,9 @@ public class BasicAttack : NetworkBehaviour, IUseable
 
             if (durationTimer < 0)
             {
-                isUsing = false;
+                isAttacking = false;
                 hitColliders.Clear();
                 cooldownTimer = cooldown;
-            }
-        }
-    }
-
-    private void Update()
-    {
-        UpdateTimers();
-
-        if (isUsing)
-        {
-            Collider[] results = new Collider[10];
-            Physics.OverlapSphereNonAlloc(transform.position + offset, size, results, layerMask, QueryTriggerInteraction.Ignore);
-
-            if (results.Length > 0)
-            {
-                foreach (Collider collider in results)
-                {
-                    if (!collider || collider.gameObject == gameObject || hitColliders.Contains(collider)) continue;
-
-                    hitColliders.Add(collider);
-                    if (collider.TryGetComponent(out Health health)) {
-                        if (IsServer) health.Damage(damage);
-                    }
-                }
             }
         }
     }

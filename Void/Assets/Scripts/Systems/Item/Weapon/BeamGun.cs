@@ -1,7 +1,4 @@
 using FMODUnity;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -25,27 +22,11 @@ public class BeamGun : Item
     private float activeTimer = 0;
     private float overheatTimer = 0;
 
+    public bool CanFire() => overheatTimer <= 0;
+
     private void Start()
     {
         powerUpTimer = -timeToWindUp;
-    }
-
-    protected override void UseServerSide()
-    {
-        base.UseServerSide();
-        isFiring = true;
-        effect.Play();
-    }
-
-    protected override void StopUsingServerSide()
-    {
-        base.StopUsingServerSide();
-        isFiring = false;
-    }
-
-    public bool CanFire()
-    {
-        return (overheatTimer <= 0);
     }
 
     private void FixedUpdate()
@@ -54,7 +35,7 @@ public class BeamGun : Item
         {
             overheatTimer -= Time.fixedDeltaTime;
 
-            if (overheatTimer <= 0 )
+            if (overheatTimer <= 0)
             {
                 isOverheating = false;
             }
@@ -96,7 +77,7 @@ public class BeamGun : Item
             {
                 activeTimer -= Time.fixedDeltaTime;
 
-                if (activeTimer <= 0 )
+                if (activeTimer <= 0)
                 {
                     activeTimer = 0;
                 }
@@ -116,6 +97,28 @@ public class BeamGun : Item
                 }
             }
         }
+    }
+
+    public override void Use()
+    {
+        base.Use();
+        StartFiring();
+    }
+
+    public override void StopUsing()
+    {
+        base.StopUsing();
+        StopFiring();
+    }
+
+    public void StartFiring()
+    {
+        isFiring = true;
+    }
+
+    public void StopFiring()
+    {
+        isFiring = false;
     }
 
     public void Overheat()

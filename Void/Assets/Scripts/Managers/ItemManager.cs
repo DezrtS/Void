@@ -30,17 +30,11 @@ public class ItemManager : Singleton<ItemManager>
         EventLoggerInterop.ShutdownLogger();
     }
 
-    public static ulong SpawnNetworkedItem(ItemData itemData)
-    {
-        Item item = SpawnItem(itemData);
-        return item.NetworkObjectId;
-    }
-
     public static Item SpawnItem(ItemData itemData)
     {
         GameObject spawnedItem = Instantiate(itemData.ItemPrefab);
         Item item = spawnedItem.GetComponent<Item>();
-        item.NetworkObject.Spawn();
+        item.NetworkItem.NetworkObject.Spawn();
         return item;
     }
 }

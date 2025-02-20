@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ThrowableItem : Item
@@ -7,32 +5,20 @@ public class ThrowableItem : Item
     [SerializeField] private float thowSpeed;
     [SerializeField] private float spinSpeed;
 
-    protected bool thrown = false;
-
-    public bool CanThrow()
+    public override void StopUsing()
     {
-        return (!thrown);
-    }
-
-    protected override void StopUsingServerSide()
-    {
-        base.StopUsingServerSide();
+        base.StopUsing();
         Throw();
     }
 
-    private void Throw()
+    public virtual void Throw()
     {
-        DropItem();
-        rig.AddForce(thowSpeed * transform.forward, ForceMode.Impulse);
-        rig.angularVelocity = spinSpeed * Vector3.right;
-
-        OnThrow();
-    }
-
-    protected virtual void OnThrow()
-    {
-        canPickUp = false;
-        canDrop = false;
-        thrown = true;
+        if (networkItem.IsOwner)
+        {
+            RequestDrop();
+            Drop();
+            rig.AddForce(thowSpeed * transform.forward, ForceMode.Impulse);
+            rig.angularVelocity = spinSpeed * Vector3.right;
+        }
     }
 }

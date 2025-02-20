@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8641862416031833373}
   - component: {fileID: 1858793924708178283}
   - component: {fileID: 3468638796157300535}
+  - component: {fileID: 6835778865550978987}
   m_Layer: 0
   m_Name: Battery Retrieval Task
   m_TagString: Untagged
@@ -68,3 +69,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   taskData: {fileID: 11400000, guid: 4d4864e5649e0b9479d50441aaf3a62c, type: 2}
   itemData: {fileID: 11400000, guid: 69af40606c0d78149968119d78aa657d, type: 2}
+--- !u!114 &6835778865550978987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4352985685612846072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46bb30afc3e5b4b429476c6ab4d1f11e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

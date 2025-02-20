@@ -35,7 +35,7 @@ public class DraggableDropOff : MonoBehaviour
             proccessed.TryGetValue(draggable, out bool state);
             if (state) return;
 
-            if (!draggable.IsDragging)
+            if (!draggable.IsUsing)
             {
                 proccessed[draggable] = true;
                 OnDropOff?.Invoke(draggable, this);
@@ -48,6 +48,6 @@ public class DraggableDropOff : MonoBehaviour
     {
         draggables.Remove(draggable);
         proccessed.Remove(draggable);
-        draggable.Drag();
+        draggable.RequestUse();
     }
 }

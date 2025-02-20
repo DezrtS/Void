@@ -1,48 +1,51 @@
-using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Draggable : NetworkBehaviour, IInteractable
+public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
 {
-    private Rigidbody rig;
+    public event IUseable.UseHandler OnUsed;
+
+    private NetworkUseable networkUseable;
+
     private SpringJoint springJoint;
-    private bool isDragging;
+    private bool isUsing;
 
-    public bool IsDragging => isDragging;
+    public NetworkUseable NetworkUseable => networkUseable;
+    public bool IsUsing => isUsing;
 
-    public delegate void DraggableHandler(Draggable draggable);
-    public event DraggableHandler OnStartDragging;
-    public event DraggableHandler OnStopDragging;
+    public bool CanUse() => !isUsing;
+    public bool CanStopUsing() => isUsing;
+
+    public void RequestUse() => networkUseable.UseServerRpc();
+    public void RequestStopUsing() => networkUseable.StopUsingServerRpc();
 
     private void Awake()
     {
-        rig = GetComponent<Rigidbody>();
+        networkUseable = GetComponent<NetworkUseable>();
         springJoint = GetComponent<SpringJoint>();
+    }
+
+    public void Use()
+    {
+        isUsing = true;
+        OnUsed?.Invoke(this, isUsing);
+    }
+
+    public void StopUsing()
+    {
+        isUsing = false;
+        OnUsed?.Invoke(this, isUsing);
     }
 
     public void Interact(GameObject interactor)
     {
-        if (isDragging) return;
+        if (!CanUse()) return;
 
         if (interactor.TryGetComponent(out Hotbar hotbar))
         {
-            hotbar.StartDragging(this);
+            hotbar.RequestStartDragging(networkUseable.NetworkObjectId);
         }
-    }
-
-    public void Drag()
-    {
-        isDragging = true;
-        OnStartDragging?.Invoke(this);
-        //rig.isKinematic = true;
-    }
-
-    public void StopDragging()
-    {
-        isDragging = false;
-        OnStopDragging?.Invoke(this);
-        //rig.isKinematic = false;
     }
 
     public void AttachRigidbody(Rigidbody rig)
@@ -56,13 +59,5 @@ public class Draggable : NetworkBehaviour, IInteractable
         springJoint.connectedBody = null;
         Destroy(springJoint);
         springJoint = null;
-    }
-
-    public static Draggable SpawnDraggable(GameObject gameObject)
-    {
-        GameObject spawnedObject = Instantiate(gameObject);
-        Draggable draggable = spawnedObject.GetComponent<Draggable>();
-        draggable.NetworkObject.Spawn();
-        return draggable;
     }
 }

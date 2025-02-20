@@ -12,7 +12,7 @@ public class HealthBar : MonoBehaviour
 
         if (health)
         {
-            health.OnHealthChanged += OnHealthBarChange;
+            health.OnCurrentHealthChanged += OnHealthBarChange;
             //health.OnDeath += DetachHealthBar;
         }
     }
@@ -23,7 +23,7 @@ public class HealthBar : MonoBehaviour
 
         if (health)
         {
-            health.OnHealthChanged -= OnHealthBarChange;
+            health.OnCurrentHealthChanged -= OnHealthBarChange;
             //health.OnDeath -= DetachHealthBar;
         }
     }
@@ -44,13 +44,13 @@ public class HealthBar : MonoBehaviour
     public void AttachHealthBar(Health health)
     {
         this.health = health;
-        health.OnHealthChanged += OnHealthBarChange;
+        health.OnCurrentHealthChanged += OnHealthBarChange;
         //health.OnDeath += DetachHealthBar;
     }
 
     public void DetachHealthBar(Health health)
     {
-        health.OnHealthChanged -= OnHealthBarChange;
+        health.OnCurrentHealthChanged -= OnHealthBarChange;
         //health.OnDeath -= DetachHealthBar;
         this.health = null;
     }
