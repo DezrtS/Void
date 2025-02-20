@@ -56,19 +56,21 @@ public class PickUpItemSubtask : Subtask
     public void OnItem(Item item)
     {
         this.item = item;
+        item.OnPickUp += OnItemPickUpStateChanged;
+        RequestRegenerateTaskInstructions();
+    }
 
-        item.OnPickedUp += (Item item) =>
+    public void OnItemPickUpStateChanged(Item item, bool pickedUp)
+    {
+        if (pickedUp)
         {
             if (isCompleted) return;
             Execute();
-        };
-
-        item.OnDropped += (Item item) =>
+        }
+        else
         {
             if (!isCompleted || !undoOnDrop) return;
             Undo();
-        };
-
-        UpdateSubtaskInstructions();
+        }
     }
 }

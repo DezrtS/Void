@@ -43,6 +43,7 @@ public class Stat
     {
         get
         {
+            UpdateValue();
             return value;
         }
     }

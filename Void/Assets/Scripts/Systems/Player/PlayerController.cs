@@ -97,10 +97,7 @@ public abstract class PlayerController : NetworkBehaviour
         movementController = GetComponent<MovementController>();
         playerLook = GetComponent<PlayerLook>();
         health = GetComponent<Health>();
-        health.OnDeath += (Health health) =>
-        {
-            Die();
-        };
+        health.OnDeathStateChanged += OnDeathStateChanged;
     }
 
     private void Start()
@@ -112,8 +109,7 @@ public abstract class PlayerController : NetworkBehaviour
         }
     }
 
-    public abstract void Die();
-    public abstract void Respawn();
+    public abstract void OnDeathStateChanged(Health health, bool isDead);
 
     public abstract void OnPrimaryAction(InputAction.CallbackContext context);
     public abstract void OnSecondaryAction(InputAction.CallbackContext context);

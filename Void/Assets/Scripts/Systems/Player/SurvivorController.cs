@@ -42,7 +42,7 @@ public class SurvivorController : PlayerController
 
         if (!IsServer) return;
         Item item = ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
-        hotbar.PickUpItem(item);
+        hotbar.RequestPickUpItem(item);
     }
 
     protected override void Awake()
@@ -72,18 +72,19 @@ public class SurvivorController : PlayerController
         }
     }
 
-    public override void Die()
+    public override void OnDeathStateChanged(Health health, bool isDead)
     {
-        if (!IsServer) return;
-        hotbar.DropAllItems();
+        if (!IsOwner) return;
 
-        Respawn();
-    }
-
-    public override void Respawn()
-    {
-        health.SetHealth(health.GetMaxHealth());
-        movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Survivor));
+        if (isDead)
+        {
+            hotbar.RequestDropAllItems();
+            health.RequestRespawn();
+        }
+        else
+        {
+            movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Survivor));
+        }
     }
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)
@@ -93,12 +94,12 @@ public class SurvivorController : PlayerController
         if (context.performed)
         {
             Item activeItem = hotbar.GetItem();
-            if (activeItem != null) activeItem.Use();
+            if (activeItem != null) activeItem.RequestUse();
         }
         else if (context.canceled)
         {
             Item activeItem = hotbar.GetItem();
-            if (activeItem != null) activeItem.StopUsing();
+            if (activeItem != null) activeItem.RequestStopUsing();
         }
     }
 
@@ -112,7 +113,8 @@ public class SurvivorController : PlayerController
     {
         if (!IsOwner) return;
         int direction = (int)Mathf.Sign(context.ReadValue<float>());
-        hotbar.SwitchItem(direction);
+        int newIndex = (hotbar.SelectedIndex + direction + hotbar.HotbarCapacity) % hotbar.HotbarCapacity;
+        hotbar.RequestSwitchToItem(newIndex);
     }
 
     public override void OnDrop(InputAction.CallbackContext context)
@@ -121,11 +123,11 @@ public class SurvivorController : PlayerController
 
         if (hotbar.IsDragging)
         {
-            hotbar.StopDragging();
+            hotbar.RequestStopDragging();
         }
         else
         {
-            hotbar.DropItem();
+            hotbar.RequestDropItem();
         }
     }
 
@@ -140,9 +142,8 @@ public class SurvivorController : PlayerController
             {
                 if (activeItem.TryGetComponent(out IReload reload))
                 {
-                    reload.Reload();
+                    reload.RequestReload();
                 }
-                
             }
         }
     }

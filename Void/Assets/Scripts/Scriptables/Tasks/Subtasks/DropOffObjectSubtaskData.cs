@@ -62,6 +62,6 @@ public class DropOffObjectSubtask : Subtask
     {
         this.draggable = draggable;
         DraggableDropOff.OnDropOff += OnDropOff;
-        UpdateSubtaskInstructions();
+        RequestRegenerateTaskInstructions();
     }
 }

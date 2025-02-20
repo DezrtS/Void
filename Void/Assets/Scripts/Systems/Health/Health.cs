@@ -2,131 +2,89 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Health : NetworkBehaviour
+public class Health : MonoBehaviour
 {
-    [SerializeField] protected Stat maxHealth = new Stat(100);
-    protected Stat health = new Stat(0);
+    public delegate void HealthHandler(float previousValue, float newValue, float maxValue);
+    public event HealthHandler OnCurrentHealthChanged;
+    public delegate void DeathHandler(Health health, bool isDead);
+    public event DeathHandler OnDeathStateChanged;
+
+    [SerializeField] protected Stat maxHealth = new(100);
+    [SerializeField] protected Stat damageResistance = new(0);
 
     [SerializeField] private bool canRegenerateHealth;
-    [SerializeField] protected Stat healthRegenerationRate;
+    [SerializeField] protected Stat healthRegenerationRate = new(5);
     [SerializeField] protected float healthRegenerationDelay;
 
-    [SerializeField] protected Stat damageResistance;
-
-    public delegate void HealthHandler(float previousValue, float newValue, float maxValue);
-    public event HealthHandler OnHealthChanged;
-    public event Action<Health> OnDeath;
+    private NetworkHealth networkHealth;
+    private bool isDead;
+    private float currentHealth;
 
     private float healthRegenerationDelayTimer;
-    private bool healthChanged = false;
+
+    public float MaxHealth => maxHealth.Value;
+    public bool IsDead => isDead;
+    public float CurrentHealth => currentHealth;
+
+    public void RequestSetCurrentHealth(float value) => networkHealth.SetCurrentHealthServerRpc(value);
+    public void RequestDie() => networkHealth.SetDeathStateServerRpc(true);
+    public void RequestRespawn() => networkHealth.SetDeathStateServerRpc(false);
 
     protected virtual void Awake()
     {
-        health.SetBaseValue(maxHealth.Value);
+        networkHealth = GetComponent<NetworkHealth>();
     }
 
     private void FixedUpdate()
     {
-        if (canRegenerateHealth && healthChanged)
+        if (networkHealth.IsServer && !isDead)
         {
-            float deltaTime = Time.deltaTime;
-            if (healthRegenerationDelayTimer <= 0)
+            if (canRegenerateHealth)
             {
-                float maxHealth = GetMaxHealth();
-                float previousHealth = GetHealth();
-                float newHealth = previousHealth + healthRegenerationRate.Value * deltaTime;
-
-                if (newHealth >= maxHealth)
+                float deltaTime = Time.deltaTime;
+                if (healthRegenerationDelayTimer <= 0)
                 {
-                    healthChanged = false;
-                    OnHealthChanged?.Invoke(previousHealth, maxHealth, GetMaxHealth());
+                    RequestHealing(healthRegenerationRate.Value * deltaTime);
                 }
                 else
                 {
-                    OnHealthChanged?.Invoke(previousHealth, newHealth, GetMaxHealth());
+                    healthRegenerationDelayTimer -= deltaTime;
                 }
-
-                SetHealth(newHealth);
-            }
-            else
-            {
-                healthRegenerationDelayTimer -= deltaTime;
             }
         }
     }
 
-    public float GetMaxHealth()
+    public void SetCurrentHealth(float value)
     {
-        return maxHealth.Value;
-    }
-
-    public float GetHealth()
-    {
-        return Mathf.Clamp(health.Value, 0, maxHealth.Value);
-    }
-
-    public void SetHealth(float value)
-    {
-        health.SetBaseValue(Mathf.Min(value, maxHealth.Value));
-    }
-
-    public void Damage(float amount)
-    {
-        amount = amount * Mathf.Clamp(1 - damageResistance.Value, 0, 1);
-        if (amount <= 0) return;
-
-        UpdateHealthClientServerSide(-amount);
-        UpdateHealthServerRpc(-amount);
-    }
-
-    public void Heal(float amount)
-    {
-        UpdateHealthClientServerSide(amount);
-        UpdateHealthServerRpc(amount);
-    }
-
-    public void Die()
-    {
-        OnDeath?.Invoke(this);
-    }
-
-    public void UpdateHealthClientServerSide(float amount)
-    {
-        if (amount < 0)
+        if (currentHealth > value)
         {
-            healthChanged = true;
             healthRegenerationDelayTimer = healthRegenerationDelay;
         }
 
-        float previousHealth = GetHealth();
-        float newHealth = previousHealth + amount;
-        OnHealthChanged?.Invoke(previousHealth, newHealth, GetMaxHealth());
-        SetHealth(newHealth);
+        OnCurrentHealthChanged?.Invoke(currentHealth, value, MaxHealth);
+        currentHealth = value;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void UpdateHealthServerRpc(float amount, ServerRpcParams serverRpcParams = default)
+    public void SetDeathState(bool isDead)
     {
-        UpdateHealthClientServerSide(amount);
-        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(serverRpcParams);
-        UpdateHealthClientRpc(amount, clientRpcParams);
-
-        if (GetHealth() <= 0)
-        {
-            Die();
-            DieClientRpc();
-        }
+        this.isDead = isDead;
+        if (networkHealth.IsServer && !isDead) RequestFullHeal();
+        OnDeathStateChanged?.Invoke(this, isDead);
     }
 
-    [ClientRpc(RequireOwnership = false)]
-    public void UpdateHealthClientRpc(float amount, ClientRpcParams clientRpcParams = default)
+    public void RequestServerDamage(float damage)
     {
-        UpdateHealthClientServerSide(amount);
+        if (networkHealth.IsServer) RequestDamage(damage);
     }
 
-    [ClientRpc(RequireOwnership = false)]
-    public void DieClientRpc(ClientRpcParams clientRpcParams = default)
+    public void RequestDamage(float damage)
     {
-        Die();
+        damage *= Mathf.Clamp(1 - damageResistance.Value, 0, 1);
+        float newCurrentHealth = currentHealth - damage;
+        RequestSetCurrentHealth(newCurrentHealth);
     }
+
+    public void RequestHealing(float healing) => RequestSetCurrentHealth(currentHealth + healing);
+
+    public void RequestFullHeal() => RequestSetCurrentHealth(MaxHealth);
 }

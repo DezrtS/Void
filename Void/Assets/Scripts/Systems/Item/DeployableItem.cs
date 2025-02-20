@@ -6,33 +6,27 @@ public class DeployableItem : Item
 {
     [SerializeField] private float deployRange = 5;
     [SerializeField] private LayerMask deployLayers;
-    protected bool deployed;
+    
+    private bool isDeployed;
 
-    public bool CanDeploy()
+    public bool CanDeploy() => !isDeployed;
+
+    public override void StopUsing()
     {
-        return (!deployed);
+        base.StopUsing();
+        if (CanDeploy()) Deploy();
     }
 
-    protected override void StopUsingServerSide()
+    public virtual void Deploy()
     {
-        base.StopUsingServerSide();
-        Deploy();
-    }
+        isDeployed = true;
 
-    public void Deploy()
-    {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, deployRange, deployLayers, QueryTriggerInteraction.Ignore))
+        if (networkItem.IsServer)
         {
-            transform.position = hit.point;
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, deployRange, deployLayers, QueryTriggerInteraction.Ignore))
+            {
+                transform.position = hit.point;
+            }
         }
-
-        OnDeploy();
-    }
-
-    protected virtual void OnDeploy()
-    {
-        canPickUp = false;
-        canDrop = false;
-        deployed = true;
     }
 }

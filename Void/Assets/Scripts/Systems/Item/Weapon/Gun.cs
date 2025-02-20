@@ -1,5 +1,4 @@
 using FMODUnity;
-using Unity.Netcode;
 using UnityEngine;
 
 public class Gun : Item, IReload
@@ -14,44 +13,65 @@ public class Gun : Item, IReload
     [SerializeField] private EventReference emptySound;
     [SerializeField] private EventReference reloadSound;
 
-    protected IProjectileSpawner projectileSpawner;
-    [SerializeField] protected bool isFiring;
-    protected int ammo;
+    private NetworkGun networkGun;
+    private bool isFiring;
+    private int ammo;
+
+    private IProjectileSpawner projectileSpawner;
     private float fireRateTimer;
     private float reloadTimer;
     private float windupTimer;
 
     public int MaxAmmo => maxAmmo;
-    public int Ammo => ammo;
-    public float ReloadSpeed => timeToReload;
+    public int Ammo { get { return ammo; } set { ammo = value; } }
+
+    public bool CanStartFire() => !isFiring;
+    public bool CanStopFiring() => isFiring;
+    public bool CanFire() => fireRateTimer <= 0 && reloadTimer <= 0 && windupTimer <= 0;
+    public bool CanReload() => reloadTimer <= 0;
+
+    public void RequestStartFiring() => networkGun.StartFiringServerRpc();
+    public void RequestStopFiring() => networkGun.StopFiringServerRpc();
+    public void RequestFire() => networkGun.FireServerRpc();
+    public void RequestReload() => networkGun.ReloadServerRpc();
 
     private void Start()
     {
+        networkGun = networkItem as NetworkGun;
         projectileSpawner = projectileSpawnerObject.GetComponent<IProjectileSpawner>();
-        ammo = maxAmmo;
     }
 
-    protected override void UseClientServerSide()
+    private void Update()
     {
-        base.UseClientServerSide();
+        UpdateTimers();
+
+        if (networkGun.IsServer && isFiring)
+        {
+            RequestFire();
+        }
+    }
+
+    public override void Use()
+    {
+        base.Use();
+        if (networkGun.IsServer) RequestStartFiring();
+    }
+
+    public override void StopUsing()
+    {
+        base.StopUsing();
+        if (networkGun.IsServer) RequestStopFiring();
+    }
+
+    public void StartFiring()
+    {
         isFiring = true;
         windupTimer = timeToWindUp;
     }
 
-    protected override void StopUsingClientServerSide()
+    public void StopFiring()
     {
-        base.StopUsingClientServerSide();
         isFiring = false;
-    }
-
-    public bool HasAmmo()
-    {
-        return ammo > 0;
-    }
-
-    public bool CanFire()
-    {
-        return (fireRateTimer <= 0 && reloadTimer <= 0 && windupTimer <= 0);
     }
 
     private void UpdateTimers()
@@ -73,118 +93,22 @@ public class Gun : Item, IReload
         }
     }
 
-    private void Update()
-    {
-        UpdateTimers();
-
-        if (!IsOwner) return;
-
-        if (isFiring)
-        {
-            Fire();
-        }
-    }
-
     public void Fire()
     {
-        if (!CanFire()) return;
-        ForceFire();
-    }
-
-    public void ForceFire()
-    {
-        if (!IsServer) FireClientSide();
-        FireServerRpc();
-    }
-
-    private void FireClientSide()
-    {
-        if (!HasAmmo())
+        if (ammo <= 0)
         {
             AudioManager.Instance.PlayOneShot(emptySound, transform.position);
-            if (IsOwner) StopUsing();
             return;
         }
 
-        FireClientServerSide();
-        AudioManager.Instance.PlayOneShot(fireSound, transform.position);
-    }
-
-    private void FireServerSide()
-    {
-        if (!HasAmmo()) return;
-
-        FireClientServerSide();
-    }
-
-    private void FireClientServerSide()
-    {
         fireRateTimer = fireRate;
-        ammo--;
         projectileSpawner.SpawnProjectile();
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void FireServerRpc(ServerRpcParams rpcParams = default)
-    {
-        if (!CanFire()) return;
-        FireServerSide();
-        //ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-        FireClientRpc();
-    }
-
-    [ClientRpc(RequireOwnership = false)]
-    private void FireClientRpc(ClientRpcParams rpcParams = default)
-    {
-        FireClientSide();
-    }
-
-    public bool CanReload()
-    {
-        return reloadTimer <= 0;
+        AudioManager.Instance.PlayOneShot(fireSound, transform.position);
     }
 
     public void Reload()
     {
-        if (!CanReload()) return;
-        ForceReload();
-    }
-
-    public void ForceReload()
-    {
-        if (!IsServer) ReloadClientSide();
-        ReloadServerRpc();
-    }
-
-    private void ReloadClientSide()
-    {
         AudioManager.Instance.PlayOneShot(reloadSound, transform.position);
-        ReloadClientServerSide();
-    }
-
-    private void ReloadServerSide()
-    {
-        ReloadClientServerSide();
-    }
-
-    private void ReloadClientServerSide()
-    {
         reloadTimer = timeToReload;
-        ammo = maxAmmo;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void ReloadServerRpc(ServerRpcParams rpcParams = default)
-    {
-        if (!CanReload()) return;
-        ReloadServerSide();
-        //ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-        ReloadClientRpc();
-    }
-
-    [ClientRpc(RequireOwnership = false)]
-    private void ReloadClientRpc(ClientRpcParams rpcParams = default)
-    {
-        ReloadClientSide();
     }
 }

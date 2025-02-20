@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: -4094151236822204787}
   - component: {fileID: 1885186142189974327}
   - component: {fileID: 7447885900623946521}
+  - component: {fileID: -6230088437021310436}
   m_Layer: 6
   m_Name: BeamGunHolder
   m_TagString: Untagged
@@ -213,8 +214,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 0bce959023d8ce24c97c240eddb33077, type: 2}
-  isPickedUp: 0
-  isDropped: 0
   canPickUp: 1
   canDrop: 1
   beam: {fileID: 3133317790554719160}
@@ -252,6 +251,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.25, y: 0.5, z: 2.1}
   m_Center: {x: 0, y: 0, z: 0.185}
+--- !u!114 &-6230088437021310436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5793455159812539837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d40a89174a39047a6d2b11f4733825, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7546154756960333364
 GameObject:
   m_ObjectHideFlags: 0

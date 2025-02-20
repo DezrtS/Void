@@ -17,10 +17,7 @@ public class VoidBeastController : NetworkBehaviour
     {
         navMeshMovement = GetComponent<NavMeshMovement>();
         health = GetComponent<Health>();
-        health.OnDeath += (Health health) =>
-        {
-            Die();
-        };
+        health.OnDeathStateChanged += OnDeathStateChanged;
     }
 
     public void Activate()
@@ -62,13 +59,16 @@ public class VoidBeastController : NetworkBehaviour
         navMeshMovement.PathfindingDestination = targetTransform.position;
     }
 
-    public void Die()
+    public void OnDeathStateChanged(Health health, bool isDead)
     {
         if (!IsServer) return;
 
-        navMeshMovement.StopPathfinding();
-        navMeshMovement.SetVelocity(Vector3.zero);
-        hasTarget = false;
-        targetTransform = null;
+        if (isDead)
+        {
+            navMeshMovement.StopPathfinding();
+            navMeshMovement.SetVelocity(Vector3.zero);
+            hasTarget = false;
+            targetTransform = null;
+        }
     }
 }

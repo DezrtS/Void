@@ -6,7 +6,9 @@ public class StatChangeMutation : Mutation
     private PlayerStats playerStats;
     private float durationTimer;
 
-    private void Awake()
+    public bool CanActivate() => durationTimer <= 0;
+
+    private void Start()
     {
         statChangeMutationData = mutationData as StatChangeMutationData;
     }
@@ -19,16 +21,14 @@ public class StatChangeMutation : Mutation
         }
     }
 
-    public bool CanActivate()
+    public override void Use()
     {
-        return durationTimer <= 0;
+        base.Use();
+        if (CanActivate()) Activate();
     }
 
-    protected override void UseClientServerSide()
+    public void Activate()
     {
-        base.UseClientServerSide();
-        if (!CanActivate()) return;
-
         durationTimer = statChangeMutationData.Duration;
         AddStats();
     }

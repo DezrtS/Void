@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -16,8 +14,7 @@ public class TaskManager : NetworkSingleton<TaskManager>
 
         foreach (Task task in tasks)
         {
-            task.OnTaskCompletion += OnTaskCompletion;
-            task.OnUpdateTaskInstructions += RegenerateTaskInstructions;
+            task.OnTaskStateChanged += OnTaskStateChanged;
         }
     }
 
@@ -25,8 +22,7 @@ public class TaskManager : NetworkSingleton<TaskManager>
     {
         foreach (Task task in tasks)
         {
-            task.OnTaskCompletion -= OnTaskCompletion;
-            task.OnUpdateTaskInstructions -= RegenerateTaskInstructions;
+            task.OnTaskStateChanged -= OnTaskStateChanged;
         }
     }
 
@@ -55,9 +51,7 @@ public class TaskManager : NetworkSingleton<TaskManager>
         if (!tasks.Contains(task))
         {
             tasks.Add(task);
-            // OnTaskAdded Event
-            task.OnTaskCompletion += OnTaskCompletion;
-            task.OnUpdateTaskInstructions += RegenerateTaskInstructions;
+            task.OnTaskStateChanged += OnTaskStateChanged;
         }
     }
 
@@ -66,13 +60,11 @@ public class TaskManager : NetworkSingleton<TaskManager>
         if (tasks.Contains(task))
         {
             tasks.Remove(task);
-            // OnTaskRemoved Event
-            task.OnTaskCompletion -= OnTaskCompletion;
-            task.OnUpdateTaskInstructions -= RegenerateTaskInstructions;
+            task.OnTaskStateChanged -= OnTaskStateChanged;
         }
     }
 
-    public void OnTaskCompletion(Task task)
+    public void OnTaskStateChanged(Task task, bool state)
     {
         Debug.Log($"{task.TaskData.TaskName} task was completed");
     }
@@ -95,10 +87,9 @@ public class TaskManager : NetworkSingleton<TaskManager>
 
         GameObject spawnedTask = Instantiate(taskPrefab);
         Task task = spawnedTask.GetComponent<Task>();
-        task.NetworkObject.Spawn();
-        AddTask(task);
+        task.NetworkTask.NetworkObject.Spawn();
 
-        SpawnTaskClientRpc(task.NetworkObjectId);
+        SpawnTaskClientRpc(task.NetworkTask.NetworkObjectId);
     }
 
     [ClientRpc(RequireOwnership = false)]
@@ -109,5 +100,13 @@ public class TaskManager : NetworkSingleton<TaskManager>
         AddTask(task);
 
         Debug.Log("Added Task");
+    }
+
+    public static Draggable SpawnDraggable(GameObject draggablePrefab)
+    {
+        GameObject spawnedDraggable = Instantiate(draggablePrefab);
+        Draggable draggable = spawnedDraggable.GetComponent<Draggable>();
+        draggable.NetworkUseable.NetworkObject.Spawn();
+        return draggable;
     }
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8641862416031833373}
   - component: {fileID: 1858793924708178283}
   - component: {fileID: 708074894297094123}
+  - component: {fileID: -8879863041822234951}
   m_Layer: 0
   m_Name: Drag Body Task
   m_TagString: Untagged
@@ -69,3 +70,15 @@ MonoBehaviour:
   taskData: {fileID: 11400000, guid: ae0de4f5e3e141b44ab680aa462355be, type: 2}
   draggablePrefab: {fileID: 4433515326207429756, guid: 5446494c2667cfd4e8a029115e57e2ec,
     type: 3}
+--- !u!114 &-8879863041822234951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4352985685612846072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60024140fde8a934fa94211e9f434643, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -48,7 +48,7 @@ public class CraftingManager : NetworkSingleton<CraftingManager>
 
         if (CanCraftItem(recipeData, inventory))
         {
-            hotbar.PickUpItem(recipeData.Item);
+            hotbar.RequestPickUpItem(recipeData.Item);
         }
     }
 }

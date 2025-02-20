@@ -17,16 +17,18 @@ public class VoidMonsterController : PlayerController
         mutationHotbar = GetComponent<MutationHotbar>();
     }
 
-    public override void Die()
+    public override void OnDeathStateChanged(Health health, bool isDead)
     {
-        if (!IsServer) return;
-        Respawn();
-    }
+        if (!IsOwner) return;
 
-    public override void Respawn()
-    {
-        health.SetHealth(health.GetMaxHealth());
-        movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster));
+        if (isDead)
+        {
+            health.RequestRespawn();
+        }
+        else
+        {
+            movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster));
+        }
     }
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)

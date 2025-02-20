@@ -40,7 +40,7 @@ public abstract class WheelSection : MonoBehaviour
         rectTransform.sizeDelta = 2 * radius * Vector2.one;
         rectTransform.eulerAngles = new Vector3(0, 0, intervalAngle * index + angleMargin / 2f + intervalAngle / 2f);
 
-        float sectionAngle = intervalAngle * index + angleMargin / 2f + intervalAngle / 2f;
+        float sectionAngle = intervalAngle * index + angleMargin / 2f; //+ intervalAngle / 2f;
         direction = new Vector2(
             Mathf.Cos(sectionAngle * Mathf.Deg2Rad),
             Mathf.Sin(sectionAngle * Mathf.Deg2Rad)

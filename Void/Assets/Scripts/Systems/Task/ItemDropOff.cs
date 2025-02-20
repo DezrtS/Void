@@ -22,8 +22,8 @@ public class ItemDropOff : MonoBehaviour, IInteractable
             if (item != null)
             {
                 if (!item.CanDrop()) return;
-                survivorController.Hotbar.DropItem();
-                ProcessItemServerRpc(item.NetworkObjectId);
+                survivorController.Hotbar.RequestDropItem();
+                ProcessItemServerRpc(item.NetworkItem.NetworkObjectId);
             }
         }
     }
@@ -45,7 +45,6 @@ public class ItemDropOff : MonoBehaviour, IInteractable
     {
         this.item = item;
         item.transform.position = transform.position;
-        item.PickUp();
         OnDropOff?.Invoke(item, this);
         processingTimer = processingTime;
     }
@@ -55,7 +54,8 @@ public class ItemDropOff : MonoBehaviour, IInteractable
     {
         NetworkObject networkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[networkObjectId];
         Item item = networkObject.GetComponent<Item>();
-        ProcessItemClientServerSide(item);
+        item.RequestPickUp();
+        ProcessItemClientRpc(item.NetworkItem.NetworkObjectId);
     }
 
     [ClientRpc(RequireOwnership = false)]
@@ -77,7 +77,7 @@ public class ItemDropOff : MonoBehaviour, IInteractable
     public void EjectItem()
     {
         if (item == null) return;
-        item.Drop();
+        item.RequestDrop();
         Rigidbody rig = item.GetComponent<Rigidbody>();
         rig.AddForce(transform.rotation * new Vector3(0, 1, 1) * ejectionPower, ForceMode.Impulse);
         item = null;

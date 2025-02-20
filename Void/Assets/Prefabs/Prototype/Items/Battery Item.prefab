@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1433619203232107144}
   - component: {fileID: 457341660016506390}
   - component: {fileID: 2914617284578575158}
+  - component: {fileID: 7916101381472070564}
   m_Layer: 6
   m_Name: Battery Item
   m_TagString: Untagged
@@ -120,8 +121,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 69af40606c0d78149968119d78aa657d, type: 2}
-  isPickedUp: 0
-  isDropped: 1
   canPickUp: 1
   canDrop: 1
 --- !u!114 &457341660016506390
@@ -165,6 +164,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7916101381472070564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941687137560951099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d40a89174a39047a6d2b11f4733825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &7457711620632503628

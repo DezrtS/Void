@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3826028151340264229}
   - component: {fileID: 2529711161331610991}
   - component: {fileID: 1205744350412627968}
+  - component: {fileID: -7295250527129054932}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -63,6 +64,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
@@ -184,6 +188,32 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  emptySound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  reloadSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+--- !u!114 &-7295250527129054932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57907132256727038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d01a42045b12b54e869f01f054dae66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9140252326772598537
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,3 +259,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: 57765bcfb44dad646b54caad86ddf2a3, type: 2}
+  objectPool: {fileID: 0}

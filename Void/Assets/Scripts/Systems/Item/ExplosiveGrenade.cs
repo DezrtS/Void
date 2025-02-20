@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ExplosiveGrenade : ThrowableItem
@@ -10,42 +8,76 @@ public class ExplosiveGrenade : ThrowableItem
     [SerializeField] private LayerMask effectableLayers;
     [SerializeField] private GameObject explosionEffect;
 
+    private NetworkExplosiveGrenade networkExplosiveGrenade;
+    private bool isActive;
+
     private float timer = 0;
+
+    public bool CanActivateGrenade() => !isActive;
+    public bool CanDeactivateGrenade() => isActive;
+    public bool CanTriggerGrenade() => timer <= 0;
+
+    public void RequestActivateGrenade() => networkExplosiveGrenade.ActivateGrenadeServerRpc();
+    public void RequestDeactivateGrenade() => networkExplosiveGrenade.DeactivateGrenadeServerRpc();
+    public void RequestTriggerGrenade() => networkExplosiveGrenade.TriggerGrenadeServerRpc();
+
+    private void Start()
+    {
+        networkExplosiveGrenade = networkItem as NetworkExplosiveGrenade;
+    }
 
     private void FixedUpdate()
     {
-        if (thrown)
+        UpdateTimers();
+
+        if (networkExplosiveGrenade.IsServer && isActive)
         {
-            if (timer <= 0)
-            {
-                Activate();
-            }
-            else
-            {
-                timer -= Time.fixedDeltaTime;
-            }
+            RequestTriggerGrenade();
         }
     }
 
-    public void Activate()
+    public override void Throw()
     {
-        RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, radius, Vector3.forward, 10, effectableLayers);
-        foreach (RaycastHit hit in raycastHits)
-        {
-            if (hit.collider.TryGetComponent(out Health health))
-            {
-                health.Damage(damage);
-                Debug.Log(hit.collider.gameObject.name);
-            }
-        }
-        Instantiate(explosionEffect, transform.position, Quaternion.identity);
-        //AudioManager.Instance.PlayOneShot(FMODEventManager.Instance.Sound2);
-        Destroy(gameObject);
+        base.Throw();
+        if (networkExplosiveGrenade.IsServer) RequestActivateGrenade();
     }
 
-    protected override void OnThrow()
+    public void ActivateGrenade()
     {
-        base.OnThrow();
+        isActive = true;
         timer = timeToActivation;
+    }
+
+    public void DeactivateGrenade()
+    {
+        isActive = false;
+        timer = 0;
+    }
+
+    public void TriggerGrenade()
+    {
+        Instantiate(explosionEffect, transform.position, Quaternion.identity);
+
+        if (networkItem.IsServer)
+        {
+            RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, radius, Vector3.forward, 10, effectableLayers);
+            foreach (RaycastHit hit in raycastHits)
+            {
+                if (hit.collider.TryGetComponent(out Health health))
+                {
+                    health.RequestDamage(damage);
+                    Debug.Log(hit.collider.gameObject.name);
+                }
+            }
+        }
+    }
+
+    private void UpdateTimers()
+    {
+        float fixedDeltaTime = Time.fixedDeltaTime;
+        if (timer > 0)
+        {
+            timer -= fixedDeltaTime;
+        }
     }
 }

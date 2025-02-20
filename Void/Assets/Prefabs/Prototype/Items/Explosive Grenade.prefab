@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 7054214674273286820}
   - component: {fileID: -3088496442184838013}
   - component: {fileID: 3159668289627401339}
-  - component: {fileID: 3134782065962044518}
-  - component: {fileID: 3246237408511064884}
+  - component: {fileID: -6156844679204154839}
+  - component: {fileID: 3690518019917096240}
+  - component: {fileID: 1170626076478034432}
   m_Layer: 6
   m_Name: Explosive Grenade
   m_TagString: Untagged
@@ -85,7 +86,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &-3088496442184838013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,8 +121,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 015dc5a18587f6448b49122dfb8f4d13, type: 2}
-  isPickedUp: 0
-  isDropped: 1
   canPickUp: 1
   canDrop: 1
   thowSpeed: 15
@@ -134,7 +133,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   explosionEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
     type: 3}
---- !u!114 &3134782065962044518
+--- !u!114 &-6156844679204154839
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +142,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1512034910407666928}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: df2868252ab5c4d1da357e8f11f1b524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UseUnreliableDeltas: 0
@@ -165,7 +164,7 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &3246237408511064884
+--- !u!114 &3690518019917096240
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,6 +174,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1170626076478034432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512034910407666928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c8f29caf8e92894c9874fc4d7401726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4916593931522308020

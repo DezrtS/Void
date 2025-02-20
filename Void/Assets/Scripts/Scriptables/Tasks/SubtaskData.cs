@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,14 +26,13 @@ public abstract class Subtask : ISubtask
     public SubtaskData SubtaskData => subtaskData;
     public bool IsCompleted => isCompleted;
 
-    public event ISubtask.SubtaskHandler OnSubtaskStateUpdate;
-    public event Action OnUpdateSubtaskInstructions;
+    public event ISubtask.SubtaskStateHandler OnSubtaskStateChanged;
 
     public virtual void Execute()
     {
         isCompleted = true;
-        OnSubtaskStateUpdate?.Invoke(this, isCompleted);
-        UpdateSubtaskInstructions();
+        OnSubtaskStateChanged?.Invoke(this, isCompleted);
+        RequestRegenerateTaskInstructions();
     }
 
     public Subtask(TaskData taskData, SubtaskData subtaskData)
@@ -87,17 +85,27 @@ public abstract class Subtask : ISubtask
         return (instructions, keys);
     }
 
-    protected void UpdateSubtaskInstructions()
-    {
-        OnUpdateSubtaskInstructions?.Invoke();
-    }
-
     public abstract string GetSubtaskInstructions();
 
     public virtual void Undo()
     {
         isCompleted = false;
-        OnSubtaskStateUpdate?.Invoke(this, isCompleted);
-        UpdateSubtaskInstructions();
+        OnSubtaskStateChanged?.Invoke(this, isCompleted);
+        RequestRegenerateTaskInstructions();
+    }
+
+    public static void RequestRegenerateTaskInstructions()
+    {
+        if (TaskManager.Instance)
+        {
+            TaskManager.Instance.RegenerateTaskInstructions();
+        }
+        else
+        {
+            TaskManager.OnSingletonInitialized += (TaskManager taskManager) =>
+            {
+                taskManager.RegenerateTaskInstructions();
+            };
+        }
     }
 }

@@ -55,19 +55,21 @@ public class DragObjectSubtask : Subtask
     public void OnDraggable(Draggable draggable)
     {
         this.draggable = draggable;
+        draggable.OnUsed += OnUseableStateChanged;
+        RequestRegenerateTaskInstructions();
+    }
 
-        draggable.OnStartDragging += (Draggable draggable) =>
+    public void OnUseableStateChanged(IUseable useable, bool isUsing)
+    {
+        if (isUsing)
         {
             if (isCompleted) return;
             Execute();
-        };
-
-        draggable.OnStopDragging += (Draggable draggable) =>
+        }
+        else
         {
             if (!isCompleted || !undoOnStopDragging) return;
             Undo();
-        };
-
-        UpdateSubtaskInstructions();
+        }
     }
 }
