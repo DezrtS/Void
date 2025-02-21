@@ -123,7 +123,8 @@ public class PlayerMovement : MovementController
     private void Update()
     {
         if (!IsOwner) return;
-        Vector3 localVelocity = WorldToLocalVelocity(GetVelocity(), orientationTransform.rotation);
+
+        Vector3 localVelocity = WorldToLocalVelocity(GetVelocity(), orientationTransform.rotation) / sprintSpeed.BaseValue;
         animator.SetFloat("xinput", localVelocity.x);
         animator.SetFloat("yinput", localVelocity.z);
     }

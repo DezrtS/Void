@@ -402,6 +402,7 @@ GameObject:
   - component: {fileID: 2703649929741312374}
   - component: {fileID: -2425281182696050174}
   - component: {fileID: -698946963445583516}
+  - component: {fileID: 8394765938335079000}
   m_Layer: 0
   m_Name: Void Monster
   m_TagString: Monster
@@ -438,7 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1127425563
+  GlobalObjectIdHash: 3567632822
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -548,9 +549,9 @@ MonoBehaviour:
   acceleration:
     baseValue: 4
   timeToAccelerate:
-    baseValue: 0.25
+    baseValue: 0.1
   timeToDeaccelerate:
-    baseValue: 0.25
+    baseValue: 0.1
   walkSpeed:
     baseValue: 6
   sprintSpeed:
@@ -698,9 +699,9 @@ MonoBehaviour:
   acceleration:
     baseValue: 4
   timeToAccelerate:
-    baseValue: 0.25
+    baseValue: 0.1
   timeToDeaccelerate:
-    baseValue: 0.25
+    baseValue: 0.1
   walkSpeed:
     baseValue: 6
   sprintSpeed:
@@ -733,6 +734,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da0b223efc1353d44932680ff9373f6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8394765938335079000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173705057825196843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a4b9c97075e52647900f85d491cec32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1186201246963802096

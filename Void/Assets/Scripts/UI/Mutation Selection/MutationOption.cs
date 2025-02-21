@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 public class MutationOption : MonoBehaviour
 {
+    public delegate void MutationOptionEventHandler(MutationOption mutationOption);
+    public event MutationOptionEventHandler OnMutationOptionSelected;
+
     [SerializeField] private Image mutationOptionImage;
     [SerializeField] private TextMeshProUGUI mutationOptionText;
 
@@ -22,7 +25,6 @@ public class MutationOption : MonoBehaviour
     public void SelectMutationOption()
     {
         if (!mutationData) return;
-
-
+        OnMutationOptionSelected?.Invoke(this);
     }
 }

@@ -1,53 +1,55 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DraggableDropOff : MonoBehaviour
 {
-    public delegate void DraggableDropOffHandler(Draggable draggable, DraggableDropOff draggableDropOff);
+    public delegate void DraggableDropOffHandler(Draggable draggable, DraggableDropOff draggableDropOff, bool isAdded);
     public static event DraggableDropOffHandler OnDropOff;
 
-    private List<Draggable> draggables = new List<Draggable>();
-    private Dictionary<Draggable, bool> proccessed = new Dictionary<Draggable, bool>();
+    private NetworkDraggableDropOff networkDraggableDropOff;
+
+    public void RequestProcessDraggable(Draggable draggable) => networkDraggableDropOff.ProcessDraggableServerRpc(draggable.NetworkUseable.NetworkObjectId); 
+    public void RequestRecessDraggable(Draggable draggable) => networkDraggableDropOff.RecessDraggableServerRpc(draggable.NetworkUseable.NetworkObjectId); 
+    public void RequestAcceptDraggable(Draggable draggable) => networkDraggableDropOff.AcceptDraggableServerRpc(draggable.NetworkUseable.NetworkObjectId);
+
+    private void Awake()
+    {
+        networkDraggableDropOff = GetComponent<NetworkDraggableDropOff>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Draggable draggable))
+        if (networkDraggableDropOff.IsServer)
         {
-            draggables.Add(draggable);
-            proccessed.Add(draggable, false);
+            if (other.TryGetComponent(out Draggable draggable))
+            {
+                RequestProcessDraggable(draggable);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out Draggable draggable))
+        if (networkDraggableDropOff.IsServer)
         {
-            draggables.Remove(draggable);
-            proccessed.Remove(draggable);
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        for (int i = draggables.Count - 1; i >= 0; i--)
-        {
-            Draggable draggable = draggables[i];
-            proccessed.TryGetValue(draggable, out bool state);
-            if (state) return;
-
-            if (!draggable.IsUsing)
+            if (other.TryGetComponent(out Draggable draggable))
             {
-                proccessed[draggable] = true;
-                OnDropOff?.Invoke(draggable, this);
-                Debug.Log("Processed");
+                RequestRecessDraggable(draggable);
             }
         }
     }
 
+    public void ProcessDraggable(Draggable draggable)
+    {
+        OnDropOff?.Invoke(draggable, this, true);
+    }
+
+    public void RecessDraggable(Draggable draggable)
+    {
+        OnDropOff?.Invoke(draggable, this, false);
+    }
+
     public void AcceptDraggable(Draggable draggable)
     {
-        draggables.Remove(draggable);
-        proccessed.Remove(draggable);
-        draggable.RequestUse();
+        Debug.Log("Accepted");
     }
 }

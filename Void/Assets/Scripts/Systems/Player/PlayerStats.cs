@@ -39,6 +39,8 @@ public class Stat
         UpdateValue();
     }
 
+    public float BaseValue => baseValue;
+
     public float Value
     {
         get

@@ -1,18 +1,17 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Mutation : NetworkBehaviour, INetworkUseable
+public abstract class Mutation : MonoBehaviour, INetworkUseable
 {
     public event IUseable.UseHandler OnUsed;
 
     [SerializeField] protected MutationData mutationData;
 
     protected NetworkUseable networkUseable;
+    private bool isUsing;
 
     protected float cooldownTimer;
 
-    private bool isUsing;
-
+    public NetworkUseable NetworkUseable => networkUseable;
     public bool IsUsing => isUsing;
     public MutationData MutationData => mutationData;
 
