@@ -47,12 +47,14 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
     public void Use()
     {
         isUsing = true;
+        OnUsed?.Invoke(this, isUsing);
         processingTimer = processingTime;
     }
 
     public void StopUsing()
     {
         isUsing = false;
+        OnUsed?.Invoke(this, isUsing);
         processingTimer = 0;
         item = null;
     }

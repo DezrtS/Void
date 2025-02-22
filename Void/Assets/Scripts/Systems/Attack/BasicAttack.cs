@@ -67,6 +67,7 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
     public void Use()
     {
         isUsing = true;
+        OnUsed?.Invoke(this, isUsing);
         isAttacking = true;
         durationTimer = duration;
 
@@ -76,6 +77,7 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
     public void StopUsing()
     {
         isUsing = false;
+        OnUsed?.Invoke(this, isUsing);
     }
 
     private void UpdateTimers()

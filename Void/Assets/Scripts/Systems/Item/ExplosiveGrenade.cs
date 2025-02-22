@@ -60,7 +60,7 @@ public class ExplosiveGrenade : ThrowableItem
 
         if (networkItem.IsServer)
         {
-            RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, radius, Vector3.forward, 10, effectableLayers);
+            RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, radius, Vector3.forward, radius, effectableLayers);
             foreach (RaycastHit hit in raycastHits)
             {
                 if (hit.collider.TryGetComponent(out Health health))

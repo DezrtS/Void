@@ -62,7 +62,7 @@ public class VoidMonsterController : PlayerController
 
     public override void OnSwitch(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || mutationHotbar.MutationCount <= 0) return;
         int direction = (int)Mathf.Sign(context.ReadValue<float>());
         int newIndex = (mutationHotbar.SelectedIndex + direction + mutationHotbar.MutationCount) % mutationHotbar.MutationCount;
         mutationHotbar.RequestSwitchToMutation(newIndex);

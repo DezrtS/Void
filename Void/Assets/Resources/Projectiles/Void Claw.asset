@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5796ad0d0abff844a2564234f4daf80, type: 3}
-  m_Name: Basic Bullet
+  m_Name: Void Claw
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 132462312740229045, guid: 0da59b4850ef339479389c489cd781d4,
+  projectilePrefab: {fileID: 7859409295400648617, guid: 2d2f3b14916226b499422f3c13f02d96,
     type: 3}
-  fireSpeed: 150
-  angularVelocity: {x: 0, y: 0, z: 0}
-  gravity: -9.8
-  boxCastSize: {x: 0.05, y: 0.05}
+  fireSpeed: 20
+  angularVelocity: {x: 0, y: 2, z: 0}
+  gravity: -1
+  boxCastSize: {x: 0.5, y: 0.2}
   lifetimeDuration: 10
-  damage: 2
-  knockback: 0
+  damage: 20
+  knockback: 20
+  hitEffect: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  value: 41.3

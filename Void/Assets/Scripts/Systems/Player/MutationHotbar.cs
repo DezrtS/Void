@@ -9,11 +9,14 @@ public class MutationHotbar : MonoBehaviour
     public event MutationEventHandler OnRemoveMutation;
     public event MutationSwitchEventHandler OnSwitchMutation;
 
+    [SerializeField] private Transform activeTransform;
+
     private NetworkMutationHotbar networkMutationHotbar;
     private int selectedIndex;
 
     private List<Mutation> mutations;
 
+    public Transform ActiveTransform => activeTransform;
     public NetworkMutationHotbar NetworkMutationHotbar => networkMutationHotbar;
     public int SelectedIndex => selectedIndex;
     public int MutationCount => mutations.Count;
@@ -73,6 +76,6 @@ public class MutationHotbar : MonoBehaviour
     {
         Mutation mutation = mutations[index];
         mutations.RemoveAt(index);
-        OnAddMutation?.Invoke(mutation, index);
+        OnRemoveMutation?.Invoke(mutation, index);
     }
 }

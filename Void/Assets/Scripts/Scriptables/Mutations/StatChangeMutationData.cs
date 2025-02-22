@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "StatChangeMutationData", menuName = "Scriptable Objects/StatChangeMutationData")]
+[CreateAssetMenu(fileName = "StatChangeMutationData", menuName = "ScriptableObjects/Mutations/StatChangeMutationData")]
 public class StatChangeMutationData : MutationData
 {
     [Serializable]

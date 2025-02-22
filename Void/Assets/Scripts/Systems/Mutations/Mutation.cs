@@ -36,18 +36,20 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
     public virtual void Use()
     {
         isUsing = true;
+        OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void StopUsing()
     {
         isUsing = false;
+        OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void UpdateTimers()
     {
         if (cooldownTimer > 0)
         {
-            cooldownTimer -= Time.deltaTime;
+            cooldownTimer -= Time.fixedDeltaTime;
 
             if (cooldownTimer <= 0)
             {
