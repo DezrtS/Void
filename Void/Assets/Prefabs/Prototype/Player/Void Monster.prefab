@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: -2425281182696050174}
   - component: {fileID: -698946963445583516}
   - component: {fileID: 8394765938335079000}
+  - component: {fileID: 8694203355553347164}
   m_Layer: 0
   m_Name: Void Monster
   m_TagString: Monster
@@ -544,7 +545,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0650c88644d4ec4595a615c53a1c4b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 2492221161476043742}
   orientationTransform: {fileID: 6754419075927096011}
   acceleration:
     baseValue: 4
@@ -621,6 +621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2370f6cde6f3949b3d84c90accc6bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerModel: {fileID: 3570833094775301265}
   disableForOwner:
   - {fileID: 4325003418474132758}
   - {fileID: 6242903475209775372}
@@ -749,6 +750,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a4b9c97075e52647900f85d491cec32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8694203355553347164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173705057825196843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b34c1376cebbc44283e034a47ba5fc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animatorInstances:
+  - name: Player
+    animator: {fileID: 2492221161476043742}
 --- !u!1 &1186201246963802096
 GameObject:
   m_ObjectHideFlags: 0

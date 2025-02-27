@@ -50,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mutationData: {fileID: 11400000, guid: 0648ee68f76edb94eab1abbcddbb68e3, type: 2}
   projectileSpawner: {fileID: 4439386080916199949}
+  voidBeastSpawnCount: 3
 --- !u!114 &4439386080916199949
 MonoBehaviour:
   m_ObjectHideFlags: 0

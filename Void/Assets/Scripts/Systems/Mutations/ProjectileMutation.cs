@@ -7,6 +7,7 @@ public class ProjectileMutation : Mutation
 
     public override void SetupMutation(GameObject player)
     {
+        base.SetupMutation(player);
         player.TryGetComponent(out mutationHotbar);
     }
 

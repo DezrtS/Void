@@ -47,6 +47,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Prototype/ProcGeneration.unity
     guid: 464768cfc18c54246a43e7a87cb8825a
+  - enabled: 1
+    path: Assets/Scenes/Prototype/VisualEffects.unity
+    guid: 4efe00ac07565474a8209ed1a688e3ac
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: d0e5c9730fd34df499acf9c1104b1ec3,
       type: 3}

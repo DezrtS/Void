@@ -10,12 +10,11 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
     private bool isUsing;
 
     protected float cooldownTimer;
+    protected GameObject player;
 
     public NetworkUseable NetworkUseable => networkUseable;
     public bool IsUsing => isUsing;
     public MutationData MutationData => mutationData;
-
-    public abstract void SetupMutation(GameObject player);
 
     public bool CanUse() => !isUsing && cooldownTimer <= 0;
     public bool CanStopUsing() => isUsing;
@@ -31,6 +30,11 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
     private void FixedUpdate()
     {
         UpdateTimers();
+    }
+
+    public virtual void SetupMutation(GameObject player)
+    {
+        this.player = player;
     }
 
     public virtual void Use()

@@ -4,7 +4,7 @@ public class AOEProjectile : Projectile
 {
     private AOEProjectileData aOEProjectileData;
 
-    public override void InitializeProjectile(ProjectileData projectileData, IProjectileSpawner projectileSpawner)
+    public override void InitializeProjectile(ProjectileData projectileData, ProjectileSpawner projectileSpawner)
     {
         base.InitializeProjectile(projectileData, projectileSpawner);
         aOEProjectileData = projectileData as AOEProjectileData;

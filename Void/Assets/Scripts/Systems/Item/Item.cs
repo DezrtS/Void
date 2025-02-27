@@ -11,7 +11,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     [SerializeField] private bool canPickUp = true;
     [SerializeField] private bool canDrop = true;
     
-    protected NetworkItem networkItem;
+    private NetworkItem networkItem;
 
     protected Rigidbody rig;
     private Collider col;

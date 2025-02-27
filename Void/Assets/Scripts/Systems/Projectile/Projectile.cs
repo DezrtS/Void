@@ -3,7 +3,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour, IProjectile
 {
     private ProjectileData projectileData;
-    private IProjectileSpawner projectileSpawner;
+    private ProjectileSpawner projectileSpawner;
 
     private Vector3 velocity;
     private Vector3 angularVelocity;
@@ -13,7 +13,7 @@ public class Projectile : MonoBehaviour, IProjectile
     private float lifetimeTimer;
 
     public ProjectileData ProjectileData => projectileData;
-    public IProjectileSpawner ProjectileSpawner => projectileSpawner;
+    public ProjectileSpawner ProjectileSpawner => projectileSpawner;
     public Vector3 Velocity { get { return velocity; } set { velocity = value; } }
     public Vector3 AngularVelocity { get { return angularVelocity; } set { angularVelocity = value; } }
     public bool IsFired => isFired;
@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour, IProjectile
         UpdateProjectile(deltaTime);
     }
 
-    public virtual void InitializeProjectile(ProjectileData projectileData, IProjectileSpawner projectileSpawner)
+    public virtual void InitializeProjectile(ProjectileData projectileData, ProjectileSpawner projectileSpawner)
     {
         this.projectileData = projectileData;
         this.projectileSpawner = projectileSpawner;

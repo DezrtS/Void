@@ -62,6 +62,8 @@ public class MutationHotbar : MonoBehaviour
         mutations.Add(mutation);
         OnAddMutation?.Invoke(mutation, mutations.Count - 1);
         mutation.SetupMutation(gameObject);
+
+        if (networkMutationHotbar.IsOwner) mutation.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
 
     public void RequestRemoveMutation(Mutation mutation)

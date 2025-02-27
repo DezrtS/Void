@@ -3,9 +3,9 @@ using UnityEngine;
 
 public interface IProjectileSpawner
 {
-    public delegate void ProjectileHitHandler(Projectile projectile, IProjectileSpawner projectileSpawner, RaycastHit raycastHit);
+    public delegate void ProjectileHitHandler(Projectile projectile, ProjectileSpawner projectileSpawner, RaycastHit raycastHit);
     public event ProjectileHitHandler OnHit;
-    public delegate void ProjectileEventHandler(Projectile projectile, IProjectileSpawner projectileSpawner);
+    public delegate void ProjectileEventHandler(Projectile projectile, ProjectileSpawner projectileSpawner);
     public event ProjectileEventHandler OnDestroy;
     public event ProjectileEventHandler OnSpawn;
 

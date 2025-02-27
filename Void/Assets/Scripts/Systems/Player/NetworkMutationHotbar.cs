@@ -37,6 +37,9 @@ public class NetworkMutationHotbar : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void AddMutationServerRpc(ulong mutationNetworkObjectId)
     {
+        NetworkObject mutationNetworkObject = GetNetworkObject(mutationNetworkObjectId);
+        Mutation mutation = mutationNetworkObject.GetComponent<Mutation>();
+        mutation.transform.SetParent(transform);
         AddMutationClientRpc(mutationNetworkObjectId);
     }
 

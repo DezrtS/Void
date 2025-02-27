@@ -45,6 +45,10 @@ public class MutationSelection : MonoBehaviour
             if (voidMonsterController == null) return;
             EnableDisableMutationSelection(!active);
         }
+        else if (Input.GetKeyDown(KeyCode.N))
+        {
+            RandomizeMutationOptions(new List<MutationData>());
+        }
     }
 
     public void EnableDisableMutationSelection(bool enabled)

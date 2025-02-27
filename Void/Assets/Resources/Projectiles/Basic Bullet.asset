@@ -19,9 +19,9 @@ MonoBehaviour:
   gravity: -9.8
   boxCastSize: {x: 0.05, y: 0.05}
   lifetimeDuration: 10
-  damage: 2
+  damage: 5
   knockback: 0
+  hitEffect: {fileID: 0}
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  value: 41.3

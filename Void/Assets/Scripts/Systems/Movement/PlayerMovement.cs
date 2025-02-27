@@ -7,7 +7,7 @@ public class PlayerMovement : MovementController
     private Rigidbody rig;
     private CapsuleCollider capsuleCollider;
 
-    [SerializeField] private Animator animator;
+    AnimationController animationController;
 
     private InputActionMap movementActionMap;
     private InputAction movementInputAction;
@@ -98,6 +98,8 @@ public class PlayerMovement : MovementController
         capsuleCollider = GetComponent<CapsuleCollider>();
         defaultColliderHeight = capsuleCollider.height;
 
+        animationController = GetComponent<AnimationController>();
+
         if (TryGetComponent(out PlayerStats playerStats))
         {
             acceleration = playerStats.Acceleration;
@@ -125,8 +127,8 @@ public class PlayerMovement : MovementController
         if (!IsOwner) return;
 
         Vector3 localVelocity = WorldToLocalVelocity(GetVelocity(), orientationTransform.rotation) / sprintSpeed.BaseValue;
-        animator.SetFloat("xinput", localVelocity.x);
-        animator.SetFloat("yinput", localVelocity.z);
+        animationController.SetFloat("xinput", localVelocity.x);
+        animationController.SetFloat("yinput", localVelocity.z);
     }
 
     private void HandleMovement()
