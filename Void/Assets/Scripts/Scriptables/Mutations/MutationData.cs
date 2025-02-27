@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public abstract class MutationData : ScriptableObject
+[CreateAssetMenu(fileName = "MutationData", menuName = "ScriptableObjects/Mutations/MutationData")]
+public class MutationData : ScriptableObject
 {
     [SerializeField] private string displayName;
     [TextArea(2, 5)]

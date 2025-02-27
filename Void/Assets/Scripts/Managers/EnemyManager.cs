@@ -50,6 +50,20 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
         voidBeastController.Activate();
     }
 
+    public void SpawnEnemy(Vector3 position)
+    {
+        GameObject voidBeast = voidBeastObjectPool.GetObject();
+        if (voidBeast == null) return;
+
+        VoidBeastController voidBeastController = voidBeast.GetComponent<VoidBeastController>();
+        voidBeastController.Health.OnDeathStateChanged += OnEnemyDeath;
+
+        voidBeastController.NavMeshMovement.Teleport(position);
+        voidBeastController.Activate();
+
+        EnableDisableEnemyClientRpc(voidBeastController.NetworkObjectId, true);
+    }
+
     public void OnEnemyDeath(Health health, bool isDead)
     {
         if (isDead)

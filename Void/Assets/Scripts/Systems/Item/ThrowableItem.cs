@@ -13,7 +13,7 @@ public class ThrowableItem : Item
 
     public virtual void Throw()
     {
-        if (networkItem.IsOwner)
+        if (NetworkItem.IsOwner)
         {
             RequestDrop();
             Drop();

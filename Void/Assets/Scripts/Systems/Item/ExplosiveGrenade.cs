@@ -23,7 +23,7 @@ public class ExplosiveGrenade : ThrowableItem
 
     private void Start()
     {
-        networkExplosiveGrenade = networkItem as NetworkExplosiveGrenade;
+        networkExplosiveGrenade = NetworkItem as NetworkExplosiveGrenade;
     }
 
     private void FixedUpdate()
@@ -58,9 +58,9 @@ public class ExplosiveGrenade : ThrowableItem
     {
         Instantiate(explosionEffect, transform.position, Quaternion.identity);
 
-        if (networkItem.IsServer)
+        if (NetworkItem.IsServer)
         {
-            RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, radius, Vector3.forward, 10, effectableLayers);
+            RaycastHit[] raycastHits = Physics.SphereCastAll(transform.position, radius, Vector3.forward, radius, effectableLayers);
             foreach (RaycastHit hit in raycastHits)
             {
                 if (hit.collider.TryGetComponent(out Health health))

@@ -23,6 +23,7 @@ public class Health : MonoBehaviour
     private float healthRegenerationDelayTimer;
 
     public float MaxHealth => maxHealth.Value;
+    public NetworkHealth NetworkHealth => networkHealth;
     public bool IsDead => isDead;
     public float CurrentHealth => currentHealth;
 

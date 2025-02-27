@@ -66,7 +66,7 @@ public class NetworkHotbar : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void PickUpItemServerRpc(ulong itemNetworkObjectId)
     {
-        NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
+        NetworkObject itemNetworkObject = GetNetworkObject(itemNetworkObjectId);
         Item item = itemNetworkObject.GetComponent<Item>();
 
         if (item.CanPickUp())
@@ -105,7 +105,7 @@ public class NetworkHotbar : NetworkBehaviour
     [ClientRpc(RequireOwnership = false)]
     public void PickUpItemClientRpc(ulong itemNetworkObjectId, int index)
     {
-        NetworkObject itemNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[itemNetworkObjectId];
+        NetworkObject itemNetworkObject = GetNetworkObject(itemNetworkObjectId);
         Item item = itemNetworkObject.GetComponent<Item>();
 
         hotbar.PickUpItem(item, index);
@@ -138,7 +138,7 @@ public class NetworkHotbar : NetworkBehaviour
     {
         if (TryGetComponent(out Rigidbody rig))
         {
-            NetworkObject draggableNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[draggableNetworkObjectId];
+            NetworkObject draggableNetworkObject = GetNetworkObject(draggableNetworkObjectId);
             Draggable draggable = draggableNetworkObject.GetComponent<Draggable>();
 
             if (!draggable.CanUse()) return;
@@ -152,7 +152,7 @@ public class NetworkHotbar : NetworkBehaviour
     [ClientRpc(RequireOwnership = false)]
     public void StartDraggingClientRpc(ulong draggableNetworkObjectId)
     {
-        NetworkObject draggableNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[draggableNetworkObjectId];
+        NetworkObject draggableNetworkObject = GetNetworkObject(draggableNetworkObjectId);
         Draggable draggable = draggableNetworkObject.GetComponent<Draggable>();
         hotbar.StartDragging(draggable);
     }

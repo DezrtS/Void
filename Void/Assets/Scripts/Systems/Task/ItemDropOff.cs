@@ -47,12 +47,14 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
     public void Use()
     {
         isUsing = true;
+        OnUsed?.Invoke(this, isUsing);
         processingTimer = processingTime;
     }
 
     public void StopUsing()
     {
         isUsing = false;
+        OnUsed?.Invoke(this, isUsing);
         processingTimer = 0;
         item = null;
     }
@@ -73,9 +75,10 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
     public void EjectItem()
     {
         OnDropOff?.Invoke(item, this, false);
-        if (networkItemDropOff.IsServer)
+        if (item.NetworkItem.IsOwner)
         {
             item.RequestDrop();
+            item.Drop();
             Rigidbody rig = item.GetComponent<Rigidbody>();
             rig.AddForce(transform.rotation * new Vector3(0, 1, 1) * ejectionPower, ForceMode.Impulse);
             RequestStopUsing();

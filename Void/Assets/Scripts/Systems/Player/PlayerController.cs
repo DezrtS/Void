@@ -12,10 +12,12 @@ public abstract class PlayerController : NetworkBehaviour
     protected PlayerLook playerLook;
     protected Health health;
 
+    [SerializeField] private GameObject playerModel;
     [SerializeField] private GameObject[] disableForOwner;
 
     public event Action<bool> OnSelectionWheel;
     public PlayerLook PlayerLook => playerLook;
+    public GameObject PlayerModel => playerModel;
 
     protected virtual void OnEnable()
     {

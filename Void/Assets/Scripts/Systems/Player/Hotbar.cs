@@ -20,6 +20,7 @@ public class Hotbar : MonoBehaviour
     private Draggable draggable;
 
     public int HotbarCapacity => hotbarCapacity;
+    public NetworkHotbar NetworkHotbar => networkHotbar;
     public Item[] Items => hotbar;
     public int SelectedIndex => selectedIndex;
     public bool IsDragging => isDragging;
@@ -75,7 +76,7 @@ public class Hotbar : MonoBehaviour
 
     public void RequestPickUpItem(ItemData itemData)
     {
-        Item newItem = ItemManager.SpawnItem(itemData);
+        Item newItem = GameDataManager.SpawnItem(itemData);
         RequestPickUpItem(newItem);
     }
 
