@@ -72,4 +72,16 @@ public class NetworkHealth : NetworkBehaviour
     {
         isDead.Value = state;
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ChangeHealthOverTimeServerRpc(float healthChange, float duration)
+    {
+        
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void ChangeHealthOverTimeClientRpc(float healthChange, float duration)
+    {
+        
+    }
 }

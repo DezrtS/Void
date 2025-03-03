@@ -5,7 +5,6 @@ public class SurvivorController : PlayerController
 {
     [SerializeField] private Transform leftHandTarget;
     [SerializeField] private Transform rightHandTarget;
-    [SerializeField] private Transform lookAtTarget;
     private InverseKinematicsObject inverseKinematicsObject;
 
     private Hotbar hotbar;
@@ -50,8 +49,18 @@ public class SurvivorController : PlayerController
     {
         base.Awake();
         hotbar = GetComponent<Hotbar>();
+        hotbar.OnSwitchItem += OnSwitchItem;
         hotbar.OnPickUpItem += OnPickUpItem;
         inventory = GetComponent<Inventory>();
+    }
+
+    private void Update()
+    {
+        if (inverseKinematicsObject != null)
+        {
+            leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
+            rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
+        }
     }
 
     private void OnPickUpItem(int index, Item item)
@@ -61,17 +70,19 @@ public class SurvivorController : PlayerController
             this.inverseKinematicsObject = inverseKinematicsObject;
             leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
             rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
-            lookAtTarget.position = inverseKinematicsObject.LookAtTarget.position;
         }
     }
 
-    private void Update()
+    private void OnSwitchItem(int fromIndex, int toIndex, Item fromItem, Item toItem)
     {
-        if (inverseKinematicsObject != null)
+        if (toItem != null)
         {
-            leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
-            rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
-            lookAtTarget.position = inverseKinematicsObject.LookAtTarget.position;
+            if (toItem.TryGetComponent(out InverseKinematicsObject inverseKinematicsObject))
+            {
+                this.inverseKinematicsObject = inverseKinematicsObject;
+                leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
+                rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
+            }
         }
     }
 
