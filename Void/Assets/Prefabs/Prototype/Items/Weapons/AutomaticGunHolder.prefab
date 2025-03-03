@@ -212,7 +212,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHandTarget: {fileID: 3890978826423210217}
   rightHandTarget: {fileID: 99772846327228237}
-  lookAtTarget: {fileID: 4883090785035617714}
 --- !u!114 &-3593698300735499805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,7 +335,7 @@ Transform:
   m_GameObject: {fileID: 4150505648786323698}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.026, z: -0.091}
+  m_LocalPosition: {x: 0.09, y: -0.004, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -388,7 +387,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: 57765bcfb44dad646b54caad86ddf2a3, type: 2}
-  objectPool: {fileID: 1465321600957527110}
 --- !u!114 &1465321600957527110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -430,7 +428,7 @@ Transform:
   m_GameObject: {fileID: 5169806097988512872}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.075, z: 0.458}
+  m_LocalPosition: {x: -0.2, y: 0.23, z: 0.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

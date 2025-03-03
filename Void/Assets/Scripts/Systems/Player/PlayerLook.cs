@@ -13,7 +13,12 @@ public class PlayerLook : NetworkBehaviour
     [Header("Camera")]
     [SerializeField] private bool spawnFirstPersonCamera;
     [SerializeField] private bool lockPlayerCursor;
+    [SerializeField] private Transform cameraRotationRootTransform;
     [SerializeField] private Transform cameraRootTransform;
+
+    [SerializeField] private bool hasLookAtTarget;
+    [SerializeField] private Transform lookAtTransform;
+    [SerializeField] private Transform lookAtTargetTransform;
 
     [Header("Interaction")]
     [SerializeField] private bool canInteract = true;
@@ -72,6 +77,11 @@ public class PlayerLook : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        if (hasLookAtTarget)
+        {
+            lookAtTransform.position = lookAtTargetTransform.position;
+        }
+
         Vector2 rotationInput = lookInputAction.ReadValue<Vector2>();
 
         float deltaYRotation = rotationInput.y * (invertY ? 1 : -1) * ySensitivity;
@@ -79,7 +89,7 @@ public class PlayerLook : NetworkBehaviour
 
         currentXRotation = Mathf.Clamp(currentXRotation, -maxYRotation, maxYRotation);
 
-        cameraRootTransform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
+        cameraRotationRootTransform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
 
         Quaternion newRotation = Quaternion.Euler(0, transform.eulerAngles.y + rotationInput.x * xSensitivity, 0);
 

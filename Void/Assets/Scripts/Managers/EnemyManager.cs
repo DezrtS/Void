@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemyManager : NetworkSingleton<EnemyManager>
 {
+    [SerializeField] private bool spawnEnemies = true;
     [SerializeField] private GameObject voidBeastPrefab;
     [SerializeField] private float spawnNewEnemyAfter;
 
@@ -21,7 +22,7 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
 
     private void FixedUpdate()
     {
-        if (!IsServer) return;
+        if (!IsServer || !spawnEnemies) return;
 
         if (spawnEnemyTimer > 0)
         {
