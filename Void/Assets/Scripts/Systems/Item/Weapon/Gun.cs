@@ -37,7 +37,7 @@ public class Gun : Item, IReload
 
     private void Start()
     {
-        networkGun = networkItem as NetworkGun;
+        networkGun = NetworkItem as NetworkGun;
         projectileSpawner = projectileSpawnerObject.GetComponent<IProjectileSpawner>();
     }
 

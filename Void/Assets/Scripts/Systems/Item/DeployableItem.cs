@@ -21,7 +21,7 @@ public class DeployableItem : Item
     {
         isDeployed = true;
 
-        if (networkItem.IsServer)
+        if (NetworkItem.IsServer)
         {
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, deployRange, deployLayers, QueryTriggerInteraction.Ignore))
             {

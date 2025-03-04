@@ -74,7 +74,7 @@ public class HotbarSlot : MonoBehaviour
         hotbar = null;
     }
 
-    public void OnSwitchItem(int fromIndex, int toIndex)
+    public void OnSwitchItem(int fromIndex, int toIndex, Item fromItem, Item toItem)
     {
         if (fromIndex == slotIndex)
         {

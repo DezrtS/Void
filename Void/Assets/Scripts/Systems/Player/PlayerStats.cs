@@ -39,6 +39,8 @@ public class Stat
         UpdateValue();
     }
 
+    public float BaseValue => baseValue;
+
     public float Value
     {
         get
@@ -97,6 +99,18 @@ public class Stat
         this.value = value;
     }
 }
+
+[Serializable]
+public class StatChange
+{
+    [SerializeField] private string statName;
+    [SerializeField] private float modifier;
+    [SerializeField] private StatModifier.StatModifierType modifierType;
+
+    public string StatName => statName;
+    public float Modifier => modifier;
+    public StatModifier.StatModifierType ModifierType => modifierType;
+};
 
 
 public class PlayerStats : MonoBehaviour

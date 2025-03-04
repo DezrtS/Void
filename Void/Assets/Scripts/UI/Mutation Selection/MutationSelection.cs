@@ -25,17 +25,6 @@ public class MutationSelection : MonoBehaviour
         if (player.TryGetComponent(out VoidMonsterController voidMonsterController))
         {
             AttachMutationSelection(voidMonsterController);
-            //if (GameDataManager.Instance)
-            //{
-            //    RandomizeMutationOptions(new MutationData[0]);
-            //}
-            //else
-            //{
-            //    GameDataManager.OnSingletonInitialized += (GameDataManager gameDataManager) =>
-            //    {
-            //        RandomizeMutationOptions(new MutationData[0]);
-            //    };
-            //}
         }
     }
 
@@ -46,7 +35,7 @@ public class MutationSelection : MonoBehaviour
 
     private void Start()
     {
-        RandomizeMutationOptions(new MutationData[0]);
+        RandomizeMutationOptions(new List<MutationData>());
     }
 
     private void Update()
@@ -55,6 +44,10 @@ public class MutationSelection : MonoBehaviour
         {
             if (voidMonsterController == null) return;
             EnableDisableMutationSelection(!active);
+        }
+        else if (Input.GetKeyDown(KeyCode.N))
+        {
+            RandomizeMutationOptions(new List<MutationData>());
         }
     }
 
@@ -87,7 +80,7 @@ public class MutationSelection : MonoBehaviour
         voidMonsterController.PlayerLook.EnableDisableCameraControls(true);
     }
 
-    public void RandomizeMutationOptions(MutationData[] avoidMutations)
+    public void RandomizeMutationOptions(List<MutationData> avoidMutations)
     {
         Debug.Log("Randomizing Mutations");
         List<MutationData> mutations = GameDataManager.Instance.Mutations;
@@ -108,11 +101,12 @@ public class MutationSelection : MonoBehaviour
             indexOptions.RemoveAt(randomIndex);
 
             mutationOptions[i].SetMutationData(mutations[chosenIndex]);
+            mutationOptions[i].OnMutationOptionSelected += OnMutationOptionSelected;
         }
     }
 
-    public void SelectMutation(int index)
+    public void OnMutationOptionSelected(MutationOption mutationOption)
     {
-        if (voidMonsterController) voidMonsterController.MutationHotbar.AddMutation(mutationOptions[index].MutationData);
+        if (voidMonsterController) voidMonsterController.MutationHotbar.RequestAddMutation(mutationOption.MutationData);
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemyManager : NetworkSingleton<EnemyManager>
 {
+    [SerializeField] private bool spawnEnemies = true;
     [SerializeField] private GameObject voidBeastPrefab;
     [SerializeField] private float spawnNewEnemyAfter;
 
@@ -21,7 +22,7 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
 
     private void FixedUpdate()
     {
-        if (!IsServer) return;
+        if (!IsServer || !spawnEnemies) return;
 
         if (spawnEnemyTimer > 0)
         {
@@ -48,6 +49,20 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
 
         voidBeastController.NavMeshMovement.Teleport(spawnpoint.Spawn());
         voidBeastController.Activate();
+    }
+
+    public void SpawnEnemy(Vector3 position)
+    {
+        GameObject voidBeast = voidBeastObjectPool.GetObject();
+        if (voidBeast == null) return;
+
+        VoidBeastController voidBeastController = voidBeast.GetComponent<VoidBeastController>();
+        voidBeastController.Health.OnDeathStateChanged += OnEnemyDeath;
+
+        voidBeastController.NavMeshMovement.Teleport(position);
+        voidBeastController.Activate();
+
+        EnableDisableEnemyClientRpc(voidBeastController.NetworkObjectId, true);
     }
 
     public void OnEnemyDeath(Health health, bool isDead)

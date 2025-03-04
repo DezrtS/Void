@@ -1,22 +1,20 @@
-using Unity.Netcode;
 using UnityEngine;
 
-public abstract class Mutation : NetworkBehaviour, INetworkUseable
+public abstract class Mutation : MonoBehaviour, INetworkUseable
 {
     public event IUseable.UseHandler OnUsed;
 
     [SerializeField] protected MutationData mutationData;
 
     protected NetworkUseable networkUseable;
-
-    protected float cooldownTimer;
-
     private bool isUsing;
 
+    protected float cooldownTimer;
+    protected GameObject player;
+
+    public NetworkUseable NetworkUseable => networkUseable;
     public bool IsUsing => isUsing;
     public MutationData MutationData => mutationData;
-
-    public abstract void SetupMutation(GameObject player);
 
     public bool CanUse() => !isUsing && cooldownTimer <= 0;
     public bool CanStopUsing() => isUsing;
@@ -34,21 +32,28 @@ public abstract class Mutation : NetworkBehaviour, INetworkUseable
         UpdateTimers();
     }
 
+    public virtual void SetupMutation(GameObject player)
+    {
+        this.player = player;
+    }
+
     public virtual void Use()
     {
         isUsing = true;
+        OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void StopUsing()
     {
         isUsing = false;
+        OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void UpdateTimers()
     {
         if (cooldownTimer > 0)
         {
-            cooldownTimer -= Time.deltaTime;
+            cooldownTimer -= Time.fixedDeltaTime;
 
             if (cooldownTimer <= 0)
             {

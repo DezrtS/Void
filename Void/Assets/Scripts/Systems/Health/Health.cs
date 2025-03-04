@@ -4,6 +4,26 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    public class HealthChange
+    {
+        private float healthChange;
+        private float duration;
+        private float creationTime;
+
+        public HealthChange(float healthChange, float duration)
+        {
+            this.healthChange = healthChange;
+            this.duration = duration;
+            creationTime = Time.timeSinceLevelLoad;
+        }
+
+        public void Apply(Health health, float deltaTime)
+        {
+            
+        }
+    }
+
+
     public delegate void HealthHandler(float previousValue, float newValue, float maxValue);
     public event HealthHandler OnCurrentHealthChanged;
     public delegate void DeathHandler(Health health, bool isDead);
@@ -23,12 +43,14 @@ public class Health : MonoBehaviour
     private float healthRegenerationDelayTimer;
 
     public float MaxHealth => maxHealth.Value;
+    public NetworkHealth NetworkHealth => networkHealth;
     public bool IsDead => isDead;
     public float CurrentHealth => currentHealth;
 
     public void RequestSetCurrentHealth(float value) => networkHealth.SetCurrentHealthServerRpc(value);
     public void RequestDie() => networkHealth.SetDeathStateServerRpc(true);
     public void RequestRespawn() => networkHealth.SetDeathStateServerRpc(false);
+    public void RequestHealthChangeOverTime(float healthChange, float duration) => networkHealth.ChangeHealthOverTimeServerRpc(healthChange, duration); 
 
     protected virtual void Awake()
     {
@@ -72,11 +94,6 @@ public class Health : MonoBehaviour
         OnDeathStateChanged?.Invoke(this, isDead);
     }
 
-    public void RequestServerDamage(float damage)
-    {
-        if (networkHealth.IsServer) RequestDamage(damage);
-    }
-
     public void RequestDamage(float damage)
     {
         damage *= Mathf.Clamp(1 - damageResistance.Value, 0, 1);
@@ -87,4 +104,9 @@ public class Health : MonoBehaviour
     public void RequestHealing(float healing) => RequestSetCurrentHealth(currentHealth + healing);
 
     public void RequestFullHeal() => RequestSetCurrentHealth(MaxHealth);
+
+    public void ChangeHealthOverTime(float healthChange, float duration)
+    {
+
+    }
 }

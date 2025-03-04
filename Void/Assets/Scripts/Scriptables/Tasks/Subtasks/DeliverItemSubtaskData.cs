@@ -50,12 +50,19 @@ public class DeliverItemSubtask : Subtask
         return newInstructions;
     }
 
-    public void OnItemDropOff(Item item, ItemDropOff itemDropOff)
+    public void OnItemDropOff(Item item, ItemDropOff itemDropOff, bool isAdded)
     {
         if (this.item == item)
         {
-            Execute();
-            itemDropOff.AcceptItem();
+            if (isAdded)
+            {
+                Execute();
+                if (task.NetworkTask.IsServer) itemDropOff.RequestAcceptItem();
+            }
+            else
+            {
+                Undo();
+            }
         }
     }
 

@@ -12,10 +12,13 @@ public abstract class PlayerController : NetworkBehaviour
     protected PlayerLook playerLook;
     protected Health health;
 
+    [SerializeField] private GameObject playerModel;
+    [SerializeField] private bool disableForOwnerOnStart;
     [SerializeField] private GameObject[] disableForOwner;
 
     public event Action<bool> OnSelectionWheel;
     public PlayerLook PlayerLook => playerLook;
+    public GameObject PlayerModel => playerModel;
 
     protected virtual void OnEnable()
     {
@@ -102,7 +105,7 @@ public abstract class PlayerController : NetworkBehaviour
 
     private void Start()
     {
-        if (!IsOwner) return;
+        if (!IsOwner || !disableForOwnerOnStart) return;
         foreach (GameObject gameObject in disableForOwner)
         {
             gameObject.SetActive(false);

@@ -5,6 +5,8 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
 {
     public event IUseable.UseHandler OnUsed;
 
+    [SerializeField] private Animator animator;
+
     [SerializeField] private Vector3 offset;
     [SerializeField] private float size;
     [SerializeField] private LayerMask layerMask;
@@ -65,13 +67,17 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
     public void Use()
     {
         isUsing = true;
+        OnUsed?.Invoke(this, isUsing);
         isAttacking = true;
         durationTimer = duration;
+
+        if (networkUseable.IsOwner) animator.SetTrigger("Attack");
     }
 
     public void StopUsing()
     {
         isUsing = false;
+        OnUsed?.Invoke(this, isUsing);
     }
 
     private void UpdateTimers()

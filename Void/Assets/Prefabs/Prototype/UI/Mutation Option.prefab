@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3219039897987836372}
   - component: {fileID: 2033321897759867884}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Mutation Data Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,10 +122,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MutationSelection, Assembly-CSharp
-        m_MethodName: SelectMutation
-        m_Mode: 3
+      - m_Target: {fileID: 1710127018119405684}
+        m_TargetAssemblyTypeName: MutationOption, Assembly-CSharp
+        m_MethodName: SelectMutationOption
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 1948022348231090870}
   - component: {fileID: 1710127018119405684}
   m_Layer: 5
-  m_Name: Mutation Choice
+  m_Name: Mutation Option
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 8157276475037699057}
   - component: {fileID: 6952984363449062590}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Mutation Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -335,7 +335,7 @@ GameObject:
   - component: {fileID: 8300456926052094952}
   - component: {fileID: 2483221373786560742}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Mutation Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

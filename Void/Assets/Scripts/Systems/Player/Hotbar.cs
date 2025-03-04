@@ -3,7 +3,7 @@ using UnityEngine;
 public class Hotbar : MonoBehaviour
 {
     public delegate void ItemEventHandler(int index, Item item);
-    public delegate void ItemSwitchEventHandler(int fromIndex, int toIndex);
+    public delegate void ItemSwitchEventHandler(int fromIndex, int toIndex, Item fromItem, Item toItem);
     public event ItemEventHandler OnPickUpItem;
     public event ItemEventHandler OnDropItem;
     public event ItemSwitchEventHandler OnSwitchItem;
@@ -20,6 +20,7 @@ public class Hotbar : MonoBehaviour
     private Draggable draggable;
 
     public int HotbarCapacity => hotbarCapacity;
+    public NetworkHotbar NetworkHotbar => networkHotbar;
     public Item[] Items => hotbar;
     public int SelectedIndex => selectedIndex;
     public bool IsDragging => isDragging;
@@ -37,7 +38,7 @@ public class Hotbar : MonoBehaviour
         hotbar = new Item[hotbarCapacity];
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (!networkHotbar.IsOwner) return;
 
@@ -69,13 +70,13 @@ public class Hotbar : MonoBehaviour
 
     public void SwitchToItem(int index)
     {
-        OnSwitchItem?.Invoke(selectedIndex, index);
+        OnSwitchItem?.Invoke(selectedIndex, index, hotbar[selectedIndex], hotbar[index]);
         selectedIndex = index;
     }
 
     public void RequestPickUpItem(ItemData itemData)
     {
-        Item newItem = ItemManager.SpawnItem(itemData);
+        Item newItem = GameDataManager.SpawnItem(itemData);
         RequestPickUpItem(newItem);
     }
 
