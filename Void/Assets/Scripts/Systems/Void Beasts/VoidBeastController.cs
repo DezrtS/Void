@@ -61,7 +61,7 @@ public class VoidBeastController : NetworkBehaviour
 
         if (!hasTarget) return;
 
-        if (playerSeen) {navMeshMovement.PathfindingDestination = targetTransform.position;} return;
+        navMeshMovement.PathfindingDestination = targetTransform.position;
     }
 
     public void OnDeathStateChanged(Health health, bool isDead)
@@ -77,7 +77,7 @@ public class VoidBeastController : NetworkBehaviour
         }
     }
 
-    private void OnTrigger(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Player")
         {
@@ -86,7 +86,7 @@ public class VoidBeastController : NetworkBehaviour
         }
     }
 
-    private void OntriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if(other.gameObject.tag == "Player")
         {
