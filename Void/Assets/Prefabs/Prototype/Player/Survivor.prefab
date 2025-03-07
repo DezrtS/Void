@@ -25,7 +25,9 @@ GameObject:
   - component: {fileID: -5629170793638448426}
   - component: {fileID: 7965163042404978423}
   - component: {fileID: 4726841137921398022}
-  m_Layer: 0
+  - component: {fileID: 7509421746790066431}
+  - component: {fileID: 6812290034540885183}
+  m_Layer: 6
   m_Name: Survivor
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -62,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 119855383
+  GlobalObjectIdHash: 3220849879
   InScenePlacedSourceGlobalObjectIdHash: 1133239272
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -85,35 +87,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList:
   - IsCrossFadeExit: 0
-    Layer: 0
+    Layer: 3
     OriginatingState: -453240694
     DestinationState: 569745642
     TransitionDuration: 0.25
     TriggerNameHash: 1464497218
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 0
+    Layer: 3
     OriginatingState: -453240694
     DestinationState: 1520933651
     TransitionDuration: 0.25
     TriggerNameHash: -707834555
     TransitionIndex: 1
   - IsCrossFadeExit: 0
-    Layer: 2
-    OriginatingState: -367768302
-    DestinationState: -1089670653
-    TransitionDuration: 0.25
-    TriggerNameHash: 548040190
-    TransitionIndex: 0
-  - IsCrossFadeExit: 0
-    Layer: 3
+    Layer: 5
     OriginatingState: -367768302
     DestinationState: -1762544625
     TransitionDuration: 0.25
     TriggerNameHash: 1793123249
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 4
+    Layer: 6
     OriginatingState: -367768302
     DestinationState: 1377215829
     TransitionDuration: 0.25
@@ -308,6 +303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfa03450ec833af45a435d7768dc3889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canAutomaticallyRespawn: 0
+  respawnDelay: 0
   playerModel: {fileID: 3650310376703722715}
   disableForOwnerOnStart: 1
   disableForOwner:
@@ -357,9 +354,9 @@ MonoBehaviour:
   acceleration:
     baseValue: 4
   timeToAccelerate:
-    baseValue: 0.25
+    baseValue: 0.15
   timeToDeaccelerate:
-    baseValue: 0.25
+    baseValue: 0.15
   walkSpeed:
     baseValue: 4
   sprintSpeed:
@@ -409,6 +406,30 @@ MonoBehaviour:
   animatorInstances:
   - name: Player
     animator: {fileID: 5203927843708038128}
+--- !u!114 &7509421746790066431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575300930724462412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc164ac0ae2cac54da3e410f416c4141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6812290034540885183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575300930724462412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecd2d6a0131e06e4f8a37a36a7729f47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1731880506800288069
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,7 +549,7 @@ Transform:
   m_GameObject: {fileID: 8848430995966370666}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3}
+  m_LocalPosition: {x: 0, y: 0, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

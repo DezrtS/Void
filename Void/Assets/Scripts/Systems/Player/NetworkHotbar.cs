@@ -37,7 +37,11 @@ public class NetworkHotbar : NetworkBehaviour
     private void OnDraggingStateChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue) return;
-        if (!newValue) hotbar.StopDragging();
+        if (!newValue)
+        {
+            hotbar.Draggable.DetachRigidbody();
+            hotbar.StopDragging();
+        }
     }
 
     public void OnItemPickUpStateChanged(Item item, bool pickedUp)
@@ -54,6 +58,17 @@ public class NetworkHotbar : NetworkBehaviour
                     return;
                 }
             }
+        }
+    }
+
+    public void OnDraggableUsingStateChanged(IUseable useable, bool isUsing)
+    {
+        if (!isUsing)
+        {
+            Draggable draggable = useable as Draggable;
+            draggable.OnUsed -= OnDraggableUsingStateChanged;
+            draggable.DetachRigidbody();
+            isDragging.Value = false;
         }
     }
 
@@ -143,7 +158,7 @@ public class NetworkHotbar : NetworkBehaviour
 
             if (!draggable.CanUse()) return;
             draggable.RequestUse();
-            draggable.AttachRigidbody(rig);
+            draggable.OnUsed += OnDraggableUsingStateChanged;
             StartDraggingClientRpc(draggableNetworkObjectId);
             isDragging.Value = true;
         }
@@ -154,6 +169,10 @@ public class NetworkHotbar : NetworkBehaviour
     {
         NetworkObject draggableNetworkObject = GetNetworkObject(draggableNetworkObjectId);
         Draggable draggable = draggableNetworkObject.GetComponent<Draggable>();
+
+        Rigidbody rig = GetComponent<Rigidbody>();
+        draggable.AttachRigidbody(rig);
+
         hotbar.StartDragging(draggable);
     }
 
@@ -166,8 +185,8 @@ public class NetworkHotbar : NetworkBehaviour
         if (draggable == null) return;
 
         if (!draggable.CanStopUsing()) return;
+        draggable.OnUsed -= OnDraggableUsingStateChanged;
         draggable.RequestStopUsing();
-        draggable.DetachRigidbody();
         isDragging.Value = false;
     }
 }

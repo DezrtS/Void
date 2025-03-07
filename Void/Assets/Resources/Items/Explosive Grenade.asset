@@ -9,11 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7328d77b7b3b6f4bbfb09374ad1b9bb, type: 3}
+  m_Script: {fileID: 11500000, guid: e975608b14f362d48999c619440d0f90, type: 3}
   m_Name: Explosive Grenade
   m_EditorClassIdentifier: 
-  Name: Grenade
-  Description: This is a grenade
+  Name: Explosive Grenade
+  Description: An explosive device
   ItemSprite: {fileID: 1208872289, guid: e6e34c0e053e8834fac1a4bc6529a83d, type: 3}
   ItemPrefab: {fileID: 1512034910407666928, guid: bdc5a380af462af449dbe1efe2a2ee1c,
+    type: 3}
+  throwSpeed: 15
+  spinSpeed: 2
+  radius: 5
+  damage: 90
+  timeToActivation: 2
+  effectableLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  explosionEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
     type: 3}

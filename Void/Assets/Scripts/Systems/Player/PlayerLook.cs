@@ -67,7 +67,9 @@ public class PlayerLook : NetworkBehaviour
         if (spawnFirstPersonCamera && IsOwner)
         {
             GameObject camera = Instantiate(GameManager.Instance.FirstPersonCamera);
-            camera.GetComponentInChildren<CinemachineCamera>().Follow = cameraRootTransform;
+            CinemachineCamera cinemachineCamera = camera.GetComponentInChildren<CinemachineCamera>();
+            cinemachineCamera.Follow = cameraRootTransform;
+            cinemachineCamera.LookAt = lookAtTargetTransform;
         }
 
         LockCamera(true);

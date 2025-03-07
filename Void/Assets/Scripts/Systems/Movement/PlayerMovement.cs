@@ -155,19 +155,19 @@ public class PlayerMovement : MovementController
 
     private void Jump(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || IsDisabled) return;
         rig.AddForce(Vector3.up * jumpPower.Value, ForceMode.VelocityChange);
     }
 
     private void Sprint(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || IsDisabled) return;
         isSprinting = context.performed;
     }
 
     private void Crouch(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || IsDisabled) return;
         isCrouched = context.performed;
         
         if (isCrouched)

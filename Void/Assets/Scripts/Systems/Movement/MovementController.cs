@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class MovementController : NetworkBehaviour
 {
     protected bool isDisabled;
-    public bool IsDisabled => isDisabled;
+    public bool IsDisabled { get { return isDisabled; } set { isDisabled = value; } }
 
     protected static float GetAcceleration(float maxSpeed, float timeToReachFullSpeed)
     {

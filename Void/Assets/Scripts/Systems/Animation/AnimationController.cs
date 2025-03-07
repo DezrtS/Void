@@ -60,11 +60,35 @@ public class AnimationController : MonoBehaviour
         }
     }
 
+    public void HandleAnimationEvent(IAnimate.AnimationEventType animationEventType, string name, string value)
+    {
+        switch (animationEventType)
+        {
+            case IAnimate.AnimationEventType.Trigger:
+                SetTrigger(name);
+                break;
+            case IAnimate.AnimationEventType.Bool:
+                SetBool(name, bool.Parse(value));
+                break;
+            case IAnimate.AnimationEventType.Float:
+                SetFloat(name, float.Parse(value));
+                break;
+        }
+    }
+
     public void SetTrigger(string name)
     {
         foreach (AnimatorInstance animatorInstance in animatorInstances)
         {
             animatorInstance.Animator.SetTrigger(name);
+        }
+    }
+
+    public void SetBool(string name, bool value)
+    {
+        foreach (AnimatorInstance animatorInstance in animatorInstances)
+        {
+            animatorInstance.Animator.SetBool(name, value);
         }
     }
 

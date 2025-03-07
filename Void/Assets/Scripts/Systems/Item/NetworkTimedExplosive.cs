@@ -1,8 +1,9 @@
 using Unity.Netcode;
+using UnityEngine;
 
-public class NetworkExplosiveGrenade : NetworkItem
+public class NetworkTimedExplosive : NetworkItem
 {
-    private ExplosiveGrenade explosiveGrenade;
+    private TimedExplosive timedExplosive;
     private readonly NetworkVariable<bool> isActive = new();
 
     protected override void OnItemInitialize()
@@ -13,7 +14,7 @@ public class NetworkExplosiveGrenade : NetworkItem
 
     private void OnGrenadeInitialize()
     {
-        explosiveGrenade = useable as ExplosiveGrenade;
+        timedExplosive = useable as TimedExplosive;
     }
 
     protected override void OnItemSpawn()
@@ -41,35 +42,43 @@ public class NetworkExplosiveGrenade : NetworkItem
     private void OnActiveStateChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue) return;
-        if (newValue) explosiveGrenade.ActivateGrenade();
-        else explosiveGrenade.DeactivateGrenade();
+        if (newValue) timedExplosive.ActivateExplosive();
+        else timedExplosive.DeactivateExplosive();
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void ActivateGrenadeServerRpc()
+    public void ActivateExplosiveServerRpc()
     {
-        if (!explosiveGrenade.CanActivateGrenade()) return;
+        if (!timedExplosive.CanActivateExplosive()) return;
         isActive.Value = true;
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void DeactivateGrenadeServerRpc()
+    public void DeactivateExplosiveServerRpc()
     {
-        if (!explosiveGrenade.CanDeactivateGrenade()) return;
+        if (!timedExplosive.CanDeactivateExplosive()) return;
         isActive.Value = false;
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void TriggerGrenadeServerRpc()
+    public void TriggerExplosiveServerRpc()
     {
-        if (!explosiveGrenade.CanTriggerGrenade()) return;
-        TriggerGrenadeClientRpc();
+        if (!timedExplosive.CanTriggerExplosive()) return;
+        TriggerExplosiveClientRpc();
+        isActive.Value = false;
     }
 
     [ClientRpc(RequireOwnership = false)]
-    public void TriggerGrenadeClientRpc()
+    public void TriggerExplosiveClientRpc()
     {
-        explosiveGrenade.TriggerGrenade();
-        explosiveGrenade.gameObject.SetActive(false);
+        timedExplosive.TriggerExplosive();
+        timedExplosive.gameObject.SetActive(false);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void TriggerImpactServerRpc()
+    {
+        TriggerExplosiveClientRpc();
+        isActive.Value = false;
     }
 }
