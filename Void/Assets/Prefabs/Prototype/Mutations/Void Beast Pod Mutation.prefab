@@ -111,5 +111,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectName: Void Beast Pod
   poolSize: 5
-  dynamicSize: 0
-  destroyObjectsOverPoolSize: 0
+  dynamicSize: 1
+  destroyObjectsOverPoolSize: 1

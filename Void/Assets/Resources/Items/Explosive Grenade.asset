@@ -20,8 +20,9 @@ MonoBehaviour:
   throwSpeed: 15
   spinSpeed: 2
   radius: 5
-  damage: 90
-  timeToActivation: 2
+  damage: 75
+  explodeOnImpact: 0
+  timeToActivation: 1
   effectableLayers:
     serializedVersion: 2
     m_Bits: 4294967295

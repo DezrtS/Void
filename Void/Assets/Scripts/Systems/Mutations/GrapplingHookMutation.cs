@@ -19,7 +19,7 @@ public class GrapplingHookMutation : ProjectileMutation
         public void Pull()
         {
             Vector3 difference = position - movementController.transform.position;
-            movementController.ApplyForce(difference.normalized * pullForce, ForceMode.Force);
+            movementController.RequestApplyForce(difference.normalized * pullForce, ForceMode.Force);
         }
 
         public bool IsWithinRange()

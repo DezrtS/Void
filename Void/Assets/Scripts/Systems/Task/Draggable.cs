@@ -55,6 +55,7 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         if (!springJoint) springJoint = transform.AddComponent<SpringJoint>();
         springJoint.connectedBody = rig;
+        springJoint.massScale = 5;
     }
 
     public void DetachRigidbody()

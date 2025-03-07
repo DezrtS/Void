@@ -159,9 +159,9 @@ public abstract class PlayerController : NetworkBehaviour
 
     public virtual void OnDeathStateChanged(Health health, bool isDead)
     {
-        movementController.IsDisabled = isDead;
         if (!IsOwner) return;
 
+        movementController.RequestSetInputDisabled(isDead);
         if (isDead)
         {
             movementController.SetVelocity(Vector3.zero);

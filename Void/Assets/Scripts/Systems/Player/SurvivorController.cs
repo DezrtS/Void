@@ -53,6 +53,10 @@ public class SurvivorController : PlayerController
         if (!IsServer) return;
         Item item = ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
         hotbar.RequestPickUpItem(item);
+        if (TaskManager.Instance != null)
+        {
+            TaskManager.Instance.RegenerateTaskInstructions();
+        }
     }
 
     protected override void Awake()
@@ -153,7 +157,7 @@ public class SurvivorController : PlayerController
 
         if (isDead)
         {
-            hotbar.RequestDropAllItems();
+            hotbar.RequestDropEverything();
         }
         else
         {

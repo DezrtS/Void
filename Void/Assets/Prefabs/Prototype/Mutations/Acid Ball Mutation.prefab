@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 546908421
+  GlobalObjectIdHash: 4200045844
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -110,5 +110,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectName: Acid Ball
   poolSize: 5
-  dynamicSize: 0
-  destroyObjectsOverPoolSize: 0
+  dynamicSize: 1
+  destroyObjectsOverPoolSize: 1

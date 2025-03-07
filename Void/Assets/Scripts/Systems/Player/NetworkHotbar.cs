@@ -67,7 +67,6 @@ public class NetworkHotbar : NetworkBehaviour
         {
             Draggable draggable = useable as Draggable;
             draggable.OnUsed -= OnDraggableUsingStateChanged;
-            draggable.DetachRigidbody();
             isDragging.Value = false;
         }
     }

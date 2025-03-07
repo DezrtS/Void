@@ -55,6 +55,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1162aa038af977a4cbc612e189a66e64, type: 2}
   - {fileID: 11400000, guid: 7fe1a475379fe3d4b805491f1dcac943, type: 2}
   - {fileID: 11400000, guid: da7ba029491ea2b4e9d8d85cf397226e, type: 2}
+  - {fileID: 11400000, guid: b7359f5e81eee094ebcb8d7c4e9b4d1a, type: 2}
+  - {fileID: 11400000, guid: e7858be524467524490054361cd7d8af, type: 2}
   recipes:
   - {fileID: 11400000, guid: 893a6d9d3adbf264594c225df0e2f1b9, type: 2}
   - {fileID: 11400000, guid: f3e3270e3cf943b41906553fce80851a, type: 2}
@@ -65,6 +67,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 79d25af2f628af546805f5a3b2e3210e, type: 2}
   - {fileID: 11400000, guid: bd167f0455189b74dbab6411f26d9fb3, type: 2}
   - {fileID: 11400000, guid: ca6804c2486393446902ec14b550bc50, type: 2}
+  - {fileID: 11400000, guid: 3dcb71b3803c20746a3a919287901a34, type: 2}
+  - {fileID: 11400000, guid: 6119d754639c45d49a9215aa86269017, type: 2}
   resources:
   - {fileID: 11400000, guid: 7662f63d691b5e6459d5c78b06d32993, type: 2}
   - {fileID: 11400000, guid: 17c678a753e10ac48a2421c8ef306e39, type: 2}

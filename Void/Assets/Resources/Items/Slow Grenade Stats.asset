@@ -17,8 +17,14 @@ MonoBehaviour:
   ItemSprite: {fileID: 0}
   ItemPrefab: {fileID: 0}
   key: 3
-  duration: 5
+  duration: 7
   statChanges:
   - statName: walkSpeed
-    modifier: 0
+    modifier: 0.5
+    modifierType: 1
+  - statName: sprintSpeed
+    modifier: 0.5
+    modifierType: 1
+  - statName: crouchSpeed
+    modifier: 0.5
     modifierType: 1

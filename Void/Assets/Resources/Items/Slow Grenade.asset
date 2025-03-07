@@ -19,10 +19,10 @@ MonoBehaviour:
     type: 3}
   throwSpeed: 15
   spinSpeed: 2
-  radius: 5
+  radius: 3
   damage: 10
   explodeOnImpact: 0
-  timeToActivation: 2
+  timeToActivation: 1
   effectableLayers:
     serializedVersion: 2
     m_Bits: 4294967295

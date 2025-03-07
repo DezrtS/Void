@@ -21,11 +21,11 @@ MonoBehaviour:
   duration: 30
   statChanges:
   - statName: sprintSpeed
-    modifier: 1.2
+    modifier: 1.5
     modifierType: 1
   - statName: walkSpeed
-    modifier: 1.2
+    modifier: 1.5
     modifierType: 1
   - statName: crouchSpeed
-    modifier: 1.2
+    modifier: 1.5
     modifierType: 1

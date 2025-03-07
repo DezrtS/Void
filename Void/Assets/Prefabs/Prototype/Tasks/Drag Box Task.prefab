@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 708074894297094123}
   - component: {fileID: -8879863041822234951}
   m_Layer: 0
-  m_Name: Drag Body Task
+  m_Name: Drag Box Task
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

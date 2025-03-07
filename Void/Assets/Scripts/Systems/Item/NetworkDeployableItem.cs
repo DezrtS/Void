@@ -49,6 +49,7 @@ public class NetworkDeployableItem : NetworkItem
     public void DeployServerRpc()
     {
         if (!deployableItem.CanDeploy()) return;
+        deployableItem.RequestDrop();
         isDeployed.Value = true;
     }
 

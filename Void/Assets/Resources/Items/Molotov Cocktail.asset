@@ -19,12 +19,12 @@ MonoBehaviour:
     type: 3}
   throwSpeed: 15
   spinSpeed: 2
-  radius: 5
-  damage: 10
+  radius: 4.5
+  damage: 40
   explodeOnImpact: 1
   timeToActivation: 2
   effectableLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  explosionEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
+  explosionEffect: {fileID: 3929961048621311391, guid: 6fc1624de8dee5240890f48b6f94881f,
     type: 3}

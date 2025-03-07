@@ -60,7 +60,7 @@ public class TimedExplosive : ThrowableItem
 
         if (NetworkItem.IsServer)
         {
-            RaycastHit[] raycastHits = new RaycastHit[10];
+            RaycastHit[] raycastHits = new RaycastHit[25];
             Physics.SphereCastNonAlloc(transform.position, timedExplosiveItemData.Radius, Vector3.forward, raycastHits, timedExplosiveItemData.Radius, timedExplosiveItemData.EffectableLayers);
             OnExplosiveHit(raycastHits);
         }
@@ -69,6 +69,7 @@ public class TimedExplosive : ThrowableItem
     public virtual void OnExplosiveHit(RaycastHit raycastHit)
     {
         if (raycastHit.collider == null) return;
+        Debug.Log($"{ItemData.Name} HIT: {raycastHit.collider.name}");
 
         if (raycastHit.collider.TryGetComponent(out Health health))
         {

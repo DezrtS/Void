@@ -2,10 +2,9 @@ using UnityEngine;
 
 public class DeployableItem : Item
 {
-    private ThrowableItemData throwableItemData;
+    private DeployableItemData deployableItemData;
 
     private NetworkDeployableItem networkDeployableItem;
-
     private bool isDeployed;
 
     public bool CanDeploy() => !isDeployed;
@@ -19,52 +18,57 @@ public class DeployableItem : Item
 
     protected virtual void OnDeployableItemInitialize()
     {
-        throwableItemData = ItemData as ThrowableItemData;
+        deployableItemData = ItemData as DeployableItemData;
         networkDeployableItem = NetworkItem as NetworkDeployableItem;
     }
+
+    public void RequestDeploy() => networkDeployableItem.DeployServerRpc();
+    public void RequestUndeploy() => networkDeployableItem.UndeployServerRpc();
 
     public override void StopUsing()
     {
         base.StopUsing();
-        Throw();
+        if (networkDeployableItem.IsServer) RequestDeploy();
     }
 
     public override void PickUp()
     {
         base.PickUp();
-        if (isDeployed) Undeploy();
-    }
-
-    public virtual void Throw()
-    {
-        canPickUp = false;
-        if (NetworkItem.IsOwner)
-        {
-            RequestDrop();
-            if (CanDrop()) Drop();
-            rig.AddForce(throwableItemData.ThrowSpeed * transform.forward, ForceMode.Impulse);
-            rig.angularVelocity = throwableItemData.SpinSpeed * Vector3.right;
-        }
+        if (networkDeployableItem.IsServer) RequestUndeploy();
     }
 
     public virtual void Deploy()
     {
         isDeployed = true;
-
+        rig.isKinematic = true;
         if (NetworkItem.IsOwner)
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, deployRange, deployLayers, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit,
+                deployableItemData.DeployRange, deployableItemData.DeployLayers,
+                QueryTriggerInteraction.Ignore))
             {
-                RequestDrop();
-                if (CanDrop()) Drop();
-                transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(Vector3.forward, hit.normal));
-                rig.isKinematic = true;
+                // Preserve original forward direction while aligning to surface normal
+                Vector3 surfaceAlignedForward = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
+
+                // Ensure valid rotation when projecting (edge case handling)
+                if (surfaceAlignedForward == Vector3.zero)
+                    surfaceAlignedForward = Vector3.forward;  // Fallback axis
+
+                Quaternion surfaceAlignment = Quaternion.LookRotation(surfaceAlignedForward, hit.normal);
+
+                transform.SetPositionAndRotation(hit.point, surfaceAlignment);
+            }
+            else
+            {
+                transform.SetPositionAndRotation(transform.position + transform.forward * deployableItemData.DeployRange, transform.rotation);
+                RequestUndeploy();
             }
         }
     }
 
     public virtual void Undeploy()
     {
-
+        rig.isKinematic = false;
+        isDeployed = false;
     }
 }

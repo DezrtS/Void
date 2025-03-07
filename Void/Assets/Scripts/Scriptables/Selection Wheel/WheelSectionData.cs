@@ -13,13 +13,18 @@ public class WheelSectionData : ScriptableObject
     public string SectionTitle => sectionTitle;
     public string SectionText => sectionText;
 
-    public virtual string GetFormattedTitle()
+    public virtual string GetTitle()
     {
         return sectionTitle;
     }
 
-    public virtual string GetFormattedDescription()
+    public virtual string GetPrimaryText()
     {
         return sectionText;
+    }
+
+    public virtual string GetSecondaryText()
+    {
+        return string.Empty;
     }
 }
