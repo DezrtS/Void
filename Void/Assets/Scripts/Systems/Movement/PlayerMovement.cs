@@ -18,7 +18,7 @@ public class PlayerMovement : MovementController
 
     [SerializeField] private Transform orientationTransform;
     [SerializeField] private Transform groundedCheckTransform;
-    [SerializeField] private float groundedCheckDistance = 0.1f;
+    [SerializeField] private float groundedCheckRadius = 0.1f;
     [SerializeField] private LayerMask groundedCheckLayerMask;
 
     [Header("Acceleration")]
@@ -166,6 +166,8 @@ public class PlayerMovement : MovementController
     private void Jump(InputAction.CallbackContext context)
     {
         if (!NetworkMovementController.IsOwner || IsInputDisabled) return;
+
+        if (!IsGrounded()) return;
         ApplyForce(Vector3.up * jumpPower.Value, ForceMode.VelocityChange);
     }
 
@@ -209,6 +211,7 @@ public class PlayerMovement : MovementController
 
     public bool IsGrounded()
     {
-        return Physics.Raycast(groundedCheckTransform.position, Vector3.down, groundedCheckDistance, groundedCheckLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(groundedCheckTransform.position, groundedCheckRadius, groundedCheckLayerMask);
+        return (colliders.Length > 0);
     }
 }

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1415986755756590847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 325154389426029720}
+  m_Layer: 6
+  m_Name: Grounded Check
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &325154389426029720
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1415986755756590847}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7928993837376897029}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1575300930724462412
 GameObject:
   m_ObjectHideFlags: 0
@@ -28,7 +59,7 @@ GameObject:
   - component: {fileID: 7509421746790066431}
   - component: {fileID: 6812290034540885183}
   - component: {fileID: -755659047214935387}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: Survivor
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -51,6 +82,7 @@ Transform:
   - {fileID: 5032625028183610827}
   - {fileID: 4034697385554003046}
   - {fileID: 3938142979775510420}
+  - {fileID: 325154389426029720}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4485477558148152696
@@ -65,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 119855383
+  GlobalObjectIdHash: 3220849879
   InScenePlacedSourceGlobalObjectIdHash: 1133239272
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -226,6 +258,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orientationTransform: {fileID: 7928993837376897029}
+  groundedCheckTransform: {fileID: 325154389426029720}
+  groundedCheckRadius: 0.1
+  groundedCheckLayerMask:
+    serializedVersion: 2
+    m_Bits: 503
   acceleration:
     baseValue: 4
   timeToAccelerate:
@@ -265,7 +302,7 @@ MonoBehaviour:
   interactRange: 5
   interactLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 576
   maxYRotation: 95
   invertY: 0
   xSensitivity: 0.02

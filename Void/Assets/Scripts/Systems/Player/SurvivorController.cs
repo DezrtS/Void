@@ -82,7 +82,7 @@ public class SurvivorController : PlayerController
 
     private void OnPickUpItem(int index, Item item)
     {
-        Debug.Log($"PICKED UP: {item.ItemData.Name}");
+        //Debug.Log($"PICKED UP: {item.ItemData.Name}");
         if (item is IAnimate)
         {
             IAnimate animate = item as IAnimate;
@@ -105,7 +105,7 @@ public class SurvivorController : PlayerController
 
     private void OnDropItem(int index, Item item)
     {
-        Debug.Log($"DROPPED UP: {item.ItemData.Name}");
+        //Debug.Log($"DROPPED UP: {item.ItemData.Name}");
 
         if (item is IAnimate)
         {
