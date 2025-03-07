@@ -77,8 +77,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectName: Void Claw
   poolSize: 5
-  dynamicSize: 0
-  destroyObjectsOverPoolSize: 0
+  dynamicSize: 1
+  destroyObjectsOverPoolSize: 1
 --- !u!114 &-7377861599400159830
 MonoBehaviour:
   m_ObjectHideFlags: 0

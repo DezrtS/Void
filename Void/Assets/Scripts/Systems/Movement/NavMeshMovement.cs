@@ -16,8 +16,9 @@ public class NavMeshMovement : MovementController
     public bool IsPathfinding => isPathfinding;
     public Vector3 PathfindingDestination { get { return pathfindingDestination; } set { pathfindingDestination = value; } }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.enabled = false;
         rig = GetComponent<Rigidbody>();
@@ -25,14 +26,14 @@ public class NavMeshMovement : MovementController
 
     private void FixedUpdate()
     {
-        if (!IsServer) return;
+        if (!NetworkMovementController.IsServer) return;
 
         if (isPathfinding) UpdatePathfinding();
     }
 
     private void Update()
     {
-        if (!IsServer) return;
+        if (!NetworkMovementController.IsServer) return;
 
         Vector3 velocity = GetVelocity();
         velocity.y = 0;
@@ -41,33 +42,24 @@ public class NavMeshMovement : MovementController
 
     public override void ApplyForce(Vector3 force, ForceMode forceMode)
     {
-        if (isPathfinding)
-        {
-            navMeshAgent.velocity += force;
-        }
-        else
-        {
-             rig.AddForce(force, forceMode);
-        }
+        if (IsMovementDisabled) return;
+
+        if (isPathfinding) navMeshAgent.velocity += force;
+        else rig.AddForce(force, forceMode);
     }
 
     public override Vector3 GetVelocity()
     {
         if (isPathfinding) return navMeshAgent.velocity;
-
-        return rig.linearVelocity;
+        else return rig.linearVelocity;
     }
 
     public override void SetVelocity(Vector3 velocity)
     {
-        if (isPathfinding)
-        {
-            navMeshAgent.velocity = velocity;
-        }
-        else
-        {
-            rig.linearVelocity = velocity;
-        }
+        if (IsMovementDisabled) return;
+
+        if (isPathfinding) navMeshAgent.velocity = velocity;
+        else rig.linearVelocity = velocity;
     }
 
     public bool CanPathfind(Vector3 position)
@@ -102,6 +94,7 @@ public class NavMeshMovement : MovementController
 
     private void UpdatePathfinding()
     {
+        if (IsInputDisabled != navMeshAgent.isStopped) navMeshAgent.isStopped = IsInputDisabled;
         if (navMeshAgent.destination != pathfindingDestination) navMeshAgent.SetDestination(pathfindingDestination);
 
         //if (navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid || (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending))

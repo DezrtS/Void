@@ -2,8 +2,12 @@ using UnityEngine;
 
 public class ThrowableItem : Item
 {
-    [SerializeField] private float thowSpeed;
-    [SerializeField] private float spinSpeed;
+    private ThrowableItemData throwableItemData;
+
+    protected virtual void Start()
+    {
+        throwableItemData = ItemData as ThrowableItemData;
+    }
 
     public override void StopUsing()
     {
@@ -13,12 +17,13 @@ public class ThrowableItem : Item
 
     public virtual void Throw()
     {
+        canPickUp = false;
         if (NetworkItem.IsOwner)
         {
             RequestDrop();
-            Drop();
-            rig.AddForce(thowSpeed * transform.forward, ForceMode.Impulse);
-            rig.angularVelocity = spinSpeed * Vector3.right;
+            if (CanDrop()) Drop();
+            rig.AddForce(throwableItemData.ThrowSpeed * transform.forward, ForceMode.Impulse);
+            rig.angularVelocity = throwableItemData.SpinSpeed * Vector3.right;
         }
     }
 }

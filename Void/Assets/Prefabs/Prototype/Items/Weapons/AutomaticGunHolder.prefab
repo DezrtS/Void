@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4025352129
+  GlobalObjectIdHash: 374236993
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
   canPickUp: 1
-  canDrop: 1
+  canDrop: 0
   projectileSpawnerObject: {fileID: 4735076810010294097}
   fireRate: 0.1
   maxAmmo: 30
@@ -400,9 +400,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Bullet
-  poolSize: 15
-  dynamicSize: 0
-  destroyObjectsOverPoolSize: 0
+  poolSize: 30
+  dynamicSize: 1
+  destroyObjectsOverPoolSize: 1
 --- !u!1 &5169806097988512872
 GameObject:
   m_ObjectHideFlags: 0

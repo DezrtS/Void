@@ -8,6 +8,7 @@ public class Hotbar : MonoBehaviour
     public event ItemEventHandler OnDropItem;
     public event ItemSwitchEventHandler OnSwitchItem;
 
+    [SerializeField] private Transform lookAt;
     [SerializeField] private Transform activeTransform;
     [SerializeField] private int hotbarCapacity;
 
@@ -45,6 +46,7 @@ public class Hotbar : MonoBehaviour
         Item item = GetItem();
         if (item != null)
         {
+            activeTransform.rotation = Quaternion.LookRotation((lookAt.position - activeTransform.position).normalized);
             item.transform.SetPositionAndRotation(activeTransform.position, activeTransform.rotation);
         }
     }
@@ -104,8 +106,9 @@ public class Hotbar : MonoBehaviour
         }
     }
 
-    public void RequestDropAllItems()
+    public void RequestDropEverything()
     {
+        if (isDragging) RequestStopDragging();
         for (int i = 0; i < hotbarCapacity; i++)
         {
             if (hotbar[i] != null)

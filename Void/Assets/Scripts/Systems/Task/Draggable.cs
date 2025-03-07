@@ -11,10 +11,13 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     private SpringJoint springJoint;
     private bool isUsing;
 
+    private bool canDrag = true;
+
     public NetworkUseable NetworkUseable => networkUseable;
     public bool IsUsing => isUsing;
+    public bool CanDrag {  get { return canDrag; } set { canDrag = value; } }
 
-    public bool CanUse() => !isUsing;
+    public bool CanUse() => !isUsing && canDrag;
     public bool CanStopUsing() => isUsing;
 
     public void RequestUse() => networkUseable.UseServerRpc();
@@ -52,6 +55,7 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         if (!springJoint) springJoint = transform.AddComponent<SpringJoint>();
         springJoint.connectedBody = rig;
+        springJoint.massScale = 5;
     }
 
     public void DetachRigidbody()

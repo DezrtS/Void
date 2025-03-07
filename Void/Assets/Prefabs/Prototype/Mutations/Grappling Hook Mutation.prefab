@@ -50,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mutationData: {fileID: 11400000, guid: 3e1ce84df609c024e95cafca87ee1b0f, type: 2}
   projectileSpawner: {fileID: 8439705898875105305}
-  pullForce: 100
+  pullForce: 75
 --- !u!114 &8439705898875105305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,8 +78,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectName: Grappling Hook
   poolSize: 5
-  dynamicSize: 0
-  destroyObjectsOverPoolSize: 0
+  dynamicSize: 1
+  destroyObjectsOverPoolSize: 1
 --- !u!114 &-7377861599400159830
 MonoBehaviour:
   m_ObjectHideFlags: 0

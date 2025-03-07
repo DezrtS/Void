@@ -86,6 +86,7 @@ public class Projectile : MonoBehaviour, IProjectile
         if (Physics.BoxCast(transform.position, halfExtents, velocity.normalized, out RaycastHit hitInfo, orientation, travelDistance, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
         {
             DebugDraw.DrawBoxCast(transform.position, halfExtents, velocity.normalized, orientation, travelDistance, Color.red, 5);
+            //DebugDraw.DrawBoxCast(transform.position + velocity * deltaTime, halfExtents, velocity.normalized, orientation, projectileData.BoxCastSize.y, Color.green, 5);
             OnProjectileHit(hitInfo);
         }
 

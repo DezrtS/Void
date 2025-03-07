@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
@@ -67,7 +68,9 @@ public class PlayerLook : NetworkBehaviour
         if (spawnFirstPersonCamera && IsOwner)
         {
             GameObject camera = Instantiate(GameManager.Instance.FirstPersonCamera);
-            camera.GetComponentInChildren<CinemachineCamera>().Follow = cameraRootTransform;
+            CinemachineCamera cinemachineCamera = camera.GetComponentInChildren<CinemachineCamera>();
+            cinemachineCamera.Follow = cameraRootTransform;
+            cinemachineCamera.LookAt = lookAtTargetTransform;
         }
 
         LockCamera(true);
@@ -106,7 +109,7 @@ public class PlayerLook : NetworkBehaviour
         if (canInteract)
         {
             //Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 1);
-            if (Physics.Raycast(cameraRootTransform.position, cameraRootTransform.forward, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Collide))
+            if (Physics.Raycast(cameraRootTransform.position, (lookAtTargetTransform.position - cameraRootTransform.position).normalized, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Collide))
             {
                 hitInfo.collider.TryGetComponent(out IInteractable interactable);
                 this.interactable = interactable;

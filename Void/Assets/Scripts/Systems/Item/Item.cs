@@ -8,8 +8,8 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public event ItemPickUpHandler OnPickUp;
 
     [SerializeField] private ItemData itemData;
-    [SerializeField] private bool canPickUp = true;
-    [SerializeField] private bool canDrop = true;
+    [SerializeField] protected bool canPickUp = true;
+    [SerializeField] protected bool canDrop = true;
     
     private NetworkItem networkItem;
 
@@ -29,6 +29,11 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public bool CanStopUsing() => isUsing;
 
     private void Awake()
+    {
+        OnItemInitialize();
+    }
+
+    protected virtual void OnItemInitialize()
     {
         networkItem = GetComponent<NetworkItem>();
         rig = GetComponent<Rigidbody>();

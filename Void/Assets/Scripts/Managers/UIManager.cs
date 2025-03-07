@@ -7,6 +7,8 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject settingsUI;
 
+    [SerializeField] private GameObject deathUI;
+
     [SerializeField] private GameObject voidMonsterUI;
     [SerializeField] private GameObject survivorUI;
     [SerializeField] private GameObject spectatorUI;
@@ -22,6 +24,7 @@ public class UIManager : Singleton<UIManager>
     public void SetupUI(GameManager.PlayerRole playerRole, GameObject player)
     {
         EnableUI(playerRole);
+        player.GetComponent<Health>().OnDeathStateChanged += OnDeathStateChanged;
         OnSetupUI?.Invoke(player);
     }
 
@@ -69,6 +72,16 @@ public class UIManager : Singleton<UIManager>
     public void OpenSettings(bool open)
     {
         settingsUI.SetActive(open);
+    }
+
+    public void ShowDeathScreen(bool show)
+    {
+        deathUI.SetActive(show);
+    }
+
+    private void OnDeathStateChanged(Health health, bool isDead)
+    {
+        ShowDeathScreen(isDead);
     }
 
     public void QuitGame()
