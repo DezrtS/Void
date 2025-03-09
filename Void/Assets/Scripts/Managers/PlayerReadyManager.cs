@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerReadyManager : SingletonPersistent<PlayerReadyManager>
+public class PlayerReadyManager : Singleton<PlayerReadyManager>
 {
     public delegate void PlayerReadyHandler(ulong clientId);
     public static event PlayerReadyHandler OnPlayerReady;

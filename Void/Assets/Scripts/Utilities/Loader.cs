@@ -19,7 +19,7 @@ public static class Loader
     public static void Load(Scene targetScene)
     {
         Loader.targetScene = targetScene;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(Scene.LoadingScene.ToString());
+        UnityEngine.SceneManagement.SceneManager.LoadScene(targetScene.ToString());
     }
 
     public static void LoadNetwork(Scene targetScene)

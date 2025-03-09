@@ -69,6 +69,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultPlayerRole: 0
+  startGameDelay: 5
+  gameDuration: 180
+  panicDuration: 60
   monsterPrefab: {fileID: 1173705057825196843, guid: 8cfc32a23ded537428f2e30e0904a6ad,
     type: 3}
   survivorPrefab: {fileID: 1575300930724462412, guid: ac7b75d41345af34294d3b00de9c4ec4,

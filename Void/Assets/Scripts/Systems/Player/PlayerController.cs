@@ -83,10 +83,10 @@ public abstract class PlayerController : NetworkBehaviour
         EnableControls();
     }
 
-    private void OnDisable()
-    {
-        UnassignControls();
-    }
+    //private void OnDisable()
+    //{
+    //    UnassignControls();
+    //}
 
     public virtual void DisableControls()
     {
@@ -200,7 +200,6 @@ public abstract class PlayerController : NetworkBehaviour
 
     public abstract void OnSwitch(InputAction.CallbackContext context);
 
-    // May be being run by the server
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;

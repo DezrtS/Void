@@ -1,18 +1,22 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using Unity.Netcode;
 using UnityEngine;
 
-public class GameManager : SingletonPersistent<GameManager>
+public class GameManager : Singleton<GameManager>
 {
     public delegate void GameStateHandler(GameState gameState);
     public static event GameStateHandler OnGameStateChanged;
 
-    public enum GameState { None, WaitingToStart, ReadyToStart, GamePlaying, GamePaused, GameOver }
+    public enum GameState { None, WaitingToStart, ReadyToStart, GamePlaying, Panic, GameOver }
     public enum PlayerRole { Survivor, Monster, Spectator }
 
     [Header("Options")]
     [SerializeField] private PlayerRole defaultPlayerRole;
+    [SerializeField] private float startGameDelay;
+
+    [SerializeField] private float gameDuration;
+    [SerializeField] private float panicDuration;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject monsterPrefab;
@@ -76,8 +80,8 @@ public class GameManager : SingletonPersistent<GameManager>
             case GameState.GamePlaying:
                 if (networkGameManager.IsServer) StartGame();
                 break;
-            case GameState.GamePaused:
-                if (networkGameManager.IsServer) PauseGame();
+            case GameState.Panic:
+                if (networkGameManager.IsServer) Panic();
                 break;
             case GameState.GameOver:
                 if (networkGameManager.IsServer) EndGame();
@@ -141,30 +145,48 @@ public class GameManager : SingletonPersistent<GameManager>
     public void PrepareGame()
     {
         TaskManager.Instance.GenerateTasks();
+        StartCoroutine(StartGameCoroutine());
     }
 
     public void StartGame()
     {
-
+        StartCoroutine(PanicCoroutine());
     }
 
-    public void PauseGame()
+    public void Panic()
     {
-
-    }
-
-    public void ResumeGame()
-    {
-
+        StartCoroutine(EndGameCoroutine());
     }
 
     public void EndGame()
     {
-
+        StopAllCoroutines();
     }
 
     public void QuitGame()
     {
+        StopAllCoroutines();
 
+        if (networkGameManager.IsHost) NetworkManager.Singleton.Shutdown();
+        else NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
+        Loader.Load(Loader.Scene.MainMenuScene);
+    }
+
+    private IEnumerator StartGameCoroutine()
+    {
+        yield return new WaitForSeconds(startGameDelay);
+        RequestSetGameState(GameState.GamePlaying);
+    }
+
+    private IEnumerator PanicCoroutine()
+    {
+        yield return new WaitForSeconds(gameDuration);
+        RequestSetGameState(GameState.Panic);
+    }
+
+    private IEnumerator EndGameCoroutine()
+    {
+        yield return new WaitForSeconds(panicDuration);
+        RequestSetGameState(GameState.GameOver);
     }
 }
