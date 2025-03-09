@@ -9,6 +9,12 @@ public class VoidMonsterController : PlayerController
 
     public MutationHotbar MutationHotbar => mutationHotbar;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (IsOwner) UIManager.Instance.SetupUI(GameManager.PlayerRole.Monster, gameObject);
+    }
+
     protected override void Awake()
     {
         base.Awake();

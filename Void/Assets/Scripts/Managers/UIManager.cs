@@ -32,19 +32,14 @@ public class UIManager : Singleton<UIManager>
     {
         switch (playerRole)
         {
-            case GameManager.PlayerRole.None:
+            case GameManager.PlayerRole.Survivor:
                 voidMonsterUI.SetActive(false);
-                survivorUI.SetActive(false);
+                survivorUI.SetActive(true);
                 spectatorUI.SetActive(false);
                 break;
             case GameManager.PlayerRole.Monster:
                 voidMonsterUI.SetActive(true);
                 survivorUI.SetActive(false);
-                spectatorUI.SetActive(false);
-                break;
-            case GameManager.PlayerRole.Survivor:
-                voidMonsterUI.SetActive(false);
-                survivorUI.SetActive(true);
                 spectatorUI.SetActive(false);
                 break;
             case GameManager.PlayerRole.Spectator:
