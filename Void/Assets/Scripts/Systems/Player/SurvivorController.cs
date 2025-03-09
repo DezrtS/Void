@@ -50,6 +50,8 @@ public class SurvivorController : PlayerController
         base.OnNetworkSpawn();
         draggable.CanDrag = false;
 
+        if (IsOwner) UIManager.Instance.SetupUI(GameManager.PlayerRole.Survivor, gameObject);
+
         if (!IsServer) return;
         Item item = ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
         hotbar.RequestPickUpItem(item);

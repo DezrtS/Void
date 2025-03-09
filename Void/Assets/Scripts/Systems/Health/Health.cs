@@ -91,7 +91,7 @@ public class Health : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.U))
         {
-            if (networkHealth.IsServer && isDead) RequestRespawn();
+            if (networkHealth.IsOwner && isDead) RequestRespawn();
         }
     }
 

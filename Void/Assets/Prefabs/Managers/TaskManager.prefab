@@ -66,3 +66,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39dd4e1810f56854aac5b6d94ce0c2d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  generateTasksOnSpawn: 0
+  tasksCount: 1

@@ -36,10 +36,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Prototype/Networking.unity
     guid: 6494fa8ffbb55e44b8d79426864a1fd7
   - enabled: 1
-    path: Assets/Scenes/Menu/MainMenu.unity
+    path: Assets/Scenes/Menu/MainMenuScene.unity
     guid: 095ace4169728b0449eb0277120f2c68
   - enabled: 1
-    path: Assets/Scenes/Gameplay/Lobby.unity
+    path: Assets/Scenes/Gameplay/LobbyScene.unity
     guid: 9756a5497bda09d47bb84602f70e207f
   - enabled: 1
     path: Assets/Scenes/Gameplay/GameplayScene.unity

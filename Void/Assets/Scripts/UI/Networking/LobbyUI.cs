@@ -28,7 +28,7 @@ public class LobbyUI : MonoBehaviour
             string ipAddress = "127.0.0.1";
             if (IPAddressInputField.text != string.Empty) ipAddress = IPAddressInputField.text;
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(ipAddress, 7777);
-            GameMultiplayer.Instance.StartHost();
+            GameMultiplayer.StartHost();
             createJoinButtons.SetActive(false);
             playerButtons.SetActive(true);
         });
@@ -38,7 +38,7 @@ public class LobbyUI : MonoBehaviour
             string ipAddress = "127.0.0.1";
             if (IPAddressInputField.text != string.Empty) ipAddress = IPAddressInputField.text;
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(ipAddress, 7777);
-            GameMultiplayer.Instance.StartClient();
+            GameMultiplayer.StartClient();
             createJoinButtons.SetActive(false);
             playerButtons.SetActive(true);
         });
@@ -47,12 +47,12 @@ public class LobbyUI : MonoBehaviour
         {
             monsterSelected = !monsterSelected;
             roleText.text = monsterSelected ? "Change To Survivor" : "Change To Monster";
-            GameManager.Instance.RequestPlayerRoleServerRpc(monsterSelected ? GameManager.PlayerRole.Monster : GameManager.PlayerRole.Survivor);
+            GameManager.Instance.RequestSetPlayerRole(NetworkManager.Singleton.LocalClientId, monsterSelected ? GameManager.PlayerRole.Monster : GameManager.PlayerRole.Survivor);
         });
 
         readyButton.onClick.AddListener(() =>
         {
-            PlayerReadyManager.Instance.RequestPlayerReadyServerRpc();
+            PlayerReadyManager.Instance.RequestSetPlayerReadyState(NetworkManager.Singleton.LocalClientId, true);
         });
     }
 
