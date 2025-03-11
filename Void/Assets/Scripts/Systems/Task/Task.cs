@@ -51,11 +51,18 @@ public abstract class Task : MonoBehaviour
                 RequestUpdateSubtaskState(i, completed);
             }
         }
+
+        if (networkTask.IsServer)
+        {
+            if (!isCompleted && completed) RequestUpdateTaskState(IsTaskComplete());
+            else if (isCompleted && !completed) RequestUpdateTaskState(IsTaskComplete());
+        }
     }
 
     public void UpdateTaskState(bool completed)
     {
         isCompleted = completed;
+        OnTaskStateChanged?.Invoke(this, completed);
         TaskManager.Instance.RegenerateTaskInstructions();
     }
 
