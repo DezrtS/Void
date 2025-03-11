@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager>
     public enum PlayerRole { Survivor, Monster, Spectator }
 
     [Header("Options")]
+    [SerializeField] private bool friendlyFireEnabled;
     [SerializeField] private PlayerRole defaultPlayerRole;
     [SerializeField] private float startGameDelay;
 
@@ -29,6 +30,7 @@ public class GameManager : Singleton<GameManager>
 
     private Dictionary<ulong, PlayerRole> playerRoleDictionary;
 
+    public bool FriendlyFireEnabled => friendlyFireEnabled;
     public NetworkGameManager NetworkGameManager => networkGameManager;
     public GameState State => state;
     public Dictionary<ulong, PlayerRole> PlayerRoleDictionary => playerRoleDictionary;
@@ -142,9 +144,16 @@ public class GameManager : Singleton<GameManager>
         RequestSetGameState(GameState.ReadyToStart);
     }
 
+    private void OnAllTasksCompleted()
+    {
+        TaskManager.OnAllTasksCompleted -= OnAllTasksCompleted;
+
+    }
+
     public void PrepareGame()
     {
-        TaskManager.Instance.GenerateTasks();
+        TaskManager.Instance.RequestSpawnRandomTasks();
+        TaskManager.OnAllTasksCompleted += OnAllTasksCompleted;
         StartCoroutine(StartGameCoroutine());
     }
 

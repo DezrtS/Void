@@ -1,12 +1,30 @@
+using System;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
-public class TaskManager : NetworkSingleton<TaskManager>
+public class TaskManager : Singleton<TaskManager>
 {
-    [SerializeField] private bool generateTasksOnSpawn;
+    public static event Action OnAllTasksCompleted;
+
+    [SerializeField] private int taskCount = 1;
+
+    private NetworkTaskManager networkTaskManager;
+    private bool isAllTasksCompleted;
+
     private List<Task> tasks = new List<Task>();
-    [SerializeField] private int tasksCount = 1;
+
+    public int TaskCount => taskCount;
+    public NetworkTaskManager NetworkTaskManager => networkTaskManager;
+    public List<Task> Tasks => tasks;
+
+    public void RequestSpawnTask(int taskDataIndex) => networkTaskManager.SpawnTaskServerRpc(taskDataIndex);
+    public void RequestAddTask(Task task) => networkTaskManager.AddTaskServerRpc(task.NetworkTask.NetworkObjectId);
+    public void RequestRemoveTask(Task task) => networkTaskManager.RemoveTaskServerRpc(task.NetworkTask.NetworkObjectId);
+
+    private void Awake()
+    {
+        networkTaskManager = GetComponent<NetworkTaskManager>();
+    }
 
     protected override void OnEnable()
     {
@@ -26,42 +44,46 @@ public class TaskManager : NetworkSingleton<TaskManager>
         }
     }
 
-    public override void OnNetworkSpawn()
+    public void SetAllTasksCompleted(bool isAllTasksCompleted)
     {
-        base.OnNetworkSpawn();
-
-        if (IsServer && generateTasksOnSpawn) GenerateTasks();
+        this.isAllTasksCompleted = isAllTasksCompleted;
+        if (isAllTasksCompleted) OnAllTasksCompleted?.Invoke();
     }
 
-    public void GenerateTasks()
+    public void RequestSpawnRandomTasks()
     {
         List<TaskData> taskDatas = GameDataManager.Instance.Tasks;
-        for (int i = 0; i < tasksCount; i++)
+        for (int i = 0; i < taskCount; i++)
         {
-            int randomTaskDataIndex = Random.Range(0, taskDatas.Count);
-            TaskData selectedTaskData = taskDatas[randomTaskDataIndex];
-            List<GameObject> taskPrefabs = selectedTaskData.TaskPrefabs;
-            int randomTaskIndex = Random.Range(0, taskPrefabs.Count);
-            SpawnTaskServerRpc(randomTaskDataIndex, randomTaskIndex);
+            int randomTaskDataIndex = UnityEngine.Random.Range(0, taskDatas.Count);
+            RequestSpawnTask(randomTaskDataIndex);
         }
+    }
+
+    public Task SpawnTask(int taskDataIndex)
+    {
+        TaskData taskData = GameDataManager.Instance.Tasks[taskDataIndex];
+
+        List<GameObject> taskPrefabs = taskData.TaskPrefabs;
+        int randomTaskIndex = UnityEngine.Random.Range(0, taskPrefabs.Count);
+        GameObject spawnedTask = Instantiate(taskPrefabs[randomTaskIndex]);
+        Task task = spawnedTask.GetComponent<Task>();
+        task.NetworkTask.NetworkObject.Spawn();
+        return task;
     }
 
     public void AddTask(Task task)
     {
-        if (!tasks.Contains(task))
-        {
-            tasks.Add(task);
-            task.OnTaskStateChanged += OnTaskStateChanged;
-        }
+        tasks.Add(task);
+        task.OnTaskStateChanged += OnTaskStateChanged;
+        RegenerateTaskInstructions();
     }
 
     public void RemoveTask(Task task)
     {
-        if (tasks.Contains(task))
-        {
-            tasks.Remove(task);
-            task.OnTaskStateChanged -= OnTaskStateChanged;
-        }
+        tasks.Remove(task);
+        task.OnTaskStateChanged -= OnTaskStateChanged;
+        RegenerateTaskInstructions();
     }
 
     public void OnTaskStateChanged(Task task, bool state)
@@ -76,30 +98,8 @@ public class TaskManager : NetworkSingleton<TaskManager>
         {
             instructions += $"{task.GetInstructions()}\n";
         }
+        Debug.Log($"INSTRUCTIONS: {instructions}");
         UIManager.Instance.TaskText.text = instructions;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void SpawnTaskServerRpc(int taskDataIndex, int taskPrefabIndex)
-    {
-        TaskData selectedTaskData = GameDataManager.Instance.Tasks[taskDataIndex];
-        GameObject taskPrefab = selectedTaskData.TaskPrefabs[taskPrefabIndex];
-
-        GameObject spawnedTask = Instantiate(taskPrefab);
-        Task task = spawnedTask.GetComponent<Task>();
-        task.NetworkTask.NetworkObject.Spawn();
-
-        SpawnTaskClientRpc(task.NetworkTask.NetworkObjectId);
-    }
-
-    [ClientRpc(RequireOwnership = false)]
-    public void SpawnTaskClientRpc(ulong networkObjectId)
-    {
-        NetworkObject taskObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
-        Task task = taskObject.GetComponent<Task>();
-        AddTask(task);
-
-        Debug.Log("Added Task");
     }
 
     public static Draggable SpawnDraggable(GameObject draggablePrefab)

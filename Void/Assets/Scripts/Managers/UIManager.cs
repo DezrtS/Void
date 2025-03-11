@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
+    [SerializeField] private GameObject loadingUI;
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject settingsUI;
 
@@ -20,6 +21,12 @@ public class UIManager : Singleton<UIManager>
 
     private bool paused;
     public TextMeshProUGUI TaskText => taskText;
+
+    private void Awake()
+    {
+        loadingUI.SetActive(true);
+        GameManager.OnGameStateChanged += OnGameStateChanged;
+    }
 
     public void SetupUI(GameManager.PlayerRole playerRole, GameObject player)
     {
@@ -77,6 +84,14 @@ public class UIManager : Singleton<UIManager>
     private void OnDeathStateChanged(Health health, bool isDead)
     {
         ShowDeathScreen(isDead);
+    }
+
+    private void OnGameStateChanged(GameManager.GameState gameState)
+    {
+        if (gameState == GameManager.GameState.WaitingToStart)
+        {
+            loadingUI.SetActive(false);
+        }
     }
 
     public void QuitGame()
