@@ -52,6 +52,9 @@ public class NetworkGameManager : NetworkBehaviour
         {
             AddPlayerRoleClientRpc(clientId, playerRole);
         }
+
+        PlayerPrefs.SetInt(clientId.ToString(), (int)playerRole);
+        PlayerPrefs.Save();
     }
 
     [ClientRpc(RequireOwnership = false)]
@@ -72,6 +75,9 @@ public class NetworkGameManager : NetworkBehaviour
             if (gameManager.PlayerRoleDictionary[clientId] == newPlayerRole) return;
             SetPlayerRoleClientRpc(clientId, newPlayerRole);
         }
+
+        PlayerPrefs.SetInt(clientId.ToString(), (int)newPlayerRole);
+        PlayerPrefs.Save();
     }
 
     [ClientRpc(RequireOwnership = false)]
@@ -85,6 +91,9 @@ public class NetworkGameManager : NetworkBehaviour
     {
         if (!gameManager.PlayerRoleDictionary.ContainsKey(clientId)) return;
         RemovePlayerRoleClientRpc(clientId);
+
+        PlayerPrefs.DeleteKey(clientId.ToString());
+        PlayerPrefs.Save();
     }
 
     [ClientRpc(RequireOwnership = false)]

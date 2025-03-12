@@ -22,10 +22,20 @@ public class UIManager : Singleton<UIManager>
     private bool paused;
     public TextMeshProUGUI TaskText => taskText;
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        GameManager.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged -= OnGameStateChanged;
+    }
+
     private void Awake()
     {
         loadingUI.SetActive(true);
-        GameManager.OnGameStateChanged += OnGameStateChanged;
     }
 
     public void SetupUI(GameManager.PlayerRole playerRole, GameObject player)

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EncodableAsset" id="{943eb7c5-378d-43de-aa87-bf8386d6d19c}">
+		<property name="assetPath">
+			<value>Void Monster/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d0ea8ef8-387f-4d8e-a694-378296a36084}</destination>
+		</relationship>
+	</object>
+</objects>

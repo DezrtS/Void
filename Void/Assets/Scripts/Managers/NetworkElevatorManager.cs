@@ -5,6 +5,7 @@ public class NetworkElevatorManager : NetworkBehaviour
 {
     private ElevatorManager elevatorManager;
     private readonly NetworkVariable<bool> isReadyToLeave = new();
+    private readonly NetworkVariable<bool> isAllSurvivorsInElevator = new();
 
     private void Awake()
     {
@@ -15,12 +16,14 @@ public class NetworkElevatorManager : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         isReadyToLeave.OnValueChanged += OnReadyToLeaveStateChanged;
+        isAllSurvivorsInElevator.OnValueChanged += OnAllSurvivorsInElevatorStateChanged;
     }
 
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
         isReadyToLeave.OnValueChanged -= OnReadyToLeaveStateChanged;
+        isAllSurvivorsInElevator.OnValueChanged -= OnAllSurvivorsInElevatorStateChanged;
     }
 
     private void OnReadyToLeaveStateChanged(bool oldState, bool newState)
@@ -29,10 +32,23 @@ public class NetworkElevatorManager : NetworkBehaviour
         elevatorManager.SetReadyToLeave(newState);
     }
 
+    private void OnAllSurvivorsInElevatorStateChanged(bool oldState, bool newState)
+    {
+        if (oldState == newState) return;
+        elevatorManager.SetAllSurvivorsInElevator(newState);
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void SetReadyToLeaveStateServerRpc(bool isReady)
     {
         if (isReadyToLeave.Value == isReady) return;
         isReadyToLeave.Value = isReady;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetAllSurvivorsInElevatorStateServerRpc(bool allSurvivorsInElevator)
+    {
+        if (isAllSurvivorsInElevator.Value == allSurvivorsInElevator) return;
+        isAllSurvivorsInElevator.Value = allSurvivorsInElevator;
     }
 }
