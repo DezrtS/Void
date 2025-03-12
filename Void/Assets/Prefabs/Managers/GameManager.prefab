@@ -68,8 +68,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 543f6a5db30b9ba4ba8f8d8dc1d82a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  friendlyFireEnabled: 0
+  endGameOnAllSurvivorDeath: 0
   defaultPlayerRole: 0
-  startGameDelay: 5
+  forceReadyUpTimer: 30
+  startGameDelay: 1
+  endGameDelay: 5
   gameDuration: 180
   panicDuration: 60
   monsterPrefab: {fileID: 1173705057825196843, guid: 8cfc32a23ded537428f2e30e0904a6ad,

@@ -14,10 +14,19 @@ public class AnimateOnGameState : MonoBehaviour
     [SerializeField] private AnimateOnGameStateData[] animateOnGameStateData;
     private Animator animator;
 
+    private void OnEnable()
+    {
+        GameManager.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged -= OnGameStateChanged;
+    }
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        GameManager.OnGameStateChanged += OnGameStateChanged;
     }
 
     private void OnGameStateChanged(GameManager.GameState gameState)

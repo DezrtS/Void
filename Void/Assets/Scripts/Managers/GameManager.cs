@@ -13,8 +13,11 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Options")]
     [SerializeField] private bool friendlyFireEnabled;
+    [SerializeField] private bool endGameOnAllSurvivorDeath;
     [SerializeField] private PlayerRole defaultPlayerRole;
+    [SerializeField] private float forceReadyUpTimer;
     [SerializeField] private float startGameDelay;
+    [SerializeField] private float endGameDelay;
 
     [SerializeField] private float gameDuration;
     [SerializeField] private float panicDuration;
@@ -29,6 +32,7 @@ public class GameManager : Singleton<GameManager>
     private GameState state;
 
     private Dictionary<ulong, PlayerRole> playerRoleDictionary;
+    private List<ulong> deadClientIds;
 
     public bool FriendlyFireEnabled => friendlyFireEnabled;
     public NetworkGameManager NetworkGameManager => networkGameManager;
@@ -47,6 +51,7 @@ public class GameManager : Singleton<GameManager>
     {
         networkGameManager = GetComponent<NetworkGameManager>();
         playerRoleDictionary = new Dictionary<ulong, PlayerRole>();
+        deadClientIds = new List<ulong>();
     }
 
     private void Update()
@@ -74,7 +79,7 @@ public class GameManager : Singleton<GameManager>
         switch (gameState) {
             case GameState.WaitingToStart:
                 RequestSpawnPlayer(networkGameManager.NetworkManager.LocalClientId);
-                if (networkGameManager.IsServer) PlayerReadyManager.OnAllPlayersReady += OnAllPlayersReady;
+                if (networkGameManager.IsServer) InitializeGame();
                 break;
             case GameState.ReadyToStart:
                 if (networkGameManager.IsServer) PrepareGame();
@@ -105,8 +110,18 @@ public class GameManager : Singleton<GameManager>
     {
         if (!playerRoleDictionary.TryGetValue(clientId, out PlayerRole playerRole))
         {
-            playerRole = defaultPlayerRole;
-            RequestAddPlayerRole(clientId, defaultPlayerRole);
+            int role = PlayerPrefs.GetInt(clientId.ToString(), -1);
+
+            if (role >= 0)
+            {
+                playerRole = (PlayerRole)role;
+            }
+            else
+            {
+                playerRole = defaultPlayerRole;
+            }
+
+            RequestAddPlayerRole(clientId, playerRole);
         }
 
         switch (playerRole)
@@ -133,25 +148,59 @@ public class GameManager : Singleton<GameManager>
     private NetworkObject SpawnSurvivor(ulong clientId)
     {
         GameObject survivorGameObject = Instantiate(survivorPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Survivor), Quaternion.identity);
+        if (survivorGameObject.TryGetComponent(out Health health)) health.OnDeathStateChanged += OnSurvivorDeathStateChanged;
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;
     }
 
+    private void OnSurvivorDeathStateChanged(Health health, bool isDead)
+    {
+        if (isDead)
+        {
+            deadClientIds.Add(health.NetworkHealth.OwnerClientId);
+            if (AllSurvivorsDead()) RequestSetGameState(GameState.GameOver);
+        }
+        else
+        {
+            deadClientIds.Remove(health.NetworkHealth.OwnerClientId);
+        }
+    }
+
+    public bool AllSurvivorsDead()
+    {
+        foreach (KeyValuePair<ulong, PlayerRole> player in playerRoleDictionary)
+        {
+            if (player.Value == PlayerRole.Survivor)
+            {
+                if (!deadClientIds.Contains(player.Key)) return false;
+            }
+        }
+
+        return true;
+    }
+
     private void OnAllPlayersReady()
     {
         PlayerReadyManager.OnAllPlayersReady -= OnAllPlayersReady;
-        RequestSetGameState(GameState.ReadyToStart);
+        if (state == GameState.WaitingToStart) RequestSetGameState(GameState.ReadyToStart);
+        else if (state == GameState.GamePlaying || state == GameState.Panic) RequestSetGameState(GameState.GameOver);
     }
 
     private void OnAllTasksCompleted()
     {
         TaskManager.OnAllTasksCompleted -= OnAllTasksCompleted;
+    }
 
+    public void InitializeGame()
+    {
+        PlayerReadyManager.OnAllPlayersReady += OnAllPlayersReady;
+        StartCoroutine(ForceReadyUpCoroutine());
     }
 
     public void PrepareGame()
     {
+        StopAllCoroutines();
         TaskManager.Instance.RequestSpawnRandomTasks();
         TaskManager.OnAllTasksCompleted += OnAllTasksCompleted;
         StartCoroutine(StartGameCoroutine());
@@ -170,15 +219,21 @@ public class GameManager : Singleton<GameManager>
     public void EndGame()
     {
         StopAllCoroutines();
+        StartCoroutine(RestartGameCoroutine());
     }
 
     public void QuitGame()
     {
         StopAllCoroutines();
-
         if (networkGameManager.IsHost) NetworkManager.Singleton.Shutdown();
         else NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
         Loader.Load(Loader.Scene.MainMenuScene);
+    }
+
+    private IEnumerator ForceReadyUpCoroutine()
+    {
+        yield return new WaitForSeconds(forceReadyUpTimer);
+        PlayerReadyManager.Instance.RequestSetAllPlayersReadyState(true);
     }
 
     private IEnumerator StartGameCoroutine()
@@ -197,5 +252,12 @@ public class GameManager : Singleton<GameManager>
     {
         yield return new WaitForSeconds(panicDuration);
         RequestSetGameState(GameState.GameOver);
+    }
+
+    private IEnumerator RestartGameCoroutine()
+    {
+        yield return new WaitForSeconds(endGameDelay);
+
+        Loader.LoadNetwork(Loader.Scene.GameplayScene);
     }
 }

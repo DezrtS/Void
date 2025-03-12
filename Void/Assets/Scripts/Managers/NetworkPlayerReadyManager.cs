@@ -38,7 +38,6 @@ public class NetworkPlayerReadyManager : NetworkBehaviour
         {
             SetPlayerReadyStateServerRpc(clientId, isReady);
         }
-        isAllPlayersReady.Value = isReady;
     }
 
     [ServerRpc(RequireOwnership = false)]

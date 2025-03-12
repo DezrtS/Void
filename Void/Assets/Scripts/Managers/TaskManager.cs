@@ -11,12 +11,14 @@ public class TaskManager : Singleton<TaskManager>
     private NetworkTaskManager networkTaskManager;
     private bool isAllTasksCompleted;
 
-    private List<Task> tasks = new List<Task>();
+    private List<Task> tasks = new();
 
     public int TaskCount => taskCount;
     public NetworkTaskManager NetworkTaskManager => networkTaskManager;
+    public bool IsAllTasksCompleted => isAllTasksCompleted;
     public List<Task> Tasks => tasks;
 
+    public void RequestSetAllTasksCompletedState(bool isCompleted) => networkTaskManager.SetAllTasksCompletedStateServerRpc(isCompleted);
     public void RequestSpawnTask(int taskDataIndex) => networkTaskManager.SpawnTaskServerRpc(taskDataIndex);
     public void RequestAddTask(Task task) => networkTaskManager.AddTaskServerRpc(task.NetworkTask.NetworkObjectId);
     public void RequestRemoveTask(Task task) => networkTaskManager.RemoveTaskServerRpc(task.NetworkTask.NetworkObjectId);
@@ -44,6 +46,20 @@ public class TaskManager : Singleton<TaskManager>
         }
     }
 
+    public bool CheckAllTasksCompleted()
+    {
+        bool allTasksCompleted = true;
+        foreach (Task task in tasks)
+        {
+            if (!task.IsCompleted)
+            {
+                allTasksCompleted = false;
+                break;
+            }
+        }
+        return allTasksCompleted;
+    }
+
     public void SetAllTasksCompleted(bool isAllTasksCompleted)
     {
         this.isAllTasksCompleted = isAllTasksCompleted;
@@ -68,7 +84,7 @@ public class TaskManager : Singleton<TaskManager>
         int randomTaskIndex = UnityEngine.Random.Range(0, taskPrefabs.Count);
         GameObject spawnedTask = Instantiate(taskPrefabs[randomTaskIndex]);
         Task task = spawnedTask.GetComponent<Task>();
-        task.NetworkTask.NetworkObject.Spawn();
+        task.NetworkTask.NetworkObject.Spawn(true);
         return task;
     }
 
@@ -89,6 +105,7 @@ public class TaskManager : Singleton<TaskManager>
     public void OnTaskStateChanged(Task task, bool state)
     {
         Debug.Log($"{task.TaskData.TaskName} task was completed");
+        if (networkTaskManager.IsServer && state) RequestSetAllTasksCompletedState(CheckAllTasksCompleted());
     }
 
     public void RegenerateTaskInstructions()
@@ -106,7 +123,7 @@ public class TaskManager : Singleton<TaskManager>
     {
         GameObject spawnedDraggable = Instantiate(draggablePrefab);
         Draggable draggable = spawnedDraggable.GetComponent<Draggable>();
-        draggable.NetworkUseable.NetworkObject.Spawn();
+        draggable.NetworkUseable.NetworkObject.Spawn(true);
         return draggable;
     }
 }

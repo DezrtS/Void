@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 public abstract class PlayerController : NetworkBehaviour
 {
+    public event Action<bool> OnSelectionWheel;
+
+    [SerializeField] private GameManager.PlayerRole playerRole;
     [SerializeField] private bool canAutomaticallyRespawn;
     [SerializeField] private float respawnDelay;
 
@@ -20,8 +23,7 @@ public abstract class PlayerController : NetworkBehaviour
     protected Health health;
 
     private float respawnTimer;
-
-    public event Action<bool> OnSelectionWheel;
+    public GameManager.PlayerRole PlayerRole => playerRole;
     public PlayerLook PlayerLook => playerLook;
     public GameObject PlayerModel => playerModel;
 
@@ -129,6 +131,10 @@ public abstract class PlayerController : NetworkBehaviour
         playerLook = GetComponent<PlayerLook>();
         health = GetComponent<Health>();
         health.OnDeathStateChanged += OnDeathStateChanged;
+        GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
+        {
+            if (gameState == GameManager.GameState.GameOver) UnassignControls();
+        };
     }
 
     private void Start()

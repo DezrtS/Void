@@ -8,6 +8,7 @@ public class Trigger : MonoBehaviour
     public event TriggerHandler OnExit;
 
     private List<GameObject> gameObjects = new List<GameObject>();
+    public List<GameObject> GameObjects => gameObjects;
 
     private void OnTriggerEnter(Collider other)
     {
