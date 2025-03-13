@@ -22009,18 +22009,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a853efa7001395d46bb27b32b1c88a66, type: 3}
---- !u!114 &428076554 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9096146225285505911, guid: a853efa7001395d46bb27b32b1c88a66,
-    type: 3}
-  m_PrefabInstance: {fileID: 428076553}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &428076555 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4392250089877235302, guid: a853efa7001395d46bb27b32b1c88a66,
@@ -33567,7 +33555,7 @@ PrefabInstance:
     - target: {fileID: 2993614299003038918, guid: 56db6b12f8a7c014689377ca10430868,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3868798984982779803, guid: 56db6b12f8a7c014689377ca10430868,
         type: 3}
@@ -60995,7 +60983,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1183270159
 Transform:
   m_ObjectHideFlags: 0
@@ -98886,7 +98874,7 @@ PrefabInstance:
         type: 3}
       propertyPath: taskText
       value: 
-      objectReference: {fileID: 428076554}
+      objectReference: {fileID: 0}
     - target: {fileID: 7772036290603550986, guid: 29c41559efb96e94bbb507a9a6202959,
         type: 3}
       propertyPath: tasksCount
