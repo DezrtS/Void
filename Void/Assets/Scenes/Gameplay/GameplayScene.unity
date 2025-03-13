@@ -57144,6 +57144,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0aa9d77c264e954d9f40d8c9b4eefbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  readyUpInteractableData: {fileID: 11400000, guid: da777e724229574429b3d9b0d6b8eba4,
+    type: 2}
+  leaveInteractableData: {fileID: 11400000, guid: 03ecf77728465974786d05f8699f49ce,
+    type: 2}
 --- !u!1 &2132044074
 GameObject:
   m_ObjectHideFlags: 0

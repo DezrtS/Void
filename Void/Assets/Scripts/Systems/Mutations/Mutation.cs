@@ -5,6 +5,7 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
     public event IUseable.UseHandler OnUsed;
 
     [SerializeField] protected MutationData mutationData;
+    [SerializeField] private TutorialData tutorialData;
 
     protected NetworkUseable networkUseable;
     private bool isUsing;
@@ -12,9 +13,10 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
     protected float cooldownTimer;
     protected GameObject player;
 
+    public MutationData MutationData => mutationData;
+    public TutorialData TutorialData => tutorialData;
     public NetworkUseable NetworkUseable => networkUseable;
     public bool IsUsing => isUsing;
-    public MutationData MutationData => mutationData;
 
     public bool CanUse() => !isUsing && cooldownTimer <= 0;
     public bool CanStopUsing() => isUsing;

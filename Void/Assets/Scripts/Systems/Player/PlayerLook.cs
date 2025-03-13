@@ -112,10 +112,20 @@ public class PlayerLook : NetworkBehaviour
             if (Physics.Raycast(cameraRootTransform.position, (lookAtTargetTransform.position - cameraRootTransform.position).normalized, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Collide))
             {
                 hitInfo.collider.TryGetComponent(out IInteractable interactable);
+
+                if (this.interactable != interactable)
+                {
+                    InteractableData interactableData = interactable.GetInteractableData();
+                    UIManager.Instance.SetInteractableText(interactableData);
+                }
                 this.interactable = interactable;
             }
             else
             {
+                if (interactable != null)
+                {
+                    UIManager.Instance.ResetInteractableText();
+                }
                 interactable = null;
             }
         }

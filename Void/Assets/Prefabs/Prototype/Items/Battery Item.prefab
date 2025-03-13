@@ -123,6 +123,11 @@ MonoBehaviour:
   itemData: {fileID: 11400000, guid: 69af40606c0d78149968119d78aa657d, type: 2}
   canPickUp: 1
   canDrop: 1
+  pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
+    type: 2}
+  tutorialData: {fileID: 11400000, guid: c135f4b4b66ff2444b46531e4e9a9dee, type: 2}
+  holdingPositionData: {fileID: 11400000, guid: d82e2f2d7580f8949939a3ae9348c8f7,
+    type: 2}
 --- !u!114 &457341660016506390
 MonoBehaviour:
   m_ObjectHideFlags: 0

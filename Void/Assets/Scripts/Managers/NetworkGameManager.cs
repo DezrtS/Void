@@ -4,8 +4,7 @@ using static GameManager;
 
 public class NetworkGameManager : NetworkBehaviour
 {
-    [Header("Options")]
-    [SerializeField] private bool startGameOnSpawn;
+    [SerializeField] private bool readyUpPlayerOnSpawn;
 
     private GameManager gameManager;
     private readonly NetworkVariable<GameState> state = new();
@@ -15,11 +14,17 @@ public class NetworkGameManager : NetworkBehaviour
         gameManager = GetComponent<GameManager>();   
     }
 
+    private void Start()
+    {
+        gameManager.RequestUpdatePlayerRole(NetworkManager.Singleton.LocalClientId);
+        if (readyUpPlayerOnSpawn) PlayerReadyManager.Instance.RequestSetPlayerReadyState(NetworkManager.Singleton.LocalClientId, true);
+    }
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         state.OnValueChanged += OnGameStateChanged;
-        if (IsServer && startGameOnSpawn) SetGameStateServerRpc(GameState.WaitingToStart);
+        if (IsServer) PlayerReadyManager.OnAllPlayersReady += gameManager.OnAllPlayersReady;
     }
 
     public override void OnNetworkDespawn()

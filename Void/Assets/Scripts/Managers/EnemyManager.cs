@@ -9,10 +9,22 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
 
     private NetworkedObjectPool voidBeastObjectPool;
     private float spawnEnemyTimer = 0;
+    private bool gameStarted;
 
-    public override void OnNetworkSpawn()
+    protected override void OnEnable()
     {
-        if (IsServer)
+        base.OnEnable();
+        GameManager.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged -= OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameManager.GameState gameState)
+    {
+        if (IsServer && gameState == GameManager.GameState.ReadyToStart)
         {
             voidBeastObjectPool = GetComponent<NetworkedObjectPool>();
             voidBeastObjectPool.InitializePool(voidBeastPrefab);
@@ -22,7 +34,7 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
 
     private void FixedUpdate()
     {
-        if (!IsServer || !spawnEnemies) return;
+        if (!IsServer || !gameStarted || !spawnEnemies) return;
 
         if (spawnEnemyTimer > 0)
         {

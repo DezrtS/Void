@@ -4,27 +4,48 @@ using UnityEngine.UI;
 
 public class MutationOption : MonoBehaviour
 {
-    public delegate void MutationOptionEventHandler(MutationOption mutationOption);
-    public event MutationOptionEventHandler OnMutationOptionSelected;
-
+    [SerializeField] private int optionIndex;
     [SerializeField] private Image mutationOptionImage;
     [SerializeField] private TextMeshProUGUI mutationOptionText;
 
     private MutationData mutationData;
+    private bool isSelected;
 
     public MutationData MutationData => mutationData;
+    public bool IsSelected => isSelected;
 
-    public void SetMutationData(MutationData mutationData)
+    private void Awake()
     {
-        this.mutationData = mutationData;
+        MutationSelectionManager.OnMutationDatasChanged += UpdateMutationData;
+        MutationSelectionManager.OnMutationDataSelected += OnMutationDataSelected;
+        
+        if (MutationSelectionManager.Instance)
+        {
+            UpdateMutationData();
+        }
+    }
+
+    public void UpdateMutationData()
+    {
+        mutationData = MutationSelectionManager.Instance.MuationDatas[optionIndex];
 
         mutationOptionImage.sprite = mutationData.DisplaySprite;
         mutationOptionText.text = mutationData.Description;
     }
 
-    public void SelectMutationOption()
+    private void OnMutationDataSelected(int index, bool isSelected)
+    {
+        if (index == optionIndex)
+        {
+            this.isSelected = isSelected;
+        }
+    }
+
+    public void Interact()
     {
         if (!mutationData) return;
-        OnMutationOptionSelected?.Invoke(this);
+        
+        if (isSelected) MutationSelectionManager.Instance.UnselectMutationOption(optionIndex);
+        else MutationSelectionManager.Instance.SelectMutationOption(optionIndex);
     }
 }

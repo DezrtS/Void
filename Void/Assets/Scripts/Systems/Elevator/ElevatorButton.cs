@@ -3,6 +3,23 @@ using UnityEngine;
 
 public class ElevatorButton : MonoBehaviour, IInteractable
 {
+    [SerializeField] private InteractableData readyUpInteractableData;
+    [SerializeField] private InteractableData leaveInteractableData;
+    
+    public InteractableData GetInteractableData()
+    {
+        if (GameManager.Instance.State == GameManager.GameState.WaitingToStart)
+        {
+            return readyUpInteractableData;
+        }
+        else if (GameManager.Instance.State == GameManager.GameState.GamePlaying || GameManager.Instance.State == GameManager.GameState.Panic)
+        {
+            if (ElevatorManager.Instance.IsReadyToLeave && ElevatorManager.Instance.IsAllSurvivorsInElevator) return leaveInteractableData;
+        }
+
+        return null;
+    }
+
     public void Interact(GameObject gameObject)
     {
         if (GameManager.Instance.State == GameManager.GameState.WaitingToStart)

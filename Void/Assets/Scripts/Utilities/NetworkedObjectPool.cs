@@ -18,6 +18,16 @@ public class NetworkedObjectPool : NetworkBehaviour
     public int PoolSize => poolSize;
     public int ActivePoolCount => activePool.Count;
 
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        for (int i = 0; i < pool.Count; i++)
+        {
+            GameObject gameObject = pool.Dequeue();
+            gameObject.GetComponent<NetworkObject>().Despawn(false);
+        }
+    }
+
     public void InitializePool(GameObject objectPrefab)
     {
         this.objectPrefab = objectPrefab;

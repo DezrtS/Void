@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public abstract class Task : MonoBehaviour
@@ -30,6 +31,11 @@ public abstract class Task : MonoBehaviour
             subtasks[i] = taskData.Subtasks[i].CreateSubtaskInstance(this, taskData);
             subtasks[i].OnSubtaskStateChanged += OnSubtaskStateChanged;
         }
+
+        GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
+        {
+            if (networkTask.IsServer && gameState == GameManager.GameState.GameOver) networkTask.NetworkObject.Despawn(false);
+        };
     }
 
     public string GetInstructions()

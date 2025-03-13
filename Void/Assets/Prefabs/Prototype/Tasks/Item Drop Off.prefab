@@ -50,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   processingTime: 1
   ejectionPower: 5
+  interactableData: {fileID: 11400000, guid: 437cdf113b3c7854d9da3c0d5a8f7c9e, type: 2}
 --- !u!65 &9207897002477603874
 BoxCollider:
   m_ObjectHideFlags: 0

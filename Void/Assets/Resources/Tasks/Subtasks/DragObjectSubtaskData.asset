@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   subtaskName: Drag Object
   subtaskInstructions: Drag the {OBJECT}
-  displayCompletionState: 1
+  displayCompletionState: 0
   undoOnStopDragging: 0

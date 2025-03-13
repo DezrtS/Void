@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -23,6 +22,7 @@ public class GameMultiplayer : NetworkSingleton<GameMultiplayer>
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
         if (IsServer)
         {
             PlayerReadyManager.OnAllPlayersReady += LoadGameplayScene;
@@ -84,7 +84,7 @@ public class GameMultiplayer : NetworkSingleton<GameMultiplayer>
                     }
                 }
 
-                playerObject.Despawn();
+                playerObject.Despawn(true);
             }
         }
 
