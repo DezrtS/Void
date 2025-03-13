@@ -47,6 +47,19 @@ public class MutationHotbar : MonoBehaviour
         OnSwitchMutation?.Invoke(selectedIndex, index);
         selectedIndex = index;
         Debug.Log($"Index: {selectedIndex}, {GetMutation().MutationData.DisplayName}");
+
+        if (networkMutationHotbar.IsOwner)
+        {
+            Mutation mutation = mutations[index];
+            if (mutation != null)
+            {
+                UIManager.Instance.SetTutorialText(mutation.TutorialData);
+            }
+            else
+            {
+                UIManager.Instance.ResetTutorialText();
+            }
+        }
     }
 
     public void RequestAddMutation(MutationData mutationData)
