@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mutationData: {fileID: 11400000, guid: ac2323f43b2d7e74f8cbdd36c5bdaf4f, type: 2}
-  playerModel: {fileID: 0}
+  tutorialData: {fileID: 11400000, guid: 21a55a6d457f4c34c92ef44735c401b7, type: 2}
   survivor: {fileID: 3571704797521969294}
   animator: {fileID: 5404794168633028517}
   duration: 8
