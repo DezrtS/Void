@@ -27,12 +27,12 @@ public class VoidBeastController : NetworkBehaviour
     public void Activate()
     {
 
-        List<GameObject> playerObjects = GameManager.Instance.PlayerObjects;
-        GameObject targetGameObject = GetClosestPlayer(playerObjects);
+        //List<GameObject> playerObjects = GameManager.Instance.PlayerObjects;
+        //GameObject targetGameObject = GetClosestPlayer(playerObjects);
         playerSeen = false;
-        if (targetGameObject == null) return;
-        targetTransform = targetGameObject.transform;
-        hasTarget = false;
+        //if (targetGameObject == null) return;
+        //targetTransform = targetGameObject.transform;
+        //hasTarget = false;
 
         //navMeshMovement.Pathfind(targetTransform.position);
     }
