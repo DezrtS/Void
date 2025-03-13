@@ -10,7 +10,10 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     [SerializeField] private ItemData itemData;
     [SerializeField] protected bool canPickUp = true;
     [SerializeField] protected bool canDrop = true;
-    
+    [SerializeField] private InteractableData pickUpInteractableData;
+    [SerializeField] private TutorialData tutorialData;
+    [SerializeField] private HoldingPositionData holdingPositionData;
+
     private NetworkItem networkItem;
 
     protected Rigidbody rig;
@@ -19,6 +22,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     private bool isUsing;
 
     public ItemData ItemData => itemData;
+    public TutorialData TutorialData => tutorialData;
     public NetworkItem NetworkItem => networkItem;
     public bool IsPickedUp => isPickedUp;
     public bool IsUsing => isUsing;
@@ -31,6 +35,10 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     private void Awake()
     {
         OnItemInitialize();
+        GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
+        {
+            if (networkItem.IsServer && gameState == GameManager.GameState.GameOver) networkItem.NetworkObject.Despawn(false);
+        };
     }
 
     protected virtual void OnItemInitialize()
@@ -77,11 +85,34 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
         col.enabled = !isPickedUp;
     }
 
+    public InteractableData GetInteractableData()
+    {
+        return pickUpInteractableData;
+    }
+
     public void Interact(GameObject interactor)
     {
         if (interactor.TryGetComponent(out Hotbar hotbar))
         {
             hotbar.RequestPickUpItem(this);
+        }
+    }
+
+    public void SetAtHoldingPosition(Vector3 worldPosition, Quaternion worldRotation)
+    {
+        if (holdingPositionData == null)
+        {
+            // No offsets, just set the world position and rotation
+            transform.SetPositionAndRotation(worldPosition, worldRotation);
+        }
+        else
+        {
+            // Convert local offsets to world space
+            Vector3 worldPositionOffset = worldRotation * holdingPositionData.PositionOffset;
+            Quaternion worldRotationOffset = worldRotation * Quaternion.Euler(holdingPositionData.RotationOffset);
+
+            // Apply the world-space offsets
+            transform.SetPositionAndRotation(worldPosition + worldPositionOffset, worldRotationOffset);
         }
     }
 }

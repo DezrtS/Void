@@ -9,6 +9,7 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
 
     [SerializeField] private float processingTime;
     [SerializeField] private float ejectionPower;
+    [SerializeField] private InteractableData interactableData;
 
     private NetworkItemDropOff networkItemDropOff;
     private bool isUsing;
@@ -83,6 +84,11 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
             rig.AddForce(transform.rotation * new Vector3(0, 1, 1) * ejectionPower, ForceMode.Impulse);
             RequestStopUsing();
         }
+    }
+
+    public InteractableData GetInteractableData()
+    {
+        return interactableData;
     }
 
     public void Interact(GameObject interactor)

@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -5,6 +6,9 @@ using UnityEngine;
 public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
 {
     public event IUseable.UseHandler OnUsed;
+
+    [SerializeField] private InteractableData dragInteractableData;
+    [SerializeField] private InteractableData dropInteractableData;
 
     private NetworkUseable networkUseable;
 
@@ -27,6 +31,10 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         networkUseable = GetComponent<NetworkUseable>();
         springJoint = GetComponent<SpringJoint>();
+        GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
+        {
+            if (networkUseable.IsServer && gameState == GameManager.GameState.GameOver) networkUseable.NetworkObject.Despawn(false);
+        };
     }
 
     public void Use()
@@ -39,6 +47,11 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         isUsing = false;
         OnUsed?.Invoke(this, isUsing);
+    }
+
+    public InteractableData GetInteractableData()
+    {
+        return (isUsing) ? dropInteractableData : dragInteractableData;
     }
 
     public void Interact(GameObject interactor)

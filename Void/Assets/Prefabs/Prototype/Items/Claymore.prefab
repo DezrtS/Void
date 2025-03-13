@@ -123,6 +123,11 @@ MonoBehaviour:
   itemData: {fileID: 11400000, guid: e7858be524467524490054361cd7d8af, type: 2}
   canPickUp: 1
   canDrop: 1
+  pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
+    type: 2}
+  tutorialData: {fileID: 11400000, guid: 8f03a6b1eb2cfc24a8428b73ef068fbe, type: 2}
+  holdingPositionData: {fileID: 11400000, guid: 1727ece570a897f47b80c7b1fc2189bb,
+    type: 2}
   trigger: {fileID: 1168892665388663429}
   damage: 125
   explosionEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,

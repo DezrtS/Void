@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   subtaskName: Drop Off Object
   subtaskInstructions: Drop the {OBJECT} at the drop off area.
-  displayCompletionState: 1
+  displayCompletionState: 0

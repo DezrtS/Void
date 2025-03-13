@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class NetworkTaskManager : NetworkBehaviour
 {
-    [SerializeField] private bool spawnTasksOnSpawn;
-    
     private TaskManager taskManager;
     private readonly NetworkVariable<bool> isAllTasksCompleted = new();
 
@@ -18,7 +16,6 @@ public class NetworkTaskManager : NetworkBehaviour
         base.OnNetworkSpawn();
 
         isAllTasksCompleted.OnValueChanged += OnAllTasksCompletedStateChanged;
-        if (IsServer && spawnTasksOnSpawn) taskManager.RequestSpawnRandomTasks();
     }
 
     public override void OnNetworkDespawn()

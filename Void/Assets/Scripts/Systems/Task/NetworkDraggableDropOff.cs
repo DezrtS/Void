@@ -19,6 +19,7 @@ public class NetworkDraggableDropOff : NetworkBehaviour
     public void ProcessDraggableClientRpc(ulong draggableNetworkObjectId)
     {
         NetworkObject draggableNetworkObject = GetNetworkObject(draggableNetworkObjectId);
+        if (draggableNetworkObject == null) return;
         Draggable draggable = draggableNetworkObject.GetComponent<Draggable>();
 
         draggableDropOff.ProcessDraggable(draggable);
@@ -34,6 +35,7 @@ public class NetworkDraggableDropOff : NetworkBehaviour
     public void RecessDraggableClientRpc(ulong draggableNetworkObjectId)
     {
         NetworkObject draggableNetworkObject = GetNetworkObject(draggableNetworkObjectId);
+        if (draggableNetworkObject == null) return;
         Draggable draggable = draggableNetworkObject.GetComponent<Draggable>();
 
         draggableDropOff.RecessDraggable(draggable);

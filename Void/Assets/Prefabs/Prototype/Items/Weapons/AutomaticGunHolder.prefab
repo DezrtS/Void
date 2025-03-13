@@ -108,6 +108,9 @@ MonoBehaviour:
   itemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
   canPickUp: 1
   canDrop: 0
+  pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
+    type: 2}
+  tutorialData: {fileID: 11400000, guid: 45494c4243cbbf94c9abc28774e1436b, type: 2}
   projectileSpawnerObject: {fileID: 4735076810010294097}
   fireRate: 0.1
   maxAmmo: 30

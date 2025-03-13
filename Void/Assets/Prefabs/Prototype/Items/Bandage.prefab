@@ -81,6 +81,9 @@ MonoBehaviour:
   itemData: {fileID: 11400000, guid: 4ef626523bf22ca4cbba9f0a55836608, type: 2}
   canPickUp: 1
   canDrop: 1
+  pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
+    type: 2}
+  tutorialData: {fileID: 11400000, guid: 463d42e8f28edd2489eb9a899ebcd4c6, type: 2}
 --- !u!114 &6777630981084434465
 MonoBehaviour:
   m_ObjectHideFlags: 0

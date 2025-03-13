@@ -122,6 +122,11 @@ MonoBehaviour:
   itemData: {fileID: 11400000, guid: b7359f5e81eee094ebcb8d7c4e9b4d1a, type: 2}
   canPickUp: 1
   canDrop: 1
+  pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
+    type: 2}
+  tutorialData: {fileID: 11400000, guid: 8f03a6b1eb2cfc24a8428b73ef068fbe, type: 2}
+  holdingPositionData: {fileID: 11400000, guid: c501dd39382af4442ad05c419ac0f1c4,
+    type: 2}
   trigger: {fileID: 7144986443774185887}
   animator: {fileID: 9153433909090259710}
   initialDamage: 50

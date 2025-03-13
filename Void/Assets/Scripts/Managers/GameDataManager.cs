@@ -72,7 +72,7 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         GameObject spawnedItem = Instantiate(itemData.ItemPrefab);
         Item item = spawnedItem.GetComponent<Item>();
-        item.NetworkItem.NetworkObject.Spawn(true);
+        item.NetworkItem.NetworkObject.Spawn();
         return item;
     }
 
@@ -80,7 +80,7 @@ public class GameDataManager : Singleton<GameDataManager>
     {
         GameObject spawnedMutation = Instantiate(mutationData.MutationPrefab);
         Mutation mutation = spawnedMutation.GetComponent<Mutation>();
-        mutation.NetworkUseable.NetworkObject.Spawn(true);
+        mutation.NetworkUseable.NetworkObject.Spawn();
         return mutation;
     }
 }

@@ -34,7 +34,7 @@ public class ItemManager : Singleton<ItemManager>
     {
         GameObject spawnedItem = Instantiate(itemData.ItemPrefab);
         Item item = spawnedItem.GetComponent<Item>();
-        item.NetworkItem.NetworkObject.Spawn(true);
+        item.NetworkItem.NetworkObject.Spawn();
         return item;
     }
 }
