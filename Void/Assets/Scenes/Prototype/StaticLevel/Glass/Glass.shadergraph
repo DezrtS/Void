@@ -99,7 +99,7 @@
     },
     "m_PreviewData": {
         "serializedMesh": {
-            "m_SerializedMesh": "{\"mesh\":{\"instanceID\":0}}",
+            "m_SerializedMesh": "{\"mesh\":{\"fileID\":10210,\"guid\":\"0000000000000000e000000000000000\",\"type\":0}}",
             "m_Guid": ""
         },
         "preventRotation": false
@@ -279,9 +279,9 @@
     "m_ShaderOutputName": "BaseColor",
     "m_StageCapability": 2,
     "m_Value": {
-        "x": 0.35849058628082278,
-        "y": 0.35849058628082278,
-        "z": 0.35849058628082278
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
     },
     "m_DefaultValue": {
         "x": 0.5,
@@ -602,7 +602,7 @@
     "m_BlendMode": 1,
     "m_ZTest": 4,
     "m_ZWrite": false,
-    "m_TransparentCullMode": 2,
+    "m_TransparentCullMode": 1,
     "m_OpaqueCullMode": 2,
     "m_SortPriority": 0,
     "m_AlphaTest": false,

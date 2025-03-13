@@ -1,8 +1,10 @@
 using FMODUnity;
 using UnityEngine;
 
-public class Gun : Item, IReload
+public class Gun : Item, IReload, IAnimate
 {
+    public event IAnimate.AnimationEventHandler OnAnimationEvent;
+
     [SerializeField] private GameObject projectileSpawnerObject;
     [SerializeField] private float fireRate;
     [SerializeField] private int maxAmmo;
@@ -37,7 +39,7 @@ public class Gun : Item, IReload
 
     private void Start()
     {
-        networkGun = networkItem as NetworkGun;
+        networkGun = NetworkItem as NetworkGun;
         projectileSpawner = projectileSpawnerObject.GetComponent<IProjectileSpawner>();
     }
 
@@ -103,6 +105,7 @@ public class Gun : Item, IReload
 
         fireRateTimer = fireRate;
         projectileSpawner.SpawnProjectile();
+        OnAnimationEvent?.Invoke(IAnimate.AnimationEventType.Trigger, "Fire", null);
         AudioManager.Instance.PlayOneShot(fireSound, transform.position);
     }
 

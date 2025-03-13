@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 1005157812831606071}
   - component: {fileID: 4545333011717027554}
   - component: {fileID: 2888204122819378816}
-  - component: {fileID: 8528834390276895103}
+  - component: {fileID: 8405906354780661191}
   m_Layer: 0
   m_Name: Cinemachine Camera
   m_TagString: Untagged
@@ -395,7 +395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damping: 0
---- !u!114 &8528834390276895103
+--- !u!114 &8405906354780661191
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -404,10 +404,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 3652581439252184262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4afa82ae3200b82408d605c3dbdd1e38, type: 3}
+  m_Script: {fileID: 11500000, guid: 62d54399b04b4fa48a73e121d4937dd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: 0
+  ReferenceFrame: 3
+  RecenterTarget: 0
+  PanAxis:
+    Value: 0
+    Center: 0
+    Range: {x: -180, y: 180}
+    Wrap: 1
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  TiltAxis:
+    Value: 0
+    Center: 0
+    Range: {x: -70, y: 70}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
 --- !u!1001 &9047289067997874531
 PrefabInstance:
   m_ObjectHideFlags: 0

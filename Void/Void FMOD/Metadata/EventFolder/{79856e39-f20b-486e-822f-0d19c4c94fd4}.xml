@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EventFolder" id="{79856e39-f20b-486e-822f-0d19c4c94fd4}">
+		<property name="name">
+			<value>Flashbang</value>
+		</property>
+		<relationship name="folder">
+			<destination>{e215fcac-7162-428d-9556-10bf18eef2d6}</destination>
+		</relationship>
+	</object>
+</objects>

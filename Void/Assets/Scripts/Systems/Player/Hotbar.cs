@@ -3,11 +3,12 @@ using UnityEngine;
 public class Hotbar : MonoBehaviour
 {
     public delegate void ItemEventHandler(int index, Item item);
-    public delegate void ItemSwitchEventHandler(int fromIndex, int toIndex);
+    public delegate void ItemSwitchEventHandler(int fromIndex, int toIndex, Item fromItem, Item toItem);
     public event ItemEventHandler OnPickUpItem;
     public event ItemEventHandler OnDropItem;
     public event ItemSwitchEventHandler OnSwitchItem;
 
+    [SerializeField] private Transform lookAt;
     [SerializeField] private Transform activeTransform;
     [SerializeField] private int hotbarCapacity;
 
@@ -20,6 +21,7 @@ public class Hotbar : MonoBehaviour
     private Draggable draggable;
 
     public int HotbarCapacity => hotbarCapacity;
+    public NetworkHotbar NetworkHotbar => networkHotbar;
     public Item[] Items => hotbar;
     public int SelectedIndex => selectedIndex;
     public bool IsDragging => isDragging;
@@ -37,14 +39,15 @@ public class Hotbar : MonoBehaviour
         hotbar = new Item[hotbarCapacity];
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (!networkHotbar.IsOwner) return;
 
         Item item = GetItem();
         if (item != null)
         {
-            item.transform.SetPositionAndRotation(activeTransform.position, activeTransform.rotation);
+            activeTransform.rotation = Quaternion.LookRotation((lookAt.position - activeTransform.position).normalized);
+            item.SetAtHoldingPosition(activeTransform.position, activeTransform.rotation);
         }
     }
 
@@ -69,13 +72,26 @@ public class Hotbar : MonoBehaviour
 
     public void SwitchToItem(int index)
     {
-        OnSwitchItem?.Invoke(selectedIndex, index);
+        OnSwitchItem?.Invoke(selectedIndex, index, hotbar[selectedIndex], hotbar[index]);
         selectedIndex = index;
+
+        if (networkHotbar.IsOwner)
+        {
+            Item item = hotbar[index];
+            if (item != null)
+            {
+                UIManager.Instance.SetTutorialText(item.TutorialData);
+            }
+            else
+            {
+                UIManager.Instance.ResetTutorialText();
+            }
+        }
     }
 
     public void RequestPickUpItem(ItemData itemData)
     {
-        Item newItem = ItemManager.SpawnItem(itemData);
+        Item newItem = GameDataManager.SpawnItem(itemData);
         RequestPickUpItem(newItem);
     }
 
@@ -87,6 +103,11 @@ public class Hotbar : MonoBehaviour
     {
         hotbar[index] = item;
         OnPickUpItem?.Invoke(index, item);
+
+        if (networkHotbar.IsOwner)
+        {
+            UIManager.Instance.SetTutorialText(item.TutorialData);
+        }
     }
 
     public void RequestDropItem() => RequestDropItem(selectedIndex);
@@ -103,8 +124,9 @@ public class Hotbar : MonoBehaviour
         }
     }
 
-    public void RequestDropAllItems()
+    public void RequestDropEverything()
     {
+        if (isDragging) RequestStopDragging();
         for (int i = 0; i < hotbarCapacity; i++)
         {
             if (hotbar[i] != null)
@@ -119,6 +141,11 @@ public class Hotbar : MonoBehaviour
         Item item = hotbar[index];
         hotbar[index] = null;
         OnDropItem?.Invoke(index, item);
+
+        if (networkHotbar.IsOwner)
+        {
+            UIManager.Instance.ResetTutorialText();
+        }
     }
 
     public void StartDragging(Draggable draggable)

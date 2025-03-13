@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8edbab871c1224d47902b0a16ead8ebc, type: 3}
+  m_Name: Medical Syringe
+  m_EditorClassIdentifier: 
+  Name: Medical Syringe
+  Description: Heals over time
+  ItemSprite: {fileID: 0}
+  ItemPrefab: {fileID: 1492810490569910539, guid: 6cae033b40808c142a8483f9815e5204,
+    type: 3}
+  amount: 30
+  duration: 3

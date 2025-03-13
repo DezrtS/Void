@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e975608b14f362d48999c619440d0f90, type: 3}
+  m_Name: Molotov Cocktail
+  m_EditorClassIdentifier: 
+  Name: Molotov Cocktail
+  Description: An incendiary explosive device
+  ItemSprite: {fileID: 1208872289, guid: e6e34c0e053e8834fac1a4bc6529a83d, type: 3}
+  ItemPrefab: {fileID: 1512034910407666928, guid: abfc9891f703d5d4885060c517597756,
+    type: 3}
+  throwSpeed: 15
+  spinSpeed: 2
+  radius: 4.5
+  damage: 40
+  explodeOnImpact: 1
+  timeToActivation: 2
+  effectableLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  explosionEffect: {fileID: 3929961048621311391, guid: 6fc1624de8dee5240890f48b6f94881f,
+    type: 3}

@@ -56,6 +56,12 @@ public class NetworkHealth : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
+    public void UpdateCurrentHealthServerRpc(float change)
+    {
+        SetCurrentHealthServerRpc(currentHealth.Value + change);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
     public void SetCurrentHealthServerRpc(float value)
     {
         if (currentHealth.Value == value) return;
@@ -71,5 +77,18 @@ public class NetworkHealth : NetworkBehaviour
     public void SetDeathStateServerRpc(bool state)
     {
         isDead.Value = state;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ChangeHealthOverTimeServerRpc(float healthChange, float duration)
+    {
+        //ChangeHealthOverTimeClientRpc(healthChange, duration);
+        health.ChangeHealthOverTime(healthChange, duration);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void ChangeHealthOverTimeClientRpc(float healthChange, float duration)
+    {
+        //health.ChangeHealthOverTime(healthChange, duration);
     }
 }

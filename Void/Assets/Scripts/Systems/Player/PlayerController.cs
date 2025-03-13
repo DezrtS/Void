@@ -5,6 +5,16 @@ using UnityEngine.InputSystem;
 
 public abstract class PlayerController : NetworkBehaviour
 {
+    public event Action<bool> OnSelectionWheel;
+
+    [SerializeField] private GameManager.PlayerRole playerRole;
+    [SerializeField] private bool canAutomaticallyRespawn;
+    [SerializeField] private float respawnDelay;
+
+    [SerializeField] private GameObject playerModel;
+    [SerializeField] private bool disableForOwnerOnStart;
+    [SerializeField] private GameObject[] disableForOwner;
+
     private InputActionMap playerActionMap;
     private InputActionMap uiActionMap;
 
@@ -12,12 +22,35 @@ public abstract class PlayerController : NetworkBehaviour
     protected PlayerLook playerLook;
     protected Health health;
 
-    [SerializeField] private GameObject[] disableForOwner;
-
-    public event Action<bool> OnSelectionWheel;
+    private float respawnTimer;
+    public GameManager.PlayerRole PlayerRole => playerRole;
     public PlayerLook PlayerLook => playerLook;
+    public GameObject PlayerModel => playerModel;
 
-    protected virtual void OnEnable()
+    private void OnEnable()
+    {
+        AssignControls();
+
+        UIManager.OnPause += (bool paused) =>
+        {
+            if (paused)
+            {
+                playerActionMap.Disable();
+            }
+            else
+            {
+                playerActionMap.Enable();
+            }
+        };
+    }
+
+    public virtual void EnableControls()
+    {
+        uiActionMap.Enable();
+        playerActionMap.Enable();
+    }
+
+    public virtual void AssignControls()
     {
         uiActionMap ??= InputSystem.actions.FindActionMap("UI");
         uiActionMap.Enable();
@@ -49,20 +82,21 @@ public abstract class PlayerController : NetworkBehaviour
         InputAction dropInputAction = playerActionMap.FindAction("Drop");
         dropInputAction.performed += OnDrop;
 
-        UIManager.OnPause += (bool paused) =>
-        {
-            if (paused)
-            {
-                playerActionMap.Disable();
-            }
-            else
-            {
-                playerActionMap.Enable();
-            }
-        };
+        EnableControls();
     }
 
-    protected virtual void OnDisable()
+    //private void OnDisable()
+    //{
+    //    UnassignControls();
+    //}
+
+    public virtual void DisableControls()
+    {
+        playerActionMap.Disable();
+        uiActionMap.Disable();
+    }
+
+    public virtual void UnassignControls()
     {
         InputAction pauseActionInputAction = uiActionMap.FindAction("Pause");
         pauseActionInputAction.performed -= OnPause;
@@ -88,8 +122,7 @@ public abstract class PlayerController : NetworkBehaviour
         InputAction dropInputAction = playerActionMap.FindAction("Drop");
         dropInputAction.performed -= OnDrop;
 
-        playerActionMap.Disable();
-        uiActionMap.Disable();
+        DisableControls();
     }
 
     protected virtual void Awake()
@@ -98,18 +131,53 @@ public abstract class PlayerController : NetworkBehaviour
         playerLook = GetComponent<PlayerLook>();
         health = GetComponent<Health>();
         health.OnDeathStateChanged += OnDeathStateChanged;
+        GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
+        {
+            if (gameState == GameManager.GameState.GameOver) UnassignControls();
+        };
     }
 
     private void Start()
     {
-        if (!IsOwner) return;
+        if (!IsOwner || !disableForOwnerOnStart) return;
         foreach (GameObject gameObject in disableForOwner)
         {
             gameObject.SetActive(false);
         }
     }
 
-    public abstract void OnDeathStateChanged(Health health, bool isDead);
+    private void FixedUpdate()
+    {
+        UpdateTimers(Time.fixedDeltaTime);
+    }
+
+    public virtual void UpdateTimers(float deltaTime)
+    {
+        if (respawnTimer > 0)
+        {
+            respawnTimer -= deltaTime;
+            if (respawnTimer < 0)
+            {
+                health.RequestRespawn();
+            }
+        }
+    }
+
+    public virtual void OnDeathStateChanged(Health health, bool isDead)
+    {
+        if (!IsOwner) return;
+
+        movementController.RequestSetInputDisabled(isDead);
+        if (isDead)
+        {
+            movementController.SetVelocity(Vector3.zero);
+            if (canAutomaticallyRespawn) respawnTimer = respawnDelay;
+        }
+        else
+        {
+            movementController.SetRotation(Quaternion.identity);
+        }
+    }
 
     public abstract void OnPrimaryAction(InputAction.CallbackContext context);
     public abstract void OnSecondaryAction(InputAction.CallbackContext context);
@@ -138,7 +206,6 @@ public abstract class PlayerController : NetworkBehaviour
 
     public abstract void OnSwitch(InputAction.CallbackContext context);
 
-    // May be being run by the server
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (!IsOwner) return;

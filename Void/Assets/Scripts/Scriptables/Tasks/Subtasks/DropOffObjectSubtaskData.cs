@@ -49,12 +49,19 @@ public class DropOffObjectSubtask : Subtask
         return newInstructions;
     }
 
-    public void OnDropOff(Draggable draggable, DraggableDropOff draggableDropOff)
+    public void OnDropOff(Draggable draggable, DraggableDropOff draggableDropOff, bool isAdded)
     {
         if (this.draggable == draggable)
         {
-            Execute();
-            draggableDropOff.AcceptDraggable(draggable);
+            if (isAdded)
+            {
+                Execute();
+                if (task.NetworkTask.IsServer) draggableDropOff.RequestAcceptDraggable(draggable);
+            }
+            else
+            {
+                Undo();
+            }
         }
     }
 

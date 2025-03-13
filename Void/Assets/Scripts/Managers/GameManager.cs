@@ -1,74 +1,63 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
-public class GameManager : NetworkSingletonPersistent<GameManager>
+public class GameManager : Singleton<GameManager>
 {
-    private enum GameState
-    {
-        WaitingToStart,
-        GamePlaying,
-        GameOver
-    }
+    public delegate void GameStateHandler(GameState gameState);
+    public static event GameStateHandler OnGameStateChanged;
 
-    public enum PlayerRelationship
-    {
-        Host,
-        Client,
-        Server
-    }
+    public enum GameState { None, WaitingToStart, ReadyToStart, GamePlaying, Panic, GameOver }
+    public enum PlayerRole { Survivor, Monster, Spectator }
 
-    public enum PlayerRole
-    {
-        None,
-        Monster,
-        Survivor,
-        Spectator
-    }
+    [Header("Debugging")]
+    [SerializeField] private bool allowGameSlowDown;
+    [SerializeField] private bool showGameTimer;
 
-    private NetworkVariable<GameState> state = new NetworkVariable<GameState>(GameState.WaitingToStart);
-    private Dictionary<ulong, PlayerRole> playerRoleDictionary;
-
-    [SerializeField] private bool initializeNetworkingOnStart;
-    [SerializeField] private PlayerRelationship defaultPlayerRelationship;
-
-    [SerializeField] private bool startGameOnStart;
+    [Header("Options")]
+    [SerializeField] private bool resetPlayerPrefsOnAwake;
+    [SerializeField] private bool friendlyFireEnabled;
+    [SerializeField] private bool endGameOnAllSurvivorDeath;
     [SerializeField] private PlayerRole defaultPlayerRole;
+    [SerializeField] private float forceReadyUpTimer;
+    [SerializeField] private float startGameDelay;
+    [SerializeField] private float endGameDelay;
 
+    [SerializeField] private float gameDuration;
+    [SerializeField] private float panicDuration;
+
+    [Header("Prefabs")]
     [SerializeField] private GameObject monsterPrefab;
     [SerializeField] private GameObject survivorPrefab;
 
     [SerializeField] public GameObject FirstPersonCamera;
 
-    private List<GameObject> playerObjects = new List<GameObject>();
-    private PlayerRole localPlayerRole;
+    private NetworkGameManager networkGameManager;
+    private GameState state;
 
-    public List<GameObject> PlayerObjects => playerObjects;
-    public PlayerRole LocalPlayerRole => localPlayerRole;
+    private Dictionary<ulong, PlayerRole> playerRoleDictionary;
+    private List<ulong> deadClientIds;
+
+    public bool FriendlyFireEnabled => friendlyFireEnabled;
+    public NetworkGameManager NetworkGameManager => networkGameManager;
+    public GameState State => state;
+    public Dictionary<ulong, PlayerRole> PlayerRoleDictionary => playerRoleDictionary;
+
+    public void RequestSetGameState(GameState gameState) => networkGameManager.SetGameStateServerRpc(gameState);
+    public void RequestAddPlayerRole(ulong clientId, PlayerRole playerRole) => networkGameManager.AddPlayerRoleServerRpc(clientId, playerRole);
+    public void RequestSetPlayerRole(ulong clientId, PlayerRole newPlayerRole) => networkGameManager.SetPlayerRoleServerRpc(clientId, newPlayerRole);
+    public void RequestRemovePlayerRole(ulong clientId) => networkGameManager.RemovePlayerRoleServerRpc(clientId);
+
+    public void RequestSpawnPlayers() => networkGameManager.SpawnPlayersServerRpc();
+    public void RequestSpawnPlayer(ulong clientId) => networkGameManager.SpawnPlayerServerRpc(clientId);
 
     private void Awake()
     {
+        networkGameManager = GetComponent<NetworkGameManager>();
         playerRoleDictionary = new Dictionary<ulong, PlayerRole>();
-    }
-
-    private void Start()
-    {
-        if (initializeNetworkingOnStart)
-        {
-            switch (defaultPlayerRelationship)
-            {
-                case PlayerRelationship.Host:
-                    GameMultiplayer.Instance.StartHost();
-                    break;
-                case PlayerRelationship.Client:
-                    GameMultiplayer.Instance.StartClient();
-                    break;
-                default:
-                    GameMultiplayer.Instance.StartHost();
-                    break;
-            }
-        }
+        deadClientIds = new List<ulong>();
+        if (resetPlayerPrefsOnAwake) PlayerPrefs.DeleteAll();
     }
 
     private void Update()
@@ -83,130 +72,217 @@ public class GameManager : NetworkSingletonPersistent<GameManager>
         }
     }
 
-    public override void OnNetworkSpawn()
+    public void SetGameState(GameState gameState)
     {
-        if (IsServer)
+        Debug.Log($"GAME STATE UPDATE: {state} to {gameState}");
+        state = gameState;
+        OnGameStateChanged?.Invoke(state);
+        HandleState(state);
+    }
+
+    private void HandleState(GameState gameState)
+    {
+        switch (gameState) {
+            case GameState.WaitingToStart:
+                RequestSpawnPlayer(networkGameManager.NetworkManager.LocalClientId);
+                UIManager.Instance.SetGameTimer(forceReadyUpTimer);
+                if (networkGameManager.IsServer) InitializeGame();
+                break;
+            case GameState.ReadyToStart:
+                UIManager.Instance.SetGameTimer(startGameDelay);
+                if (networkGameManager.IsServer) PrepareGame();
+                break;
+            case GameState.GamePlaying:
+                UIManager.Instance.SetGameTimer(gameDuration);
+                if (networkGameManager.IsServer) StartGame();
+                break;
+            case GameState.Panic:
+                UIManager.Instance.SetGameTimer(panicDuration);
+                if (networkGameManager.IsServer) Panic();
+                break;
+            case GameState.GameOver:
+                UIManager.Instance.SetGameTimer(endGameDelay);
+                if (networkGameManager.IsServer) EndGame();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void RequestUpdatePlayerRole(ulong clientId)
+    {
+        if (!playerRoleDictionary.TryGetValue(clientId, out PlayerRole playerRole))
         {
-            if (startGameOnStart)
+            int role = PlayerPrefs.GetInt(clientId.ToString(), -1);
+
+            if (role >= 0)
             {
-                StartGame();
-                return;
+                playerRole = (PlayerRole)role;
+            }
+            else
+            {
+                playerRole = defaultPlayerRole;
             }
 
-            PlayerReadyManager.OnAllPlayersReady += () => Loader.LoadNetwork(Loader.Scene.GameplayScene);
-            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnSceneManagerLoadEventCompleted;
+            RequestAddPlayerRole(clientId, playerRole);
         }
     }
 
-    private void OnSceneManagerLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadScene, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    public void SpawnPlayers()
     {
-        if (sceneName == Loader.Scene.GameplayScene.ToString())
-        {
-            StartGame();
-        }
-    }
-
-    public void StartGame()
-    {
-        //HandleGenerateGridMap();
-        //HandleGenerateGridMapClientRpc();
-        //GridMapManager.Instance.GenerateTasks();
-        //HandleTaskListClientRpc();
-        SpawnPlayersServerRpc();
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnPlayersServerRpc(ServerRpcParams rpcParams = default)
-    {
-        Debug.Log("Spawning Players");
         foreach (var clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            Debug.Log($"Spawning Player [{clientId}]");
-            PlayerRole role = defaultPlayerRole;
-            playerRoleDictionary.TryGetValue(clientId, out PlayerRole playerRole);
-            if (playerRole != PlayerRole.None) role = playerRole;
-            NetworkObject networkObject;
-            switch (role)
+            SpawnPlayer(clientId);
+        }
+    }
+
+    public void SpawnPlayer(ulong clientId)
+    {
+        if (playerRoleDictionary.TryGetValue(clientId, out PlayerRole playerRole))
+        {
+            switch (playerRole)
             {
                 case PlayerRole.Monster:
-                    networkObject = SpawnMonster(clientId);
+                    SpawnMonster(clientId);
                     break;
                 case PlayerRole.Survivor:
-                    networkObject = SpawnSurvivor(clientId);
+                    SpawnSurvivor(clientId);
                     break;
                 default:
-                    role = PlayerRole.Survivor;
-                    networkObject = SpawnSurvivor(clientId);
                     break;
             }
-
-            ClientRpcParams clientRpcParams = new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new List<ulong> { clientId },
-                }
-            };
-            HandlePlayerUIClientRpc(role, networkObject.NetworkObjectId, clientId, clientRpcParams);
-
         }
     }
 
     private NetworkObject SpawnMonster(ulong clientId)
     {
         GameObject monsterGameObject = Instantiate(monsterPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster), Quaternion.identity);
-        playerObjects.Add(monsterGameObject);
         NetworkObject networkObject = monsterGameObject.GetComponent<NetworkObject>();
-        networkObject.SpawnAsPlayerObject(clientId, true);
+        networkObject.SpawnAsPlayerObject(clientId);
         return networkObject;
     }
 
     private NetworkObject SpawnSurvivor(ulong clientId)
     {
         GameObject survivorGameObject = Instantiate(survivorPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Survivor), Quaternion.identity);
-        playerObjects.Add(survivorGameObject);
+        if (survivorGameObject.TryGetComponent(out Health health)) health.OnDeathStateChanged += OnSurvivorDeathStateChanged;
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
-        networkObject.SpawnAsPlayerObject(clientId, true);
+        networkObject.SpawnAsPlayerObject(clientId);
         return networkObject;
     }
 
-    [ClientRpc(RequireOwnership = false)]
-    private void HandlePlayerUIClientRpc(PlayerRole playerRole, ulong networkObjectId, ulong clientId, ClientRpcParams rpcParams = default)
+    private void OnSurvivorDeathStateChanged(Health health, bool isDead)
     {
-        ItemManager.CreateSimpleEventLog("HandlePlayerUIEvent", $"PlayerRole: {playerRole}, NetworkObjectId: {networkObjectId}, ClientId: {clientId}");
-
-        localPlayerRole = playerRole;
-        NetworkObject networkObject = NetworkManager.SpawnManager.SpawnedObjects[networkObjectId];
-        UIManager.Instance.SetupUI(playerRole, networkObject.gameObject);
+        if (isDead)
+        {
+            deadClientIds.Add(health.NetworkHealth.OwnerClientId);
+            if (endGameOnAllSurvivorDeath && AllSurvivorsDead()) RequestSetGameState(GameState.GameOver);
+        }
+        else
+        {
+            deadClientIds.Remove(health.NetworkHealth.OwnerClientId);
+        }
     }
 
-    public void HandleGenerateGridMap()
+    public bool AllSurvivorsDead()
     {
-        //GridMapManager.Instance.GenerateNewGridMap();
-        //TaskManager.Instance.DisplayTaskUI();
+        foreach (KeyValuePair<ulong, PlayerRole> player in playerRoleDictionary)
+        {
+            if (player.Value == PlayerRole.Survivor)
+            {
+                if (!deadClientIds.Contains(player.Key)) return false;
+            }
+        }
+
+        return true;
     }
 
-    [ClientRpc(RequireOwnership = false)]
-    public void HandleGenerateGridMapClientRpc()
+    public void OnAllPlayersReady()
     {
-        HandleGenerateGridMap();
+        PlayerReadyManager.OnAllPlayersReady -= OnAllPlayersReady;
+        PlayerReadyManager.Instance.RequestSetAllPlayersReadyState(false);
+        if (state == GameState.None) StartCoroutine(InitializeGameCoroutine());
+        else if (state == GameState.WaitingToStart) RequestSetGameState(GameState.ReadyToStart);
+        else if (state == GameState.GamePlaying || state == GameState.Panic) RequestSetGameState(GameState.GameOver);
     }
 
-    [ClientRpc(RequireOwnership = false)]
-    public void HandleTaskListClientRpc()
+    private void OnAllTasksCompleted()
     {
-        TaskManager.Instance.RegenerateTaskInstructions();
+        TaskManager.OnAllTasksCompleted -= OnAllTasksCompleted;
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void RequestPlayerRoleServerRpc(PlayerRole playerRole, ServerRpcParams serverRpcParams = default)
+    public void InitializeGame()
     {
-        playerRoleDictionary[serverRpcParams.Receive.SenderClientId] = playerRole;
-        ItemManager.CreateSimpleEventLog("Player Join", $"{serverRpcParams.Receive.SenderClientId} : {playerRole}");
+        PlayerReadyManager.OnAllPlayersReady += OnAllPlayersReady;
+        StartCoroutine(ForceReadyUpCoroutine());
+    }
+
+    public void PrepareGame()
+    {
+        StopAllCoroutines();
+        TaskManager.Instance.RequestSpawnRandomTasks();
+        TaskManager.OnAllTasksCompleted += OnAllTasksCompleted;
+        StartCoroutine(StartGameCoroutine());
+    }
+
+    public void StartGame()
+    {
+        StartCoroutine(PanicCoroutine());
+    }
+
+    public void Panic()
+    {
+        StartCoroutine(EndGameCoroutine());
+    }
+
+    public void EndGame()
+    {
+        StopAllCoroutines();
+        StartCoroutine(RestartGameCoroutine());
     }
 
     public void QuitGame()
     {
+        StopAllCoroutines();
+        if (networkGameManager.IsHost) NetworkManager.Singleton.Shutdown();
+        else NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
+        Loader.Load(Loader.Scene.MainMenuScene);
+    }
 
+    private IEnumerator InitializeGameCoroutine()
+    {
+        yield return new WaitForSeconds(1);
+        RequestSetGameState(GameState.WaitingToStart);
+    }
+
+    private IEnumerator ForceReadyUpCoroutine()
+    {
+        yield return new WaitForSeconds(forceReadyUpTimer);
+        PlayerReadyManager.Instance.RequestSetAllPlayersReadyState(true);
+    }
+
+    private IEnumerator StartGameCoroutine()
+    {
+        yield return new WaitForSeconds(startGameDelay);
+        RequestSetGameState(GameState.GamePlaying);
+    }
+
+    private IEnumerator PanicCoroutine()
+    {
+        yield return new WaitForSeconds(gameDuration);
+        RequestSetGameState(GameState.Panic);
+    }
+
+    private IEnumerator EndGameCoroutine()
+    {
+        yield return new WaitForSeconds(panicDuration);
+        RequestSetGameState(GameState.GameOver);
+    }
+
+    private IEnumerator RestartGameCoroutine()
+    {
+        yield return new WaitForSeconds(endGameDelay);
+
+        Loader.LoadNetwork(Loader.Scene.GameplayScene);
     }
 }
