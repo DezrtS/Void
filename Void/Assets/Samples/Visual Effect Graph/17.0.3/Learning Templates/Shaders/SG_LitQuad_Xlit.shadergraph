@@ -412,6 +412,7 @@
     "m_OutputNode": {
         "m_Id": ""
     },
+    "m_SubDatas": [],
     "m_ActiveTargets": [
         {
             "m_Id": "d4793a580fac4c5798c9d48f4eccb050"
@@ -945,8 +946,8 @@
     "m_ObjectId": "42e837029cc34d9f9706809efb943f08",
     "m_Title": "Alpha TXT * Particle Alpha",
     "m_Position": {
-        "x": -888.6666259765625,
-        "y": 183.3333740234375
+        "x": -888.0,
+        "y": 182.99981689453126
     }
 }
 
@@ -1477,7 +1478,7 @@
     },
     "m_DefaultValue": {
         "x": 0.0,
-        "y": 0.0
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -1754,8 +1755,8 @@
     "m_ObjectId": "77bd77772334491dabfe2916c39b095d",
     "m_Title": "Naive Normal Bending",
     "m_Position": {
-        "x": -1839.3333740234375,
-        "y": -116.6666259765625
+        "x": -1839.0,
+        "y": -117.0
     }
 }
 
@@ -2023,7 +2024,7 @@
     "m_StageCapability": 3,
     "m_BareResource": false,
     "m_Texture": {
-        "m_SerializedTexture": "{\"texture\":{\"instanceID\":0}}",
+        "m_SerializedTexture": "",
         "m_Guid": ""
     },
     "m_DefaultType": 0
@@ -2490,8 +2491,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 10.0,
+        "y": 10.0
     },
     "m_Labels": []
 }
@@ -2674,8 +2675,8 @@
         "y": 0.5
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 0.5,
+        "y": 0.5
     },
     "m_Labels": []
 }
@@ -2695,8 +2696,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": -1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -2778,7 +2779,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.Rendering.HighDefinition.ShaderGraph.SystemData",
     "m_ObjectId": "eb9723a4d3864b35a660775fb878b1ba",
-    "m_MaterialNeedsUpdateHash": 280372,
+    "m_MaterialNeedsUpdateHash": 279841,
     "m_SurfaceType": 0,
     "m_RenderingPass": 1,
     "m_BlendMode": 0,
@@ -2788,6 +2789,7 @@
     "m_OpaqueCullMode": 2,
     "m_SortPriority": 0,
     "m_AlphaTest": true,
+    "m_ExcludeFromTUAndAA": false,
     "m_TransparentDepthPrepass": false,
     "m_TransparentDepthPostpass": false,
     "m_SupportLodCrossFade": false,
