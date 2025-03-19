@@ -17,11 +17,20 @@ MonoBehaviour:
   fireSpeed: 150
   angularVelocity: {x: 0, y: 0, z: 0}
   gravity: -9.8
+  useBoxCast: 0
   boxCastSize: {x: 0.05, y: 0.05}
   lifetimeDuration: 10
   damage: 5
   knockback: 0
-  hitEffect: {fileID: 0}
+  hitEffect: {fileID: 2836366377352891722, guid: b5d45f1b5ffda594d999b679bb100e6e,
+    type: 3}
+  hitSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
