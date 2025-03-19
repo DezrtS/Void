@@ -7,11 +7,11 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
 {
     public delegate void MutationSelectionHandler(int index, bool isSelected);
     public static event MutationSelectionHandler OnMutationDataSelected;
-    public static event Action OnMutationDatasChanged;
 
     [SerializeField] private int optionCount;
     [SerializeField] private int requiredSelectionCount;
     [SerializeField] private GameObject mutationSelectionHolder;
+    [SerializeField] private List<MutationOption> mutationOptions; 
 
     private VoidMonsterController voidMonsterController;
     private MutationData[] mutationDatas;
@@ -178,6 +178,9 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
             mutationDatas[i] = (mutations[chosenIndex]);
         }
 
-        OnMutationDatasChanged?.Invoke();
+        foreach (MutationOption mutationOption in mutationOptions)
+        {
+            mutationOption.UpdateMutationData();
+        }
     }
 }

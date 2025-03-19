@@ -58,7 +58,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle
+  m_Name: New State
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -88,7 +88,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -1446285879564569925}
-    m_Position: {x: 160, y: -170, z: 0}
+    m_Position: {x: 320, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3077532826738423138}
     m_Position: {x: 352.9412, y: 111.17645, z: 0}
@@ -124,7 +124,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 1ee18777041c5264481d1fe140915958, type: 2}
+  m_Motion: {fileID: 7400000, guid: 0d511904224321844b3e6b96e17e06a8, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -158,7 +158,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Void Monster
+  m_Name: Old Void Monster
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Attack
@@ -213,23 +213,15 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 8b830dcbed1bab549bc852590610944a, type: 2}
+    m_Motion: {fileID: 7400000, guid: 35177d12d5e0ad64ebc0f61d9fe2f231, type: 2}
     m_Threshold: -1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 10
-    m_CycleOffset: 0
-    m_DirectBlendParameter: xinput
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 8b830dcbed1bab549bc852590610944a, type: 2}
-    m_Threshold: -0.6
     m_Position: {x: 0, y: 0}
     m_TimeScale: -5
     m_CycleOffset: 0
     m_DirectBlendParameter: xinput
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 7120c3f42b494f14ab51f357c752b519, type: 2}
+    m_Motion: {fileID: 7400000, guid: 1dde319c68a75f94b8cd456b589c5bcf, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -237,18 +229,10 @@ BlendTree:
     m_DirectBlendParameter: xinput
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 8b830dcbed1bab549bc852590610944a, type: 2}
-    m_Threshold: 0.6
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 5
-    m_CycleOffset: 0
-    m_DirectBlendParameter: xinput
-    m_Mirror: 0
-  - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 8b830dcbed1bab549bc852590610944a, type: 2}
+    m_Motion: {fileID: 7400000, guid: 35177d12d5e0ad64ebc0f61d9fe2f231, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 10
+    m_TimeScale: 5
     m_CycleOffset: 0
     m_DirectBlendParameter: xinput
     m_Mirror: 0

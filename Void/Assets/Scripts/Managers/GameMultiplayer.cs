@@ -52,7 +52,7 @@ public class GameMultiplayer : NetworkSingleton<GameMultiplayer>
 
     private void OnClientConnectedCallback(ulong clientId)
     {
-        GameManager.Instance.RequestAddPlayerRole(clientId, GameManager.PlayerRole.Survivor);
+        GameManager.Instance.RequestAddPlayerRole(clientId, GameManager.Instance.DefaultPlayerRole);
         Debug.Log("Client Connected");
     }
 
