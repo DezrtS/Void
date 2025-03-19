@@ -342,6 +342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfa03450ec833af45a435d7768dc3889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerRole: 0
   canAutomaticallyRespawn: 0
   respawnDelay: 0
   playerModel: {fileID: 3650310376703722715}
@@ -350,6 +351,7 @@ MonoBehaviour:
   - {fileID: 8877575038918965678}
   - {fileID: 8979241602379522693}
   - {fileID: 4856796755343302328}
+  dragInteractableData: {fileID: 0}
   leftHandTarget: {fileID: 3099789985793332728}
   rightHandTarget: {fileID: 4562941766658243511}
 --- !u!114 &4788557165388811619
@@ -469,6 +471,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecd2d6a0131e06e4f8a37a36a7729f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragInteractableData: {fileID: 11400000, guid: fe0b8f2675ac90e4dba75daff77e248b,
+    type: 2}
+  dropInteractableData: {fileID: 11400000, guid: a224c20df4c75a24ca38584b5a3d2ee8,
+    type: 2}
 --- !u!114 &-755659047214935387
 MonoBehaviour:
   m_ObjectHideFlags: 0

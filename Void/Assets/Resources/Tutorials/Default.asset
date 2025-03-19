@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overrideTitle: 0
   title: Controls
-  description: 'Use [WASD] to Move
+  description: 'Use [TAB] to Hide Controls
 
-    Use [SPACE] to Jump'
+    Use [WASD] to Move
+
+    Use [SPACE]
+    to Jump'

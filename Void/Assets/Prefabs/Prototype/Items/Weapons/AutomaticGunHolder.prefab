@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5708900129364935595}
   - component: {fileID: -2539449346179503360}
   - component: {fileID: 9106116638687197553}
+  - component: {fileID: 6234776376339690202}
   - component: {fileID: 3688373138169565638}
   - component: {fileID: -973645888921241733}
   - component: {fileID: 5135502783942027889}
@@ -111,6 +112,7 @@ MonoBehaviour:
   pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
     type: 2}
   tutorialData: {fileID: 11400000, guid: 45494c4243cbbf94c9abc28774e1436b, type: 2}
+  holdingPositionData: {fileID: 0}
   projectileSpawnerObject: {fileID: 4735076810010294097}
   fireRate: 0.1
   maxAmmo: 30
@@ -137,6 +139,22 @@ MonoBehaviour:
       Data3: -1381415759
       Data4: -750953849
     Path: event:/Prototype/Weapons/Reload
+--- !u!114 &6234776376339690202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159275963486535576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fe5e18afa65f44f827ffdba52200d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recoilAmount: 2
+  recoilSpeed: 10
+  returnSpeed: 20
+  cameraRecoilMultiplier: 0.5
 --- !u!65 &3688373138169565638
 BoxCollider:
   m_ObjectHideFlags: 0

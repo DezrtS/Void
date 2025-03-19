@@ -18,11 +18,6 @@ public class MutationOption : MonoBehaviour
     {
         MutationSelectionManager.OnMutationDatasChanged += UpdateMutationData;
         MutationSelectionManager.OnMutationDataSelected += OnMutationDataSelected;
-        
-        if (MutationSelectionManager.Instance)
-        {
-            UpdateMutationData();
-        }
     }
 
     public void UpdateMutationData()

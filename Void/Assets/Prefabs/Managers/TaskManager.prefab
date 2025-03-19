@@ -80,4 +80,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f7e669bb91b56d4fb2e0a60ec42693f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnTasksOnSpawn: 0

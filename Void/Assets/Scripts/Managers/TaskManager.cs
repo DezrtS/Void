@@ -86,7 +86,7 @@ public class TaskManager : Singleton<TaskManager>
         int randomTaskIndex = UnityEngine.Random.Range(0, taskPrefabs.Count);
         GameObject spawnedTask = Instantiate(taskPrefabs[randomTaskIndex]);
         Task task = spawnedTask.GetComponent<Task>();
-        task.NetworkTask.NetworkObject.Spawn();
+        task.NetworkTask.NetworkObject.Spawn(true);
         return task;
     }
 
@@ -125,7 +125,7 @@ public class TaskManager : Singleton<TaskManager>
     {
         GameObject spawnedDraggable = Instantiate(draggablePrefab);
         Draggable draggable = spawnedDraggable.GetComponent<Draggable>();
-        draggable.NetworkUseable.NetworkObject.Spawn();
+        draggable.NetworkUseable.NetworkObject.Spawn(true);
         return draggable;
     }
 }

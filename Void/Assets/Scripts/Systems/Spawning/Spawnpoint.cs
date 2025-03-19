@@ -16,19 +16,9 @@ public class Spawnpoint : MonoBehaviour
 
     [SerializeField] private SpawnpointType[] allowedSpawnpointTypes = new SpawnpointType[] { SpawnpointType.Any };
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (SpawnManager.Instance)
-        {
-            SpawnManager.Instance.AddSpawnpoint(this);
-        }
-        else
-        {
-            SpawnManager.OnSingletonInitialized += (SpawnManager spawnManager) =>
-            {
-                spawnManager.AddSpawnpoint(this);
-            };
-        }
+        SpawnManager.AddSpawnpoint(this);
     }
 
     public virtual bool CanSpawn(SpawnpointType spawnpointType)

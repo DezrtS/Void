@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class SurvivorController : PlayerController
 {
+    [SerializeField] private InteractableData dragInteractableData;
     [SerializeField] private Transform leftHandTarget;
     [SerializeField] private Transform rightHandTarget;
     private InverseKinematicsObject inverseKinematicsObject;
@@ -34,6 +35,8 @@ public class SurvivorController : PlayerController
 
     public override void UnassignControls()
     {
+        if (!IsOwner) return;
+
         InputAction switchInputAction = survivorActionMap.FindAction("Reload");
         switchInputAction.performed -= OnReload;
         base.UnassignControls();
@@ -53,7 +56,7 @@ public class SurvivorController : PlayerController
         if (IsOwner) UIManager.Instance.SetupUI(GameManager.PlayerRole.Survivor, gameObject);
 
         if (!IsServer) return;
-        Item item = ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
+        Item item = GameDataManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
         hotbar.RequestPickUpItem(item);
         if (TaskManager.Instance != null)
         {
@@ -82,6 +85,12 @@ public class SurvivorController : PlayerController
         }
     }
 
+    private void OnFireGun()
+    {
+        playerLook.AddXRotation(-1.5f);
+        playerLook.AddRandomYRotation();
+    }
+
     private void OnPickUpItem(int index, Item item)
     {
         //Debug.Log($"PICKED UP: {item.ItemData.Name}");
@@ -93,6 +102,8 @@ public class SurvivorController : PlayerController
 
         if (item is Gun)
         {
+            Gun gun = item as Gun;
+            gun.OnFire += OnFireGun;
             animationController.SetBool("IK", true);
             animationController.SetBool("hasGun", true);
         }
@@ -108,7 +119,6 @@ public class SurvivorController : PlayerController
     private void OnDropItem(int index, Item item)
     {
         //Debug.Log($"DROPPED UP: {item.ItemData.Name}");
-
         if (item is IAnimate)
         {
             IAnimate animate = item as IAnimate;
@@ -117,6 +127,8 @@ public class SurvivorController : PlayerController
 
         if (item is Gun)
         {
+            Gun gun = item as Gun;
+            gun.OnFire -= OnFireGun;
             animationController.SetBool("IK", false);
             animationController.SetBool("hasGun", false);
         }

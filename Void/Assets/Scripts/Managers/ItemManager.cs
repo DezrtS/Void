@@ -29,12 +29,4 @@ public class ItemManager : Singleton<ItemManager>
     {
         EventLoggerInterop.ShutdownLogger();
     }
-
-    public static Item SpawnItem(ItemData itemData)
-    {
-        GameObject spawnedItem = Instantiate(itemData.ItemPrefab);
-        Item item = spawnedItem.GetComponent<Item>();
-        item.NetworkItem.NetworkObject.Spawn();
-        return item;
-    }
 }

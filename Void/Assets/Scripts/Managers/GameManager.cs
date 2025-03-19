@@ -138,6 +138,7 @@ public class GameManager : Singleton<GameManager>
 
     public void SpawnPlayer(ulong clientId)
     {
+        RequestUpdatePlayerRole(clientId);
         if (playerRoleDictionary.TryGetValue(clientId, out PlayerRole playerRole))
         {
             switch (playerRole)
@@ -158,7 +159,7 @@ public class GameManager : Singleton<GameManager>
     {
         GameObject monsterGameObject = Instantiate(monsterPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster), Quaternion.identity);
         NetworkObject networkObject = monsterGameObject.GetComponent<NetworkObject>();
-        networkObject.SpawnAsPlayerObject(clientId);
+        networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;
     }
 
@@ -167,7 +168,7 @@ public class GameManager : Singleton<GameManager>
         GameObject survivorGameObject = Instantiate(survivorPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Survivor), Quaternion.identity);
         if (survivorGameObject.TryGetComponent(out Health health)) health.OnDeathStateChanged += OnSurvivorDeathStateChanged;
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
-        networkObject.SpawnAsPlayerObject(clientId);
+        networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;
     }
 
@@ -243,10 +244,16 @@ public class GameManager : Singleton<GameManager>
 
     public void QuitGame()
     {
-        StopAllCoroutines();
-        if (networkGameManager.IsHost) NetworkManager.Singleton.Shutdown();
-        else NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
+        CleanUp();
+        NetworkManager.Singleton.Shutdown();
         Loader.Load(Loader.Scene.MainMenuScene);
+    }
+
+    public void CleanUp()
+    {
+        StopAllCoroutines();
+        TaskManager.OnAllTasksCompleted -= OnAllTasksCompleted;
+        PlayerReadyManager.OnAllPlayersReady -= OnAllPlayersReady;
     }
 
     private IEnumerator InitializeGameCoroutine()

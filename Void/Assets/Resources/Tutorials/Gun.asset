@@ -16,6 +16,4 @@ MonoBehaviour:
   title: Gun
   description: 'Use [LMB] to Shoot
 
-    Use [R] to Reload
-
-    Use [Q] to Drop'
+    Use [R] to Reload'

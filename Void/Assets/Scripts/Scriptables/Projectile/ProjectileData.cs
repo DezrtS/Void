@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ProjectileData", menuName = "ScriptableObjects/Projectiles/ProjectileData", order = 1)]
@@ -16,6 +17,7 @@ public class ProjectileData : ScriptableObject
     [SerializeField] private float knockback;
 
     [SerializeField] private GameObject hitEffect;
+    [SerializeField] private EventReference hitSound;
     [SerializeField] private LayerMask layerMask;
 
     public GameObject ProjectilePrefab => projectilePrefab;
@@ -27,5 +29,6 @@ public class ProjectileData : ScriptableObject
     public float Damage => damage;
     public float Knockback => knockback;
     public GameObject HitEffect => hitEffect;
+    public EventReference HitSound => hitSound;
     public LayerMask LayerMask => layerMask;
 }

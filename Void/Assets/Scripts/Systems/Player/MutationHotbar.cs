@@ -22,7 +22,7 @@ public class MutationHotbar : MonoBehaviour
     public int MutationCount => mutations.Count;
 
     public void RequestSwitchToMutation(int index) => networkMutationHotbar.SwitchToMutationServerRpc(index);
-    public void RequestAddMutation(ulong mutationNetworkObjectId) => networkMutationHotbar.AddMutationServerRpc(mutationNetworkObjectId);
+    public void RequestAddMutation(int mutationDataIndex) => networkMutationHotbar.AddMutationServerRpc(mutationDataIndex);
     public void RequestRemoveMutation(int index) => networkMutationHotbar.RemoveMutationServerRpc(index);
 
     private void Awake()
@@ -62,13 +62,7 @@ public class MutationHotbar : MonoBehaviour
         }
     }
 
-    public void RequestAddMutation(MutationData mutationData)
-    {
-        Mutation newMutation = GameDataManager.SpawnMutation(mutationData);
-        RequestAddMutation(newMutation);
-    }
-
-    public void RequestAddMutation(Mutation mutation) => RequestAddMutation(mutation.NetworkUseable.NetworkObjectId);
+    public void RequestAddMutation(MutationData mutationData) => RequestAddMutation(GameDataManager.Instance.GetMutationDataIndex(mutationData));
 
     public void AddMutation(Mutation mutation)
     {
