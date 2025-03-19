@@ -24,7 +24,7 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
     public void RequestUse() => networkUseable.UseServerRpc();
     public void RequestStopUsing() => networkUseable.StopUsingServerRpc();
 
-    private void Awake()
+    protected virtual void Awake()
     {
         networkUseable = GetComponent<NetworkUseable>();
     }

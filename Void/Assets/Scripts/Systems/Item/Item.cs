@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -10,6 +11,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     [SerializeField] private ItemData itemData;
     [SerializeField] protected bool canPickUp = true;
     [SerializeField] protected bool canDrop = true;
+
     [SerializeField] private InteractableData pickUpInteractableData;
     [SerializeField] private TutorialData tutorialData;
     [SerializeField] private HoldingPositionData holdingPositionData;
@@ -35,10 +37,6 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     private void Awake()
     {
         OnItemInitialize();
-        GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
-        {
-            if (networkItem.IsServer && gameState == GameManager.GameState.GameOver) networkItem.NetworkObject.Despawn(false);
-        };
     }
 
     protected virtual void OnItemInitialize()
@@ -56,18 +54,21 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public virtual void Use()
     {
         isUsing = true;
+        AudioManager.PlayOneShot(itemData.UseSound, transform.position);
         OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void StopUsing()
     {
         isUsing = false;
+        AudioManager.PlayOneShot(itemData.StopUsingSound, transform.position);
         OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void PickUp()
     {
         isPickedUp = true;
+        AudioManager.PlayOneShot(itemData.PickUpSound, transform.position);
         OnPickUp?.Invoke(this, isPickedUp);
         UpdateItemState(true);
     }
@@ -75,6 +76,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public virtual void Drop()
     {
         isPickedUp = false;
+        AudioManager.PlayOneShot(itemData.DropSound, transform.position);
         OnPickUp?.Invoke(this, isPickedUp);
         UpdateItemState(false);
     }
@@ -90,7 +92,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
         return pickUpInteractableData;
     }
 
-    public void Interact(GameObject interactor)
+    public virtual void Interact(GameObject interactor)
     {
         if (interactor.TryGetComponent(out Hotbar hotbar))
         {

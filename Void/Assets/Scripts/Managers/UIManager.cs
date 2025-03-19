@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject loadingUI;
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject settingsUI;
+    [SerializeField] private GameObject tutorialUI;
 
     [SerializeField] private GameObject deathUI;
 
@@ -21,6 +23,9 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TextMeshProUGUI interactableText;
     [SerializeField] private TextMeshProUGUI gameStateText;
     [SerializeField] private TextMeshProUGUI gameTimerText;
+
+    [SerializeField] private TextMeshProUGUI dialogueNameText;
+    [SerializeField] private TextMeshProUGUI dialogueText;
 
     public static event Action<GameObject> OnSetupUI;
     public static event Action<bool> OnPause;
@@ -44,6 +49,7 @@ public class UIManager : Singleton<UIManager>
     private void Awake()
     {
         loadingUI.SetActive(true);
+        SetTutorialText(defaultTutorialData);
     }
 
     private void FixedUpdate()
@@ -86,13 +92,22 @@ public class UIManager : Singleton<UIManager>
 
     public void SetInteractableText(InteractableData interactableData)
     {
-        if (interactableData == null) return;
+        if (interactableData == null)
+        {
+            ResetInteractableText();
+            return;
+        }
         interactableText.text = interactableData.Description;
     }
 
     public void ResetInteractableText()
     {
         interactableText.text = string.Empty;
+    }
+
+    public void HideUnhideTutorialUI()
+    {
+        tutorialUI.SetActive(!tutorialUI.activeSelf);
     }
 
     public void SetTutorialText(TutorialData tutorialData)
@@ -104,6 +119,31 @@ public class UIManager : Singleton<UIManager>
     public void ResetTutorialText()
     {
         tutorialText.text = defaultTutorialData.Description;
+    }
+
+    public void SetDialogueText(DialogueData dialogueData)
+    {
+        ResetDialogueText();
+        SetDialogue(dialogueData, 0);
+    }
+
+    private void SetDialogue(DialogueData dialogueData, int index)
+    {
+        if (index >= dialogueData.DialogueLines.Count)
+        {
+            ResetDialogueText();
+            return;
+        }
+        dialogueNameText.text = $"[{dialogueData.DialogueNameData.SpeakerName}]";
+        dialogueText.text = dialogueData.DialogueLines[index].Dialogue;
+        StartCoroutine(IncrementDialogueCoroutine(dialogueData, index));
+    }
+
+    public void ResetDialogueText()
+    {
+        StopAllCoroutines();
+        dialogueNameText.text = string.Empty;
+        dialogueText.text = string.Empty;
     }
 
     public void SetGameTimer(float time)
@@ -147,6 +187,13 @@ public class UIManager : Singleton<UIManager>
         {
             loadingUI.SetActive(false);
         }
+    }
+
+    private IEnumerator IncrementDialogueCoroutine(DialogueData dialogueData, int index)
+    {
+        yield return new WaitForSeconds(dialogueData.DialogueLines[index].Duration);
+        index++;
+        SetDialogue(dialogueData, index);
     }
 
     public void QuitGame()

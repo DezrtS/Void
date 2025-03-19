@@ -6,11 +6,24 @@ public class ShapeshiftingMutation : Mutation
     [SerializeField] private Animator animator;
     [SerializeField] private float duration;
 
+    private NetworkShapeshiftingMutation networkShapeshiftingMutation;
+    private bool isActive;
+
     AnimationController animationController;
     private GameObject playerModel;
     private float durationTimer;
 
     public bool CanActivate() => durationTimer <= 0;
+    public bool CanDeactivate() => isActive;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        networkShapeshiftingMutation = GetComponent<NetworkShapeshiftingMutation>();
+    }
+
+    public void RequestActivateShapeshiftingMutation() => networkShapeshiftingMutation.ActivateShapeshiftingMutationServerRpc();
+    public void RequestDeactivateShapeshiftingMutation() => networkShapeshiftingMutation.DeactivateShapeshiftingMutationServerRpc();
 
     public override void SetupMutation(GameObject player)
     {
@@ -22,13 +35,13 @@ public class ShapeshiftingMutation : Mutation
     public override void Use()
     {
         base.Use();
-        if (CanActivate()) Activate();
+        if (networkShapeshiftingMutation.IsServer) RequestActivateShapeshiftingMutation();
     }
 
     public void Activate()
     {
+        isActive = true;
         durationTimer = duration;
-        //if (networkUseable.IsOwner) return;
         playerModel.SetActive(false);
         survivor.SetActive(true);
         animationController.AddAnimatorInstance("Player", animator);
@@ -45,7 +58,7 @@ public class ShapeshiftingMutation : Mutation
             if (durationTimer <= 0)
             {
                 durationTimer = 0;
-                Deactivate();
+                if (networkShapeshiftingMutation.IsServer) RequestDeactivateShapeshiftingMutation();
                 cooldownTimer = mutationData.Cooldown;
             }
         }
@@ -53,7 +66,7 @@ public class ShapeshiftingMutation : Mutation
 
     public void Deactivate()
     {
-        //if (networkUseable.IsOwner) return;
+        isActive = false;
         survivor.SetActive(false);
         playerModel.SetActive(true);
         animationController.RemoveAnimatorInstance(animator);

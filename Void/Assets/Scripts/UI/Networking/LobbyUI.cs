@@ -9,6 +9,7 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private GameObject createJoinButtons;
     [SerializeField] private Button createGameButton;
     [SerializeField] private Button joinGameButton;
+    [SerializeField] private Button quitGameButton;
 
     [SerializeField] private TMP_InputField IPAddressInputField;
 
@@ -16,6 +17,7 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private Button changeRoleButton;
     [SerializeField] private TextMeshProUGUI roleText;
     [SerializeField] private Button readyButton;
+    [SerializeField] private Button goBackButton;
 
     private bool monsterSelected = false;
 
@@ -41,6 +43,11 @@ public class LobbyUI : MonoBehaviour
             playerButtons.SetActive(true);
         });
 
+        quitGameButton.onClick.AddListener(() =>
+        {
+            Application.Quit();
+        });
+
         changeRoleButton.onClick.AddListener(() =>
         {
             monsterSelected = !monsterSelected;
@@ -51,6 +58,13 @@ public class LobbyUI : MonoBehaviour
         readyButton.onClick.AddListener(() =>
         {
             PlayerReadyManager.Instance.RequestSetPlayerReadyState(NetworkManager.Singleton.LocalClientId, true);
+        });
+
+        goBackButton.onClick.AddListener(() =>
+        {
+            NetworkManager.Singleton.Shutdown();
+            playerButtons.SetActive(false);
+            createJoinButtons.SetActive(true);
         });
     }
 

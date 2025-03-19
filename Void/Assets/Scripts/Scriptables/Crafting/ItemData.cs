@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,4 +10,14 @@ public class ItemData : ScriptableObject
     public string Description;
     public Sprite ItemSprite;
     public GameObject ItemPrefab;
+
+    [SerializeField] private EventReference useSound;
+    [SerializeField] private EventReference stopUsingSound;
+    [SerializeField] private EventReference pickUpSound;
+    [SerializeField] private EventReference dropSound;
+
+    public EventReference UseSound => useSound;
+    public EventReference StopUsingSound => stopUsingSound;
+    public EventReference PickUpSound => pickUpSound;
+    public EventReference DropSound => dropSound;
 }

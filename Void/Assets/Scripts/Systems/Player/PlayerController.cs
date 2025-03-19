@@ -27,36 +27,52 @@ public abstract class PlayerController : NetworkBehaviour
     public PlayerLook PlayerLook => playerLook;
     public GameObject PlayerModel => playerModel;
 
-    private void OnEnable()
+    public override void OnNetworkSpawn()
     {
-        AssignControls();
-
-        UIManager.OnPause += (bool paused) =>
+        base.OnNetworkSpawn();
+        if (IsOwner)
         {
-            if (paused)
+            AssignControls();
+
+            UIManager.OnPause += (bool paused) =>
             {
-                playerActionMap.Disable();
-            }
-            else
-            {
-                playerActionMap.Enable();
-            }
-        };
+                if (paused)
+                {
+                    playerActionMap.Disable();
+                }
+                else
+                {
+                    playerActionMap.Enable();
+                }
+            };
+        }
+    }
+
+    private void OnDisable()
+    {
+        UnassignControls();
     }
 
     public virtual void EnableControls()
     {
+        if (!IsOwner) return;
+
         uiActionMap.Enable();
         playerActionMap.Enable();
     }
 
     public virtual void AssignControls()
     {
+        if (!IsOwner) return;
+
         uiActionMap ??= InputSystem.actions.FindActionMap("UI");
         uiActionMap.Enable();
 
         InputAction pauseActionInputAction = uiActionMap.FindAction("Pause");
         pauseActionInputAction.performed += OnPause;
+
+        InputAction hideTutorialInputAction = uiActionMap.FindAction("Hide Tutorial");
+        hideTutorialInputAction.performed += OnHideTutorial;
 
         playerActionMap ??= InputSystem.actions.FindActionMap("Player");
         playerActionMap.Enable();
@@ -85,21 +101,23 @@ public abstract class PlayerController : NetworkBehaviour
         EnableControls();
     }
 
-    //private void OnDisable()
-    //{
-    //    UnassignControls();
-    //}
-
     public virtual void DisableControls()
     {
+        if (!IsOwner) return;
+
         playerActionMap.Disable();
         uiActionMap.Disable();
     }
 
     public virtual void UnassignControls()
     {
+        if (!IsOwner) return;
+
         InputAction pauseActionInputAction = uiActionMap.FindAction("Pause");
         pauseActionInputAction.performed -= OnPause;
+
+        InputAction hideTutorialInputAction = uiActionMap.FindAction("Hide Tutorial");
+        hideTutorialInputAction.performed -= OnHideTutorial;
 
         InputAction primaryActionInputAction = playerActionMap.FindAction("Primary Action");
         primaryActionInputAction.performed -= OnPrimaryAction;
@@ -131,10 +149,14 @@ public abstract class PlayerController : NetworkBehaviour
         playerLook = GetComponent<PlayerLook>();
         health = GetComponent<Health>();
         health.OnDeathStateChanged += OnDeathStateChanged;
-        GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
-        {
-            if (gameState == GameManager.GameState.GameOver) UnassignControls();
-        };
+        //GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
+        //{
+        //    if (gameState == GameManager.GameState.GameOver)
+        //    {
+        //        UnassignControls();
+        //        if (IsServer) NetworkObject.Despawn();
+        //    }
+        //};
     }
 
     private void Start()
@@ -202,6 +224,12 @@ public abstract class PlayerController : NetworkBehaviour
     {
         if (!IsOwner) return;
         UIManager.Instance.PauseUnpauseGame();
+    }
+
+    public void OnHideTutorial(InputAction.CallbackContext context)
+    {
+        if (!IsOwner) return;
+        UIManager.Instance.HideUnhideTutorialUI();
     }
 
     public abstract void OnSwitch(InputAction.CallbackContext context);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 33406381828781339}
   - component: {fileID: 8006547884009384095}
   - component: {fileID: 7483261379724094456}
-  - component: {fileID: 8360031432610207715}
+  - component: {fileID: 5875011672280484825}
   m_Layer: 0
   m_Name: Shapeshifting Mutation
   m_TagString: Untagged
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3842532170
+  GlobalObjectIdHash: 2199126611
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -73,7 +73,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &8360031432610207715
+--- !u!114 &5875011672280484825
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -82,7 +82,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2712595020136137020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc164ac0ae2cac54da3e410f416c4141, type: 3}
+  m_Script: {fileID: 11500000, guid: 622a234ce09a44c47b6baf2c75347776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &2535936913055644564

@@ -31,10 +31,10 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         networkUseable = GetComponent<NetworkUseable>();
         springJoint = GetComponent<SpringJoint>();
-        GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
-        {
-            if (networkUseable.IsServer && gameState == GameManager.GameState.GameOver) networkUseable.NetworkObject.Despawn(false);
-        };
+        //GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
+        //{
+        //    if (networkUseable.IsServer && gameState == GameManager.GameState.GameOver) networkUseable.NetworkObject.Despawn(false);
+        //};
     }
 
     public void Use()
@@ -51,6 +51,7 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
 
     public InteractableData GetInteractableData()
     {
+        if (!canDrag) return null;
         return (isUsing) ? dropInteractableData : dragInteractableData;
     }
 
@@ -68,7 +69,7 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         if (!springJoint) springJoint = transform.AddComponent<SpringJoint>();
         springJoint.connectedBody = rig;
-        springJoint.massScale = 5;
+        springJoint.connectedMassScale = 0.1f;
     }
 
     public void DetachRigidbody()

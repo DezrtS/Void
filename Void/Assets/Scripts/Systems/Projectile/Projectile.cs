@@ -58,6 +58,7 @@ public class Projectile : MonoBehaviour, IProjectile
     public virtual void OnProjectileHit(RaycastHit raycastHit)
     {
         if (projectileData.HitEffect != null) Instantiate(projectileData.HitEffect, transform.position, Quaternion.identity);
+        AudioManager.PlayOneShot(projectileData.HitSound, transform.position);
         projectileSpawner.OnProjectileHit(this, raycastHit);
     }
 

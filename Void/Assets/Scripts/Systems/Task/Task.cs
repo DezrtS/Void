@@ -32,10 +32,10 @@ public abstract class Task : MonoBehaviour
             subtasks[i].OnSubtaskStateChanged += OnSubtaskStateChanged;
         }
 
-        GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
-        {
-            if (networkTask.IsServer && gameState == GameManager.GameState.GameOver) networkTask.NetworkObject.Despawn(false);
-        };
+        //GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
+        //{
+        //    if (networkTask.IsServer && gameState == GameManager.GameState.GameOver) networkTask.NetworkObject.Despawn(false);
+        //};
     }
 
     public string GetInstructions()

@@ -16,7 +16,6 @@ public class NetworkGameManager : NetworkBehaviour
 
     private void Start()
     {
-        gameManager.RequestUpdatePlayerRole(NetworkManager.Singleton.LocalClientId);
         if (readyUpPlayerOnSpawn) PlayerReadyManager.Instance.RequestSetPlayerReadyState(NetworkManager.Singleton.LocalClientId, true);
     }
 

@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using UnityEngine;
 
 public class NetworkMutationHotbar : NetworkBehaviour
 {
@@ -35,12 +36,12 @@ public class NetworkMutationHotbar : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void AddMutationServerRpc(ulong mutationNetworkObjectId)
+    public void AddMutationServerRpc(int mutationDataIndex)
     {
-        NetworkObject mutationNetworkObject = GetNetworkObject(mutationNetworkObjectId);
-        Mutation mutation = mutationNetworkObject.GetComponent<Mutation>();
+        Mutation mutation = GameDataManager.SpawnMutation(mutationDataIndex);
         mutation.transform.SetParent(transform);
-        AddMutationClientRpc(mutationNetworkObjectId);
+        mutation.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        AddMutationClientRpc(mutation.NetworkUseable.NetworkObjectId);
     }
 
     [ClientRpc(RequireOwnership = false)]
