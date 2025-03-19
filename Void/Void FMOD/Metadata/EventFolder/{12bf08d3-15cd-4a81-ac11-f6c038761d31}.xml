@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EventFolder" id="{12bf08d3-15cd-4a81-ac11-f6c038761d31}">
+		<property name="name">
+			<value>DropBox</value>
+		</property>
+		<relationship name="folder">
+			<destination>{d27b16d7-1cd2-4583-b119-d5bee07beb8a}</destination>
+		</relationship>
+	</object>
+</objects>
