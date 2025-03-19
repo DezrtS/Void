@@ -10,6 +10,7 @@ public class ProjectileData : ScriptableObject
     [SerializeField] private Vector3 angularVelocity;
     [SerializeField] private float gravity;
 
+    [SerializeField] private bool useBoxCast = true;
     [SerializeField] private Vector2 boxCastSize = Vector2.one;
 
     [SerializeField] private float lifetimeDuration;
@@ -24,6 +25,7 @@ public class ProjectileData : ScriptableObject
     public float FireSpeed => fireSpeed;
     public Vector3 AngularVelocity => angularVelocity;
     public float Gravity => gravity;
+    public bool UseBoxCast => useBoxCast;
     public Vector2 BoxCastSize => boxCastSize;
     public float LifetimeDuration => lifetimeDuration;
     public float Damage => damage;

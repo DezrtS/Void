@@ -57,7 +57,7 @@ public class Projectile : MonoBehaviour, IProjectile
 
     public virtual void OnProjectileHit(RaycastHit raycastHit)
     {
-        if (projectileData.HitEffect != null) Instantiate(projectileData.HitEffect, transform.position, Quaternion.identity);
+        if (projectileData.HitEffect != null) Instantiate(projectileData.HitEffect, transform.position, Quaternion.LookRotation(-raycastHit.normal), raycastHit.transform);
         AudioManager.PlayOneShot(projectileData.HitSound, transform.position);
         projectileSpawner.OnProjectileHit(this, raycastHit);
     }
@@ -96,25 +96,44 @@ public class Projectile : MonoBehaviour, IProjectile
             return;
         }
 
-        float travelDistance = velocity.magnitude * deltaTime;
-        Vector3 halfExtents = new Vector3(projectileData.BoxCastSize.x * 0.5f, projectileData.BoxCastSize.y * 0.5f, travelDistance);
-        Quaternion orientation = Quaternion.LookRotation(velocity);
-
-        if (Physics.BoxCast(transform.position, halfExtents, velocity.normalized, out RaycastHit hitInfo, orientation, travelDistance, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
+        if (projectileData.UseBoxCast)
         {
-            DebugDraw.DrawBoxCast(transform.position, halfExtents, velocity.normalized, orientation, travelDistance, Color.red, 5);
-            //DebugDraw.DrawBoxCast(transform.position + velocity * deltaTime, halfExtents, velocity.normalized, orientation, projectileData.BoxCastSize.y, Color.green, 5);
-            //OnProjectileHit(hitInfo);
-            lastHit = hitInfo;
-            hasHit = true;
+            float travelDistance = velocity.magnitude * deltaTime;
+            Vector3 halfExtents = new Vector3(projectileData.BoxCastSize.x * 0.5f, projectileData.BoxCastSize.y * 0.5f, travelDistance);
+            Quaternion orientation = Quaternion.LookRotation(velocity);
 
-            transform.position = hitInfo.point;
-            UpdateRotation(deltaTime);
+            if (Physics.BoxCast(transform.position, halfExtents, velocity.normalized, out RaycastHit hitInfo, orientation, travelDistance, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
+            {
+                DebugDraw.DrawBoxCast(transform.position, halfExtents, velocity.normalized, orientation, travelDistance, Color.red, 5);
+                //DebugDraw.DrawBoxCast(transform.position + velocity * deltaTime, halfExtents, velocity.normalized, orientation, projectileData.BoxCastSize.y, Color.green, 5);
+                //OnProjectileHit(hitInfo);
+                lastHit = hitInfo;
+                hasHit = true;
+
+                transform.position = hitInfo.point;
+                UpdateRotation(deltaTime);
+            }
+            else
+            {
+                UpdatePosition(deltaTime);
+                UpdateRotation(deltaTime);
+            }
         }
         else
         {
-            UpdatePosition(deltaTime);
-            UpdateRotation(deltaTime);
+            if (Physics.Raycast(transform.position, velocity.normalized, out RaycastHit hitInfo, velocity.magnitude, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
+            {
+                lastHit = hitInfo;
+                hasHit = true;
+
+                transform.position = hitInfo.point;
+                UpdateRotation(deltaTime);
+            }
+            else
+            {
+                UpdatePosition(deltaTime);
+                UpdateRotation(deltaTime);
+            }
         }
 
         if (HasExpired()) DestroyProjectile();
