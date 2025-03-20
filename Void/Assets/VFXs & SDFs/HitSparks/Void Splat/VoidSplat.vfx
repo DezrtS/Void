@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d4c867f6b72b714dbb5fd1780afe208, type: 3}
-  m_Name: 03_Simple_Burst
+  m_Name: VoidSplat
   m_EditorClassIdentifier: 
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 0}
@@ -77,7 +77,7 @@ VisualEffectResource:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BloodSplat
+  m_Name: VoidSplat
   m_Graph: {fileID: 114350483966674976}
   m_Infos:
     m_RendererSettings:
@@ -564,7 +564,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Gradient, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"colorKeys":[{"color":{"r":0.5,"g":0.0,"b":0.021568775177001954,"a":1.0},"time":0.0},{"color":{"r":0.0,"g":0.0,"b":0.0,"a":1.0},"time":0.800000011920929}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":0.4156862795352936,"time":1.0}],"gradientMode":0}'
+      m_SerializableObject: '{"colorKeys":[{"color":{"r":0.2770606279373169,"g":0.0,"b":0.5849056243896484,"a":1.0},"time":0.02058442123234272},{"color":{"r":0.11355306208133698,"g":0.006331111770123243,"b":0.232225701212883,"a":1.0},"time":0.426474392414093}],"alphaKeys":[{"alpha":1.0,"time":0.0},{"alpha":0.7411764860153198,"time":1.0}],"gradientMode":0}'
     m_Space: -1
   m_Property:
     name: Color
