@@ -14,7 +14,20 @@ public class NavMeshMovement : MovementController
     private Vector3 pathfindingDestination;
 
     public bool IsPathfinding => isPathfinding;
-    public Vector3 PathfindingDestination { get { return pathfindingDestination; } set { pathfindingDestination = value; } }
+    //public Vector3 PathfindingDestination { get { return pathfindingDestination; } set { pathfindingDestination = value; } }
+
+    public Vector3 PathfindingDestination 
+    { 
+        get { return pathfindingDestination; } 
+        set 
+        { 
+            pathfindingDestination = value;
+            if (isPathfinding && navMeshAgent != null) 
+            {
+                navMeshAgent.SetDestination(pathfindingDestination);
+            }
+        } 
+    }
 
     protected override void Awake()
     {

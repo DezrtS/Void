@@ -36,14 +36,14 @@ public class EnemyManager : NetworkSingleton<EnemyManager>
     {
         if (!IsServer || !gameStarted || !spawnEnemies) return;
 
-        if (spawnEnemyTimer > 0)
+        if (spawnEnemyTimer <= 0)
+        {
+            SpawnNewEnemy();
+            spawnEnemyTimer = spawnNewEnemyAfter;
+        }
+        else
         {
             spawnEnemyTimer -= Time.deltaTime;
-            if (spawnEnemyTimer <= 0)
-            {
-                SpawnNewEnemy();
-                spawnEnemyTimer = spawnNewEnemyAfter;
-            }
         }
     }
 
