@@ -1194,6 +1194,13 @@ MonoBehaviour:
     type: 2}
   leaveInteractableData: {fileID: 11400000, guid: 03ecf77728465974786d05f8699f49ce,
     type: 2}
+  pressSound:
+    Guid:
+      Data1: 536860679
+      Data2: 1074294316
+      Data3: 1851311788
+      Data4: 1009216370
+    Path: event:/Prototype/Elevator/ButtonPress
 --- !u!1001 &754334770
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16464,6 +16471,20 @@ MonoBehaviour:
   healthRegenerationRate:
     baseValue: 0
   healthRegenerationDelay: 0
+  hurtSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  deathSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!4 &5928259586409166042
 Transform:
   m_ObjectHideFlags: 0
@@ -17480,6 +17501,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7054738144520742708, guid: b310c97fbd1041e4ca6c1e6a15b9cbd3,
+        type: 3}
+      propertyPath: defaultMusic.Path
+      value: event:/Prototype/Music/AlarmTheme
+      objectReference: {fileID: 0}
+    - target: {fileID: 7054738144520742708, guid: b310c97fbd1041e4ca6c1e6a15b9cbd3,
+        type: 3}
+      propertyPath: defaultMusic.Guid.Data1
+      value: 1362471149
+      objectReference: {fileID: 0}
+    - target: {fileID: 7054738144520742708, guid: b310c97fbd1041e4ca6c1e6a15b9cbd3,
+        type: 3}
+      propertyPath: defaultMusic.Guid.Data2
+      value: 1171257147
+      objectReference: {fileID: 0}
+    - target: {fileID: 7054738144520742708, guid: b310c97fbd1041e4ca6c1e6a15b9cbd3,
+        type: 3}
+      propertyPath: defaultMusic.Guid.Data3
+      value: -1883932777
+      objectReference: {fileID: 0}
+    - target: {fileID: 7054738144520742708, guid: b310c97fbd1041e4ca6c1e6a15b9cbd3,
+        type: 3}
+      propertyPath: defaultMusic.Guid.Data4
+      value: 1488298961
+      objectReference: {fileID: 0}
     - target: {fileID: 7668213746630528289, guid: b310c97fbd1041e4ca6c1e6a15b9cbd3,
         type: 3}
       propertyPath: m_LocalPosition.x

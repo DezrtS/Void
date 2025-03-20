@@ -32,7 +32,7 @@ public class BearTrap : DeployableItem
     {
         if (durationTimer > 0)
         {
-            if (networkBearTrap.IsServer) captured.RequestDamage(damage * Time.fixedDeltaTime);
+            //if (networkBearTrap.IsServer) captured.RequestDamage(damage * Time.fixedDeltaTime);
             durationTimer -= Time.fixedDeltaTime;
             if (durationTimer <= 0)
             {
@@ -48,6 +48,7 @@ public class BearTrap : DeployableItem
     {
         base.Deploy();
         if (NetworkItem.IsServer) trigger.OnEnter += OnEnter;
+        if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
     }
 
     public override void Undeploy()
@@ -93,6 +94,5 @@ public class BearTrap : DeployableItem
             }
         }
         captured = null;
-        if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
     }
 }

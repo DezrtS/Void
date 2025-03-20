@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ public class ProjectileMutation : Mutation
     [SerializeField] protected ProjectileSpawner projectileSpawner;
     [SerializeField] private float spawnProjectileDelay;
     [SerializeField] private string spawnProjectileTrigger;
+
+    [SerializeField] private EventReference spawnProjectileSound;
     private MutationHotbar mutationHotbar;
 
     public override void SetupMutation(GameObject player)
@@ -26,6 +29,7 @@ public class ProjectileMutation : Mutation
     private IEnumerator SpawnProjectileCoroutine()
     {
         yield return new WaitForSeconds(spawnProjectileDelay);
+        AudioManager.PlayOneShot(spawnProjectileSound, gameObject);
         projectileSpawner.SpawnProjectile(mutationHotbar.ActiveTransform.position, mutationHotbar.ActiveTransform.rotation);
     }
 }

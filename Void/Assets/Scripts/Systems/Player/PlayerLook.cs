@@ -116,13 +116,15 @@ public class PlayerLook : NetworkBehaviour
             //Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 1);
             if (Physics.Raycast(cameraRootTransform.position, (lookAtTargetTransform.position - cameraRootTransform.position).normalized, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Collide))
             {
-                hitInfo.collider.TryGetComponent(out IInteractable interactable);
-
-                //if (this.interactable != interactable)
-                //{
+                if (hitInfo.collider.TryGetComponent(out IInteractable interactable))
+                {
                     InteractableData interactableData = interactable.GetInteractableData();
                     instance.SetInteractableText(interactableData);
-                //}
+                }
+                else if (this.interactable != null)
+                {
+                    instance.ResetInteractableText();
+                }
 
                 this.interactable = interactable;
             }
@@ -130,7 +132,7 @@ public class PlayerLook : NetworkBehaviour
             {
                 if (interactable != null)
                 {
-                    UIManager.Instance.ResetInteractableText();
+                    instance.ResetInteractableText();
                 }
                 interactable = null;
             }

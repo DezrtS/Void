@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class SurvivorController : PlayerController
 {
-    [SerializeField] private InteractableData dragInteractableData;
     [SerializeField] private Transform leftHandTarget;
     [SerializeField] private Transform rightHandTarget;
     private InverseKinematicsObject inverseKinematicsObject;

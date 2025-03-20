@@ -107,6 +107,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doorAnimator: {fileID: 1850265326009760139}
   trigger: {fileID: 3076333449126434194}
+  elevatorOpenSound:
+    Guid:
+      Data1: 1582182975
+      Data2: 1211546902
+      Data3: -1834456147
+      Data4: 1173569061
+    Path: event:/Prototype/Elevator/ElevatorOpen
+  elevatorCloseSound:
+    Guid:
+      Data1: -922605451
+      Data2: 1328400989
+      Data3: -244195176
+      Data4: -1897111115
+    Path: event:/Prototype/Elevator/ElevatorClose
+  elevatorDingSound:
+    Guid:
+      Data1: 1542571128
+      Data2: 1310441215
+      Data3: 1852737671
+      Data4: 729163937
+    Path: event:/Prototype/Elevator/ElevatorDing
+  elevatorMoveDownSound:
+    Guid:
+      Data1: -445109674
+      Data2: 1277249059
+      Data3: 902713510
+      Data4: 2098780638
+    Path: event:/Prototype/Elevator/EvevatorMoveDown
+  elevatorMoveUpSound:
+    Guid:
+      Data1: -1001391629
+      Data2: 1187420915
+      Data3: -1955076973
+      Data4: -567902770
+    Path: event:/Prototype/Elevator/ElevatorMoveUp
 --- !u!114 &2046617441088736849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1296979140
+  GlobalObjectIdHash: 3885423558
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1

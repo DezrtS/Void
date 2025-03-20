@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -33,6 +34,8 @@ public class PlayerMovement : MovementController
 
     [Header("Jump")]
     [SerializeField] private Stat jumpPower = new Stat(7);
+    [SerializeField] private EventReference jumpSound;
+    [SerializeField] private EventReference landJumpSound;
 
     [Header("Crouch")]
     [SerializeField] private Stat crouchHeight = new Stat(1);

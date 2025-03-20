@@ -45,6 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2204998e3087f42a216fd69133a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMusic:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  startMusicOnAwake: 0
 --- !u!114 &4784981991694889388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,6 +65,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05037c1e78de64249ba1fb8ec27971e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TitleTheme:
+    Guid:
+      Data1: -1631800485
+      Data2: 1331602509
+      Data3: -570282078
+      Data4: -1896540679
+    Path: event:/Prototype/Music/TitleTheme
+  MainMenuTheme:
+    Guid:
+      Data1: 197273100
+      Data2: 1199250269
+      Data3: -1915996522
+      Data4: -488857076
+    Path: event:/Prototype/Music/MainMenuTheme
+  LobbyTheme:
+    Guid:
+      Data1: -294117460
+      Data2: 1090489723
+      Data3: -331309949
+      Data4: 415706827
+    Path: event:/Prototype/Music/LobbyTheme
+  ElevatorTheme:
+    Guid:
+      Data1: 638677497
+      Data2: 1149102432
+      Data3: 1117850787
+      Data4: 828400948
+    Path: event:/Prototype/Music/ElevatorTheme
+  BackgroundTheme:
+    Guid:
+      Data1: -440898285
+      Data2: 1303721553
+      Data3: -781522003
+      Data4: 2121305628
+    Path: event:/Prototype/Music/BgTheme
+  AlarmTheme:
+    Guid:
+      Data1: 1362471149
+      Data2: 1171257147
+      Data3: -1883932777
+      Data4: 1488298961
+    Path: event:/Prototype/Music/AlarmTheme
   Sound1:
     Guid:
       Data1: 1967878443
@@ -71,3 +121,17 @@ MonoBehaviour:
       Data3: -789222729
       Data4: -1421211024
     Path: event:/Debugging/Sound2
+  SwitchItemSound:
+    Guid:
+      Data1: -571449395
+      Data2: 1081864936
+      Data3: 2095610532
+      Data4: -1320778866
+    Path: event:/Prototype/Survivor/SwitchItem/SwithItem
+  SelectMutationSound:
+    Guid:
+      Data1: -88974853
+      Data2: 1077803087
+      Data3: -2095384900
+      Data4: -2114515453
+    Path: event:/Prototype/VoidMonster/SelectMutation

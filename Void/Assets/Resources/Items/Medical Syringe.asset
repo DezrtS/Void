@@ -17,5 +17,33 @@ MonoBehaviour:
   ItemSprite: {fileID: 0}
   ItemPrefab: {fileID: 1492810490569910539, guid: 6cae033b40808c142a8483f9815e5204,
     type: 3}
+  useSound:
+    Guid:
+      Data1: 1984627632
+      Data2: 1129424991
+      Data3: -1166392939
+      Data4: 1670757020
+    Path: event:/Prototype/Items/Medical Syringe/MedSyringeInject
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  pickUpSound:
+    Guid:
+      Data1: 320945385
+      Data2: 1082138234
+      Data3: 1422123177
+      Data4: -2075219262
+    Path: event:/Prototype/Tasks/Battery/BatteryPickUp
+  dropSound:
+    Guid:
+      Data1: 1055878425
+      Data2: 1195061842
+      Data3: -964257871
+      Data4: 1447670243
+    Path: event:/Prototype/Tasks/Battery/BatteryDrop
   amount: 30
   duration: 3

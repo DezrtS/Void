@@ -17,5 +17,33 @@ MonoBehaviour:
   ItemSprite: {fileID: 0}
   ItemPrefab: {fileID: 4865586938871194396, guid: 5c3f69e362184744c96fd3af56dd0aec,
     type: 3}
+  useSound:
+    Guid:
+      Data1: 96376205
+      Data2: 1335121082
+      Data3: 1884041123
+      Data4: -581917791
+    Path: event:/Prototype/Items/Bandage/BandageAction
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  pickUpSound:
+    Guid:
+      Data1: 320945385
+      Data2: 1082138234
+      Data3: 1422123177
+      Data4: -2075219262
+    Path: event:/Prototype/Tasks/Battery/BatteryPickUp
+  dropSound:
+    Guid:
+      Data1: 1055878425
+      Data2: 1195061842
+      Data3: -964257871
+      Data4: 1447670243
+    Path: event:/Prototype/Tasks/Battery/BatteryDrop
   amount: 10
   duration: 2

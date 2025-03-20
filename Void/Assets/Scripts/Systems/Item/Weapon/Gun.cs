@@ -104,7 +104,7 @@ public class Gun : Item, IReload, IAnimate
     {
         if (ammo <= 0)
         {
-            AudioManager.PlayOneShot(emptySound, transform.position);
+            AudioManager.PlayOneShot(emptySound, gameObject);
             return;
         }
 
@@ -113,12 +113,12 @@ public class Gun : Item, IReload, IAnimate
         //recoil.ApplyRecoil();
         OnFire?.Invoke();
         OnAnimationEvent?.Invoke(IAnimate.AnimationEventType.Trigger, "Fire", null);
-        AudioManager.PlayOneShot(fireSound, transform.position);
+        AudioManager.PlayOneShot(fireSound, gameObject);
     }
 
     public void Reload()
     {
-        AudioManager.PlayOneShot(reloadSound, transform.position);
+        AudioManager.PlayOneShot(reloadSound, gameObject);
         reloadTimer = timeToReload;
     }
 

@@ -5,7 +5,7 @@
 			<value>30SecondsLeft</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{2b922a2b-09a6-4f95-9b25-e7862e564ede}</destination>
@@ -99,7 +99,6 @@
 	<object class="MixerBusEffectChain" id="{7d68ae49-ad29-478e-a54b-0d9202545197}">
 		<relationship name="effects">
 			<destination>{20bdebf8-57e2-4b4e-a109-712f5a62e599}</destination>
-			<destination>{bc45ab61-1e84-48ae-b921-cc75ddb6f076}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{991df420-53a2-4542-8c96-c5b3fd60b10e}" />
@@ -111,7 +110,6 @@
 	</object>
 	<object class="MixerBusFader" id="{902303b6-7d7a-4271-8a2f-eec6c6d5e5e7}" />
 	<object class="MixerBusFader" id="{20bdebf8-57e2-4b4e-a109-712f5a62e599}" />
-	<object class="SpatialiserEffect" id="{bc45ab61-1e84-48ae-b921-cc75ddb6f076}" />
 	<object class="SingleSound" id="{6927e56c-1c69-4fa2-8a63-a63615ab18a7}">
 		<relationship name="audioFile">
 			<destination>{f65f38f3-175d-4c66-ab30-0d61f4b37a47}</destination>

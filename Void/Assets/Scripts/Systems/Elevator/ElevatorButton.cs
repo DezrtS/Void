@@ -1,3 +1,4 @@
+using FMODUnity;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -5,6 +6,8 @@ public class ElevatorButton : MonoBehaviour, IInteractable
 {
     [SerializeField] private InteractableData readyUpInteractableData;
     [SerializeField] private InteractableData leaveInteractableData;
+
+    [SerializeField] private EventReference pressSound;
     
     public InteractableData GetInteractableData()
     {
@@ -22,6 +25,7 @@ public class ElevatorButton : MonoBehaviour, IInteractable
 
     public void Interact(GameObject gameObject)
     {
+        AudioManager.PlayOneShot(pressSound, gameObject);
         if (GameManager.Instance.State == GameManager.GameState.WaitingToStart)
         {
             PlayerReadyManager.Instance.RequestSetPlayerReadyState(NetworkManager.Singleton.LocalClientId, true);

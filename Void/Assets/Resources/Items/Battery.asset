@@ -14,5 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Battery
   Description: It Charges Stuff
+  ItemSprite: {fileID: 0}
   ItemPrefab: {fileID: 941687137560951099, guid: 877873f02ff48ac4f80154076476ca22,
     type: 3}
+  useSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  pickUpSound:
+    Guid:
+      Data1: 320945385
+      Data2: 1082138234
+      Data3: 1422123177
+      Data4: -2075219262
+    Path: event:/Prototype/Tasks/Battery/BatteryPickUp
+  dropSound:
+    Guid:
+      Data1: 1055878425
+      Data2: 1195061842
+      Data3: -964257871
+      Data4: 1447670243
+    Path: event:/Prototype/Tasks/Battery/BatteryDrop

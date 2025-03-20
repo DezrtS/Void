@@ -37,6 +37,10 @@ public class MutationOption : MonoBehaviour
         if (index == optionIndex)
         {
             this.isSelected = isSelected;
+            if (isSelected)
+            {
+                AudioManager.PlayOneShot(FMODEventManager.Instance.SelectMutationSound);
+            }
         }
     }
 

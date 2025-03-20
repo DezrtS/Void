@@ -1,3 +1,5 @@
+using FMOD.Studio;
+using FMODUnity;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,12 +12,17 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     [SerializeField] private InteractableData dragInteractableData;
     [SerializeField] private InteractableData dropInteractableData;
 
+    [SerializeField] private EventReference dragSound;
+    [SerializeField] private EventReference stopDraggingSound;
+    [SerializeField] private EventReference draggingSound;
+
     private NetworkUseable networkUseable;
 
     private SpringJoint springJoint;
     private bool isUsing;
 
     private bool canDrag = true;
+    private EventInstance draggingInstance;
 
     public NetworkUseable NetworkUseable => networkUseable;
     public bool IsUsing => isUsing;
@@ -41,12 +48,14 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         isUsing = true;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(dragSound, gameObject);
     }
 
     public void StopUsing()
     {
         isUsing = false;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(stopDraggingSound, gameObject);
     }
 
     public InteractableData GetInteractableData()
