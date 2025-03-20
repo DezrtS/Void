@@ -87,6 +87,7 @@ public class SurvivorController : PlayerController
 
     private void OnFireGun()
     {
+        CameraManager.TriggerScreenShake(0.25f, 0.1f, 1f);
         playerLook.AddXRotation(-1.5f);
         playerLook.AddRandomYRotation();
     }

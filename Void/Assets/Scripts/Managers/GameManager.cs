@@ -40,6 +40,7 @@ public class GameManager : Singleton<GameManager>
     private List<ulong> deadClientIds;
 
     public bool FriendlyFireEnabled => friendlyFireEnabled;
+    public PlayerRole DefaultPlayerRole => defaultPlayerRole;
     public NetworkGameManager NetworkGameManager => networkGameManager;
     public GameState State => state;
     public Dictionary<ulong, PlayerRole> PlayerRoleDictionary => playerRoleDictionary;

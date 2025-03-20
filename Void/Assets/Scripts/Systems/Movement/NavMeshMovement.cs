@@ -44,7 +44,7 @@ public class NavMeshMovement : MovementController
     {
         if (IsMovementDisabled) return;
 
-        if (isPathfinding) navMeshAgent.velocity += force;
+        if (isPathfinding) navMeshAgent.velocity += force * 0.1f;
         else rig.AddForce(force, forceMode);
     }
 

@@ -49,6 +49,10 @@ public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
             Vector3 difference = movementController.transform.position - projectile.transform.position;
             if (movementController.NetworkMovementController.IsServer) movementController.RequestApplyForce(difference.normalized * projectile.ProjectileData.Knockback, ForceMode.Impulse);
         }
+        else if (raycastHit.collider.TryGetComponent(out Rigidbody rig))
+        {
+            rig.AddForceAtPosition(projectile.transform.forward * projectile.ProjectileData.Knockback, projectile.transform.position, ForceMode.Impulse);
+        }
 
         if (destroyProjectile) projectile.DestroyProjectile();
     }
