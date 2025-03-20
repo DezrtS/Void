@@ -56,3 +56,10 @@ MonoBehaviour:
     m_Bits: 576
   explosionEffect: {fileID: 3929961048621311391, guid: 6fc1624de8dee5240890f48b6f94881f,
     type: 3}
+  explosionSound:
+    Guid:
+      Data1: -1840032818
+      Data2: 1081117344
+      Data3: 1770024868
+      Data4: 1077343190
+    Path: event:/Prototype/Items/Molotov/Fire

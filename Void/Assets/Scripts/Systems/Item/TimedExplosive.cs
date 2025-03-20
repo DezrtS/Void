@@ -56,6 +56,7 @@ public class TimedExplosive : ThrowableItem
 
     public void TriggerExplosive()
     {
+        AudioManager.PlayOneShot(timedExplosiveItemData.ExplosionSound, gameObject);
         Instantiate(timedExplosiveItemData.ExplosionEffect, transform.position, Quaternion.identity);
 
         if (NetworkItem.IsServer)
