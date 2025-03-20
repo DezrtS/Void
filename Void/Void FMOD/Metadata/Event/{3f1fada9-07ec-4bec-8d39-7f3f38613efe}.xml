@@ -120,12 +120,12 @@
 	</object>
 	<object class="SingleSound" id="{187cebd4-a475-4396-b89e-17e4c3aa6338}">
 		<relationship name="audioFile">
-			<destination>{33cd2cd3-c2e9-40f8-b92f-d093a6840ff1}</destination>
+			<destination>{eeafe58a-0b43-472d-a404-ae15683887a6}</destination>
 		</relationship>
 	</object>
 	<object class="SingleSound" id="{dc691737-70f5-4dc3-ab29-e7e88fa86f99}">
 		<relationship name="audioFile">
-			<destination>{613efabd-8885-4416-bc10-c7130afc655c}</destination>
+			<destination>{6d124981-2577-4271-a8cd-d5b3325d4ffb}</destination>
 		</relationship>
 	</object>
 </objects>
