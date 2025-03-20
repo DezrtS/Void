@@ -9,7 +9,6 @@ public class ShapeshiftingMutation : Mutation
     private NetworkShapeshiftingMutation networkShapeshiftingMutation;
     private bool isActive;
 
-    AnimationController animationController;
     private GameObject playerModel;
     private float durationTimer;
 
@@ -28,7 +27,6 @@ public class ShapeshiftingMutation : Mutation
     public override void SetupMutation(GameObject player)
     {
         base.SetupMutation(player);
-        animationController = player.GetComponent<AnimationController>();
         playerModel = player.GetComponent<PlayerController>().PlayerModel;
     }
 

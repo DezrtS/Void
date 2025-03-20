@@ -51,6 +51,8 @@ MonoBehaviour:
   mutationData: {fileID: 11400000, guid: 3e1ce84df609c024e95cafca87ee1b0f, type: 2}
   tutorialData: {fileID: 11400000, guid: 21a55a6d457f4c34c92ef44735c401b7, type: 2}
   projectileSpawner: {fileID: 8439705898875105305}
+  spawnProjectileDelay: 0.5
+  spawnProjectileTrigger: GrapplingHookStart
   pullForce: 75
 --- !u!114 &8439705898875105305
 MonoBehaviour:

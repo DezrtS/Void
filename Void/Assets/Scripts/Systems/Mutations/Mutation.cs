@@ -12,6 +12,7 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
 
     protected float cooldownTimer;
     protected GameObject player;
+    protected AnimationController animationController;
 
     public MutationData MutationData => mutationData;
     public TutorialData TutorialData => tutorialData;
@@ -37,6 +38,7 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
     public virtual void SetupMutation(GameObject player)
     {
         this.player = player;
+        player.TryGetComponent(out animationController);
     }
 
     public virtual void Use()
