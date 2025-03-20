@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +8,12 @@ public class VoidMonsterController : PlayerController
 
     public MutationHotbar MutationHotbar => mutationHotbar;
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        if (IsOwner) UIManager.Instance.SetupUI(GameManager.PlayerRole.Monster, gameObject);
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -19,16 +23,8 @@ public class VoidMonsterController : PlayerController
 
     public override void OnDeathStateChanged(Health health, bool isDead)
     {
-        if (!IsOwner) return;
-
-        if (isDead)
-        {
-            health.RequestRespawn();
-        }
-        else
-        {
-            movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster));
-        }
+        base.OnDeathStateChanged(health, isDead);
+        if (IsOwner && !isDead) movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster));
     }
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)
@@ -37,8 +33,11 @@ public class VoidMonsterController : PlayerController
 
         if (context.performed)
         {
-            basicAttack.Use();
-            //Debug.Log("Tried To Attack");
+            basicAttack.RequestUse();
+        }
+        else
+        {
+            basicAttack.RequestStopUsing();
         }
     }
 
@@ -48,20 +47,22 @@ public class VoidMonsterController : PlayerController
 
         if (context.performed)
         {
-            Mutation activeMutation = mutationHotbar.GetActiveMutation();
-            if (activeMutation != null) activeMutation.Use();
+            Mutation activeMutation = mutationHotbar.GetMutation();
+            if (activeMutation != null) activeMutation.RequestUse();
         }
         else if (context.canceled)
         {
-            Mutation activeMutation = mutationHotbar.GetActiveMutation();
-            if (activeMutation != null) activeMutation.StopUsing();
+            Mutation activeMutation = mutationHotbar.GetMutation();
+            if (activeMutation != null) activeMutation.RequestStopUsing();
         }
     }
 
     public override void OnSwitch(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
-        //throw new System.NotImplementedException();
+        if (!IsOwner || mutationHotbar.MutationCount <= 0) return;
+        int direction = (int)Mathf.Sign(context.ReadValue<float>());
+        int newIndex = (mutationHotbar.SelectedIndex + direction + mutationHotbar.MutationCount) % mutationHotbar.MutationCount;
+        mutationHotbar.RequestSwitchToMutation(newIndex);
     }
 
     public override void OnDrop(InputAction.CallbackContext context)

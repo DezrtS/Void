@@ -15,6 +15,7 @@ public class StatChangeMutation : Mutation
 
     public override void SetupMutation(GameObject player)
     {
+        base.SetupMutation(player);
         if (player.TryGetComponent(out PlayerStats playerStats))
         {
             this.playerStats = playerStats;
@@ -39,7 +40,7 @@ public class StatChangeMutation : Mutation
 
         if (durationTimer > 0)
         {
-            durationTimer -= Time.deltaTime;
+            durationTimer -= Time.fixedDeltaTime;
 
             if (durationTimer <= 0)
             {
@@ -54,7 +55,7 @@ public class StatChangeMutation : Mutation
     {
         for (int i = 0; i < statChangeMutationData.StatChanges.Count; i++)
         {
-            StatChangeMutationData.StatChange statChange = statChangeMutationData.StatChanges[i];
+            StatChange statChange = statChangeMutationData.StatChanges[i];
             playerStats.ApplyModifier(statChange.StatName, statChangeMutationData.Key * 100 + i, statChange.Modifier, statChange.ModifierType);
         }
     }
@@ -63,7 +64,7 @@ public class StatChangeMutation : Mutation
     {
         for (int i = 0; i < statChangeMutationData.StatChanges.Count; i++)
         {
-            StatChangeMutationData.StatChange statChange = statChangeMutationData.StatChanges[i];
+            StatChange statChange = statChangeMutationData.StatChanges[i];
             playerStats.RemoveModifier(statChange.StatName, statChangeMutationData.Key * 100 + i);
         }
     }

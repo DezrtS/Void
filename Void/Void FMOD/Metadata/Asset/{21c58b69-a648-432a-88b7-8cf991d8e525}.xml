@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EncodableAsset" id="{21c58b69-a648-432a-88b7-8cf991d8e525}">
+		<property name="assetPath">
+			<value>Mutations/GrappleHook/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d0ea8ef8-387f-4d8e-a694-378296a36084}</destination>
+		</relationship>
+	</object>
+</objects>

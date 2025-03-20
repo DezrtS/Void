@@ -19,7 +19,7 @@ public class NetworkItemRetrievalTask : NetworkTask
     [ServerRpc(RequireOwnership = false)]
     public void SpawnItemServerRpc()
     {
-        Item item = ItemManager.SpawnItem(itemRetrievalTask.ItemData);
+        Item item = GameDataManager.SpawnItem(itemRetrievalTask.ItemData);
         item.transform.position = SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Item);
         SpawnItemClientRpc(item.NetworkItem.NetworkObjectId);
     }

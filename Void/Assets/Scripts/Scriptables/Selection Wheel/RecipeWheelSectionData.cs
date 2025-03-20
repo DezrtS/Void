@@ -7,14 +7,14 @@ public class RecipeWheelSectionData : WheelSectionData
     [SerializeField] private RecipeData recipeData;
     public RecipeData RecipeData => recipeData;
 
-    public override string GetFormattedTitle()
+    public override string GetTitle()
     {
         if (overrideSectionTitle) return recipeData.Item.Name;
 
-        return base.GetFormattedTitle();
+        return base.GetTitle();
     }
 
-    public override string GetFormattedDescription()
+    public override string GetSecondaryText()
     {
         string recipe = "";
 
@@ -23,6 +23,6 @@ public class RecipeWheelSectionData : WheelSectionData
             recipe += $"- {resourceRequirement.Amount} {resourceRequirement.Resource.Name}\n";
         }
 
-        return base.GetFormattedDescription() + recipe;
+        return recipe;
     }
 }

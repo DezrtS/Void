@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -15,14 +16,24 @@ public class StatModifier
 
     [SerializeField] private float modifierValue;
     [SerializeField] private StatModifierType modifierType;
+    [SerializeField] private float duration;
+    private float creationTime;
 
     public float ModifierValue => modifierValue;
     public StatModifierType ModifierType => modifierType;
+    public float Duration => duration;
 
-    public StatModifier(float modifierValue, StatModifierType modifierType)
+    public StatModifier(float modifierValue, StatModifierType modifierType, float duration)
     {
         this.modifierValue = modifierValue;
         this.modifierType = modifierType;
+        this.duration = duration;
+        creationTime = Time.timeSinceLevelLoad;
+    }
+
+    public bool IsExpired(float timeSinceLevelLoad)
+    {
+        return timeSinceLevelLoad - creationTime > duration;
     }
 }
 
@@ -36,8 +47,10 @@ public class Stat
     public Stat(float baseValue)
     {
         this.baseValue = baseValue;
-        UpdateValue();
+        value = baseValue;
     }
+
+    public float BaseValue => baseValue;
 
     public float Value
     {
@@ -72,9 +85,18 @@ public class Stat
     private void UpdateValue()
     {
         float value = baseValue;
+        float timeSinceLevelLoad = Time.timeSinceLevelLoad;
 
-        foreach (KeyValuePair<int, StatModifier> modifier in modifiers)
+        for (int i = modifiers.Count - 1; i >= 0; i--)
         {
+            KeyValuePair<int, StatModifier> modifier = modifiers.ElementAt(i);
+
+            if (modifier.Value.IsExpired(timeSinceLevelLoad))
+            {
+                modifiers.Remove(modifier.Key);
+                continue;
+            } 
+
             switch (modifier.Value.ModifierType)
             {
                 case StatModifier.StatModifierType.Add:
@@ -97,6 +119,18 @@ public class Stat
         this.value = value;
     }
 }
+
+[Serializable]
+public class StatChange
+{
+    [SerializeField] private string statName;
+    [SerializeField] private float modifier;
+    [SerializeField] private StatModifier.StatModifierType modifierType;
+
+    public string StatName => statName;
+    public float Modifier => modifier;
+    public StatModifier.StatModifierType ModifierType => modifierType;
+};
 
 
 public class PlayerStats : MonoBehaviour
@@ -138,12 +172,20 @@ public class PlayerStats : MonoBehaviour
 
     public Stat CrouchHeight => crouchHeight;
 
-    public void ApplyModifier(string statName, int key, float modifier, StatModifier.StatModifierType modifierType)
+    public void AddStats(IEnumerable<StatChange> statChanges)
+    {
+        for (int i = 0; i < statChanges.Count(); i++)
+        {
+
+        }
+    }
+
+    public void ApplyModifier(string statName, int key, float modifier, StatModifier.StatModifierType modifierType, float duration = 99999)
     {
         var stat = GetStatByName(statName);
         if (stat == null) return;
 
-        StatModifier statModifier = new StatModifier(modifier, modifierType);
+        StatModifier statModifier = new StatModifier(modifier, modifierType, duration);
         stat.AddModifier(key, statModifier);
     }
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{aa777d76-ae1d-41ac-a3ce-76283bb0f681}">
+		<property name="assetPath">
+			<value>Items/BearTrap/BearTrapClose2.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.50941043083900228</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d0ea8ef8-387f-4d8e-a694-378296a36084}</destination>
+		</relationship>
+	</object>
+</objects>

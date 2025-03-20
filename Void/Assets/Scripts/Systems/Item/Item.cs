@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -8,10 +9,14 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public event ItemPickUpHandler OnPickUp;
 
     [SerializeField] private ItemData itemData;
-    [SerializeField] private bool canPickUp = true;
-    [SerializeField] private bool canDrop = true;
-    
-    protected NetworkItem networkItem;
+    [SerializeField] protected bool canPickUp = true;
+    [SerializeField] protected bool canDrop = true;
+
+    [SerializeField] private InteractableData pickUpInteractableData;
+    [SerializeField] private TutorialData tutorialData;
+    [SerializeField] private HoldingPositionData holdingPositionData;
+
+    private NetworkItem networkItem;
 
     protected Rigidbody rig;
     private Collider col;
@@ -19,6 +24,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     private bool isUsing;
 
     public ItemData ItemData => itemData;
+    public TutorialData TutorialData => tutorialData;
     public NetworkItem NetworkItem => networkItem;
     public bool IsPickedUp => isPickedUp;
     public bool IsUsing => isUsing;
@@ -29,6 +35,11 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public bool CanStopUsing() => isUsing;
 
     private void Awake()
+    {
+        OnItemInitialize();
+    }
+
+    protected virtual void OnItemInitialize()
     {
         networkItem = GetComponent<NetworkItem>();
         rig = GetComponent<Rigidbody>();
@@ -43,18 +54,21 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public virtual void Use()
     {
         isUsing = true;
+        AudioManager.PlayOneShot(itemData.UseSound, transform.position);
         OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void StopUsing()
     {
         isUsing = false;
+        AudioManager.PlayOneShot(itemData.StopUsingSound, transform.position);
         OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void PickUp()
     {
         isPickedUp = true;
+        AudioManager.PlayOneShot(itemData.PickUpSound, transform.position);
         OnPickUp?.Invoke(this, isPickedUp);
         UpdateItemState(true);
     }
@@ -62,6 +76,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public virtual void Drop()
     {
         isPickedUp = false;
+        AudioManager.PlayOneShot(itemData.DropSound, transform.position);
         OnPickUp?.Invoke(this, isPickedUp);
         UpdateItemState(false);
     }
@@ -72,11 +87,34 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
         col.enabled = !isPickedUp;
     }
 
-    public void Interact(GameObject interactor)
+    public InteractableData GetInteractableData()
+    {
+        return pickUpInteractableData;
+    }
+
+    public virtual void Interact(GameObject interactor)
     {
         if (interactor.TryGetComponent(out Hotbar hotbar))
         {
             hotbar.RequestPickUpItem(this);
+        }
+    }
+
+    public void SetAtHoldingPosition(Vector3 worldPosition, Quaternion worldRotation)
+    {
+        if (holdingPositionData == null)
+        {
+            // No offsets, just set the world position and rotation
+            transform.SetPositionAndRotation(worldPosition, worldRotation);
+        }
+        else
+        {
+            // Convert local offsets to world space
+            Vector3 worldPositionOffset = worldRotation * holdingPositionData.PositionOffset;
+            Quaternion worldRotationOffset = worldRotation * Quaternion.Euler(holdingPositionData.RotationOffset);
+
+            // Apply the world-space offsets
+            transform.SetPositionAndRotation(worldPosition + worldPositionOffset, worldRotationOffset);
         }
     }
 }

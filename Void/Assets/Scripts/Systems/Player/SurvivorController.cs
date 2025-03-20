@@ -3,66 +3,77 @@ using UnityEngine.InputSystem;
 
 public class SurvivorController : PlayerController
 {
+    [SerializeField] private InteractableData dragInteractableData;
     [SerializeField] private Transform leftHandTarget;
     [SerializeField] private Transform rightHandTarget;
-    [SerializeField] private Transform lookAtTarget;
     private InverseKinematicsObject inverseKinematicsObject;
 
     private Hotbar hotbar;
     private Inventory inventory;
+    private Draggable draggable;
 
     private InputActionMap survivorActionMap;
+    private AnimationController animationController;
 
     public Hotbar Hotbar => hotbar;
     public Inventory Inventory => inventory;
 
-    protected override void OnEnable()
+    public override void AssignControls()
     {
-        base.OnEnable();
-
         survivorActionMap ??= InputSystem.actions.FindActionMap("Survivor");
-        survivorActionMap.Enable();
 
         InputAction switchInputAction = survivorActionMap.FindAction("Reload");
         switchInputAction.performed += OnReload;
+        base.AssignControls();
     }
 
-    protected override void OnDisable()
+    public override void EnableControls()
     {
-        base.OnDisable();
+        base.EnableControls();
+        survivorActionMap.Enable();
+    }
+
+    public override void UnassignControls()
+    {
+        if (!IsOwner) return;
 
         InputAction switchInputAction = survivorActionMap.FindAction("Reload");
         switchInputAction.performed -= OnReload;
+        base.UnassignControls();
+    }
 
+    public override void DisableControls()
+    {
+        base.DisableControls();
         survivorActionMap.Disable();
     }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        draggable.CanDrag = false;
+
+        if (IsOwner) UIManager.Instance.SetupUI(GameManager.PlayerRole.Survivor, gameObject);
 
         if (!IsServer) return;
-        Item item = ItemManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
+        Item item = GameDataManager.SpawnItem(GameDataManager.Instance.GetItemData(0));
         hotbar.RequestPickUpItem(item);
+        if (TaskManager.Instance != null)
+        {
+            TaskManager.Instance.RegenerateTaskInstructions();
+        }
     }
 
     protected override void Awake()
     {
         base.Awake();
         hotbar = GetComponent<Hotbar>();
+        hotbar.OnSwitchItem += OnSwitchItem;
         hotbar.OnPickUpItem += OnPickUpItem;
+        hotbar.OnDropItem += OnDropItem;
         inventory = GetComponent<Inventory>();
-    }
-
-    private void OnPickUpItem(int index, Item item)
-    {
-        if (item.TryGetComponent(out InverseKinematicsObject inverseKinematicsObject))
-        {
-            this.inverseKinematicsObject = inverseKinematicsObject;
-            leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
-            rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
-            lookAtTarget.position = inverseKinematicsObject.LookAtTarget.position;
-        }
+        draggable = GetComponent<Draggable>();
+        animationController = GetComponent<AnimationController>();
     }
 
     private void Update()
@@ -71,22 +82,100 @@ public class SurvivorController : PlayerController
         {
             leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
             rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
-            lookAtTarget.position = inverseKinematicsObject.LookAtTarget.position;
+        }
+    }
+
+    private void OnFireGun()
+    {
+        playerLook.AddXRotation(-1.5f);
+        playerLook.AddRandomYRotation();
+    }
+
+    private void OnPickUpItem(int index, Item item)
+    {
+        //Debug.Log($"PICKED UP: {item.ItemData.Name}");
+        if (item is IAnimate)
+        {
+            IAnimate animate = item as IAnimate;
+            animate.OnAnimationEvent += animationController.HandleAnimationEvent;
+        }
+
+        if (item is Gun)
+        {
+            Gun gun = item as Gun;
+            gun.OnFire += OnFireGun;
+            animationController.SetBool("IK", true);
+            animationController.SetBool("hasGun", true);
+        }
+
+        if (item.TryGetComponent(out InverseKinematicsObject inverseKinematicsObject))
+        {
+            this.inverseKinematicsObject = inverseKinematicsObject;
+            leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
+            rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
+        }
+    }
+
+    private void OnDropItem(int index, Item item)
+    {
+        //Debug.Log($"DROPPED UP: {item.ItemData.Name}");
+        if (item is IAnimate)
+        {
+            IAnimate animate = item as IAnimate;
+            animate.OnAnimationEvent -= animationController.HandleAnimationEvent;
+        }
+
+        if (item is Gun)
+        {
+            Gun gun = item as Gun;
+            gun.OnFire -= OnFireGun;
+            animationController.SetBool("IK", false);
+            animationController.SetBool("hasGun", false);
+        }
+    }
+
+    private void OnSwitchItem(int fromIndex, int toIndex, Item fromItem, Item toItem)
+    {
+        if (toItem != null)
+        {
+            if (toItem is Gun)
+            {
+                animationController.SetBool("IK", true);
+                animationController.SetBool("hasGun", true);
+            }
+            else
+            {
+                animationController.SetBool("IK", false);
+                animationController.SetBool("hasGun", false);
+            }
+
+            if (toItem.TryGetComponent(out InverseKinematicsObject inverseKinematicsObject))
+            {
+                this.inverseKinematicsObject = inverseKinematicsObject;
+                leftHandTarget.position = inverseKinematicsObject.LeftHandTarget.position;
+                rightHandTarget.position = inverseKinematicsObject.RightHandTarget.position;
+            }
+        }
+        else
+        {
+            animationController.SetBool("IK", false);
+            animationController.SetBool("hasGun", false);
         }
     }
 
     public override void OnDeathStateChanged(Health health, bool isDead)
     {
+        base.OnDeathStateChanged(health, isDead);
+        draggable.CanDrag = isDead;
         if (!IsOwner) return;
 
         if (isDead)
         {
-            hotbar.RequestDropAllItems();
-            health.RequestRespawn();
+            hotbar.RequestDropEverything();
         }
         else
         {
-            movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Survivor));
+            draggable.RequestStopUsing();
         }
     }
 

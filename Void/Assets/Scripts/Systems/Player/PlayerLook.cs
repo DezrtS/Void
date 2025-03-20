@@ -13,7 +13,12 @@ public class PlayerLook : NetworkBehaviour
     [Header("Camera")]
     [SerializeField] private bool spawnFirstPersonCamera;
     [SerializeField] private bool lockPlayerCursor;
+    [SerializeField] private Transform cameraRotationRootTransform;
     [SerializeField] private Transform cameraRootTransform;
+
+    [SerializeField] private bool hasLookAtTarget;
+    [SerializeField] private Transform lookAtTransform;
+    [SerializeField] private Transform lookAtTargetTransform;
 
     [Header("Interaction")]
     [SerializeField] private bool canInteract = true;
@@ -29,6 +34,7 @@ public class PlayerLook : NetworkBehaviour
     [SerializeField] private float ySensitivity = 0.01f;
 
     private IInteractable interactable;
+    private UIManager instance;
 
     private void OnEnable()
     {
@@ -62,15 +68,27 @@ public class PlayerLook : NetworkBehaviour
         if (spawnFirstPersonCamera && IsOwner)
         {
             GameObject camera = Instantiate(GameManager.Instance.FirstPersonCamera);
-            camera.GetComponentInChildren<CinemachineCamera>().Follow = cameraRootTransform;
+            CinemachineCamera cinemachineCamera = camera.GetComponentInChildren<CinemachineCamera>();
+            cinemachineCamera.Follow = cameraRootTransform;
+            cinemachineCamera.LookAt = lookAtTargetTransform;
         }
 
         LockCamera(true);
     }
 
+    private void Start()
+    {
+        instance = UIManager.Instance;
+    }
+
     private void Update()
     {
         if (!IsOwner) return;
+
+        if (hasLookAtTarget)
+        {
+            lookAtTransform.position = lookAtTargetTransform.position;
+        }
 
         Vector2 rotationInput = lookInputAction.ReadValue<Vector2>();
 
@@ -79,7 +97,7 @@ public class PlayerLook : NetworkBehaviour
 
         currentXRotation = Mathf.Clamp(currentXRotation, -maxYRotation, maxYRotation);
 
-        cameraRootTransform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
+        cameraRotationRootTransform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
 
         Quaternion newRotation = Quaternion.Euler(0, transform.eulerAngles.y + rotationInput.x * xSensitivity, 0);
 
@@ -96,16 +114,41 @@ public class PlayerLook : NetworkBehaviour
         if (canInteract)
         {
             //Debug.DrawRay(cameraRootTransform.position, cameraRootTransform.forward, Color.red, 1);
-            if (Physics.Raycast(cameraRootTransform.position, cameraRootTransform.forward, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Collide))
+            if (Physics.Raycast(cameraRootTransform.position, (lookAtTargetTransform.position - cameraRootTransform.position).normalized, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Collide))
             {
                 hitInfo.collider.TryGetComponent(out IInteractable interactable);
+
+                //if (this.interactable != interactable)
+                //{
+                    InteractableData interactableData = interactable.GetInteractableData();
+                    instance.SetInteractableText(interactableData);
+                //}
+
                 this.interactable = interactable;
             }
             else
             {
+                if (interactable != null)
+                {
+                    UIManager.Instance.ResetInteractableText();
+                }
                 interactable = null;
             }
         }
+    }
+
+    public void AddXRotation(float value)
+    {
+        if (!IsOwner) return;
+
+        currentXRotation = Mathf.Clamp(currentXRotation + value, -maxYRotation, maxYRotation);
+    }
+
+    public void AddRandomYRotation()
+    {
+        if (!IsOwner) return;
+
+        transform.Rotate(new Vector3(0, Random.Range(-100, 100) / 100f, 0));
     }
 
     public void EnableDisableCameraControls(bool enabled)

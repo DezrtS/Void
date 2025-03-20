@@ -5,16 +5,16 @@ using FMODUnity;
 
 public class AudioManager : Singleton<AudioManager>
 {
-    private readonly List<EventInstance> eventInstances = new List<EventInstance>();
+    private static readonly List<EventInstance> eventInstances = new List<EventInstance>();
 
-    public EventInstance CreateEventInstance(EventReference eventReference)
+    public static EventInstance CreateEventInstance(EventReference eventReference)
     {
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
         eventInstances.Add(eventInstance);
         return eventInstance;
     }
 
-    public EventInstance CreateEventInstance(EventReference eventReference, GameObject attachTo)
+    public static EventInstance CreateEventInstance(EventReference eventReference, GameObject attachTo)
     {
         EventInstance eventInstance = RuntimeManager.CreateInstance(eventReference);
         eventInstances.Add(eventInstance);
@@ -22,19 +22,21 @@ public class AudioManager : Singleton<AudioManager>
         return eventInstance;
     }
 
-    public void RemoveEventInstance(EventInstance eventInstance)
+    public static void RemoveEventInstance(EventInstance eventInstance)
     {
         eventInstances.Remove(eventInstance);
         RuntimeManager.DetachInstanceFromGameObject(eventInstance);
     }
 
-    public void PlayOneShot(EventReference sound)
+    public static void PlayOneShot(EventReference sound)
     {
+        if (sound.IsNull) return;
         RuntimeManager.PlayOneShot(sound);
     }
 
-    public void PlayOneShot(EventReference sound, Vector3 worldPosition)
+    public static void PlayOneShot(EventReference sound, Vector3 worldPosition)
     {
+        if (sound.IsNull) return;
         RuntimeManager.PlayOneShot(sound, worldPosition);
     }
 

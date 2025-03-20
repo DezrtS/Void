@@ -1,12 +1,36 @@
+using FMODUnity;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ProjectileData", menuName = "ScriptableObjects/Projectile", order = 1)]
+[CreateAssetMenu(fileName = "ProjectileData", menuName = "ScriptableObjects/Projectiles/ProjectileData", order = 1)]
 public class ProjectileData : ScriptableObject
 {
-    public float FireSpeed;
-    public float LifetimeDuration;
-    public float Damage;
-    public float Gravity;
-    public LayerMask LayerMask;
-    public GameObject Prefab;
+    [SerializeField] private GameObject projectilePrefab;
+
+    [SerializeField] private float fireSpeed;
+    [SerializeField] private Vector3 angularVelocity;
+    [SerializeField] private float gravity;
+
+    [SerializeField] private bool useBoxCast = true;
+    [SerializeField] private Vector2 boxCastSize = Vector2.one;
+
+    [SerializeField] private float lifetimeDuration;
+    [SerializeField] private float damage;
+    [SerializeField] private float knockback;
+
+    [SerializeField] private GameObject hitEffect;
+    [SerializeField] private EventReference hitSound;
+    [SerializeField] private LayerMask layerMask;
+
+    public GameObject ProjectilePrefab => projectilePrefab;
+    public float FireSpeed => fireSpeed;
+    public Vector3 AngularVelocity => angularVelocity;
+    public float Gravity => gravity;
+    public bool UseBoxCast => useBoxCast;
+    public Vector2 BoxCastSize => boxCastSize;
+    public float LifetimeDuration => lifetimeDuration;
+    public float Damage => damage;
+    public float Knockback => knockback;
+    public GameObject HitEffect => hitEffect;
+    public EventReference HitSound => hitSound;
+    public LayerMask LayerMask => layerMask;
 }

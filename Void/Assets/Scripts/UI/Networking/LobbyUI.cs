@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -11,6 +9,7 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private GameObject createJoinButtons;
     [SerializeField] private Button createGameButton;
     [SerializeField] private Button joinGameButton;
+    [SerializeField] private Button quitGameButton;
 
     [SerializeField] private TMP_InputField IPAddressInputField;
 
@@ -18,6 +17,7 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] private Button changeRoleButton;
     [SerializeField] private TextMeshProUGUI roleText;
     [SerializeField] private Button readyButton;
+    [SerializeField] private Button goBackButton;
 
     private bool monsterSelected = false;
 
@@ -28,7 +28,7 @@ public class LobbyUI : MonoBehaviour
             string ipAddress = "127.0.0.1";
             if (IPAddressInputField.text != string.Empty) ipAddress = IPAddressInputField.text;
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(ipAddress, 7777);
-            GameMultiplayer.Instance.StartHost();
+            GameMultiplayer.StartHost();
             createJoinButtons.SetActive(false);
             playerButtons.SetActive(true);
         });
@@ -38,21 +38,33 @@ public class LobbyUI : MonoBehaviour
             string ipAddress = "127.0.0.1";
             if (IPAddressInputField.text != string.Empty) ipAddress = IPAddressInputField.text;
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(ipAddress, 7777);
-            GameMultiplayer.Instance.StartClient();
+            GameMultiplayer.StartClient();
             createJoinButtons.SetActive(false);
             playerButtons.SetActive(true);
+        });
+
+        quitGameButton.onClick.AddListener(() =>
+        {
+            Application.Quit();
         });
 
         changeRoleButton.onClick.AddListener(() =>
         {
             monsterSelected = !monsterSelected;
             roleText.text = monsterSelected ? "Change To Survivor" : "Change To Monster";
-            GameManager.Instance.RequestPlayerRoleServerRpc(monsterSelected ? GameManager.PlayerRole.Monster : GameManager.PlayerRole.Survivor);
+            GameManager.Instance.RequestSetPlayerRole(NetworkManager.Singleton.LocalClientId, monsterSelected ? GameManager.PlayerRole.Monster : GameManager.PlayerRole.Survivor);
         });
 
         readyButton.onClick.AddListener(() =>
         {
-            PlayerReadyManager.Instance.RequestPlayerReadyServerRpc();
+            PlayerReadyManager.Instance.RequestSetPlayerReadyState(NetworkManager.Singleton.LocalClientId, true);
+        });
+
+        goBackButton.onClick.AddListener(() =>
+        {
+            NetworkManager.Singleton.Shutdown();
+            playerButtons.SetActive(false);
+            createJoinButtons.SetActive(true);
         });
     }
 

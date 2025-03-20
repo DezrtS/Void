@@ -18,7 +18,8 @@ public class SelectionWheel : MonoBehaviour
     [SerializeField] private WheelSectionData[] sections = new WheelSectionData[0];
     [SerializeField] private RectTransform infoHolder;
     [SerializeField] private TextMeshProUGUI titleHolder;
-    [SerializeField] private TextMeshProUGUI textHolder;
+    [SerializeField] private TextMeshProUGUI primaryTextHolder;
+    [SerializeField] private TextMeshProUGUI secondaryTextHolder;
 
     [Header("Options")]
     [SerializeField] private bool allowInnerSelection;
@@ -153,7 +154,7 @@ public class SelectionWheel : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             GameObject section = Instantiate(sectionPrefab, selectionWheelHolder.transform);
-            GameObject icon = Instantiate(iconPrefab, selectionWheelHolder.transform);
+            //GameObject icon = Instantiate(iconPrefab, selectionWheelHolder.transform);
 
             wheelSections[i] = section.GetComponent<WheelSection>();
             wheelSections[i].Initialize(i, intervalAngle, angleMargin, radius);
@@ -162,9 +163,9 @@ public class SelectionWheel : MonoBehaviour
             if (i < sections.Length)
             {
                 wheelSections[i].InitializeData(sections[i]);
-                icon.GetComponent<Image>().sprite = sections[i].SectionSprite;
-                icon.transform.position = wheelSections[i].Direction * (radius - radius * 0.13f) + (Vector2)transform.position;
-                icon.transform.SetParent(wheelSections[i].transform, false);
+                //icon.GetComponent<Image>().sprite = sections[i].SectionSprite;
+                //icon.transform.position = wheelSections[i].Direction * (radius - radius * 0.13f) + (Vector2)transform.position;
+                //icon.transform.SetParent(wheelSections[i].transform, false);
             }
         }
     }
@@ -222,22 +223,26 @@ public class SelectionWheel : MonoBehaviour
         if (!selectedWheelSection || !selectedWheelSection.Data)
         {
             titleHolder.text = string.Empty;
-            textHolder.text = string.Empty;
+            primaryTextHolder.text = string.Empty;
+            secondaryTextHolder.text = string.Empty;
             return;
         }
 
         if (selectedWheelSection.Active)
         {
             titleHolder.color = activeTextColor;
-            textHolder.color = activeTextColor;
+            primaryTextHolder.color = activeTextColor;
+            secondaryTextHolder.color = activeTextColor;
         }
         else
         {
             titleHolder.color = inactiveTextColor;
-            textHolder.color = inactiveTextColor;
+            primaryTextHolder.color = inactiveTextColor;
+            secondaryTextHolder.color = inactiveTextColor;
         }
 
-        titleHolder.text = selectedWheelSection.Data.GetFormattedTitle();
-        textHolder.text = selectedWheelSection.Data.GetFormattedDescription();
+        titleHolder.text = selectedWheelSection.Data.GetTitle();
+        primaryTextHolder.text = selectedWheelSection.Data.GetPrimaryText();
+        secondaryTextHolder.text = selectedWheelSection.Data.GetSecondaryText();
     }
 }

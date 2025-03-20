@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5708900129364935595}
   - component: {fileID: -2539449346179503360}
   - component: {fileID: 9106116638687197553}
+  - component: {fileID: 6234776376339690202}
   - component: {fileID: 3688373138169565638}
   - component: {fileID: -973645888921241733}
   - component: {fileID: 5135502783942027889}
@@ -84,7 +85,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4025352129
+  GlobalObjectIdHash: 374236993
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -107,7 +108,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: a4705f72fca99c24ba2f6201bb0f79fd, type: 2}
   canPickUp: 1
-  canDrop: 1
+  canDrop: 0
+  pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
+    type: 2}
+  tutorialData: {fileID: 11400000, guid: 45494c4243cbbf94c9abc28774e1436b, type: 2}
+  holdingPositionData: {fileID: 0}
   projectileSpawnerObject: {fileID: 4735076810010294097}
   fireRate: 0.1
   maxAmmo: 30
@@ -134,6 +139,22 @@ MonoBehaviour:
       Data3: -1381415759
       Data4: -750953849
     Path: event:/Prototype/Weapons/Reload
+--- !u!114 &6234776376339690202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 159275963486535576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fe5e18afa65f44f827ffdba52200d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recoilAmount: 2
+  recoilSpeed: 10
+  returnSpeed: 20
+  cameraRecoilMultiplier: 0.5
 --- !u!65 &3688373138169565638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -212,7 +233,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHandTarget: {fileID: 3890978826423210217}
   rightHandTarget: {fileID: 99772846327228237}
-  lookAtTarget: {fileID: 4883090785035617714}
 --- !u!114 &-3593698300735499805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,7 +356,7 @@ Transform:
   m_GameObject: {fileID: 4150505648786323698}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.026, z: -0.091}
+  m_LocalPosition: {x: 0.09, y: -0.004, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -351,7 +371,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4381912256224793128}
-  - component: {fileID: 9082257127205320915}
+  - component: {fileID: 3143233788407340831}
   - component: {fileID: 1465321600957527110}
   m_Layer: 0
   m_Name: ProjectileSpawner
@@ -375,7 +395,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3881246837650636354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9082257127205320915
+--- !u!114 &3143233788407340831
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -384,11 +404,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4735076810010294097}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e4a18d7db7862f4bb3ec6a52a837010, type: 3}
+  m_Script: {fileID: 11500000, guid: b5ff5b09c6c33a2448e4e10ddea8e5ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: 57765bcfb44dad646b54caad86ddf2a3, type: 2}
-  objectPool: {fileID: 1465321600957527110}
 --- !u!114 &1465321600957527110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,9 +421,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Bullet
-  poolSize: 15
-  dynamicSize: 0
-  destroyObjectsOverPoolSize: 0
+  poolSize: 30
+  dynamicSize: 1
+  destroyObjectsOverPoolSize: 1
 --- !u!1 &5169806097988512872
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,7 +449,7 @@ Transform:
   m_GameObject: {fileID: 5169806097988512872}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.075, z: 0.458}
+  m_LocalPosition: {x: -0.2, y: 0.23, z: 0.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

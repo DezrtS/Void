@@ -1,8 +1,12 @@
 using FMODUnity;
+using System;
 using UnityEngine;
 
-public class Gun : Item, IReload
+public class Gun : Item, IReload, IAnimate
 {
+    public event IAnimate.AnimationEventHandler OnAnimationEvent;
+    public event Action OnFire;
+
     [SerializeField] private GameObject projectileSpawnerObject;
     [SerializeField] private float fireRate;
     [SerializeField] private int maxAmmo;
@@ -22,6 +26,8 @@ public class Gun : Item, IReload
     private float reloadTimer;
     private float windupTimer;
 
+    private Recoil recoil;
+
     public int MaxAmmo => maxAmmo;
     public int Ammo { get { return ammo; } set { ammo = value; } }
 
@@ -37,8 +43,9 @@ public class Gun : Item, IReload
 
     private void Start()
     {
-        networkGun = networkItem as NetworkGun;
+        networkGun = NetworkItem as NetworkGun;
         projectileSpawner = projectileSpawnerObject.GetComponent<IProjectileSpawner>();
+        recoil = GetComponent<Recoil>();  
     }
 
     private void Update()
@@ -97,18 +104,27 @@ public class Gun : Item, IReload
     {
         if (ammo <= 0)
         {
-            AudioManager.Instance.PlayOneShot(emptySound, transform.position);
+            AudioManager.PlayOneShot(emptySound, transform.position);
             return;
         }
 
         fireRateTimer = fireRate;
         projectileSpawner.SpawnProjectile();
-        AudioManager.Instance.PlayOneShot(fireSound, transform.position);
+        //recoil.ApplyRecoil();
+        OnFire?.Invoke();
+        OnAnimationEvent?.Invoke(IAnimate.AnimationEventType.Trigger, "Fire", null);
+        AudioManager.PlayOneShot(fireSound, transform.position);
     }
 
     public void Reload()
     {
-        AudioManager.Instance.PlayOneShot(reloadSound, transform.position);
+        AudioManager.PlayOneShot(reloadSound, transform.position);
         reloadTimer = timeToReload;
+    }
+
+    public override void Interact(GameObject interactor)
+    {
+        base.Interact(interactor);
+
     }
 }

@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 8302959232339777597}
   - component: {fileID: 5953057538168339322}
   - component: {fileID: 7054214674273286820}
+  - component: {fileID: 3074593700789230244}
   - component: {fileID: -3088496442184838013}
-  - component: {fileID: 3159668289627401339}
   - component: {fileID: -6156844679204154839}
   - component: {fileID: 3690518019917096240}
-  - component: {fileID: 1170626076478034432}
+  - component: {fileID: 8610248309510076501}
   m_Layer: 6
   m_Name: Explosive Grenade
   m_TagString: Untagged
@@ -87,6 +87,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &3074593700789230244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512034910407666928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 584d89eda0d2a9c42aba9d684c6ced46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 1e089afb4eafec348bf8d679315b7421, type: 2}
+  canPickUp: 1
+  canDrop: 1
+  pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
+    type: 2}
+  tutorialData: {fileID: 11400000, guid: 5af47656de132614ab048f694ee7fdc5, type: 2}
 --- !u!114 &-3088496442184838013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,31 +126,6 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &3159668289627401339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1512034910407666928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e16aa4559787d74ebc8e0711c11f334, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 015dc5a18587f6448b49122dfb8f4d13, type: 2}
-  canPickUp: 1
-  canDrop: 1
-  thowSpeed: 15
-  spinSpeed: 2
-  radius: 5
-  damage: 90
-  timeToActivation: 2
-  effectableLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  explosionEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
-    type: 3}
 --- !u!114 &-6156844679204154839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1170626076478034432
+--- !u!114 &8610248309510076501
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,7 +178,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1512034910407666928}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c8f29caf8e92894c9874fc4d7401726, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ae8f3f2ce45d584b82c0701e1d519d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4916593931522308020

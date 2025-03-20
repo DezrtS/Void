@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EncodableAsset" id="{77e91477-e314-4aca-83aa-18705360f145}">
+		<property name="assetPath">
+			<value>Tasks/Tasks/Battery/BatteryDrop/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d0ea8ef8-387f-4d8e-a694-378296a36084}</destination>
+		</relationship>
+	</object>
+</objects>

@@ -7,7 +7,7 @@ public class PlayerMovement : MovementController
     private Rigidbody rig;
     private CapsuleCollider capsuleCollider;
 
-    [SerializeField] private Animator animator;
+    AnimationController animationController;
 
     private InputActionMap movementActionMap;
     private InputAction movementInputAction;
@@ -17,6 +17,9 @@ public class PlayerMovement : MovementController
     private float defaultColliderHeight;
 
     [SerializeField] private Transform orientationTransform;
+    [SerializeField] private Transform groundedCheckTransform;
+    [SerializeField] private float groundedCheckRadius = 0.1f;
+    [SerializeField] private LayerMask groundedCheckLayerMask;
 
     [Header("Acceleration")]
     [SerializeField] private Stat acceleration = new Stat(4);
@@ -92,11 +95,14 @@ public class PlayerMovement : MovementController
         movementActionMap.Disable();
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         rig = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         defaultColliderHeight = capsuleCollider.height;
+
+        animationController = GetComponent<AnimationController>();
 
         if (TryGetComponent(out PlayerStats playerStats))
         {
@@ -114,24 +120,31 @@ public class PlayerMovement : MovementController
         }
     }
 
+    public override void SetMovementDisabled(bool isMovementDisabled)
+    {
+        base.SetMovementDisabled(isMovementDisabled);
+        rig.isKinematic = isMovementDisabled;
+    }
+
     private void FixedUpdate()
     {
-        if (!IsOwner) return;
+        if (!NetworkMovementController.IsOwner) return;
         HandleMovement();
     }
 
     private void Update()
     {
-        if (!IsOwner) return;
-        Vector3 localVelocity = WorldToLocalVelocity(GetVelocity(), orientationTransform.rotation);
-        animator.SetFloat("xinput", localVelocity.x);
-        animator.SetFloat("yinput", localVelocity.z);
+        if (!NetworkMovementController.IsOwner) return;
+
+        Vector3 localVelocity = WorldToLocalVelocity(GetVelocity(), orientationTransform.rotation) / sprintSpeed.BaseValue;
+        animationController.SetFloat("xinput", localVelocity.x);
+        animationController.SetFloat("yinput", localVelocity.z);
     }
 
     private void HandleMovement()
     {
         Vector2 moveInput = movementInputAction.ReadValue<Vector2>();
-        if (IsDisabled) moveInput = Vector2.zero;
+        if (IsInputDisabled) moveInput = Vector2.zero;
 
         Vector3 move = orientationTransform.forward * moveInput.y + orientationTransform.right * moveInput.x;
         move.y = 0;
@@ -152,19 +165,21 @@ public class PlayerMovement : MovementController
 
     private void Jump(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
-        rig.AddForce(Vector3.up * jumpPower.Value, ForceMode.VelocityChange);
+        if (!NetworkMovementController.IsOwner || IsInputDisabled) return;
+
+        if (!IsGrounded()) return;
+        ApplyForce(Vector3.up * jumpPower.Value, ForceMode.VelocityChange);
     }
 
     private void Sprint(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!NetworkMovementController.IsOwner || IsInputDisabled) return;
         isSprinting = context.performed;
     }
 
     private void Crouch(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!NetworkMovementController.IsOwner || IsInputDisabled) return;
         isCrouched = context.performed;
         
         if (isCrouched)
@@ -184,11 +199,19 @@ public class PlayerMovement : MovementController
 
     public override void SetVelocity(Vector3 velocity)
     {
+        if (IsMovementDisabled) return;
         rig.linearVelocity = velocity;
     }
 
     public override void ApplyForce(Vector3 force, ForceMode forceMode)
     {
+        if (IsMovementDisabled) return;
         rig.AddForce(force, forceMode);
+    }
+
+    public bool IsGrounded()
+    {
+        Collider[] colliders = Physics.OverlapSphere(groundedCheckTransform.position, groundedCheckRadius, groundedCheckLayerMask);
+        return (colliders.Length > 0);
     }
 }

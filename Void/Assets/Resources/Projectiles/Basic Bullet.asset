@@ -12,11 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5796ad0d0abff844a2564234f4daf80, type: 3}
   m_Name: Basic Bullet
   m_EditorClassIdentifier: 
-  FireSpeed: 100
-  LifetimeDuration: 10
-  Damage: 2
-  Gravity: -9.8
-  LayerMask:
+  projectilePrefab: {fileID: 132462312740229045, guid: 0da59b4850ef339479389c489cd781d4,
+    type: 3}
+  fireSpeed: 150
+  angularVelocity: {x: 0, y: 0, z: 0}
+  gravity: -9.8
+  useBoxCast: 0
+  boxCastSize: {x: 0.05, y: 0.05}
+  lifetimeDuration: 10
+  damage: 5
+  knockback: 0
+  hitEffect: {fileID: 2836366377352891722, guid: b5d45f1b5ffda594d999b679bb100e6e,
+    type: 3}
+  hitSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  Prefab: {fileID: 3948855964855248953, guid: e996c3baede487c44a87403b581c8ab6, type: 3}

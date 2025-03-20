@@ -1,3 +1,4 @@
+using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -65,5 +66,26 @@ public class GameDataManager : Singleton<GameDataManager>
     public TaskData GetTaskData(int index)
     {
         return tasks[index];
+    }
+
+    public static Item SpawnItem(ItemData itemData)
+    {
+        GameObject spawnedItem = Instantiate(itemData.ItemPrefab);
+        Item item = spawnedItem.GetComponent<Item>();
+        item.NetworkItem.NetworkObject.Spawn(true);
+        return item;
+    }
+
+    public static Mutation SpawnMutation(int mutationDataIndex)
+    {
+        return SpawnMutation(Instance.GetMutationData(mutationDataIndex));
+    }
+
+    public static Mutation SpawnMutation(MutationData mutationData)
+    {
+        GameObject spawnedMutation = Instantiate(mutationData.MutationPrefab);
+        Mutation mutation = spawnedMutation.GetComponent<Mutation>();
+        mutation.NetworkUseable.NetworkObject.Spawn(true);
+        return mutation;
     }
 }

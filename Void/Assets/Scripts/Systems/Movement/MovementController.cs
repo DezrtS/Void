@@ -1,10 +1,56 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public abstract class MovementController : NetworkBehaviour
+public abstract class MovementController : MonoBehaviour
 {
-    protected bool isDisabled;
-    public bool IsDisabled => isDisabled;
+    private NetworkMovementController networkMovementController;
+    private bool isMovementDisabled;
+    private bool isInputDisabled;
+
+    public NetworkMovementController NetworkMovementController => networkMovementController;
+    public bool IsMovementDisabled => isMovementDisabled;
+    public bool IsInputDisabled => isInputDisabled;
+
+    public void RequestSetMovementDisabled(bool value) => networkMovementController.SetMovementDisabledServerRpc(value);
+    public void RequestSetInputDisabled(bool value) => networkMovementController.SetInputDisabledServerRpc(value);
+    public void RequestSetVelocity(Vector3 velocity) => networkMovementController.SetVelocityServerRpc(velocity);
+    public void RequestSetRotation(Quaternion rotation) => networkMovementController.SetRotationServerRpc(rotation);
+    public void RequestApplyForce(Vector3 force, ForceMode forceMode) => networkMovementController.ApplyForceServerRpc(force, forceMode);
+    public void RequestTeleport(Vector3 location) => networkMovementController.TeleportServerRpc(location);
+
+    protected virtual void Awake()
+    {
+        networkMovementController = GetComponent<NetworkMovementController>();
+    }
+
+    public virtual void SetMovementDisabled(bool isMovementDisabled)
+    {
+        this.isMovementDisabled = isMovementDisabled;
+    }
+
+    public void SetInputDisabled(bool isInputDisabled)
+    {
+        this.isInputDisabled = isInputDisabled;
+    }
+
+    public abstract Vector3 GetVelocity();
+    public abstract void SetVelocity(Vector3 velocity);
+    public virtual Quaternion GetRotation()
+    {
+        return transform.rotation;
+    }
+
+    public virtual void SetRotation(Quaternion rotation)
+    {
+        transform.rotation = rotation;
+    }
+
+    public abstract void ApplyForce(Vector3 force, ForceMode forceMode);
+
+    public virtual void Teleport(Vector3 location)
+    {
+        transform.position = location;
+    }
 
     protected static float GetAcceleration(float maxSpeed, float timeToReachFullSpeed)
     {
@@ -37,7 +83,7 @@ public abstract class MovementController : NetworkBehaviour
 
         if (velocityDifference.magnitude < accelerationIncrement)
         {
-            return velocityDifference; 
+            return velocityDifference;
         }
         else
         {
@@ -51,24 +97,5 @@ public abstract class MovementController : NetworkBehaviour
 
         Vector3 localVelocity = inverseRotation * worldVelocity;
         return localVelocity;
-    }
-
-    public abstract Vector3 GetVelocity();
-    public abstract void SetVelocity(Vector3 velocity);
-    public virtual Quaternion GetRotation()
-    {
-        return transform.rotation;
-    }
-
-    public virtual void SetRotation(Quaternion rotation)
-    {
-        transform.rotation = rotation;
-    }
-
-    public abstract void ApplyForce(Vector3 force, ForceMode forceMode);
-
-    public virtual void Teleport(Vector3 location)
-    {
-        transform.position = location;
     }
 }

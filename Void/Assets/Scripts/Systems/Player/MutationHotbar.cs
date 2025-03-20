@@ -1,78 +1,90 @@
-using System;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
 public class MutationHotbar : MonoBehaviour
 {
-    private List<Mutation> mutations = new List<Mutation>();
+    public delegate void MutationEventHandler(Mutation mutation, int index);
+    public delegate void MutationSwitchEventHandler(int fromIndex, int toIndex);
+    public event MutationEventHandler OnAddMutation;
+    public event MutationEventHandler OnRemoveMutation;
+    public event MutationSwitchEventHandler OnSwitchMutation;
+
+    [SerializeField] private Transform activeTransform;
+
+    private NetworkMutationHotbar networkMutationHotbar;
     private int selectedIndex;
 
-    public Mutation GetActiveMutation()
-    {
-        if (mutations.Count <= 0) return null;
+    private List<Mutation> mutations;
 
-        return mutations[selectedIndex];
+    public Transform ActiveTransform => activeTransform;
+    public NetworkMutationHotbar NetworkMutationHotbar => networkMutationHotbar;
+    public int SelectedIndex => selectedIndex;
+    public int MutationCount => mutations.Count;
+
+    public void RequestSwitchToMutation(int index) => networkMutationHotbar.SwitchToMutationServerRpc(index);
+    public void RequestAddMutation(int mutationDataIndex) => networkMutationHotbar.AddMutationServerRpc(mutationDataIndex);
+    public void RequestRemoveMutation(int index) => networkMutationHotbar.RemoveMutationServerRpc(index);
+
+    private void Awake()
+    {
+        networkMutationHotbar = GetComponent<NetworkMutationHotbar>();
+        mutations = new List<Mutation>();
     }
 
-    public void AddMutation(MutationData mutation)
+    public Mutation GetMutation()
     {
-        AddMutationServerRpc(GameDataManager.Instance.GetMutationDataIndex(mutation));
+        return GetMutation(selectedIndex);
     }
 
-    public void AddMutationClientServerSide(Mutation mutation)
+    public Mutation GetMutation(int index)
     {
-        mutations.Add(mutation);
-        mutation.SetupMutation(gameObject);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void AddMutationServerRpc(int mutationIndex, ServerRpcParams rpcParams = default)
-    {
-        MutationData mutationData = GameDataManager.Instance.GetMutationData(mutationIndex);
-        GameObject spawnedMutation = Instantiate(mutationData.MutationPrefab);
-        Mutation mutation = spawnedMutation.GetComponent<Mutation>();
-        mutation.NetworkObject.Spawn();
-        mutation.NetworkObject.TrySetParent(transform);
-        AddMutationClientServerSide(mutation);
-        AddMutationClientRpc(mutation.NetworkObjectId);
-    }
-
-    public void AddMutationClientRpc(ulong mutationNetworkObjectId, ServerRpcParams rpcParams = default)
-    {
-        NetworkObject mutationNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects[mutationNetworkObjectId];
-        AddMutationClientServerSide(mutationNetworkObject.GetComponent<Mutation>());
-    }
-
-    public void SwitchMutation(int direction)
-    {
-        int newIndex = (Mathf.Abs(selectedIndex + direction)) % mutations.Count;
-        SwitchToMutation(newIndex);
+        if (mutations.Count <= index) return null;
+        return mutations[index];
     }
 
     public void SwitchToMutation(int index)
     {
-        SwitchToMutationClientServerSide(index);
-        SwitchToMutationServerRpc(index);
-    }
-
-    public void SwitchToMutationClientServerSide(int index)
-    {
-        //OnSwitchItem?.Invoke(selectedIndex, index);
+        OnSwitchMutation?.Invoke(selectedIndex, index);
         selectedIndex = index;
+        Debug.Log($"Index: {selectedIndex}, {GetMutation().MutationData.DisplayName}");
+
+        if (networkMutationHotbar.IsOwner)
+        {
+            Mutation mutation = mutations[index];
+            if (mutation != null)
+            {
+                UIManager.Instance.SetTutorialText(mutation.TutorialData);
+            }
+            else
+            {
+                UIManager.Instance.ResetTutorialText();
+            }
+        }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void SwitchToMutationServerRpc(int index, ServerRpcParams rpcParams = default)
+    public void RequestAddMutation(MutationData mutationData) => RequestAddMutation(GameDataManager.Instance.GetMutationDataIndex(mutationData));
+
+    public void AddMutation(Mutation mutation)
     {
-        SwitchToMutationClientServerSide(index);
-        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(rpcParams);
-        SwitchToMutationClientRpc(index, clientRpcParams);
+        mutations.Add(mutation);
+        OnAddMutation?.Invoke(mutation, mutations.Count - 1);
+        mutation.SetupMutation(gameObject);
+
+        if (networkMutationHotbar.IsOwner) mutation.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
 
-    [ClientRpc(RequireOwnership = false)]
-    public void SwitchToMutationClientRpc(int index, ClientRpcParams clientRpcParams = default)
+    public void RequestRemoveMutation(Mutation mutation)
     {
-        SwitchToMutationClientServerSide(index);
+        if (mutations.Contains(mutation))
+        {
+            RequestRemoveMutation(mutations.IndexOf(mutation));
+        }
+    }
+
+    public void RemoveMutation(int index)
+    {
+        Mutation mutation = mutations[index];
+        mutations.RemoveAt(index);
+        OnRemoveMutation?.Invoke(mutation, index);
     }
 }

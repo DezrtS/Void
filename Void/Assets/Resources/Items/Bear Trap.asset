@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11f298251be01fb42bfdb065697bcf73, type: 3}
+  m_Name: Bear Trap
+  m_EditorClassIdentifier: 
+  Name: Bear Trap
+  Description: A deployable trap
+  ItemSprite: {fileID: 21300000, guid: 0398b851c79455d4c99f70a5c40f2a71, type: 3}
+  ItemPrefab: {fileID: 1587995057012278745, guid: af1f3308b72c64142a24125d3c29085d,
+    type: 3}
+  deployRange: 5
+  deployLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
