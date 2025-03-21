@@ -14,7 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Void Claw
   description: A claw-like projectile
-  displaySprite: {fileID: 21300000, guid: af50a2a4c3f4bd04dbcf5b4faf7f1e70, type: 3}
+  displaySprite: {fileID: 2141611656, guid: 53697cf359e39c54aa2ca173af17bd9d, type: 3}
   mutationPrefab: {fileID: 4142632218152818884, guid: ef71e6bb3c3e9bb46bd14200b45019de,
     type: 3}
   cooldown: 1
+  useSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

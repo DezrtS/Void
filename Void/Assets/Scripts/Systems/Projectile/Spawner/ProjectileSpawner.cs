@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
 {
@@ -8,6 +9,7 @@ public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
     public event IProjectileSpawner.ProjectileEventHandler OnDestroy;
 
     [SerializeField] private ProjectileData projectileData;
+    [SerializeField] private List<VisualEffect> visualEffects;
     private ObjectPool objectPool;
 
     private void Awake()
@@ -26,6 +28,11 @@ public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
         GameObject projectileObject = objectPool.GetObject();
         if (projectileObject == null) return;
 
+        foreach (VisualEffect visualEffect in visualEffects)
+        {
+            visualEffect.Reinit();
+            visualEffect.Play();
+        }
         projectileObject.transform.SetPositionAndRotation(position, rotation);
         Projectile projectile = projectileObject.GetComponent<Projectile>();
         OnSpawn?.Invoke(projectile, this);

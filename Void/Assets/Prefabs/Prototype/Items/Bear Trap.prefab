@@ -132,6 +132,13 @@ MonoBehaviour:
   initialDamage: 50
   damage: 5
   duration: 5
+  activateSound:
+    Guid:
+      Data1: -1812609364
+      Data2: 1149557830
+      Data3: 1587640249
+      Data4: -1701083853
+    Path: event:/Prototype/Items/BearTrap/BearTrapTrigger
 --- !u!114 &8893412017956493710
 MonoBehaviour:
   m_ObjectHideFlags: 0

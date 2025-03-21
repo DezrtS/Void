@@ -275,8 +275,24 @@ MonoBehaviour:
     baseValue: 7
   crouchSpeed:
     baseValue: 2
+  canJump: 1
   jumpPower:
     baseValue: 7
+  jumpSound:
+    Guid:
+      Data1: -402041278
+      Data2: 1213661273
+      Data3: 1674658953
+      Data4: -284470857
+    Path: event:/Prototype/Survivor/Jump/JumpLiftOff
+  landJumpSound:
+    Guid:
+      Data1: 1887411688
+      Data2: 1181870443
+      Data3: 1258723482
+      Data4: 2028470742
+    Path: event:/Prototype/Survivor/Jump/JumpLanding
+  canCrouch: 1
   crouchHeight:
     baseValue: 1
 --- !u!114 &7382960481825333238
@@ -351,7 +367,6 @@ MonoBehaviour:
   - {fileID: 8877575038918965678}
   - {fileID: 8979241602379522693}
   - {fileID: 4856796755343302328}
-  dragInteractableData: {fileID: 0}
   leftHandTarget: {fileID: 3099789985793332728}
   rightHandTarget: {fileID: 4562941766658243511}
 --- !u!114 &4788557165388811619
@@ -374,6 +389,20 @@ MonoBehaviour:
   healthRegenerationRate:
     baseValue: 5
   healthRegenerationDelay: 1
+  hurtSound:
+    Guid:
+      Data1: 1298896073
+      Data2: 1091472507
+      Data3: -530929748
+      Data4: 1793110144
+    Path: event:/Prototype/Survivor/Damage/PlDamageBlunt
+  deathSound:
+    Guid:
+      Data1: 316750510
+      Data2: 1216692522
+      Data3: -949676648
+      Data4: 1387233187
+    Path: event:/Prototype/Survivor/Death/PlayerDies
 --- !u!114 &-1442178192573862978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,6 +504,27 @@ MonoBehaviour:
     type: 2}
   dropInteractableData: {fileID: 11400000, guid: a224c20df4c75a24ca38584b5a3d2ee8,
     type: 2}
+  dragSound:
+    Guid:
+      Data1: 1936307440
+      Data2: 1172643231
+      Data3: -1186217303
+      Data4: 1405101078
+    Path: event:/Prototype/Tasks/DeadPlayer/PickUpBody
+  stopDraggingSound:
+    Guid:
+      Data1: 1059040681
+      Data2: 1273759724
+      Data3: 1065302413
+      Data4: -29466312
+    Path: event:/Prototype/Tasks/DeadPlayer/BodyThump
+  draggingSound:
+    Guid:
+      Data1: -1258015881
+      Data2: 1325734002
+      Data3: 873877136
+      Data4: 1031112157
+    Path: event:/Prototype/Tasks/DeadPlayer/DragBody
 --- !u!114 &-755659047214935387
 MonoBehaviour:
   m_ObjectHideFlags: 0

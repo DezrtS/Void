@@ -1,3 +1,4 @@
+using FMODUnity;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,6 +63,9 @@ public class Health : MonoBehaviour
     [SerializeField] private bool canRegenerateHealth;
     [SerializeField] protected Stat healthRegenerationRate = new(5);
     [SerializeField] protected float healthRegenerationDelay;
+
+    [SerializeField] private EventReference hurtSound;
+    [SerializeField] private EventReference deathSound;
 
     private NetworkHealth networkHealth;
     private bool isDead;
@@ -130,6 +134,7 @@ public class Health : MonoBehaviour
         if (currentHealth > value)
         {
             healthRegenerationDelayTimer = healthRegenerationDelay;
+            AudioManager.PlayOneShot(hurtSound, gameObject);
         }
 
         OnCurrentHealthChanged?.Invoke(currentHealth, value, MaxHealth);
@@ -139,6 +144,7 @@ public class Health : MonoBehaviour
     public void SetDeathState(bool isDead)
     {
         this.isDead = isDead;
+        if (isDead) AudioManager.PlayOneShot(deathSound, gameObject);
         if (networkHealth.IsServer && !isDead) RequestFullHeal();
         OnDeathStateChanged?.Invoke(this, isDead);
     }

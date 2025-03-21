@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class BearTrap : DeployableItem
@@ -7,6 +8,7 @@ public class BearTrap : DeployableItem
     [SerializeField] private float initialDamage;
     [SerializeField] private float damage;
     [SerializeField] private float duration;
+    [SerializeField] private EventReference activateSound;
     
     private NetworkBearTrap networkBearTrap;
     private bool isActive;
@@ -32,7 +34,7 @@ public class BearTrap : DeployableItem
     {
         if (durationTimer > 0)
         {
-            if (networkBearTrap.IsServer) captured.RequestDamage(damage * Time.fixedDeltaTime);
+            //if (networkBearTrap.IsServer) captured.RequestDamage(damage * Time.fixedDeltaTime);
             durationTimer -= Time.fixedDeltaTime;
             if (durationTimer <= 0)
             {
@@ -46,19 +48,26 @@ public class BearTrap : DeployableItem
 
     public override void Deploy()
     {
-        base.Deploy();
         if (NetworkItem.IsServer) trigger.OnEnter += OnEnter;
+        if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
+        base.Deploy();
     }
 
     public override void Undeploy()
     {
         base.Undeploy();
         if (NetworkItem.IsServer) trigger.OnEnter -= OnEnter;
+        if (networkBearTrap.IsOwner) animator.SetBool("Active", true);
     }
 
     public void OnEnter(Trigger trigger, GameObject gameObject)
     {
         if (captured != null) return;
+        //if (!IsDeployed)
+        //{
+        //    trigger.OnEnter -= OnEnter;
+        //    return;
+        //}
 
         if (gameObject.TryGetComponent(out captured))
         {
@@ -77,6 +86,7 @@ public class BearTrap : DeployableItem
         isActive = true;
         canPickUp = false;
         durationTimer = duration;
+        AudioManager.PlayOneShot(activateSound, gameObject);
         if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
     }
 
@@ -93,6 +103,5 @@ public class BearTrap : DeployableItem
             }
         }
         captured = null;
-        if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
     }
 }

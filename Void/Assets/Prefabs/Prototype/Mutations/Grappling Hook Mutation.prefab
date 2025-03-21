@@ -53,6 +53,13 @@ MonoBehaviour:
   projectileSpawner: {fileID: 8439705898875105305}
   spawnProjectileDelay: 0.5
   spawnProjectileTrigger: GrapplingHookStart
+  spawnProjectileSound:
+    Guid:
+      Data1: -1543203126
+      Data2: 1133680209
+      Data3: -1274747729
+      Data4: -734287913
+    Path: event:/Prototype/Mutations/GrappleHook/GrappleRelease
   pullForce: 75
 --- !u!114 &8439705898875105305
 MonoBehaviour:
@@ -67,6 +74,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: 9e767b1962563c146a2d366f4949588f, type: 2}
+  visualEffects: []
 --- !u!114 &7036162325047722773
 MonoBehaviour:
   m_ObjectHideFlags: 0

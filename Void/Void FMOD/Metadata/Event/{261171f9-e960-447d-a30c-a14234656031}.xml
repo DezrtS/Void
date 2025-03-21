@@ -5,7 +5,7 @@
 			<value>ElevatorTheme</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{d25a8668-b26e-4b08-8ea1-8cd9cfbdd851}</destination>
@@ -133,7 +133,6 @@
 	<object class="MixerBusEffectChain" id="{2096e249-ee1e-4400-8d47-f953d9a7e997}">
 		<relationship name="effects">
 			<destination>{ca386da9-52e2-4d30-9ac6-dee44c5001ab}</destination>
-			<destination>{f446bec8-93dd-42ed-8ecd-ae186e8f9f5b}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{5985ae03-f09d-439e-9724-18a49aa69e47}" />
@@ -145,6 +144,5 @@
 	</object>
 	<object class="MixerBusPanner" id="{11033a98-382a-4504-aa2c-c6bc958bbd2f}" />
 	<object class="MixerBusFader" id="{ca386da9-52e2-4d30-9ac6-dee44c5001ab}" />
-	<object class="SpatialiserEffect" id="{f446bec8-93dd-42ed-8ecd-ae186e8f9f5b}" />
 	<object class="MixerBusFader" id="{2aec1ed4-d3f0-4ab7-8a25-3e7ed2bc4aaf}" />
 </objects>

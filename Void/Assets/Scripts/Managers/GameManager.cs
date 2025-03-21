@@ -87,6 +87,7 @@ public class GameManager : Singleton<GameManager>
             case GameState.WaitingToStart:
                 RequestSpawnPlayer(networkGameManager.NetworkManager.LocalClientId);
                 UIManager.Instance.SetGameTimer(forceReadyUpTimer);
+                AudioManager.ChangeMusic(FMODEventManager.Instance.ElevatorTheme);
                 if (networkGameManager.IsServer) InitializeGame();
                 break;
             case GameState.ReadyToStart:
@@ -95,14 +96,17 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.GamePlaying:
                 UIManager.Instance.SetGameTimer(gameDuration);
+                AudioManager.ChangeMusic(FMODEventManager.Instance.BackgroundTheme);
                 if (networkGameManager.IsServer) StartGame();
                 break;
             case GameState.Panic:
                 UIManager.Instance.SetGameTimer(panicDuration);
+                AudioManager.ChangeMusic(FMODEventManager.Instance.AlarmTheme);
                 if (networkGameManager.IsServer) Panic();
                 break;
             case GameState.GameOver:
                 UIManager.Instance.SetGameTimer(endGameDelay);
+                AudioManager.StopMusic(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 if (networkGameManager.IsServer) EndGame();
                 break;
             default:

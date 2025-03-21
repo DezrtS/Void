@@ -1,4 +1,5 @@
 using FMOD.Studio;
+using FMODUnity;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TimedExplosiveItemData", menuName = "ScriptableObjects/Items/Data/TimedExplosiveItemData")]
@@ -10,7 +11,7 @@ public class TimedExplosiveItemData : ThrowableItemData
     [SerializeField] private float timeToActivation;
     [SerializeField] private LayerMask effectableLayers;
     [SerializeField] private GameObject explosionEffect;
-    [SerializeField] private EventInstance explosionSound;
+    [SerializeField] private EventReference explosionSound;
 
     public float Radius => radius;
     public float Damage => damage;
@@ -18,5 +19,5 @@ public class TimedExplosiveItemData : ThrowableItemData
     public float TimeToActivation => timeToActivation;
     public LayerMask EffectableLayers => effectableLayers;
     public GameObject ExplosionEffect => explosionEffect;
-    public EventInstance ExplosionSound => explosionSound;
+    public EventReference ExplosionSound => explosionSound;
 }

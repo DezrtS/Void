@@ -1954,7 +1954,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4253240432
+  GlobalObjectIdHash: 3593659605
   InScenePlacedSourceGlobalObjectIdHash: 3567632822
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -2205,6 +2205,20 @@ MonoBehaviour:
   healthRegenerationRate:
     baseValue: 10
   healthRegenerationDelay: 2
+  hurtSound:
+    Guid:
+      Data1: 1817735778
+      Data2: 1134274571
+      Data3: 867110303
+      Data4: -1952907178
+    Path: event:/Prototype/VoidMonster/MonsterDamage
+  deathSound:
+    Guid:
+      Data1: 1354401878
+      Data2: 1337272468
+      Data3: -988153192
+      Data4: -1985942415
+    Path: event:/Prototype/VoidMonster/MonsterDeath
 --- !u!114 &5946823732524437066
 MonoBehaviour:
   m_ObjectHideFlags: 0

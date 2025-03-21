@@ -14,9 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Stim Boost
   Description: Boosts movement speed
-  ItemSprite: {fileID: -1154795906, guid: 510359a9973e7f94abf0fef0368f874a, type: 3}
+  ItemSprite: {fileID: -1144766447, guid: 97ffbe20b7437a642a0ffb33739129d7, type: 3}
   ItemPrefab: {fileID: 6548378123191463726, guid: b227e0f179be2f24e93848246db3ea51,
     type: 3}
+  useSound:
+    Guid:
+      Data1: -363483795
+      Data2: 1097610678
+      Data3: -1809782621
+      Data4: -1989663117
+    Path: event:/Prototype/Items/StimBoost/Stimming
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  pickUpSound:
+    Guid:
+      Data1: 320945385
+      Data2: 1082138234
+      Data3: 1422123177
+      Data4: -2075219262
+    Path: event:/Prototype/Tasks/Battery/BatteryPickUp
+  dropSound:
+    Guid:
+      Data1: 1055878425
+      Data2: 1195061842
+      Data3: -964257871
+      Data4: 1447670243
+    Path: event:/Prototype/Tasks/Battery/BatteryDrop
   key: 2
   duration: 30
   statChanges:

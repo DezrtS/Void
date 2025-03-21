@@ -14,7 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Acid Ball
   description: A ball of acid that leaves a puddle of acid
-  displaySprite: {fileID: 1910031878, guid: b7d9a7054b44f6a43a410fddac332126, type: 3}
+  displaySprite: {fileID: 881543554, guid: 151a739364355254e8bc8fd5171d607f, type: 3}
   mutationPrefab: {fileID: 5892155703861258531, guid: bd2116be20769464ea6eb04358b77cdb,
     type: 3}
   cooldown: 1
+  useSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

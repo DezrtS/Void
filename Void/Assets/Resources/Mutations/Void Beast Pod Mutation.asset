@@ -14,7 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Void Beast Pod
   description: A pod projectile that contains void beasts
-  displaySprite: {fileID: 21300000, guid: 7efcdd5730048c04b854e8ee55417204, type: 3}
+  displaySprite: {fileID: -1241881851, guid: e2b7c7d7a0d2c0f4da16870da930a05b, type: 3}
   mutationPrefab: {fileID: 5892155703861258531, guid: c167b5dfee49e5940b6a83a259e8b2ec,
     type: 3}
   cooldown: 1
+  useSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

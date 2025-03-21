@@ -5,7 +5,7 @@
 			<value>BgTheme</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{d25a8668-b26e-4b08-8ea1-8cd9cfbdd851}</destination>
@@ -136,7 +136,6 @@
 	<object class="MixerBusEffectChain" id="{85df6a8f-4156-424c-b852-a74e453ac75e}">
 		<relationship name="effects">
 			<destination>{3493a18f-bf36-475a-bd84-90f026df9d10}</destination>
-			<destination>{119eda4b-8f41-47d0-9642-0f2c638b29c9}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{a8089bd1-508a-440e-bbe4-0ecbbb2c7579}" />
@@ -148,6 +147,5 @@
 	</object>
 	<object class="MixerBusPanner" id="{1e1471bb-958b-453f-9931-6eb1b77822ac}" />
 	<object class="MixerBusFader" id="{3493a18f-bf36-475a-bd84-90f026df9d10}" />
-	<object class="SpatialiserEffect" id="{119eda4b-8f41-47d0-9642-0f2c638b29c9}" />
 	<object class="MixerBusFader" id="{070b91ee-ffe2-4397-a88a-5fd5263965db}" />
 </objects>

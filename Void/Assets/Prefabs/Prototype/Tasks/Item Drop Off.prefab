@@ -48,8 +48,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 954d17d59ad5b4e4cb836efa9ba244e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  processingTime: 1
+  processingTime: 5
   ejectionPower: 5
+  openSound:
+    Guid:
+      Data1: -458339171
+      Data2: 1217215397
+      Data3: 1587480233
+      Data4: -1431817235
+    Path: event:/Prototype/DropBox/DropBoxOpen
+  closeSound:
+    Guid:
+      Data1: -218710833
+      Data2: 1137004473
+      Data3: 766362779
+      Data4: 1198934017
+    Path: event:/Prototype/DropBox/DropBoxClose
+  acceptSound:
+    Guid:
+      Data1: 212603948
+      Data2: 1076814757
+      Data3: 1515894673
+      Data4: -62122363
+    Path: event:/Prototype/DropBox/AcceptItem
+  rejectSound:
+    Guid:
+      Data1: -102163125
+      Data2: 1221616234
+      Data3: -41602118
+      Data4: -1040395002
+    Path: event:/Prototype/DropBox/RejectItem
   interactableData: {fileID: 11400000, guid: 437cdf113b3c7854d9da3c0d5a8f7c9e, type: 2}
 --- !u!65 &9207897002477603874
 BoxCollider:

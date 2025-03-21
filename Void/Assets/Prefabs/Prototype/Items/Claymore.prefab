@@ -132,6 +132,13 @@ MonoBehaviour:
   damage: 125
   explosionEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
     type: 3}
+  activateSound:
+    Guid:
+      Data1: 1002880312
+      Data2: 1144325419
+      Data3: -1369286731
+      Data4: 374365311
+    Path: event:/Prototype/Items/Claymore/ClayMoreExplosion
 --- !u!114 &4113537354138752352
 MonoBehaviour:
   m_ObjectHideFlags: 0

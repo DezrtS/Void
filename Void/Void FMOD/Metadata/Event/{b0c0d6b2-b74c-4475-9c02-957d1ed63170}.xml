@@ -115,12 +115,12 @@
 	<object class="SpatialiserEffect" id="{71031cb5-3589-4a32-93ed-d066a268ead4}" />
 	<object class="SingleSound" id="{08dc22f4-ea4b-44b3-9528-22e426c2cd37}">
 		<relationship name="audioFile">
-			<destination>{7319992c-380b-40ec-a9d0-05d180dcd1c8}</destination>
+			<destination>{9f3dd0ee-9c35-4348-99c5-b9d5e67b76c3}</destination>
 		</relationship>
 	</object>
 	<object class="SingleSound" id="{c5ed14e9-36ad-4d9f-ad6f-6177e05082e5}">
 		<relationship name="audioFile">
-			<destination>{37d0bdbd-a51e-497e-8e46-9ecfce03f18f}</destination>
+			<destination>{74bc5873-b07c-4f51-bda6-1b01294ef294}</destination>
 		</relationship>
 	</object>
 	<object class="SingleSound" id="{624eceb2-7712-43b9-a253-2749c2e47d9a}">

@@ -1,3 +1,5 @@
+using FMOD.Studio;
+using FMODUnity;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +9,19 @@ public class ElevatorManager : Singleton<ElevatorManager>
     [SerializeField] private Animator doorAnimator;
     [SerializeField] private Trigger trigger;
 
+    [SerializeField] private EventReference elevatorOpenSound;
+    [SerializeField] private EventReference elevatorCloseSound;
+    [SerializeField] private EventReference elevatorDingSound;
+
+    [SerializeField] private EventReference elevatorMoveDownSound;
+    [SerializeField] private EventReference elevatorMoveUpSound;
+
     private NetworkElevatorManager networkElevatorManager;
     private bool isReadyToLeave;
     private bool isAllSurvivorsInElevator;
 
     private List<ulong> clientsInElevator = new();
+    private EventInstance elevatorMovementInstance;
 
     public NetworkElevatorManager NetworkElevatorManager => networkElevatorManager;
     public bool IsReadyToLeave => isReadyToLeave;
@@ -42,11 +52,17 @@ public class ElevatorManager : Singleton<ElevatorManager>
     private void Awake()
     {
         networkElevatorManager = GetComponent<NetworkElevatorManager>();
+        elevatorMovementInstance = AudioManager.CreateEventInstance(elevatorMoveDownSound);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(elevatorMovementInstance, transform, true);
     }
 
     private void OnGameStateChanged(GameManager.GameState gameState)
     {
-        if (gameState == GameManager.GameState.GamePlaying)
+        if (gameState == GameManager.GameState.WaitingToStart)
+        {
+            elevatorMovementInstance.start();
+        }
+        else if (gameState == GameManager.GameState.GamePlaying)
         {
             Arrive();
         }
@@ -65,11 +81,16 @@ public class ElevatorManager : Singleton<ElevatorManager>
     public void Arrive()
     {
         doorAnimator.SetBool("Open", true);
+        AudioManager.PlayOneShot(elevatorOpenSound, transform.position);
+        AudioManager.PlayOneShot(elevatorDingSound, transform.position);
+        elevatorMovementInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     public void Leave()
     {
         doorAnimator.SetBool("Open", false);
+        AudioManager.PlayOneShot(elevatorCloseSound, transform.position);
+        elevatorMovementInstance.start();
     }
 
     public void SetReadyToLeave(bool isReadyToLeave)

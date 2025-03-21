@@ -5,7 +5,7 @@
 			<value>SelectMutation</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{64a13eb5-f011-4057-83f6-42c31adacc3b}</destination>
@@ -99,7 +99,6 @@
 	<object class="MixerBusEffectChain" id="{0ed7b5ed-b112-4322-91c0-cf573ae1a049}">
 		<relationship name="effects">
 			<destination>{013bee59-c3f0-4dc2-81fa-fb2dc0ea866c}</destination>
-			<destination>{4454e5a2-c51c-4aae-b529-fc59cb411cbc}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{16a0cf71-505c-4e28-92c9-774e8c4de10c}" />
@@ -112,7 +111,6 @@
 	</object>
 	<object class="MixerBusFader" id="{cbfb79f7-55b9-4f4a-8107-2dba386b06e4}" />
 	<object class="MixerBusFader" id="{013bee59-c3f0-4dc2-81fa-fb2dc0ea866c}" />
-	<object class="SpatialiserEffect" id="{4454e5a2-c51c-4aae-b529-fc59cb411cbc}" />
 	<object class="SingleSound" id="{4fe965d0-51d2-42b2-ab7f-498491aacacc}">
 		<relationship name="audioFile">
 			<destination>{b5f55e63-c326-44b0-8e8d-45883aae8c9e}</destination>

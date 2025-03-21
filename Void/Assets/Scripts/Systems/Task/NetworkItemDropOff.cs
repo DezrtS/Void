@@ -20,6 +20,7 @@ public class NetworkItemDropOff : NetworkUseable
     {
         NetworkObject itemNetworkObject = GetNetworkObject(itemNetworkObjectId);
         Item item = itemNetworkObject.GetComponent<Item>();
+        if (itemDropOff.HasItem()) return;
 
         if (!item.CanDrop()) return;
         item.RequestDrop();
@@ -34,7 +35,6 @@ public class NetworkItemDropOff : NetworkUseable
     [ClientRpc(RequireOwnership = false)]
     public void ProcessItemClientRpc(ulong itemNetworkObjectId)
     {
-        if (itemDropOff.HasItem()) return;
         NetworkObject itemNetworkObject = GetNetworkObject(itemNetworkObjectId);
         Item item = itemNetworkObject.GetComponent<Item>();
 
@@ -57,8 +57,6 @@ public class NetworkItemDropOff : NetworkUseable
     [ServerRpc(RequireOwnership = false)]
     public void EjectItemServerRpc()
     {
-        if (!itemDropOff.CanEjectItem()) return;
-        
         if (!itemDropOff.HasItem())
         {
             StopUsingServerRpc();

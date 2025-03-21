@@ -190,6 +190,27 @@ MonoBehaviour:
     type: 2}
   dropInteractableData: {fileID: 11400000, guid: d9dc064fc8856fc4dad1afb719e93a98,
     type: 2}
+  dragSound:
+    Guid:
+      Data1: -1329539406
+      Data2: 1148565324
+      Data3: 2106917532
+      Data4: 1882314270
+    Path: event:/Prototype/Tasks/Box/GrabBox
+  stopDraggingSound:
+    Guid:
+      Data1: 79191678
+      Data2: 1140262231
+      Data3: 1651323308
+      Data4: -1794708795
+    Path: event:/Prototype/Tasks/Box/DropBox
+  draggingSound:
+    Guid:
+      Data1: -1329539406
+      Data2: 1148565324
+      Data3: 2106917532
+      Data4: 1882314270
+    Path: event:/Prototype/Tasks/Box/GrabBox
 --- !u!65 &1556337531653399344
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -17,6 +17,34 @@ MonoBehaviour:
   ItemSprite: {fileID: 1208872289, guid: e6e34c0e053e8834fac1a4bc6529a83d, type: 3}
   ItemPrefab: {fileID: 1512034910407666928, guid: bdc5a380af462af449dbe1efe2a2ee1c,
     type: 3}
+  useSound:
+    Guid:
+      Data1: -1435732180
+      Data2: 1296308461
+      Data3: -1341093722
+      Data4: -1908748312
+    Path: event:/Prototype/Items/Explosive Grenade/ExGrenadePin
+  stopUsingSound:
+    Guid:
+      Data1: 1405134400
+      Data2: 1239930052
+      Data3: -1972771688
+      Data4: 1793558270
+    Path: event:/Prototype/Items/Explosive Grenade/ExGrenadeThrow
+  pickUpSound:
+    Guid:
+      Data1: 320945385
+      Data2: 1082138234
+      Data3: 1422123177
+      Data4: -2075219262
+    Path: event:/Prototype/Tasks/Battery/BatteryPickUp
+  dropSound:
+    Guid:
+      Data1: 1055878425
+      Data2: 1195061842
+      Data3: -964257871
+      Data4: 1447670243
+    Path: event:/Prototype/Tasks/Battery/BatteryDrop
   throwSpeed: 15
   spinSpeed: 2
   radius: 5
@@ -25,6 +53,13 @@ MonoBehaviour:
   timeToActivation: 1
   effectableLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 576
   explosionEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
     type: 3}
+  explosionSound:
+    Guid:
+      Data1: -1173655845
+      Data2: 1275974679
+      Data3: -710115908
+      Data4: -622952010
+    Path: event:/Prototype/Items/Explosive Grenade/ExGrenadeExplosion

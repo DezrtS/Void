@@ -14,9 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Molotov Cocktail
   Description: An incendiary explosive device
-  ItemSprite: {fileID: 1208872289, guid: e6e34c0e053e8834fac1a4bc6529a83d, type: 3}
+  ItemSprite: {fileID: 1186501973, guid: 4d3e74b2237f7094189b8429fd724eb3, type: 3}
   ItemPrefab: {fileID: 1512034910407666928, guid: abfc9891f703d5d4885060c517597756,
     type: 3}
+  useSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  stopUsingSound:
+    Guid:
+      Data1: 1538945060
+      Data2: 1280976149
+      Data3: 1039967405
+      Data4: -46358727
+    Path: event:/Prototype/Items/Molotov/MolotovThrow
+  pickUpSound:
+    Guid:
+      Data1: 320945385
+      Data2: 1082138234
+      Data3: 1422123177
+      Data4: -2075219262
+    Path: event:/Prototype/Tasks/Battery/BatteryPickUp
+  dropSound:
+    Guid:
+      Data1: 1055878425
+      Data2: 1195061842
+      Data3: -964257871
+      Data4: 1447670243
+    Path: event:/Prototype/Tasks/Battery/BatteryDrop
   throwSpeed: 15
   spinSpeed: 2
   radius: 4.5
@@ -25,6 +53,13 @@ MonoBehaviour:
   timeToActivation: 2
   effectableLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 576
   explosionEffect: {fileID: 3929961048621311391, guid: 6fc1624de8dee5240890f48b6f94881f,
     type: 3}
+  explosionSound:
+    Guid:
+      Data1: -1840032818
+      Data2: 1081117344
+      Data3: 1770024868
+      Data4: 1077343190
+    Path: event:/Prototype/Items/Molotov/Fire

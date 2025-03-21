@@ -54,21 +54,21 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public virtual void Use()
     {
         isUsing = true;
-        AudioManager.PlayOneShot(itemData.UseSound, transform.position);
+        AudioManager.PlayOneShot(itemData.UseSound, gameObject);
         OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void StopUsing()
     {
         isUsing = false;
-        AudioManager.PlayOneShot(itemData.StopUsingSound, transform.position);
+        AudioManager.PlayOneShot(itemData.StopUsingSound, gameObject);
         OnUsed?.Invoke(this, isUsing);
     }
 
     public virtual void PickUp()
     {
         isPickedUp = true;
-        AudioManager.PlayOneShot(itemData.PickUpSound, transform.position);
+        AudioManager.PlayOneShot(itemData.PickUpSound, gameObject);
         OnPickUp?.Invoke(this, isPickedUp);
         UpdateItemState(true);
     }
@@ -76,13 +76,14 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public virtual void Drop()
     {
         isPickedUp = false;
-        AudioManager.PlayOneShot(itemData.DropSound, transform.position);
+        AudioManager.PlayOneShot(itemData.DropSound, gameObject);
         OnPickUp?.Invoke(this, isPickedUp);
         UpdateItemState(false);
     }
 
     private void UpdateItemState(bool isPickedUp)
     {
+        Debug.Log($"IsPickedUp: {isPickedUp}");
         rig.isKinematic = isPickedUp;
         col.enabled = !isPickedUp;
     }

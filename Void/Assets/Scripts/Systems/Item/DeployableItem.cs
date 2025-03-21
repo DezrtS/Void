@@ -7,6 +7,8 @@ public class DeployableItem : Item
     private NetworkDeployableItem networkDeployableItem;
     private bool isDeployed;
 
+    public bool IsDeployed => isDeployed;
+
     public bool CanDeploy() => !isDeployed;
     public bool CanUndeploy() => isDeployed;
 
@@ -33,22 +35,23 @@ public class DeployableItem : Item
 
     public override void PickUp()
     {
-        base.PickUp();
         if (networkDeployableItem.IsServer) RequestUndeploy();
+        base.PickUp();
     }
 
     public virtual void Deploy()
     {
         isDeployed = true;
         rig.isKinematic = true;
-        if (NetworkItem.IsOwner)
+        Transform castTransform = CameraManager.Instance.transform;
+        if (Physics.Raycast(castTransform.position, castTransform.forward, out RaycastHit hit,
+            deployableItemData.DeployRange, deployableItemData.DeployLayers,
+            QueryTriggerInteraction.Ignore))
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit,
-                deployableItemData.DeployRange, deployableItemData.DeployLayers,
-                QueryTriggerInteraction.Ignore))
+            if (NetworkItem.IsOwner)
             {
                 // Preserve original forward direction while aligning to surface normal
-                Vector3 surfaceAlignedForward = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
+                Vector3 surfaceAlignedForward = Vector3.ProjectOnPlane(castTransform.forward, hit.normal).normalized;
 
                 // Ensure valid rotation when projecting (edge case handling)
                 if (surfaceAlignedForward == Vector3.zero)
@@ -58,17 +61,17 @@ public class DeployableItem : Item
 
                 transform.SetPositionAndRotation(hit.point, surfaceAlignment);
             }
-            else
-            {
-                transform.SetPositionAndRotation(transform.position + transform.forward * deployableItemData.DeployRange, transform.rotation);
-                RequestUndeploy();
-            }
+        }
+        else
+        {
+            if (NetworkItem.IsOwner) transform.SetPositionAndRotation(castTransform.position + castTransform.forward * deployableItemData.DeployRange, transform.rotation);
+            if (NetworkItem.IsServer) RequestUndeploy();
         }
     }
 
     public virtual void Undeploy()
     {
-        rig.isKinematic = false;
         isDeployed = false;
+        rig.isKinematic = false;
     }
 }

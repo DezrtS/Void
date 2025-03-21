@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class Claymore : DeployableItem
@@ -5,6 +6,7 @@ public class Claymore : DeployableItem
     [SerializeField] private Trigger trigger;
     [SerializeField] private float damage;
     [SerializeField] private GameObject explosionEffect;
+    [SerializeField] private EventReference activateSound;
 
     private NetworkClaymore networkClaymore;
     private bool isActive;
@@ -29,8 +31,8 @@ public class Claymore : DeployableItem
 
     public override void Deploy()
     {
-        base.Deploy();
         if (networkClaymore.IsServer) RequestActivateClaymore();
+        base.Deploy();
     }
 
     public override void Undeploy()
@@ -65,6 +67,7 @@ public class Claymore : DeployableItem
 
     public void TriggerClaymore()
     {
+        AudioManager.PlayOneShot(activateSound, gameObject);
         Instantiate(explosionEffect, transform.position, transform.rotation);
     }
 }
