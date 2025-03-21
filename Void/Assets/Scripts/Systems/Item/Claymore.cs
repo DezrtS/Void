@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class Claymore : DeployableItem
@@ -5,6 +6,7 @@ public class Claymore : DeployableItem
     [SerializeField] private Trigger trigger;
     [SerializeField] private float damage;
     [SerializeField] private GameObject explosionEffect;
+    [SerializeField] private EventReference activateSound;
 
     private NetworkClaymore networkClaymore;
     private bool isActive;
@@ -41,11 +43,6 @@ public class Claymore : DeployableItem
 
     public void OnEnter(Trigger trigger, GameObject gameObject)
     {
-        if (!IsDeployed)
-        {
-            trigger.OnEnter -= OnEnter;
-            return;
-        }
         if (!gameObject.CompareTag("Player") && !gameObject.CompareTag("Monster")) return;
         RequestTriggerClaymore();
 
@@ -70,6 +67,7 @@ public class Claymore : DeployableItem
 
     public void TriggerClaymore()
     {
+        AudioManager.PlayOneShot(activateSound, gameObject);
         Instantiate(explosionEffect, transform.position, transform.rotation);
     }
 }

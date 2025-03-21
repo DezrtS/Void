@@ -38,10 +38,7 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         networkUseable = GetComponent<NetworkUseable>();
         springJoint = GetComponent<SpringJoint>();
-        //GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
-        //{
-        //    if (networkUseable.IsServer && gameState == GameManager.GameState.GameOver) networkUseable.NetworkObject.Despawn(false);
-        //};
+        draggingInstance = AudioManager.CreateEventInstance(draggingSound, gameObject);
     }
 
     public void Use()
@@ -49,6 +46,7 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
         isUsing = true;
         OnUsed?.Invoke(this, isUsing);
         AudioManager.PlayOneShot(dragSound, gameObject);
+        draggingInstance.start();
     }
 
     public void StopUsing()
@@ -56,6 +54,7 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
         isUsing = false;
         OnUsed?.Invoke(this, isUsing);
         AudioManager.PlayOneShot(stopDraggingSound, gameObject);
+        draggingInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     public InteractableData GetInteractableData()

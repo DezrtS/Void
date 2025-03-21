@@ -35,8 +35,8 @@ public class DeployableItem : Item
 
     public override void PickUp()
     {
-        base.PickUp();
         if (networkDeployableItem.IsServer) RequestUndeploy();
+        base.PickUp();
     }
 
     public virtual void Deploy()
@@ -71,7 +71,7 @@ public class DeployableItem : Item
 
     public virtual void Undeploy()
     {
-        rig.isKinematic = false;
         isDeployed = false;
+        rig.isKinematic = false;
     }
 }

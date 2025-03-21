@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMOD.Studio;
 using FMODUnity;
+using Unity.Netcode;
 
 public class AudioManager : Singleton<AudioManager>
 {
@@ -75,6 +76,20 @@ public class AudioManager : Singleton<AudioManager>
     {
         if (sound.IsNull) return;
         RuntimeManager.PlayOneShotAttached(sound, gameObject);
+    }
+
+    public static void RequestPlayOneShot(EventReference sound, Vector3 worldPosition) => PlayOneShotServerRpc(sound, worldPosition);
+
+    [ServerRpc(RequireOwnership = false)]
+    private static void PlayOneShotServerRpc(EventReference sound, Vector3 worldPosition)
+    {
+        PlayOneShotClientRpc(sound, worldPosition);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    private static void PlayOneShotClientRpc(EventReference sound, Vector3 worldPosition)
+    {
+        PlayOneShot(sound, worldPosition);
     }
 
     public void CleanUp()

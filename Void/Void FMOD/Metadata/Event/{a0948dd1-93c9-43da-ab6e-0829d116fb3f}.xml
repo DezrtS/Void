@@ -5,7 +5,7 @@
 			<value>RandomHumanVoiceLines</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{2b922a2b-09a6-4f95-9b25-e7862e564ede}</destination>
@@ -99,6 +99,7 @@
 	<object class="MixerBusEffectChain" id="{75e3790f-8192-4330-a53c-7f7ba2599889}">
 		<relationship name="effects">
 			<destination>{89bdbc58-055e-4d58-9280-c78de8b65713}</destination>
+			<destination>{308d4e8a-48c5-4536-bab3-ca14535412e0}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{6cb96f9a-1d00-4052-b688-d2e73183f976}" />
@@ -116,6 +117,7 @@
 	</object>
 	<object class="MixerBusFader" id="{98572e10-ed99-43a1-a8b4-833fd1f10dcf}" />
 	<object class="MixerBusFader" id="{89bdbc58-055e-4d58-9280-c78de8b65713}" />
+	<object class="SpatialiserEffect" id="{308d4e8a-48c5-4536-bab3-ca14535412e0}" />
 	<object class="SingleSound" id="{f893e2b8-e5b4-4b2a-9cb1-fb58b1c1f746}">
 		<relationship name="audioFile">
 			<destination>{b6635c66-6034-474e-aacd-a280f6f3c064}</destination>

@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class BearTrap : DeployableItem
@@ -7,6 +8,7 @@ public class BearTrap : DeployableItem
     [SerializeField] private float initialDamage;
     [SerializeField] private float damage;
     [SerializeField] private float duration;
+    [SerializeField] private EventReference activateSound;
     
     private NetworkBearTrap networkBearTrap;
     private bool isActive;
@@ -55,6 +57,7 @@ public class BearTrap : DeployableItem
     {
         base.Undeploy();
         if (NetworkItem.IsServer) trigger.OnEnter -= OnEnter;
+        if (networkBearTrap.IsOwner) animator.SetBool("Active", true);
     }
 
     public void OnEnter(Trigger trigger, GameObject gameObject)
@@ -83,6 +86,7 @@ public class BearTrap : DeployableItem
         isActive = true;
         canPickUp = false;
         durationTimer = duration;
+        AudioManager.PlayOneShot(activateSound, gameObject);
         if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
     }
 

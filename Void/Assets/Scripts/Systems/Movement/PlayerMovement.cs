@@ -15,6 +15,7 @@ public class PlayerMovement : MovementController
 
     private bool isSprinting;
     private bool isCrouched;
+    private bool isGrounded;
     private float defaultColliderHeight;
 
     [SerializeField] private Transform orientationTransform;
@@ -33,11 +34,13 @@ public class PlayerMovement : MovementController
     [SerializeField] private Stat crouchSpeed = new Stat(2);
 
     [Header("Jump")]
+    [SerializeField] private bool canJump;
     [SerializeField] private Stat jumpPower = new Stat(7);
     [SerializeField] private EventReference jumpSound;
     [SerializeField] private EventReference landJumpSound;
 
     [Header("Crouch")]
+    [SerializeField] private bool canCrouch;
     [SerializeField] private Stat crouchHeight = new Stat(1);
 
     public Stat TimeToAccelerate => timeToAccelerate;
@@ -132,6 +135,9 @@ public class PlayerMovement : MovementController
     private void FixedUpdate()
     {
         if (!NetworkMovementController.IsOwner) return;
+        bool newGroundedState = IsGrounded();
+        if (!isGrounded && newGroundedState) AudioManager.RequestPlayOneShot(landJumpSound, transform.position);
+        isGrounded = newGroundedState;
         HandleMovement();
     }
 
@@ -168,9 +174,10 @@ public class PlayerMovement : MovementController
 
     private void Jump(InputAction.CallbackContext context)
     {
-        if (!NetworkMovementController.IsOwner || IsInputDisabled) return;
+        if (!NetworkMovementController.IsOwner || IsInputDisabled || !canJump) return;
 
         if (!IsGrounded()) return;
+        AudioManager.RequestPlayOneShot(jumpSound, transform.position);
         ApplyForce(Vector3.up * jumpPower.Value, ForceMode.VelocityChange);
     }
 
@@ -182,7 +189,7 @@ public class PlayerMovement : MovementController
 
     private void Crouch(InputAction.CallbackContext context)
     {
-        if (!NetworkMovementController.IsOwner || IsInputDisabled) return;
+        if (!NetworkMovementController.IsOwner || IsInputDisabled || !canCrouch) return;
         isCrouched = context.performed;
         
         if (isCrouched)

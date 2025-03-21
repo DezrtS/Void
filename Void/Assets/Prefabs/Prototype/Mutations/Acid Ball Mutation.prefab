@@ -53,6 +53,13 @@ MonoBehaviour:
   projectileSpawner: {fileID: 4439386080916199949}
   spawnProjectileDelay: 0.5
   spawnProjectileTrigger: ShootProjectile
+  spawnProjectileSound:
+    Guid:
+      Data1: -163746505
+      Data2: 1266346922
+      Data3: -363345478
+      Data4: 1890353868
+    Path: event:/Prototype/Mutations/AcidSpit/AcidSpitting
 --- !u!114 &4439386080916199949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +73,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: 1c476d3c2c807f84fa28abd5bda17d66, type: 2}
+  visualEffects: []
 --- !u!114 &8986859684110690607
 MonoBehaviour:
   m_ObjectHideFlags: 0

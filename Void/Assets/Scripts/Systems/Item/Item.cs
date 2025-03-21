@@ -83,6 +83,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
 
     private void UpdateItemState(bool isPickedUp)
     {
+        Debug.Log($"IsPickedUp: {isPickedUp}");
         rig.isKinematic = isPickedUp;
         col.enabled = !isPickedUp;
     }

@@ -53,6 +53,13 @@ MonoBehaviour:
   projectileSpawner: {fileID: 8439705898875105305}
   spawnProjectileDelay: 0.5
   spawnProjectileTrigger: VoidClaw
+  spawnProjectileSound:
+    Guid:
+      Data1: -216524419
+      Data2: 1195948105
+      Data3: 1788833971
+      Data4: 434400467
+    Path: event:/Prototype/Mutations/ClawThrowing/ClawThrow
 --- !u!114 &8439705898875105305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +73,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: 6e3ad35f2178c724897687995fc9e8b2, type: 2}
+  visualEffects: []
 --- !u!114 &7036162325047722773
 MonoBehaviour:
   m_ObjectHideFlags: 0
