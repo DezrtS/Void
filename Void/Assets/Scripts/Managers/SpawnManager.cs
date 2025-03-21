@@ -3,11 +3,16 @@ using UnityEngine;
 
 public class SpawnManager : Singleton<SpawnManager>
 {
-    private readonly List<Spawnpoint> spawnpoints = new List<Spawnpoint>();
+    private static List<Spawnpoint> spawnpoints = new List<Spawnpoint>();
 
-    public void AddSpawnpoint(Spawnpoint spawnpoint)
+    private void OnDisable()
     {
-        spawnpoints.Add(spawnpoint);
+        spawnpoints.Clear();
+    }
+
+    public static void AddSpawnpoint(Spawnpoint spawnpoint)
+    {
+        if (!spawnpoints.Contains(spawnpoint)) spawnpoints.Add(spawnpoint);
     }
 
     public List<Spawnpoint> GetSpawnpoints(Spawnpoint.SpawnpointType spawnpointType)

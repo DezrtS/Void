@@ -47,7 +47,7 @@ public class Hotbar : MonoBehaviour
         if (item != null)
         {
             activeTransform.rotation = Quaternion.LookRotation((lookAt.position - activeTransform.position).normalized);
-            item.transform.SetPositionAndRotation(activeTransform.position, activeTransform.rotation);
+            item.SetAtHoldingPosition(activeTransform.position, activeTransform.rotation);
         }
     }
 
@@ -74,6 +74,19 @@ public class Hotbar : MonoBehaviour
     {
         OnSwitchItem?.Invoke(selectedIndex, index, hotbar[selectedIndex], hotbar[index]);
         selectedIndex = index;
+
+        if (networkHotbar.IsOwner)
+        {
+            Item item = hotbar[index];
+            if (item != null)
+            {
+                UIManager.Instance.SetTutorialText(item.TutorialData);
+            }
+            else
+            {
+                UIManager.Instance.ResetTutorialText();
+            }
+        }
     }
 
     public void RequestPickUpItem(ItemData itemData)
@@ -90,6 +103,11 @@ public class Hotbar : MonoBehaviour
     {
         hotbar[index] = item;
         OnPickUpItem?.Invoke(index, item);
+
+        if (networkHotbar.IsOwner)
+        {
+            UIManager.Instance.SetTutorialText(item.TutorialData);
+        }
     }
 
     public void RequestDropItem() => RequestDropItem(selectedIndex);
@@ -123,6 +141,11 @@ public class Hotbar : MonoBehaviour
         Item item = hotbar[index];
         hotbar[index] = null;
         OnDropItem?.Invoke(index, item);
+
+        if (networkHotbar.IsOwner)
+        {
+            UIManager.Instance.ResetTutorialText();
+        }
     }
 
     public void StartDragging(Draggable draggable)

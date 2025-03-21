@@ -289,17 +289,37 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Hide Tutorial"",
+                    ""type"": ""Button"",
+                    ""id"": ""2cf89c3f-e053-4358-a75e-15e64421f310"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""32b4891b-a6ad-4499-b117-56f13a297aed"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e5b430fb-e8c0-4bd0-9e6b-1a7778d4ad20"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hide Tutorial"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1134,6 +1154,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+        m_UI_HideTutorial = m_UI.FindAction("Hide Tutorial", throwIfNotFound: true);
         // UIMenu
         m_UIMenu = asset.FindActionMap("UIMenu", throwIfNotFound: true);
         m_UIMenu_Navigate = m_UIMenu.FindAction("Navigate", throwIfNotFound: true);
@@ -1402,11 +1423,13 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_Pause;
+    private readonly InputAction m_UI_HideTutorial;
     public struct UIActions
     {
         private @UserInputControls m_Wrapper;
         public UIActions(@UserInputControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Pause => m_Wrapper.m_UI_Pause;
+        public InputAction @HideTutorial => m_Wrapper.m_UI_HideTutorial;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1419,6 +1442,9 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @HideTutorial.started += instance.OnHideTutorial;
+            @HideTutorial.performed += instance.OnHideTutorial;
+            @HideTutorial.canceled += instance.OnHideTutorial;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1426,6 +1452,9 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @HideTutorial.started -= instance.OnHideTutorial;
+            @HideTutorial.performed -= instance.OnHideTutorial;
+            @HideTutorial.canceled -= instance.OnHideTutorial;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1833,6 +1862,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnPause(InputAction.CallbackContext context);
+        void OnHideTutorial(InputAction.CallbackContext context);
     }
     public interface IUIMenuActions
     {

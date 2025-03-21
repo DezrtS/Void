@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mutationData: {fileID: 11400000, guid: b55028e3d118b5449b3d800c149d4e2e, type: 2}
+  tutorialData: {fileID: 11400000, guid: 21a55a6d457f4c34c92ef44735c401b7, type: 2}
 --- !u!114 &-6360011152182680397
 MonoBehaviour:
   m_ObjectHideFlags: 0

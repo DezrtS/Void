@@ -156,6 +156,8 @@ public class NetworkHotbar : NetworkBehaviour
             Draggable draggable = draggableNetworkObject.GetComponent<Draggable>();
 
             if (!draggable.CanUse()) return;
+
+            if (hotbar.IsDragging) StopDraggingServerRpc();
             draggable.RequestUse();
             draggable.OnUsed += OnDraggableUsingStateChanged;
             StartDraggingClientRpc(draggableNetworkObjectId);

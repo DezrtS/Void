@@ -13,6 +13,10 @@ public class VoidBeastController : NetworkBehaviour
     public NavMeshMovement NavMeshMovement => navMeshMovement;
     public Health Health => health;
 
+    [SerializeField] private GameObject coneVision;
+    [SerializeField] private GameObject surroundVision;
+    private bool playerSeen = false;
+
     private void Awake()
     {
         navMeshMovement = GetComponent<NavMeshMovement>();
@@ -22,11 +26,13 @@ public class VoidBeastController : NetworkBehaviour
 
     public void Activate()
     {
+
         //List<GameObject> playerObjects = GameManager.Instance.PlayerObjects;
         //GameObject targetGameObject = GetClosestPlayer(playerObjects);
+        playerSeen = false;
         //if (targetGameObject == null) return;
         //targetTransform = targetGameObject.transform;
-        //hasTarget = true;
+        //hasTarget = false;
 
         //navMeshMovement.Pathfind(targetTransform.position);
     }
@@ -69,6 +75,24 @@ public class VoidBeastController : NetworkBehaviour
             navMeshMovement.SetVelocity(Vector3.zero);
             hasTarget = false;
             targetTransform = null;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            playerSeen = true;
+            hasTarget = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            playerSeen = false;
+            hasTarget = false;
         }
     }
 }

@@ -267,17 +267,37 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Hide Tutorial",
+                    "type": "Button",
+                    "id": "2cf89c3f-e053-4358-a75e-15e64421f310",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
                     "id": "32b4891b-a6ad-4499-b117-56f13a297aed",
-                    "path": "<Keyboard>/tab",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5b430fb-e8c0-4bd0-9e6b-1a7778d4ad20",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Hide Tutorial",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1973683678038727786}
   - component: {fileID: 7365976091761305971}
   - component: {fileID: 1288812495254657336}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Medical Syringe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,6 +104,9 @@ MonoBehaviour:
   itemData: {fileID: 11400000, guid: 6a97e4240627b9445b25444723baf197, type: 2}
   canPickUp: 1
   canDrop: 1
+  pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
+    type: 2}
+  tutorialData: {fileID: 11400000, guid: 463d42e8f28edd2489eb9a899ebcd4c6, type: 2}
 --- !u!114 &2881230572158077046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2411994415
+  GlobalObjectIdHash: 1561576115
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1

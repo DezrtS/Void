@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
@@ -27,9 +26,19 @@ public class GameMultiplayer : NetworkSingleton<GameMultiplayer>
         if (IsServer)
         {
             PlayerReadyManager.OnAllPlayersReady += LoadGameplayScene;
-            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnSceneManagerLoadEventCompleted;
-
+            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectedCallback;
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        if (IsServer)
+        {
+            PlayerReadyManager.OnAllPlayersReady -= LoadGameplayScene;
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnectedCallback;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectedCallback;
         }
     }
 
@@ -41,12 +50,10 @@ public class GameMultiplayer : NetworkSingleton<GameMultiplayer>
         Loader.LoadNetwork(Loader.Scene.GameplayScene);
     }
 
-    private void OnSceneManagerLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadScene, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    private void OnClientConnectedCallback(ulong clientId)
     {
-        if (sceneName == Loader.Scene.GameplayScene.ToString())
-        {
-            GameManager.Instance.RequestSetGameState(GameManager.GameState.WaitingToStart);
-        }
+        GameManager.Instance.RequestAddPlayerRole(clientId, GameManager.PlayerRole.Survivor);
+        Debug.Log("Client Connected");
     }
 
     private void OnClientDisconnectedCallback(ulong clientId)
@@ -77,7 +84,7 @@ public class GameMultiplayer : NetworkSingleton<GameMultiplayer>
                     }
                 }
 
-                playerObject.Despawn();
+                playerObject.Despawn(true);
             }
         }
 

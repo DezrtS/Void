@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7511782416821805592}
   - component: {fileID: 4381393292176402532}
   - component: {fileID: 7772036290603550986}
+  - component: {fileID: 2475937281271552082}
   m_Layer: 0
   m_Name: TaskManager
   m_TagString: Untagged
@@ -66,5 +67,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39dd4e1810f56854aac5b6d94ce0c2d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generateTasksOnSpawn: 0
-  tasksCount: 1
+  taskCount: 5
+--- !u!114 &2475937281271552082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1035749791086969092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f7e669bb91b56d4fb2e0a60ec42693f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

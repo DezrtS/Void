@@ -4,8 +4,7 @@ using static GameManager;
 
 public class NetworkGameManager : NetworkBehaviour
 {
-    [Header("Options")]
-    [SerializeField] private bool startGameOnSpawn;
+    [SerializeField] private bool readyUpPlayerOnSpawn;
 
     private GameManager gameManager;
     private readonly NetworkVariable<GameState> state = new();
@@ -15,11 +14,16 @@ public class NetworkGameManager : NetworkBehaviour
         gameManager = GetComponent<GameManager>();   
     }
 
+    private void Start()
+    {
+        if (readyUpPlayerOnSpawn) PlayerReadyManager.Instance.RequestSetPlayerReadyState(NetworkManager.Singleton.LocalClientId, true);
+    }
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         state.OnValueChanged += OnGameStateChanged;
-        if (IsServer && startGameOnSpawn) SetGameStateServerRpc(GameState.WaitingToStart);
+        if (IsServer) PlayerReadyManager.OnAllPlayersReady += gameManager.OnAllPlayersReady;
     }
 
     public override void OnNetworkDespawn()
@@ -52,6 +56,9 @@ public class NetworkGameManager : NetworkBehaviour
         {
             AddPlayerRoleClientRpc(clientId, playerRole);
         }
+
+        PlayerPrefs.SetInt(clientId.ToString(), (int)playerRole);
+        PlayerPrefs.Save();
     }
 
     [ClientRpc(RequireOwnership = false)]
@@ -72,6 +79,9 @@ public class NetworkGameManager : NetworkBehaviour
             if (gameManager.PlayerRoleDictionary[clientId] == newPlayerRole) return;
             SetPlayerRoleClientRpc(clientId, newPlayerRole);
         }
+
+        PlayerPrefs.SetInt(clientId.ToString(), (int)newPlayerRole);
+        PlayerPrefs.Save();
     }
 
     [ClientRpc(RequireOwnership = false)]
@@ -85,6 +95,9 @@ public class NetworkGameManager : NetworkBehaviour
     {
         if (!gameManager.PlayerRoleDictionary.ContainsKey(clientId)) return;
         RemovePlayerRoleClientRpc(clientId);
+
+        PlayerPrefs.DeleteKey(clientId.ToString());
+        PlayerPrefs.Save();
     }
 
     [ClientRpc(RequireOwnership = false)]

@@ -12,7 +12,7 @@ public class PlayerReadyManager : Singleton<PlayerReadyManager>
     private NetworkPlayerReadyManager networkPlayerReadyManager;
     private bool isAllPlayersReady;
 
-    private Dictionary<ulong, bool> playerReadyDictionary = new Dictionary<ulong, bool>();
+    private readonly Dictionary<ulong, bool> playerReadyDictionary = new Dictionary<ulong, bool>();
 
     public NetworkPlayerReadyManager NetworkPlayerReadyManager => networkPlayerReadyManager;
     public bool IsAllPlayersReady => isAllPlayersReady;

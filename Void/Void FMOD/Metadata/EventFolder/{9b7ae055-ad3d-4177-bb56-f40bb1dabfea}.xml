@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EventFolder" id="{9b7ae055-ad3d-4177-bb56-f40bb1dabfea}">
+		<property name="name">
+			<value>GrappleHook</value>
+		</property>
+		<relationship name="folder">
+			<destination>{08a8c0c6-30f9-434f-a5e0-3212073fe86b}</destination>
+		</relationship>
+	</object>
+</objects>

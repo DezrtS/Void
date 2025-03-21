@@ -1,4 +1,3 @@
-using System.Linq;
 using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
@@ -35,6 +34,7 @@ public class PlayerLook : NetworkBehaviour
     [SerializeField] private float ySensitivity = 0.01f;
 
     private IInteractable interactable;
+    private UIManager instance;
 
     private void OnEnable()
     {
@@ -76,6 +76,11 @@ public class PlayerLook : NetworkBehaviour
         LockCamera(true);
     }
 
+    private void Start()
+    {
+        instance = UIManager.Instance;
+    }
+
     private void Update()
     {
         if (!IsOwner) return;
@@ -112,13 +117,38 @@ public class PlayerLook : NetworkBehaviour
             if (Physics.Raycast(cameraRootTransform.position, (lookAtTargetTransform.position - cameraRootTransform.position).normalized, out RaycastHit hitInfo, interactRange, interactLayerMask, QueryTriggerInteraction.Collide))
             {
                 hitInfo.collider.TryGetComponent(out IInteractable interactable);
+
+                //if (this.interactable != interactable)
+                //{
+                    InteractableData interactableData = interactable.GetInteractableData();
+                    instance.SetInteractableText(interactableData);
+                //}
+
                 this.interactable = interactable;
             }
             else
             {
+                if (interactable != null)
+                {
+                    UIManager.Instance.ResetInteractableText();
+                }
                 interactable = null;
             }
         }
+    }
+
+    public void AddXRotation(float value)
+    {
+        if (!IsOwner) return;
+
+        currentXRotation = Mathf.Clamp(currentXRotation + value, -maxYRotation, maxYRotation);
+    }
+
+    public void AddRandomYRotation()
+    {
+        if (!IsOwner) return;
+
+        transform.Rotate(new Vector3(0, Random.Range(-100, 100) / 100f, 0));
     }
 
     public void EnableDisableCameraControls(bool enabled)

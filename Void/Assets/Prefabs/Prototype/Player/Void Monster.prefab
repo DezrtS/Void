@@ -442,7 +442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3567632822
+  GlobalObjectIdHash: 1127425563
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -588,7 +588,7 @@ MonoBehaviour:
   hasLookAtTarget: 0
   lookAtTransform: {fileID: 0}
   lookAtTargetTransform: {fileID: 4295661854576409293}
-  canInteract: 1
+  canInteract: 0
   interactRange: 5
   interactLayerMask:
     serializedVersion: 2
@@ -632,6 +632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d2370f6cde6f3949b3d84c90accc6bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerRole: 1
   canAutomaticallyRespawn: 1
   respawnDelay: 5
   playerModel: {fileID: 3570833094775301265}
