@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfe362f9869c7104d9fd3427d94a2482, type: 3}
+  m_Name: Armored Skin
+  m_EditorClassIdentifier: 
+  displayName: Armored Skin
+  description: Reinforce your skin to reflect all damage for a limited time
+  displaySprite: {fileID: 1330719568, guid: 041f534614a4d1f4bb2ce51a34089004, type: 3}
+  mutationPrefab: {fileID: 2402010164325770602, guid: 748b099e968ebca4fa65104bb91decb2,
+    type: 3}
+  cooldown: 10
+  useSound:
+    Guid:
+      Data1: 159996010
+      Data2: 1335368854
+      Data3: -1865863539
+      Data4: 1509925154
+    Path: event:/Prototype/Mutations/Invincibility/InvincibilityActive
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

@@ -45,12 +45,14 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
     {
         isUsing = true;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(mutationData.UseSound, gameObject);
     }
 
     public virtual void StopUsing()
     {
         isUsing = false;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(mutationData.StopUsingSound, gameObject);
     }
 
     public virtual void UpdateTimers()

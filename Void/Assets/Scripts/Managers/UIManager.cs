@@ -30,6 +30,7 @@ public class UIManager : Singleton<UIManager>
     public static event Action<GameObject> OnSetupUI;
     public static event Action<bool> OnPause;
 
+    private Animator animator;
     private bool paused;
     private float gameTimer;
 
@@ -50,6 +51,7 @@ public class UIManager : Singleton<UIManager>
     {
         loadingUI.SetActive(true);
         SetTutorialText(defaultTutorialData);
+        animator = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
@@ -186,6 +188,10 @@ public class UIManager : Singleton<UIManager>
         if (gameState == GameManager.GameState.WaitingToStart)
         {
             loadingUI.SetActive(false);
+        }
+        else if (gameState == GameManager.GameState.GameOver)
+        {
+            animator.SetTrigger("Fade");
         }
     }
 

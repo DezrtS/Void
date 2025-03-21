@@ -7,6 +7,7 @@ public class DeployableItem : Item
     private NetworkDeployableItem networkDeployableItem;
     private bool isDeployed;
 
+    public DeployableItemData DeployableItemData => deployableItemData;
     public bool IsDeployed => isDeployed;
 
     public bool CanDeploy() => !isDeployed;
@@ -43,29 +44,23 @@ public class DeployableItem : Item
     {
         isDeployed = true;
         rig.isKinematic = true;
-        Transform castTransform = CameraManager.Instance.transform;
-        if (Physics.Raycast(castTransform.position, castTransform.forward, out RaycastHit hit,
-            deployableItemData.DeployRange, deployableItemData.DeployLayers,
-            QueryTriggerInteraction.Ignore))
+        if (NetworkItem.IsOwner)
         {
-            if (NetworkItem.IsOwner)
+            Transform castTransform = CameraManager.Instance.transform;
+            if (Physics.Raycast(castTransform.position, castTransform.forward, out RaycastHit hit, deployableItemData.DeployRange, deployableItemData.DeployLayers, QueryTriggerInteraction.Ignore))
             {
-                // Preserve original forward direction while aligning to surface normal
                 Vector3 surfaceAlignedForward = Vector3.ProjectOnPlane(castTransform.forward, hit.normal).normalized;
-
-                // Ensure valid rotation when projecting (edge case handling)
-                if (surfaceAlignedForward == Vector3.zero)
-                    surfaceAlignedForward = Vector3.forward;  // Fallback axis
-
+                if (surfaceAlignedForward == Vector3.zero) surfaceAlignedForward = Vector3.forward;
                 Quaternion surfaceAlignment = Quaternion.LookRotation(surfaceAlignedForward, hit.normal);
 
                 transform.SetPositionAndRotation(hit.point, surfaceAlignment);
+                AudioManager.RequestPlayOneShot(deployableItemData.DeploySound, transform.position);
             }
-        }
-        else
-        {
-            if (NetworkItem.IsOwner) transform.SetPositionAndRotation(castTransform.position + castTransform.forward * deployableItemData.DeployRange, transform.rotation);
-            if (NetworkItem.IsServer) RequestUndeploy();
+            else
+            {
+                transform.SetPositionAndRotation(castTransform.position + castTransform.forward * deployableItemData.DeployRange, transform.rotation);
+                RequestUndeploy();
+            }
         }
     }
 

@@ -17,11 +17,19 @@ MonoBehaviour:
   fireSpeed: 45
   angularVelocity: {x: 0, y: 0, z: 0}
   gravity: -1
+  useBoxCast: 1
   boxCastSize: {x: 0.25, y: 0.25}
   lifetimeDuration: 10
   damage: 0
   knockback: 0
   hitEffect: {fileID: 0}
+  hitSound:
+    Guid:
+      Data1: 2075448328
+      Data2: 1141013037
+      Data3: -1217270141
+      Data4: -106163253
+    Path: event:/Prototype/Mutations/GrappleHook/GrappleConnect
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295

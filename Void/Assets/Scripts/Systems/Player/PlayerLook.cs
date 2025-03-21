@@ -36,6 +36,8 @@ public class PlayerLook : NetworkBehaviour
     private IInteractable interactable;
     private UIManager instance;
 
+    public Transform CameraRootTransform => cameraRootTransform;
+
     private void OnEnable()
     {
         cameraActionMap ??= InputSystem.actions.FindActionMap("Camera");

@@ -51,7 +51,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e089afb4eafec348bf8d679315b7421, type: 2}
   - {fileID: 11400000, guid: 6a97e4240627b9445b25444723baf197, type: 2}
   - {fileID: 11400000, guid: 4ef626523bf22ca4cbba9f0a55836608, type: 2}
-  - {fileID: 11400000, guid: 297e919259697be4ca5e99ba4ed14adb, type: 2}
+  - {fileID: 11400000, guid: 03d6f5daa7672514c85925afd0c41439, type: 2}
   - {fileID: 11400000, guid: 1162aa038af977a4cbc612e189a66e64, type: 2}
   - {fileID: 11400000, guid: 7fe1a475379fe3d4b805491f1dcac943, type: 2}
   - {fileID: 11400000, guid: da7ba029491ea2b4e9d8d85cf397226e, type: 2}
@@ -74,8 +74,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 17c678a753e10ac48a2421c8ef306e39, type: 2}
   - {fileID: 11400000, guid: e29ad63d80a9a494a93995761b2e5972, type: 2}
   mutations:
-  - {fileID: 11400000, guid: 4e7d56e9597a0204ba47d4711e787587, type: 2}
-  - {fileID: 11400000, guid: b55028e3d118b5449b3d800c149d4e2e, type: 2}
+  - {fileID: 11400000, guid: 0ec27e6618e06754c86347f4dd0b27ee, type: 2}
+  - {fileID: 11400000, guid: 58db8209aa12c084fa463e532e240645, type: 2}
   - {fileID: 11400000, guid: 0f66c3d65eeb4ae489c0e6b60f7cd5e7, type: 2}
   - {fileID: 11400000, guid: 0648ee68f76edb94eab1abbcddbb68e3, type: 2}
   - {fileID: 11400000, guid: c6324e1e825d0124f86cb91a0db49e80, type: 2}
@@ -84,3 +84,8 @@ MonoBehaviour:
   tasks:
   - {fileID: 11400000, guid: 4d4864e5649e0b9479d50441aaf3a62c, type: 2}
   - {fileID: 11400000, guid: ae0de4f5e3e141b44ab680aa462355be, type: 2}
+  statChanges:
+  - {fileID: 11400000, guid: e337e8ea29ca5864c8046e5072ecaa65, type: 2}
+  - {fileID: 11400000, guid: cf938b0b0f8192444b8e35320a470594, type: 2}
+  - {fileID: 11400000, guid: 28084fe7b50a9ce47a82edbb91661cb5, type: 2}
+  - {fileID: 11400000, guid: 1e50a8221b5439c45bfed6e364074985, type: 2}

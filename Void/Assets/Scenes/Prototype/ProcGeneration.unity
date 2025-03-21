@@ -3301,6 +3301,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
         type: 3}
+      propertyPath: endGameOnAllSurvivorDeath
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
+        type: 3}
       propertyPath: initializeNetworkingOnAwake
       value: 1
       objectReference: {fileID: 0}
@@ -16457,6 +16462,13 @@ MonoBehaviour:
     baseValue: 0
   healthRegenerationDelay: 0
   hurtSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  reflectSound:
     Guid:
       Data1: 0
       Data2: 0

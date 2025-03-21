@@ -5,7 +5,7 @@
 			<value>SwithItem</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{186e2b31-1767-4650-9fd1-a820dd92401f}</destination>
@@ -99,7 +99,6 @@
 	<object class="MixerBusEffectChain" id="{b8b5b86a-5e22-4be6-a7d3-7d85c6cc8d0a}">
 		<relationship name="effects">
 			<destination>{ab7575ea-973e-4b5c-8fea-076a89bcb893}</destination>
-			<destination>{14e626c0-a5cd-4418-913a-6ea2d3ad7bc7}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{65f638c7-4fa2-4e77-86a6-9563ac0c9d09}" />
@@ -112,7 +111,6 @@
 	</object>
 	<object class="MixerBusFader" id="{884868db-3161-404c-bd12-91122631393a}" />
 	<object class="MixerBusFader" id="{ab7575ea-973e-4b5c-8fea-076a89bcb893}" />
-	<object class="SpatialiserEffect" id="{14e626c0-a5cd-4418-913a-6ea2d3ad7bc7}" />
 	<object class="SingleSound" id="{d1f7f552-89e8-4036-a112-c5dadd7d26af}">
 		<relationship name="audioFile">
 			<destination>{f46612f3-68c6-4558-82cd-ce52bcc49951}</destination>

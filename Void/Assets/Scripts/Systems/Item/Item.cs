@@ -101,6 +101,12 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
         }
     }
 
+    public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+    {
+        if (!networkItem.IsOwner) return;
+        transform.SetPositionAndRotation(position, rotation);
+    }
+
     public void SetAtHoldingPosition(Vector3 worldPosition, Quaternion worldRotation)
     {
         if (holdingPositionData == null)

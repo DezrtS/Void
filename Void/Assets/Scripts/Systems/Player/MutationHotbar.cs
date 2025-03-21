@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MutationHotbar : MonoBehaviour
@@ -9,6 +10,7 @@ public class MutationHotbar : MonoBehaviour
     public event MutationEventHandler OnRemoveMutation;
     public event MutationSwitchEventHandler OnSwitchMutation;
 
+    [SerializeField] private Transform lookAt;
     [SerializeField] private Transform activeTransform;
 
     private NetworkMutationHotbar networkMutationHotbar;
@@ -29,6 +31,18 @@ public class MutationHotbar : MonoBehaviour
     {
         networkMutationHotbar = GetComponent<NetworkMutationHotbar>();
         mutations = new List<Mutation>();
+    }
+
+    private void LateUpdate()
+    {
+        if (!networkMutationHotbar.IsOwner) return;
+
+        Mutation mutation = GetMutation();
+        if (mutation != null)
+        {
+            activeTransform.rotation = Quaternion.LookRotation((lookAt.position - activeTransform.position).normalized);
+            mutation.transform.SetPositionAndRotation(activeTransform.position, activeTransform.rotation);
+        }
     }
 
     public Mutation GetMutation()

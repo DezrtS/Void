@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class ShapeshiftingMutation : Mutation
@@ -5,6 +6,8 @@ public class ShapeshiftingMutation : Mutation
     [SerializeField] private GameObject survivor;
     [SerializeField] private Animator animator;
     [SerializeField] private float duration;
+
+    [SerializeField] private EventReference shapeshiftBackSound;
 
     private NetworkShapeshiftingMutation networkShapeshiftingMutation;
     private bool isActive;
@@ -68,5 +71,6 @@ public class ShapeshiftingMutation : Mutation
         survivor.SetActive(false);
         playerModel.SetActive(true);
         animationController.RemoveAnimatorInstance(animator);
+        AudioManager.PlayOneShot(shapeshiftBackSound, gameObject);
     }
 }

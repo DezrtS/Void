@@ -77,6 +77,8 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         if (!springJoint) springJoint = transform.AddComponent<SpringJoint>();
         springJoint.connectedBody = rig;
+        springJoint.damper = 1;
+        springJoint.maxDistance = 1;
         springJoint.connectedMassScale = 0.1f;
     }
 

@@ -15,4 +15,4 @@ MonoBehaviour:
   ResourceRequirements:
   - Resource: {fileID: 11400000, guid: 17c678a753e10ac48a2421c8ef306e39, type: 2}
     Amount: 0
-  Item: {fileID: 11400000, guid: 297e919259697be4ca5e99ba4ed14adb, type: 2}
+  Item: {fileID: 11400000, guid: 03d6f5daa7672514c85925afd0c41439, type: 2}

@@ -33,11 +33,14 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] public GameObject FirstPersonCamera;
 
+    [Header("Sound Events")]
+
     private NetworkGameManager networkGameManager;
     private GameState state;
 
     private Dictionary<ulong, PlayerRole> playerRoleDictionary;
     private List<ulong> deadClientIds;
+    private float gameTimer;
 
     public bool FriendlyFireEnabled => friendlyFireEnabled;
     public PlayerRole DefaultPlayerRole => defaultPlayerRole;
@@ -95,6 +98,7 @@ public class GameManager : Singleton<GameManager>
                 if (networkGameManager.IsServer) PrepareGame();
                 break;
             case GameState.GamePlaying:
+                gameTimer = gameDuration + panicDuration;
                 UIManager.Instance.SetGameTimer(gameDuration);
                 AudioManager.ChangeMusic(FMODEventManager.Instance.BackgroundTheme);
                 if (networkGameManager.IsServer) StartGame();
@@ -182,7 +186,15 @@ public class GameManager : Singleton<GameManager>
         if (isDead)
         {
             deadClientIds.Add(health.NetworkHealth.OwnerClientId);
-            if (endGameOnAllSurvivorDeath && AllSurvivorsDead()) RequestSetGameState(GameState.GameOver);
+            if (endGameOnAllSurvivorDeath && AllSurvivorsDead())
+            {
+                RequestSetGameState(GameState.GameOver);
+            }
+            else
+            {
+                if (deadClientIds.Count == 1) AudioManager.RequestPlayOneShot(FMODEventManager.Instance.OnePlayerSlayed, transform.position);
+                else if (deadClientIds.Count == 2) AudioManager.RequestPlayOneShot(FMODEventManager.Instance.TwoPlayersSlayed, transform.position);
+            }
         }
         else
         {

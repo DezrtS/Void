@@ -206,11 +206,11 @@ MonoBehaviour:
     Path: event:/Prototype/Tasks/Box/DropBox
   draggingSound:
     Guid:
-      Data1: -1329539406
-      Data2: 1148565324
-      Data3: 2106917532
-      Data4: 1882314270
-    Path: event:/Prototype/Tasks/Box/GrabBox
+      Data1: -1743477759
+      Data2: 1168750899
+      Data3: -1620655993
+      Data4: 1702918809
+    Path: event:/Prototype/Tasks/Box/DragBox
 --- !u!65 &1556337531653399344
 BoxCollider:
   m_ObjectHideFlags: 0

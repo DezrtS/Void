@@ -65,6 +65,7 @@ public class Health : MonoBehaviour
     [SerializeField] protected float healthRegenerationDelay;
 
     [SerializeField] private EventReference hurtSound;
+    [SerializeField] private EventReference reflectSound;
     [SerializeField] private EventReference deathSound;
 
     private NetworkHealth networkHealth;
@@ -153,6 +154,7 @@ public class Health : MonoBehaviour
     {
         damage *= Mathf.Clamp(1 - damageResistance.Value, 0, 1);
         float newCurrentHealth = currentHealth - damage;
+        if (damage <= 0) AudioManager.RequestPlayOneShot(reflectSound, transform.position);
         RequestSetCurrentHealth(newCurrentHealth);
     }
 

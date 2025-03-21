@@ -205,7 +205,7 @@ public abstract class PlayerController : NetworkBehaviour
     public abstract void OnSecondaryAction(InputAction.CallbackContext context);
     public void OnOpenSelection(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
 
         if (context.performed)
         {
@@ -236,7 +236,7 @@ public abstract class PlayerController : NetworkBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
         if (context.performed) playerLook.InteractWithObject();
     }
 

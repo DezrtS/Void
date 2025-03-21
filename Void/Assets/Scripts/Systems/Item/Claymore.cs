@@ -31,14 +31,14 @@ public class Claymore : DeployableItem
 
     public override void Deploy()
     {
-        if (networkClaymore.IsServer) RequestActivateClaymore();
         base.Deploy();
+        if (networkClaymore.IsOwner) RequestActivateClaymore();
     }
 
     public override void Undeploy()
     {
         base.Undeploy();
-        if (networkClaymore.IsServer) RequestDeactivateClaymore();
+        if (networkClaymore.IsOwner) RequestDeactivateClaymore();
     }
 
     public void OnEnter(Trigger trigger, GameObject gameObject)

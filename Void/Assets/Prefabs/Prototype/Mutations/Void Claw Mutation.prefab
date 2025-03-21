@@ -55,11 +55,11 @@ MonoBehaviour:
   spawnProjectileTrigger: VoidClaw
   spawnProjectileSound:
     Guid:
-      Data1: -216524419
-      Data2: 1195948105
-      Data3: 1788833971
-      Data4: 434400467
-    Path: event:/Prototype/Mutations/ClawThrowing/ClawThrow
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!114 &8439705898875105305
 MonoBehaviour:
   m_ObjectHideFlags: 0

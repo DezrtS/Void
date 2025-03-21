@@ -53,6 +53,7 @@ MonoBehaviour:
   projectileSpawner: {fileID: 4439386080916199949}
   spawnProjectileDelay: 0.5
   spawnProjectileTrigger: ShootProjectile
+  spawnAtCamera: 1
   spawnProjectileSound:
     Guid:
       Data1: -163746505

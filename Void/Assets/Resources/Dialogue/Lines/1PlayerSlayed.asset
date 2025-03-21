@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e14a16caa85c0a47b8093f124c89e51, type: 3}
+  m_Name: 1PlayerSlayed
+  m_EditorClassIdentifier: 
+  dialogueNameData: {fileID: 11400000, guid: 70ab6dd3898538e41acd96d3f3636975, type: 2}
+  dialogueAudio:
+    Guid:
+      Data1: 621453713
+      Data2: 1093047167
+      Data3: 2027273898
+      Data4: -2002820525
+    Path: event:/Prototype/Voicelines/1PlayerSlayed
+  dialogueLines:
+  - duration: 3
+    dialogue: One player has been slayed

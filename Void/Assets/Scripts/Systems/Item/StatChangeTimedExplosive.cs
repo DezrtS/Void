@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class StatChangeTimedExplosive : TimedExplosive
 {
-    [SerializeField] private StatChangeItemData statChangeItemData;
+    [SerializeField] private StatChangesData statChangesData;
 
     public override void OnExplosiveHit(RaycastHit raycastHit)
     {
@@ -11,18 +11,9 @@ public class StatChangeTimedExplosive : TimedExplosive
 
         if (raycastHit.collider.TryGetComponent(out PlayerStats playerStats))
         {
-            AddStats(playerStats);
+            playerStats.RequestChangeStats(statChangesData);
         }
 
         base.OnExplosiveHit(raycastHit);
-    }
-
-    private void AddStats(PlayerStats playerStats)
-    {
-        for (int i = 0; i < statChangeItemData.StatChanges.Count; i++)
-        {
-            StatChange statChange = statChangeItemData.StatChanges[i];
-            playerStats.ApplyModifier(statChange.StatName, statChangeItemData.Key * 100 + i, statChange.Modifier, statChange.ModifierType, statChangeItemData.Duration);
-        }
     }
 }

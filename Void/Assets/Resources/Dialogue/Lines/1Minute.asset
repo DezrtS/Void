@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e14a16caa85c0a47b8093f124c89e51, type: 3}
+  m_Name: 1Minute
+  m_EditorClassIdentifier: 
+  dialogueNameData: {fileID: 11400000, guid: 70ab6dd3898538e41acd96d3f3636975, type: 2}
+  dialogueAudio:
+    Guid:
+      Data1: -876407093
+      Data2: 1274006722
+      Data3: -121763193
+      Data4: 889450825
+    Path: event:/Prototype/Voicelines/1MinuteLeft
+  dialogueLines:
+  - duration: 4.7
+    dialogue: 1 minute, good luck, don't die

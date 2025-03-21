@@ -20,11 +20,11 @@ MonoBehaviour:
   cooldown: 1
   useSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1282375186
+      Data2: 1120014126
+      Data3: -44546403
+      Data4: -1214818684
+    Path: event:/Prototype/Mutations/ShapeShift/ShapeToHuman
   stopUsingSound:
     Guid:
       Data1: 0
