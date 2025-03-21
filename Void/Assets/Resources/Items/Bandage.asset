@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Bandage
   Description: Heals over time
-  ItemSprite: {fileID: 0}
+  ItemSprite: {fileID: 1565828978, guid: ac665fb3cc39c2048a0684a89623e65c, type: 3}
   ItemPrefab: {fileID: 4865586938871194396, guid: 5c3f69e362184744c96fd3af56dd0aec,
     type: 3}
   useSound:

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Battery
   Description: It Charges Stuff
-  ItemSprite: {fileID: 0}
+  ItemSprite: {fileID: -323598381, guid: ea4adffcdbaf6674da3bdc6c440be316, type: 3}
   ItemPrefab: {fileID: 941687137560951099, guid: 877873f02ff48ac4f80154076476ca22,
     type: 3}
   useSound:

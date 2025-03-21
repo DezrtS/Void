@@ -14,10 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Armored Skin
   description: Temporarily become immune to all damage.
-  displaySprite: {fileID: 21300000, guid: 1d27ed83a4277384a800aacfc585a8b6, type: 3}
+  displaySprite: {fileID: 1330719568, guid: 041f534614a4d1f4bb2ce51a34089004, type: 3}
   mutationPrefab: {fileID: 2402010164325770602, guid: 748b099e968ebca4fa65104bb91decb2,
     type: 3}
   cooldown: 2
+  useSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   key: 0
   duration: 5
   statChanges:

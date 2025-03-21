@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Claymore
   Description: A deployable explosive
-  ItemSprite: {fileID: 21300000, guid: 0398b851c79455d4c99f70a5c40f2a71, type: 3}
+  ItemSprite: {fileID: 1552961816, guid: 4a8ca23cf9a3fa4418ab72b0d4fa0d60, type: 3}
   ItemPrefab: {fileID: 2140256471134006915, guid: 14dcc12668fca3243ad51cfdc17c866c,
     type: 3}
   useSound:

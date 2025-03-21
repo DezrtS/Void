@@ -29,8 +29,8 @@ public class Claymore : DeployableItem
 
     public override void Deploy()
     {
-        base.Deploy();
         if (networkClaymore.IsServer) RequestActivateClaymore();
+        base.Deploy();
     }
 
     public override void Undeploy()
@@ -41,6 +41,11 @@ public class Claymore : DeployableItem
 
     public void OnEnter(Trigger trigger, GameObject gameObject)
     {
+        if (!IsDeployed)
+        {
+            trigger.OnEnter -= OnEnter;
+            return;
+        }
         if (!gameObject.CompareTag("Player") && !gameObject.CompareTag("Monster")) return;
         RequestTriggerClaymore();
 

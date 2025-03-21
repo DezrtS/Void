@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Slow Grenade
   Description: A slowing explosive device
-  ItemSprite: {fileID: 1208872289, guid: e6e34c0e053e8834fac1a4bc6529a83d, type: 3}
+  ItemSprite: {fileID: -663509700, guid: f3100c1ae4feb5b43a81b26f34b2206d, type: 3}
   ItemPrefab: {fileID: 1512034910407666928, guid: 01fbdc24d7238934cb764b59b2e74548,
     type: 3}
   useSound:

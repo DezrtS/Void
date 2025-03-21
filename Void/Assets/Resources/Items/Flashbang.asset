@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Flashbang
   Description: A disorienting explosive device
-  ItemSprite: {fileID: 1208872289, guid: e6e34c0e053e8834fac1a4bc6529a83d, type: 3}
+  ItemSprite: {fileID: -389244830, guid: 37928d3c0443e59428cc4d9b14b0ff7a, type: 3}
   ItemPrefab: {fileID: 1512034910407666928, guid: 893ff40523d6ec046a49211010f0fa3a,
     type: 3}
   useSound:

@@ -14,10 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Speedster
   description: Increased movement speed while active
-  displaySprite: {fileID: 21300000, guid: b949283a509434341931f77b832fc48a, type: 3}
+  displaySprite: {fileID: -1476067512, guid: 8cd091d60c54fd94394cccc526e9b369, type: 3}
   mutationPrefab: {fileID: 2402010164325770602, guid: 20bd6c9866cb7c147b5ae29b34b77ec7,
     type: 3}
   cooldown: 2
+  useSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   key: 1
   duration: 5
   statChanges:

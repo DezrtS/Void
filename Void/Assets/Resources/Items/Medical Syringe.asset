@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Medical Syringe
   Description: Heals over time
-  ItemSprite: {fileID: 0}
+  ItemSprite: {fileID: 1305683252, guid: cf1121df93645e44885e343dd0648e09, type: 3}
   ItemPrefab: {fileID: 1492810490569910539, guid: 6cae033b40808c142a8483f9815e5204,
     type: 3}
   useSound:

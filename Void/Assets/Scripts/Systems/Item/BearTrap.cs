@@ -46,9 +46,9 @@ public class BearTrap : DeployableItem
 
     public override void Deploy()
     {
-        base.Deploy();
         if (NetworkItem.IsServer) trigger.OnEnter += OnEnter;
         if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
+        base.Deploy();
     }
 
     public override void Undeploy()
@@ -60,6 +60,11 @@ public class BearTrap : DeployableItem
     public void OnEnter(Trigger trigger, GameObject gameObject)
     {
         if (captured != null) return;
+        //if (!IsDeployed)
+        //{
+        //    trigger.OnEnter -= OnEnter;
+        //    return;
+        //}
 
         if (gameObject.TryGetComponent(out captured))
         {
