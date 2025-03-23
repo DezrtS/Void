@@ -17,11 +17,26 @@ MonoBehaviour:
   fireSpeed: 20
   angularVelocity: {x: 0, y: 2, z: 0}
   gravity: -1
+  useBoxCast: 1
   boxCastSize: {x: 0.5, y: 0.2}
   lifetimeDuration: 10
   damage: 20
   knockback: 20
   hitEffect: {fileID: 0}
+  spawnSound:
+    Guid:
+      Data1: -216524419
+      Data2: 1195948105
+      Data3: 1788833971
+      Data4: 434400467
+    Path: event:/Prototype/Mutations/ClawThrowing/ClawThrow
+  hitSound:
+    Guid:
+      Data1: -718260445
+      Data2: 1284609360
+      Data3: -1861387848
+      Data4: 1812969984
+    Path: event:/Prototype/Mutations/ClawThrowing/ClawConnect
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295

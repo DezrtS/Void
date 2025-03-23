@@ -1,3 +1,4 @@
+using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,6 +18,7 @@ public class PlayerMovement : MovementController
     private bool isCrouched;
     private bool isGrounded;
     private float defaultColliderHeight;
+    private float footstepTimer;
 
     [SerializeField] private Transform orientationTransform;
     [SerializeField] private Transform groundedCheckTransform;
@@ -32,6 +34,8 @@ public class PlayerMovement : MovementController
     [SerializeField] private Stat walkSpeed = new Stat(4);
     [SerializeField] private Stat sprintSpeed = new Stat(7);
     [SerializeField] private Stat crouchSpeed = new Stat(2);
+    [SerializeField] private EventReference footstepSound;
+    [SerializeField] private float footstepDelay;
 
     [Header("Jump")]
     [SerializeField] private bool canJump;
@@ -148,6 +152,8 @@ public class PlayerMovement : MovementController
         Vector3 localVelocity = WorldToLocalVelocity(GetVelocity(), orientationTransform.rotation) / sprintSpeed.BaseValue;
         animationController.SetFloat("xinput", localVelocity.x);
         animationController.SetFloat("yinput", localVelocity.z);
+
+        HandleFootstep();
     }
 
     private void HandleMovement()
@@ -170,6 +176,21 @@ public class PlayerMovement : MovementController
 
         Vector3 velocityChange = HandleMovement(move, speed, acceleration.Value, timeToAccelerate.Value, timeToDeaccelerate.Value, rig.linearVelocity);
         ApplyForce(velocityChange, ForceMode.VelocityChange);
+    }
+
+    private void HandleFootstep()
+    {
+        if (!isGrounded) return;
+        float currentSpeed = rig.linearVelocity.magnitude;
+        float speedMultiplier = currentSpeed / walkSpeed.Value;
+
+        footstepTimer -= Time.deltaTime * speedMultiplier;
+
+        if (footstepTimer <= 0)
+        {
+            AudioManager.PlayOneShot(footstepSound, transform.position);
+            footstepTimer = footstepDelay;
+        }
     }
 
     private void Jump(InputAction.CallbackContext context)
@@ -221,7 +242,7 @@ public class PlayerMovement : MovementController
 
     public bool IsGrounded()
     {
-        Collider[] colliders = Physics.OverlapSphere(groundedCheckTransform.position, groundedCheckRadius, groundedCheckLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(groundedCheckTransform.position, groundedCheckRadius, groundedCheckLayerMask, QueryTriggerInteraction.Ignore);
         return (colliders.Length > 0);
     }
 }

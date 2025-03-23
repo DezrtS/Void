@@ -11,11 +11,14 @@ public class BearTrap : DeployableItem
     [SerializeField] private EventReference activateSound;
     
     private NetworkBearTrap networkBearTrap;
+    private bool isPrimed;
     private bool isActive;
 
     private Health captured;
     private float durationTimer;
 
+    public bool CanPrimeBearTrap() => !isPrimed;
+    public bool CanUnprimeBearTrap() => isPrimed;
     public bool CanActivateBearTrap() => !isActive;
     public bool CanDeactivateBearTrap() => isActive;
 
@@ -43,31 +46,26 @@ public class BearTrap : DeployableItem
         }
     }
 
+    public void RequestPrimeBearTrap() => networkBearTrap.PrimeBearTrapServerRpc();
+    public void RequestUnprimeBearTrap() => networkBearTrap.UnprimeBearTrapServerRpc();
     public void RequestActivateBearTrap() => networkBearTrap.ActivateBearTrapServerRpc();
     public void RequestDeactivateBearTrap() => networkBearTrap.DeactivateBearTrapServerRpc();
 
     public override void Deploy()
     {
-        if (NetworkItem.IsServer) trigger.OnEnter += OnEnter;
-        if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
         base.Deploy();
+        if (networkBearTrap.IsOwner) RequestPrimeBearTrap();
     }
 
     public override void Undeploy()
     {
         base.Undeploy();
-        if (NetworkItem.IsServer) trigger.OnEnter -= OnEnter;
-        if (networkBearTrap.IsOwner) animator.SetBool("Active", true);
+        if (networkBearTrap.IsOwner) RequestUnprimeBearTrap();
     }
 
     public void OnEnter(Trigger trigger, GameObject gameObject)
     {
         if (captured != null) return;
-        //if (!IsDeployed)
-        //{
-        //    trigger.OnEnter -= OnEnter;
-        //    return;
-        //}
 
         if (gameObject.TryGetComponent(out captured))
         {
@@ -81,13 +79,27 @@ public class BearTrap : DeployableItem
         }
     }
 
+    public void PrimeBearTrap()
+    {
+        isPrimed = true;
+        animator.SetBool("Active", isActive);
+        if (NetworkItem.IsServer) trigger.OnEnter += OnEnter;
+    }
+
+    public void UnprimeBearTrap()
+    {
+        isPrimed = false;
+        animator.SetBool("Active", true);
+        if (NetworkItem.IsServer) trigger.OnEnter -= OnEnter;
+    }
+
     public void ActivateBearTrap()
     {
         isActive = true;
         canPickUp = false;
         durationTimer = duration;
         AudioManager.PlayOneShot(activateSound, gameObject);
-        if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
+        animator.SetBool("Active", isActive);
     }
 
     public void DeactivateBearTrap()

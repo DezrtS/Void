@@ -20,11 +20,11 @@ MonoBehaviour:
   cooldown: 1
   useSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: 1435196291
+      Data2: 1279332017
+      Data3: -954587977
+      Data4: 299688401
+    Path: event:/Prototype/VoidMonster/MonsterGrunt
   stopUsingSound:
     Guid:
       Data1: 0

@@ -8,13 +8,15 @@ public class ProjectileMutation : Mutation
     [SerializeField] private float spawnProjectileDelay;
     [SerializeField] private string spawnProjectileTrigger;
 
+    [SerializeField] private bool spawnAtCamera;
+
     [SerializeField] private EventReference spawnProjectileSound;
-    private MutationHotbar mutationHotbar;
+    private PlayerLook playerLook;
 
     public override void SetupMutation(GameObject player)
     {
         base.SetupMutation(player);
-        player.TryGetComponent(out mutationHotbar);
+        player.TryGetComponent(out playerLook);
     }
 
     public override void StopUsing()
@@ -30,6 +32,14 @@ public class ProjectileMutation : Mutation
     {
         yield return new WaitForSeconds(spawnProjectileDelay);
         AudioManager.PlayOneShot(spawnProjectileSound, gameObject);
-        projectileSpawner.SpawnProjectile(mutationHotbar.ActiveTransform.position, mutationHotbar.ActiveTransform.rotation);
+        if (spawnAtCamera)
+        {
+            Transform cameraTransform = playerLook.CameraRootTransform;
+            projectileSpawner.SpawnProjectile(cameraTransform.position, cameraTransform.rotation);
+        }
+        else
+        {
+            projectileSpawner.SpawnProjectile(transform.position, transform.rotation);
+        }
     }
 }

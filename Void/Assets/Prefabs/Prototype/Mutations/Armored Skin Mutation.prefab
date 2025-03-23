@@ -67,8 +67,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eea5a23d1f09b724caa43bd1d0e955c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mutationData: {fileID: 11400000, guid: b55028e3d118b5449b3d800c149d4e2e, type: 2}
+  mutationData: {fileID: 11400000, guid: 58db8209aa12c084fa463e532e240645, type: 2}
   tutorialData: {fileID: 11400000, guid: 21a55a6d457f4c34c92ef44735c401b7, type: 2}
+  statChangesData: {fileID: 11400000, guid: e337e8ea29ca5864c8046e5072ecaa65, type: 2}
 --- !u!114 &-6360011152182680397
 MonoBehaviour:
   m_ObjectHideFlags: 0

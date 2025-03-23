@@ -17,12 +17,20 @@ MonoBehaviour:
   fireSpeed: 25
   angularVelocity: {x: 0, y: 0, z: 0}
   gravity: -9.8
+  useBoxCast: 1
   boxCastSize: {x: 0.75, y: 0.75}
   lifetimeDuration: 10
   damage: 5
   knockback: 0
   hitEffect: {fileID: 3929961048621311391, guid: 6fc1624de8dee5240890f48b6f94881f,
     type: 3}
+  hitSound:
+    Guid:
+      Data1: -325948631
+      Data2: 1240931067
+      Data3: 1032428984
+      Data4: -757338963
+    Path: event:/Prototype/Mutations/AcidSpit/AcidSplash
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295

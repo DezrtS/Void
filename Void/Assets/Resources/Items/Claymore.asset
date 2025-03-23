@@ -19,11 +19,11 @@ MonoBehaviour:
     type: 3}
   useSound:
     Guid:
-      Data1: 1857818178
-      Data2: 1300722753
-      Data3: 1399964083
-      Data4: 1715162326
-    Path: event:/Prototype/Items/Claymore/ClayMoreSetup
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   stopUsingSound:
     Guid:
       Data1: 0
@@ -49,3 +49,10 @@ MonoBehaviour:
   deployLayers:
     serializedVersion: 2
     m_Bits: 1463
+  deploySound:
+    Guid:
+      Data1: 1857818178
+      Data2: 1300722753
+      Data3: 1399964083
+      Data4: 1715162326
+    Path: event:/Prototype/Items/Claymore/ClayMoreSetup

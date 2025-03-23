@@ -120,28 +120,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList:
   - IsCrossFadeExit: 0
-    Layer: 3
+    Layer: 4
     OriginatingState: -453240694
     DestinationState: 569745642
     TransitionDuration: 0.25
     TriggerNameHash: 1464497218
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 3
+    Layer: 4
     OriginatingState: -453240694
     DestinationState: 1520933651
     TransitionDuration: 0.25
     TriggerNameHash: -707834555
     TransitionIndex: 1
   - IsCrossFadeExit: 0
-    Layer: 5
+    Layer: 6
     OriginatingState: -367768302
     DestinationState: -1762544625
     TransitionDuration: 0.25
     TriggerNameHash: 1793123249
     TransitionIndex: 0
   - IsCrossFadeExit: 0
-    Layer: 6
+    Layer: 7
     OriginatingState: -367768302
     DestinationState: 1377215829
     TransitionDuration: 0.25
@@ -259,7 +259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientationTransform: {fileID: 7928993837376897029}
   groundedCheckTransform: {fileID: 325154389426029720}
-  groundedCheckRadius: 0.1
+  groundedCheckRadius: 0.25
   groundedCheckLayerMask:
     serializedVersion: 2
     m_Bits: 503
@@ -275,6 +275,14 @@ MonoBehaviour:
     baseValue: 7
   crouchSpeed:
     baseValue: 2
+  footstepSound:
+    Guid:
+      Data1: -1810450758
+      Data2: 1324032692
+      Data3: 162738075
+      Data4: -711878353
+    Path: event:/Prototype/Survivor/Walk/Walking
+  footstepDelay: 0.25
   canJump: 1
   jumpPower:
     baseValue: 7
@@ -396,6 +404,13 @@ MonoBehaviour:
       Data3: -530929748
       Data4: 1793110144
     Path: event:/Prototype/Survivor/Damage/PlDamageBlunt
+  reflectSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   deathSound:
     Guid:
       Data1: 316750510

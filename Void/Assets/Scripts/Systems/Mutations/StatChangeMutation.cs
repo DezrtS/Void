@@ -2,16 +2,11 @@ using UnityEngine;
 
 public class StatChangeMutation : Mutation
 {
-    private StatChangeMutationData statChangeMutationData;
+    [SerializeField] private StatChangesData statChangesData;
     private PlayerStats playerStats;
     private float durationTimer;
 
     public bool CanActivate() => durationTimer <= 0;
-
-    private void Start()
-    {
-        statChangeMutationData = mutationData as StatChangeMutationData;
-    }
 
     public override void SetupMutation(GameObject player)
     {
@@ -30,8 +25,8 @@ public class StatChangeMutation : Mutation
 
     public void Activate()
     {
-        durationTimer = statChangeMutationData.Duration;
-        AddStats();
+        durationTimer = statChangesData.Duration;
+        playerStats.RequestChangeStats(statChangesData);
     }
 
     public override void UpdateTimers()
@@ -45,27 +40,8 @@ public class StatChangeMutation : Mutation
             if (durationTimer <= 0)
             {
                 durationTimer = 0;
-                RemoveStats();
                 cooldownTimer = mutationData.Cooldown;
             }
-        }
-    }
-
-    private void AddStats()
-    {
-        for (int i = 0; i < statChangeMutationData.StatChanges.Count; i++)
-        {
-            StatChange statChange = statChangeMutationData.StatChanges[i];
-            playerStats.ApplyModifier(statChange.StatName, statChangeMutationData.Key * 100 + i, statChange.Modifier, statChange.ModifierType);
-        }
-    }
-
-    private void RemoveStats()
-    {
-        for (int i = 0; i < statChangeMutationData.StatChanges.Count; i++)
-        {
-            StatChange statChange = statChangeMutationData.StatChanges[i];
-            playerStats.RemoveModifier(statChange.StatName, statChangeMutationData.Key * 100 + i);
         }
     }
 }

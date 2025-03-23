@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
 
     [SerializeField] private float cooldown;
     [SerializeField] private float duration;
+
+    [SerializeField] private EventReference attackSound;
 
     protected NetworkUseable networkUseable;
 
@@ -71,6 +74,7 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
         isAttacking = true;
         durationTimer = duration;
 
+        AudioManager.PlayOneShot(attackSound, gameObject);
         if (networkUseable.IsOwner) animator.SetTrigger("Attack");
     }
 

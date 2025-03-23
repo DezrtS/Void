@@ -171,17 +171,19 @@ public class SurvivorController : PlayerController
 
         if (isDead)
         {
+            animationController.SetTrigger("Die");
             hotbar.RequestDropEverything();
         }
         else
         {
+            animationController.SetTrigger("Respawn");
             draggable.RequestStopUsing();
         }
     }
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
 
         if (context.performed)
         {
@@ -203,7 +205,7 @@ public class SurvivorController : PlayerController
 
     public override void OnSwitch(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
         int direction = (int)Mathf.Sign(context.ReadValue<float>());
         int newIndex = (hotbar.SelectedIndex + direction + hotbar.HotbarCapacity) % hotbar.HotbarCapacity;
         hotbar.RequestSwitchToItem(newIndex);
@@ -225,7 +227,7 @@ public class SurvivorController : PlayerController
 
     public void OnReload(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
 
         if (context.performed)
         {

@@ -38,6 +38,7 @@ public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
         OnSpawn?.Invoke(projectile, this);
         projectile.InitializeProjectile(projectileData, this);
         projectile.FireProjectile(projectileObject.transform.forward);
+        AudioManager.PlayOneShot(projectileData.SpawnSound, projectileObject);
     }
 
     public virtual void OnProjectileHit(Projectile projectile, RaycastHit raycastHit, bool destroyProjectile = true)

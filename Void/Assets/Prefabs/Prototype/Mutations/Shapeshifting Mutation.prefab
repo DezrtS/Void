@@ -52,6 +52,13 @@ MonoBehaviour:
   survivor: {fileID: 3571704797521969294}
   animator: {fileID: 5404794168633028517}
   duration: 8
+  shapeshiftBackSound:
+    Guid:
+      Data1: -701762145
+      Data2: 1078264781
+      Data3: -275885922
+      Data4: -2145492753
+    Path: event:/Prototype/Mutations/ShapeShift/ShapeBackToMonster
 --- !u!114 &7483261379724094456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,7 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2199126611
+  GlobalObjectIdHash: 3842532170
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1

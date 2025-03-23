@@ -92,6 +92,17 @@ public class AudioManager : Singleton<AudioManager>
         PlayOneShot(sound, worldPosition);
     }
 
+    public static void PlayDialogue(DialogueData dialogueData)
+    {
+        UIManager.Instance.SetDialogueText(dialogueData);
+        PlayOneShot(dialogueData.DialogueAudio);
+    }
+
+    public static void RequestPlayDialogueData(DialogueData dialogueData)
+    {
+
+    }
+
     public void CleanUp()
     {
         foreach (EventInstance eventInstance in eventInstances)

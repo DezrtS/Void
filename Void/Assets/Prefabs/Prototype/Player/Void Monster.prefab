@@ -1326,7 +1326,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4872378298549078721}
-  - {fileID: 161951825856454103}
   m_Father: {fileID: 5239340325648352669}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3608694555707022289
@@ -2077,8 +2076,32 @@ MonoBehaviour:
     baseValue: 10
   crouchSpeed:
     baseValue: 4
+  footstepSound:
+    Guid:
+      Data1: 249981184
+      Data2: 1252358605
+      Data3: -1506812741
+      Data4: 1610723185
+    Path: event:/Prototype/VoidMonster/MonsterWalk
+  footstepDelay: 0.25
+  canJump: 0
   jumpPower:
     baseValue: 7
+  jumpSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  landJumpSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  canCrouch: 0
   crouchHeight:
     baseValue: 1
 --- !u!114 &508842097207354520
@@ -2146,7 +2169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerRole: 1
   canAutomaticallyRespawn: 1
-  respawnDelay: 5
+  respawnDelay: 10
   playerModel: {fileID: 4421207556848156263}
   disableForOwnerOnStart: 1
   disableForOwner:
@@ -2163,6 +2186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42fbdc92049b6384e9f2b1a583135f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lookAt: {fileID: 4872378298549078721}
   activeTransform: {fileID: 161951825856454103}
 --- !u!114 &2193251143016695879
 MonoBehaviour:
@@ -2183,8 +2207,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   damage: 25
-  cooldown: 0.5
+  cooldown: 1
   duration: 0.25
+  attackSound:
+    Guid:
+      Data1: 89796714
+      Data2: 1315119537
+      Data3: 508547235
+      Data4: 1218515006
+    Path: event:/Prototype/VoidMonster/MonsterSlash
 --- !u!114 &5169402615200178495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2212,6 +2243,13 @@ MonoBehaviour:
       Data3: 867110303
       Data4: -1952907178
     Path: event:/Prototype/VoidMonster/MonsterDamage
+  reflectSound:
+    Guid:
+      Data1: 1567477279
+      Data2: 1138989909
+      Data3: -1920058494
+      Data4: 520281918
+    Path: event:/Prototype/Mutations/Invincibility/InvincibilityReflect
   deathSound:
     Guid:
       Data1: 1354401878
@@ -2471,7 +2509,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1848131393473264207}
+  m_Father: {fileID: 2234522042585549698}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5026515076913813053
 GameObject:
@@ -3972,6 +4010,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4327129619302304494}
+  - {fileID: 161951825856454103}
   m_Father: {fileID: 5313106785880922231}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8702355964334039161

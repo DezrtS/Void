@@ -187,12 +187,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3189f9d7835ab244abe8af388f91c280, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 297e919259697be4ca5e99ba4ed14adb, type: 2}
+  itemData: {fileID: 11400000, guid: 03d6f5daa7672514c85925afd0c41439, type: 2}
   canPickUp: 1
   canDrop: 1
   pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
     type: 2}
   tutorialData: {fileID: 11400000, guid: 463d42e8f28edd2489eb9a899ebcd4c6, type: 2}
+  holdingPositionData: {fileID: 0}
+  statChangesData: {fileID: 11400000, guid: 1e50a8221b5439c45bfed6e364074985, type: 2}
 --- !u!114 &-3272972591656714924
 MonoBehaviour:
   m_ObjectHideFlags: 0

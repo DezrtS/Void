@@ -18,6 +18,7 @@ public class ProjectileData : ScriptableObject
     [SerializeField] private float knockback;
 
     [SerializeField] private GameObject hitEffect;
+    [SerializeField] private EventReference spawnSound;
     [SerializeField] private EventReference hitSound;
     [SerializeField] private LayerMask layerMask;
 
@@ -31,6 +32,7 @@ public class ProjectileData : ScriptableObject
     public float Damage => damage;
     public float Knockback => knockback;
     public GameObject HitEffect => hitEffect;
+    public EventReference SpawnSound => spawnSound;
     public EventReference HitSound => hitSound;
     public LayerMask LayerMask => layerMask;
 }

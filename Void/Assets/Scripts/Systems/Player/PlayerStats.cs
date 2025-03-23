@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
 [Serializable]
@@ -67,6 +68,7 @@ public class Stat
         {
             Debug.LogWarning("Duplicate Stat Modifier Key");
         }
+        Debug.Log($"Added Modifier: {value.ModifierType}, {value.ModifierValue}, {value.Duration}");
         UpdateValue();
     }
 
@@ -172,18 +174,38 @@ public class PlayerStats : MonoBehaviour
 
     public Stat CrouchHeight => crouchHeight;
 
-    public void AddStats(IEnumerable<StatChange> statChanges)
-    {
-        for (int i = 0; i < statChanges.Count(); i++)
-        {
 
+    public void ChangeStats(StatChangesData statChangesData)
+    {
+        for (int i = 0; i < statChangesData.StatChanges.Count; i++)
+        {
+            StatChange statChange = statChangesData.StatChanges[i];
+            ApplyModifier(statChange.StatName, statChangesData.Key * 100 + i, statChange.Modifier, statChange.ModifierType, statChangesData.Duration);
         }
+    }
+
+    public void RequestChangeStats(StatChangesData statChangesData) => ChangeStatsServerRpc(GameDataManager.Instance.GetStatChangesDataIndex(statChangesData));
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ChangeStatsServerRpc(int index)
+    {
+        ChangeStatsClientRpc(index);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void ChangeStatsClientRpc(int index)
+    {
+        ChangeStats(GameDataManager.Instance.GetStatChangesData(index));
     }
 
     public void ApplyModifier(string statName, int key, float modifier, StatModifier.StatModifierType modifierType, float duration = 99999)
     {
         var stat = GetStatByName(statName);
-        if (stat == null) return;
+        if (stat == null)
+        {
+            Debug.Log("Stat Name == NULL");
+            return;
+        }
 
         StatModifier statModifier = new StatModifier(modifier, modifierType, duration);
         stat.AddModifier(key, statModifier);

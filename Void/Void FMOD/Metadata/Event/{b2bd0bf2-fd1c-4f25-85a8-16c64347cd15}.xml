@@ -5,7 +5,7 @@
 			<value>TasksComplete</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{2b922a2b-09a6-4f95-9b25-e7862e564ede}</destination>
@@ -99,7 +99,6 @@
 	<object class="MixerBusEffectChain" id="{3a06e5f3-d3c9-416a-b657-256cea643c8a}">
 		<relationship name="effects">
 			<destination>{1e2122c5-097d-45db-ba11-d22603ffc36c}</destination>
-			<destination>{54549ca8-9f1e-49c6-8a7b-e5d5b7e16f22}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{6431516d-6de5-431a-9885-838a295d1044}" />
@@ -110,5 +109,4 @@
 	</object>
 	<object class="MixerBusFader" id="{80524133-c91f-4654-aadf-6bf052694216}" />
 	<object class="MixerBusFader" id="{1e2122c5-097d-45db-ba11-d22603ffc36c}" />
-	<object class="SpatialiserEffect" id="{54549ca8-9f1e-49c6-8a7b-e5d5b7e16f22}" />
 </objects>

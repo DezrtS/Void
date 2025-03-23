@@ -169,7 +169,8 @@ MonoBehaviour:
   pickUpInteractableData: {fileID: 11400000, guid: 4ffde133035cc8940a29cbddbc82c768,
     type: 2}
   tutorialData: {fileID: 11400000, guid: 5af47656de132614ab048f694ee7fdc5, type: 2}
-  statChangeItemData: {fileID: 11400000, guid: 1fdfb42012ac58840a92a5ca16c9adab, type: 2}
+  holdingPositionData: {fileID: 0}
+  statChangesData: {fileID: 11400000, guid: cf938b0b0f8192444b8e35320a470594, type: 2}
 --- !u!114 &-3222436000470431126
 MonoBehaviour:
   m_ObjectHideFlags: 0
