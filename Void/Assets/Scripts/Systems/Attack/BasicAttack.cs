@@ -46,7 +46,7 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
     {
         UpdateTimers();
 
-        if (networkUseable.IsServer && isAttacking)
+        if (networkUseable.IsOwner && isAttacking)
         {
             Collider[] results = new Collider[10];
             Physics.OverlapSphereNonAlloc(transform.position + offset, size, results, layerMask, QueryTriggerInteraction.Ignore);

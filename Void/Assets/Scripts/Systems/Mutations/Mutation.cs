@@ -6,6 +6,7 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
 
     [SerializeField] protected MutationData mutationData;
     [SerializeField] private TutorialData tutorialData;
+    [SerializeField] private bool disableActiveTransformOverride;
 
     protected NetworkUseable networkUseable;
     private bool isUsing;
@@ -16,6 +17,7 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
 
     public MutationData MutationData => mutationData;
     public TutorialData TutorialData => tutorialData;
+    public bool DisableActiveTransformOverride => disableActiveTransformOverride;
     public NetworkUseable NetworkUseable => networkUseable;
     public bool IsUsing => isUsing;
 

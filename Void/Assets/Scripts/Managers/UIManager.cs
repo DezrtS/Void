@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
-    [SerializeField] private TutorialData defaultTutorialData;
+    [SerializeField] private TutorialData defaultSurvivorTutorialData;
+    [SerializeField] private TutorialData defaultMonsterTutorialData;
 
     [SerializeField] private GameObject loadingUI;
     [SerializeField] private GameObject pauseMenuUI;
@@ -27,12 +29,17 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TextMeshProUGUI dialogueNameText;
     [SerializeField] private TextMeshProUGUI dialogueText;
 
+    [SerializeField] private GameObject compassBar;
+
     public static event Action<GameObject> OnSetupUI;
     public static event Action<bool> OnPause;
 
+    private TutorialData defaultTutorialData;
     private Animator animator;
     private bool paused;
     private float gameTimer;
+
+    private List<CompassIcon> compassIcons = new List<CompassIcon>();
 
     public TextMeshProUGUI TaskText => taskText;
 
@@ -49,6 +56,7 @@ public class UIManager : Singleton<UIManager>
 
     private void Awake()
     {
+        defaultTutorialData = defaultSurvivorTutorialData;
         loadingUI.SetActive(true);
         SetTutorialText(defaultTutorialData);
         animator = GetComponent<Animator>();
@@ -66,6 +74,8 @@ public class UIManager : Singleton<UIManager>
     public void SetupUI(GameManager.PlayerRole playerRole, GameObject player)
     {
         EnableUI(playerRole);
+        if (playerRole == GameManager.PlayerRole.Survivor) defaultTutorialData = defaultSurvivorTutorialData;
+        else if (playerRole == GameManager.PlayerRole.Monster) defaultTutorialData = defaultMonsterTutorialData;
         player.GetComponent<Health>().OnDeathStateChanged += OnDeathStateChanged;
         OnSetupUI?.Invoke(player);
     }
@@ -90,6 +100,14 @@ public class UIManager : Singleton<UIManager>
                 spectatorUI.SetActive(true);
                 break;
         }
+    }
+
+    public CompassIcon AddCompassIcon(GameObject prefab)
+    {
+        GameObject newIcon = Instantiate(prefab, Vector3.zero, Quaternion.identity, compassBar.transform);
+        CompassIcon compassIcon = newIcon.GetComponent<CompassIcon>();
+        compassIcons.Add(compassIcon);
+        return compassIcon;
     }
 
     public void SetInteractableText(InteractableData interactableData)
@@ -182,6 +200,12 @@ public class UIManager : Singleton<UIManager>
         ShowDeathScreen(isDead);
     }
 
+    public void TriggerFade(bool fadeIn)
+    {
+        if (fadeIn) animator.SetTrigger("FadeIn");
+        else animator.SetTrigger("FadeOut");
+    }
+
     private void OnGameStateChanged(GameManager.GameState gameState)
     {
         gameStateText.text = gameState.ToString();
@@ -191,7 +215,7 @@ public class UIManager : Singleton<UIManager>
         }
         else if (gameState == GameManager.GameState.GameOver)
         {
-            animator.SetTrigger("Fade");
+            TriggerFade(true);
         }
     }
 

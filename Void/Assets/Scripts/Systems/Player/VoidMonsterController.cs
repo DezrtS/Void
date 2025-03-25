@@ -24,7 +24,17 @@ public class VoidMonsterController : PlayerController
     public override void OnDeathStateChanged(Health health, bool isDead)
     {
         base.OnDeathStateChanged(health, isDead);
-        if (IsOwner && !isDead) movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster));
+        if (!IsOwner) return;
+
+        if (isDead)
+        {
+            UIManager.Instance.TriggerFade(true);
+        }
+        else
+        {
+            UIManager.Instance.TriggerFade(false);
+            movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster));
+        }
     }
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)

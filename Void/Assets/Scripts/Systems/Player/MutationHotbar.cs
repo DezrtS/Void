@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class MutationHotbar : MonoBehaviour
@@ -40,6 +39,7 @@ public class MutationHotbar : MonoBehaviour
         Mutation mutation = GetMutation();
         if (mutation != null)
         {
+            if (mutation.DisableActiveTransformOverride) return;
             activeTransform.rotation = Quaternion.LookRotation((lookAt.position - activeTransform.position).normalized);
             mutation.transform.SetPositionAndRotation(activeTransform.position, activeTransform.rotation);
         }

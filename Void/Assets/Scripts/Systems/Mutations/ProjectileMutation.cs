@@ -34,8 +34,7 @@ public class ProjectileMutation : Mutation
         AudioManager.PlayOneShot(spawnProjectileSound, gameObject);
         if (spawnAtCamera)
         {
-            Transform cameraTransform = playerLook.CameraRootTransform;
-            projectileSpawner.SpawnProjectile(cameraTransform.position, cameraTransform.rotation);
+            projectileSpawner.SpawnProjectile(playerLook.CameraRootTransform.position, playerLook.CameraRotationRootTransform.rotation);
         }
         else
         {

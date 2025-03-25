@@ -8,6 +8,8 @@ public class GameManager : Singleton<GameManager>
     public delegate void GameStateHandler(GameState gameState);
     public static event GameStateHandler OnGameStateChanged;
 
+    public static bool IsFriendlyFireDisabled;
+
     public enum GameState { None, WaitingToStart, ReadyToStart, GamePlaying, Panic, GameOver }
     public enum PlayerRole { Survivor, Monster, Spectator }
 
@@ -17,7 +19,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Options")]
     [SerializeField] private bool resetPlayerPrefsOnAwake;
-    [SerializeField] private bool friendlyFireEnabled;
+    [SerializeField] private bool enableFriendlyFireOnAwake;
     [SerializeField] private bool endGameOnAllSurvivorDeath;
     [SerializeField] private PlayerRole defaultPlayerRole;
     [SerializeField] private float forceReadyUpTimer;
@@ -42,7 +44,6 @@ public class GameManager : Singleton<GameManager>
     private List<ulong> deadClientIds;
     private float gameTimer;
 
-    public bool FriendlyFireEnabled => friendlyFireEnabled;
     public PlayerRole DefaultPlayerRole => defaultPlayerRole;
     public NetworkGameManager NetworkGameManager => networkGameManager;
     public GameState State => state;
@@ -62,6 +63,7 @@ public class GameManager : Singleton<GameManager>
         playerRoleDictionary = new Dictionary<ulong, PlayerRole>();
         deadClientIds = new List<ulong>();
         if (resetPlayerPrefsOnAwake) PlayerPrefs.DeleteAll();
+        IsFriendlyFireDisabled = !enableFriendlyFireOnAwake;
     }
 
     private void Update()

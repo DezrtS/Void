@@ -5,6 +5,7 @@ using UnityEngine;
 public class ElevatorButton : MonoBehaviour, IInteractable
 {
     [SerializeField] private InteractableData readyUpInteractableData;
+    [SerializeField] private InteractableData allPlayersInteractableData;
     [SerializeField] private InteractableData leaveInteractableData;
 
     [SerializeField] private EventReference pressSound;
@@ -17,7 +18,17 @@ public class ElevatorButton : MonoBehaviour, IInteractable
         }
         else if (GameManager.Instance.State == GameManager.GameState.GamePlaying || GameManager.Instance.State == GameManager.GameState.Panic)
         {
-            if (ElevatorManager.Instance.IsReadyToLeave && ElevatorManager.Instance.IsAllSurvivorsInElevator) return leaveInteractableData;
+            if (ElevatorManager.Instance.IsReadyToLeave)
+            {
+                if (ElevatorManager.Instance.IsAllSurvivorsInElevator)
+                {
+                    return leaveInteractableData;
+                }
+                else
+                {
+                    return allPlayersInteractableData;
+                }
+            }
         }
 
         return null;

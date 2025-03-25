@@ -36,6 +36,7 @@ public class PlayerLook : NetworkBehaviour
     private IInteractable interactable;
     private UIManager instance;
 
+    public Transform CameraRotationRootTransform => cameraRotationRootTransform;
     public Transform CameraRootTransform => cameraRootTransform;
 
     private void OnEnable()

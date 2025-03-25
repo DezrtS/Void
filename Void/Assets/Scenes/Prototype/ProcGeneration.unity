@@ -1109,6 +1109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   readyUpInteractableData: {fileID: 11400000, guid: da777e724229574429b3d9b0d6b8eba4,
     type: 2}
+  allPlayersInteractableData: {fileID: 11400000, guid: 2b815ad0d63f58242a4d5168f3e5595a,
+    type: 2}
   leaveInteractableData: {fileID: 11400000, guid: 03ecf77728465974786d05f8699f49ce,
     type: 2}
   pressSound:
@@ -3287,7 +3289,7 @@ PrefabInstance:
     - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
         type: 3}
       propertyPath: defaultPlayerRole
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
         type: 3}

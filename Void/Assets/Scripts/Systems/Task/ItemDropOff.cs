@@ -17,7 +17,8 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
     [SerializeField] private EventReference acceptSound;
     [SerializeField] private EventReference rejectSound;
 
-    [SerializeField] private InteractableData interactableData;
+    [SerializeField] private InteractableData dropOffInteractableData;
+    [SerializeField] private InteractableData processingItemInteractableData;
 
     private NetworkItemDropOff networkItemDropOff;
     private bool isUsing;
@@ -91,7 +92,8 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
 
     public InteractableData GetInteractableData()
     {
-        return interactableData;
+        if (isUsing) return processingItemInteractableData;
+        else return dropOffInteractableData;
     }
 
     public void Interact(GameObject interactor)

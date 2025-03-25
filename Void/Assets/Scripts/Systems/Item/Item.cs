@@ -23,6 +23,8 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     private bool isPickedUp;
     private bool isUsing;
 
+    private CompassObject compassObject;
+
     public ItemData ItemData => itemData;
     public TutorialData TutorialData => tutorialData;
     public NetworkItem NetworkItem => networkItem;
@@ -44,6 +46,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
         networkItem = GetComponent<NetworkItem>();
         rig = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
+        TryGetComponent(out compassObject);
     }
 
     public void RequestUse() => networkItem.UseServerRpc();
@@ -68,6 +71,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public virtual void PickUp()
     {
         isPickedUp = true;
+        if (compassObject != null) compassObject.DisableCompassIcon();
         AudioManager.PlayOneShot(itemData.PickUpSound, gameObject);
         OnPickUp?.Invoke(this, isPickedUp);
         UpdateItemState(true);
@@ -76,6 +80,7 @@ public class Item : MonoBehaviour, INetworkUseable, IInteractable
     public virtual void Drop()
     {
         isPickedUp = false;
+        if (compassObject != null) compassObject.EnableCompassIcon();
         AudioManager.PlayOneShot(itemData.DropSound, gameObject);
         OnPickUp?.Invoke(this, isPickedUp);
         UpdateItemState(false);

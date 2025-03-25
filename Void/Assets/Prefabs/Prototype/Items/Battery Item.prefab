@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 457341660016506390}
   - component: {fileID: 2914617284578575158}
   - component: {fileID: 7916101381472070564}
+  - component: {fileID: 5038359608225215263}
   m_Layer: 6
   m_Name: Battery Item
   m_TagString: Untagged
@@ -183,6 +184,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48d40a89174a39047a6d2b11f4733825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5038359608225215263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941687137560951099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6024dd00c65fe1643b34ca5c0da22c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compassIconPrefab: {fileID: 5616257516550400628, guid: 502c0539d0582ad439201a75bdc7b86c,
+    type: 3}
 --- !u!1001 &7457711620632503628
 PrefabInstance:
   m_ObjectHideFlags: 0
