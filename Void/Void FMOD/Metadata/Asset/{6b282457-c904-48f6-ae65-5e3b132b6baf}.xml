@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
-	<object class="EncodableAsset" id="{e53d0ac5-6a61-44ab-85ab-faaabe1a1116}">
+	<object class="EncodableAsset" id="{6b282457-c904-48f6-ae65-5e3b132b6baf}">
 		<property name="assetPath">
-			<value>Void Monster/Attack/</value>
+			<value>Survivor/Heartbeat/</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{d0ea8ef8-387f-4d8e-a694-378296a36084}</destination>

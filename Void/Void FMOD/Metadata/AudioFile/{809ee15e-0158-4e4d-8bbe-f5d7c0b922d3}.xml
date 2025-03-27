@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{809ee15e-0158-4e4d-8bbe-f5d7c0b922d3}">
 		<property name="assetPath">
-			<value>Void Monster/Slash/Slash2.wav</value>
+			<value>Void Monster/Attack/Slash2.wav</value>
 		</property>
 		<property name="frequencyInKHz">
 			<value>48</value>

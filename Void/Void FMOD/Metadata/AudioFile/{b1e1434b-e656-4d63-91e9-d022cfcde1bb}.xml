@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.02.02.00">
-	<object class="AudioFile" id="{5c2aa92c-2b37-47dc-956d-e3cda6a270e9}">
+	<object class="AudioFile" id="{b1e1434b-e656-4d63-91e9-d022cfcde1bb}">
 		<property name="assetPath">
-			<value>Void Monster/Attack/Slash3.wav</value>
+			<value>Survivor/Heartbeat/Heartbeat.wav</value>
 		</property>
 		<property name="frequencyInKHz">
-			<value>48</value>
+			<value>44.0999985</value>
 		</property>
 		<property name="channelCount">
 			<value>2</value>
 		</property>
 		<property name="length">
-			<value>1.2010624999999999</value>
+			<value>3.0022902494331065</value>
 		</property>
 		<relationship name="masterAssetFolder">
 			<destination>{d0ea8ef8-387f-4d8e-a694-378296a36084}</destination>
