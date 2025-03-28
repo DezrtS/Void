@@ -3,6 +3,7 @@ using UnityEngine;
 using FMOD.Studio;
 using FMODUnity;
 using Unity.Netcode;
+using FMOD;
 
 public class AudioManager : Singleton<AudioManager>
 {

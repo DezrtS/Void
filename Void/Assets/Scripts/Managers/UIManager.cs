@@ -256,6 +256,7 @@ public class UIManager : Singleton<UIManager>
         if (gameState == GameManager.GameState.WaitingToStart)
         {
             loadingUI.SetActive(false);
+            animator.SetTrigger("Tutorial");
         }
         else if (gameState == GameManager.GameState.ReadyToStart)
         {

@@ -9,7 +9,6 @@ public class SurvivorController : PlayerController
 
     private Hotbar hotbar;
     private Inventory inventory;
-    private Draggable draggable;
     private CompassObject compassObject;
 
     private InputActionMap survivorActionMap;
@@ -56,8 +55,6 @@ public class SurvivorController : PlayerController
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        draggable.CanDrag = false;
-
         if (IsOwner) UIManager.Instance.SetupUI(GameManager.PlayerRole.Survivor, gameObject);
 
         if (!IsServer) return;
@@ -77,7 +74,6 @@ public class SurvivorController : PlayerController
         hotbar.OnPickUpItem += OnPickUpItem;
         hotbar.OnDropItem += OnDropItem;
         inventory = GetComponent<Inventory>();
-        draggable = GetComponent<Draggable>();
         compassObject = GetComponent<CompassObject>();
         animationController = GetComponent<AnimationController>();
     }
@@ -173,7 +169,6 @@ public class SurvivorController : PlayerController
     public override void OnDeathStateChanged(Health health, bool isDead)
     {
         base.OnDeathStateChanged(health, isDead);
-        draggable.CanDrag = isDead;
         if (!IsOwner) return;
 
         if (isDead)
@@ -185,7 +180,6 @@ public class SurvivorController : PlayerController
         else
         {
             animationController.SetTrigger("Respawn");
-            draggable.RequestStopUsing();
             compassObject.DisableCompassIcon();
         }
     }

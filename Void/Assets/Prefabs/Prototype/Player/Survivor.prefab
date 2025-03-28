@@ -1911,7 +1911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 119855383
+  GlobalObjectIdHash: 3220849879
   InScenePlacedSourceGlobalObjectIdHash: 1133239272
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -2096,7 +2096,7 @@ MonoBehaviour:
       Data3: 162738075
       Data4: -711878353
     Path: event:/Prototype/Survivor/Walk/Walking
-  footstepDelay: 0.25
+  footstepDelay: 1
   canJump: 1
   jumpPower:
     baseValue: 7
@@ -2130,6 +2130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnFirstPersonCamera: 1
+  canLockCamera: 0
   lockPlayerCursor: 1
   cameraRotationRootTransform: {fileID: 3938142979775510420}
   cameraRootTransform: {fileID: 3662237747590448752}
@@ -2211,7 +2212,16 @@ MonoBehaviour:
   canRegenerateHealth: 1
   healthRegenerationRate:
     baseValue: 5
-  healthRegenerationDelay: 1
+  healthRegenerationDelay: 5
+  playHeartbeat: 1
+  gruntThreshold: 25
+  heartbeatSound:
+    Guid:
+      Data1: 162373804
+      Data2: 1251241505
+      Data3: -1424862290
+      Data4: -661919365
+    Path: event:/Prototype/Survivor/Heartbeat
   hurtSound:
     Guid:
       Data1: 1298896073
@@ -2219,6 +2229,13 @@ MonoBehaviour:
       Data3: -530929748
       Data4: 1793110144
     Path: event:/Prototype/Survivor/Damage/PlDamageBlunt
+  gruntSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   reflectSound:
     Guid:
       Data1: 0
@@ -3532,7 +3549,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 4579454407841743219, guid: b43c8863d8fc85d4298cf24eeb01f681, type: 3}
   m_Bones:

@@ -2083,7 +2083,7 @@ MonoBehaviour:
       Data3: -1506812741
       Data4: 1610723185
     Path: event:/Prototype/VoidMonster/MonsterWalk
-  footstepDelay: 0.25
+  footstepDelay: 1.25
   canJump: 0
   jumpPower:
     baseValue: 7
@@ -2117,6 +2117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnFirstPersonCamera: 1
+  canLockCamera: 0
   lockPlayerCursor: 1
   cameraRotationRootTransform: {fileID: 1848131393473264207}
   cameraRootTransform: {fileID: 5989482127351808705}
@@ -2237,6 +2238,15 @@ MonoBehaviour:
   healthRegenerationRate:
     baseValue: 10
   healthRegenerationDelay: 2
+  playHeartbeat: 0
+  gruntThreshold: 50
+  heartbeatSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   hurtSound:
     Guid:
       Data1: 1817735778
@@ -2244,6 +2254,13 @@ MonoBehaviour:
       Data3: 867110303
       Data4: -1952907178
     Path: event:/Prototype/VoidMonster/MonsterDamage
+  gruntSound:
+    Guid:
+      Data1: 1435196291
+      Data2: 1279332017
+      Data3: -954587977
+      Data4: 299688401
+    Path: event:/Prototype/VoidMonster/MonsterGrunt
   reflectSound:
     Guid:
       Data1: 1567477279

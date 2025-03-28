@@ -182,9 +182,8 @@ public class PlayerMovement : MovementController
     {
         if (!isGrounded) return;
         float currentSpeed = rig.linearVelocity.magnitude;
-        float speedMultiplier = currentSpeed / walkSpeed.Value;
 
-        footstepTimer -= Time.deltaTime * speedMultiplier;
+        footstepTimer -= Time.deltaTime * currentSpeed;
 
         if (footstepTimer <= 0)
         {
