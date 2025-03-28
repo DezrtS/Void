@@ -62,7 +62,7 @@ public class VoidBeastController : NetworkBehaviour
 
         if (!hasTarget) return;
 
-        navMeshMovement.PathfindingDestination = targetTransform.position;
+        //navMeshMovement.PathfindingDestination = targetTransform.position;
     }
 
     public void OnDeathStateChanged(Health health, bool isDead)

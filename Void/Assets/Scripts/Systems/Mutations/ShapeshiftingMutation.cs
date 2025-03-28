@@ -43,6 +43,7 @@ public class ShapeshiftingMutation : Mutation
     {
         isActive = true;
         durationTimer = duration;
+        cooldownTimer = mutationData.Cooldown;
         playerModel.SetActive(false);
         survivor.SetActive(true);
         animationController.AddAnimatorInstance("Player", animator);
@@ -60,7 +61,6 @@ public class ShapeshiftingMutation : Mutation
             {
                 durationTimer = 0;
                 if (networkShapeshiftingMutation.IsServer) RequestDeactivateShapeshiftingMutation();
-                cooldownTimer = mutationData.Cooldown;
             }
         }
     }

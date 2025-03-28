@@ -13578,7 +13578,7 @@ GameObject:
   - component: {fileID: -5247600483189517173}
   m_Layer: 9
   m_Name: Void Beast
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13726,6 +13726,13 @@ MonoBehaviour:
       Data3: 882104989
       Data4: 179462128
     Path: event:/Prototype/VoidBeast/BeastBulletHit
+  reflectSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   deathSound:
     Guid:
       Data1: 2062004534

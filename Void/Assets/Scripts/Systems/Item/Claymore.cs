@@ -44,25 +44,26 @@ public class Claymore : DeployableItem
     public void OnEnter(Trigger trigger, GameObject gameObject)
     {
         if (!gameObject.CompareTag("Player") && !gameObject.CompareTag("Monster")) return;
-        RequestTriggerClaymore();
+        if (networkClaymore.IsServer) RequestTriggerClaymore();
 
         if (gameObject.TryGetComponent(out Health health))
         {
             trigger.OnEnter -= OnEnter;
-            health.RequestDamage(damage);
+            if (networkClaymore.IsOwner) UIManager.Instance.TriggerHit();
+            if (networkClaymore.IsServer) health.RequestDamage(damage);
         }
     }
 
     public void ActivateClaymore()
     {
         isActive = true;
-        if (networkClaymore.IsServer) trigger.OnEnter += OnEnter;
+        trigger.OnEnter += OnEnter;
     }
 
     public void DeactivateClaymore()
     {
         isActive = false;
-        if (networkClaymore.IsServer) trigger.OnEnter -= OnEnter;
+        trigger.OnEnter -= OnEnter;
     }
 
     public void TriggerClaymore()

@@ -91,13 +91,13 @@ public class NetworkHotbar : NetworkBehaviour
                 itemNetworkObject.ChangeOwnership(OwnerClientId);
             }
 
-            item.RequestPickUp();
-            item.OnPickUp += OnItemPickUpStateChanged;
-            item.transform.SetParent(transform);
-
             if (hotbar.GetItem() == null)
             {
                 PickUpItemClientRpc(itemNetworkObjectId, selectedIndex.Value);
+
+                item.RequestPickUp();
+                item.OnPickUp += OnItemPickUpStateChanged;
+                item.transform.SetParent(transform);
                 return;
             }
 
@@ -107,12 +107,23 @@ public class NetworkHotbar : NetworkBehaviour
                 {
                     PickUpItemClientRpc(itemNetworkObjectId, i);
                     selectedIndex.Value = i;
+
+                    item.RequestPickUp();
+                    item.OnPickUp += OnItemPickUpStateChanged;
+                    item.transform.SetParent(transform);
                     return;
                 }
             }
 
-            DropItemServerRpc(hotbar.SelectedIndex);
-            PickUpItemClientRpc(itemNetworkObjectId, selectedIndex.Value);
+            if (hotbar.GetItem().CanDrop())
+            {
+                item.RequestPickUp();
+                item.OnPickUp += OnItemPickUpStateChanged;
+                item.transform.SetParent(transform);
+
+                DropItemServerRpc(hotbar.SelectedIndex);
+                PickUpItemClientRpc(itemNetworkObjectId, selectedIndex.Value);
+            }
         }
     }
 

@@ -8,12 +8,16 @@ public class GrapplingHookMutation : ProjectileMutation
         private Vector3 position;
         private MovementController movementController;
         private float pullForce;
+        private float creationTime;
+        private float duration;
 
-        public GrapplingHookAttachment(Vector3 position, MovementController movementController, float pullForce)
+        public GrapplingHookAttachment(Vector3 position, MovementController movementController, float pullForce, float duration)
         {
             this.position = position;
             this.movementController = movementController;
             this.pullForce = pullForce;
+            creationTime = Time.timeSinceLevelLoad;
+            this.duration = duration;
         }
 
         public void Pull()
@@ -27,9 +31,15 @@ public class GrapplingHookMutation : ProjectileMutation
             Vector3 difference = position - movementController.transform.position;
             return difference.magnitude <= 5;
         }
+
+        public bool IsExpired()
+        {
+            return (Time.timeSinceLevelLoad - creationTime) > duration;
+        }
     }
 
     [SerializeField] private float pullForce;
+    [SerializeField] private float grappleDuration;
     private List<GrapplingHookAttachment> grapplingHookAttachments = new List<GrapplingHookAttachment>();
 
     private void Start()
@@ -47,7 +57,7 @@ public class GrapplingHookMutation : ProjectileMutation
             GrapplingHookAttachment grapplingHookAttachment = grapplingHookAttachments[i];
             grapplingHookAttachment.Pull();
 
-            if (grapplingHookAttachment.IsWithinRange())
+            if (grapplingHookAttachment.IsWithinRange() || grapplingHookAttachment.IsExpired())
             {
                 grapplingHookAttachments.RemoveAt(i);
                 i--;
@@ -59,11 +69,11 @@ public class GrapplingHookMutation : ProjectileMutation
     {
         if (raycastHit.collider.TryGetComponent(out MovementController movementController))
         {
-            grapplingHookAttachments.Add(new GrapplingHookAttachment(transform.position, movementController, pullForce));
+            grapplingHookAttachments.Add(new GrapplingHookAttachment(transform.position, movementController, pullForce, grappleDuration));
         }
         else
         {
-            grapplingHookAttachments.Add(new GrapplingHookAttachment(raycastHit.point, player.GetComponent<MovementController>(), pullForce));
+            grapplingHookAttachments.Add(new GrapplingHookAttachment(raycastHit.point, player.GetComponent<MovementController>(), pullForce, grappleDuration));
         }
     }
 }

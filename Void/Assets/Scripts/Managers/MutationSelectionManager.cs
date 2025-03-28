@@ -11,7 +11,8 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
     [SerializeField] private int optionCount;
     [SerializeField] private int requiredSelectionCount;
     [SerializeField] private GameObject mutationSelectionHolder;
-    [SerializeField] private List<MutationOption> mutationOptions; 
+    [SerializeField] private List<MutationOption> mutationOptions;
+    [SerializeField] private List<MutationData> avoidMutations = new List<MutationData>();
 
     private VoidMonsterController voidMonsterController;
     private MutationData[] mutationDatas;
@@ -42,7 +43,7 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
-            RandomizeMutationOptions(new List<MutationData>());
+            RandomizeMutationOptions(avoidMutations);
         }
     }
 
@@ -140,16 +141,16 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
     {
         mutationSelectionHolder.SetActive(true);
 
-        voidMonsterController.PlayerLook.LockCamera(false);
-        voidMonsterController.PlayerLook.EnableDisableCameraControls(false);
+        voidMonsterController.PlayerLook.LockCamera(true);
+        //voidMonsterController.PlayerLook.EnableDisableCameraControls(false);
     }
 
     public void DeactivateMutationSelection()
     {
         mutationSelectionHolder.SetActive(false);
 
-        voidMonsterController.PlayerLook.LockCamera(true);
-        voidMonsterController.PlayerLook.EnableDisableCameraControls(true);
+        voidMonsterController.PlayerLook.LockCamera(false);
+        //voidMonsterController.PlayerLook.EnableDisableCameraControls(true);
     }
 
     public void RandomizeMutationOptions(List<MutationData> avoidMutations)

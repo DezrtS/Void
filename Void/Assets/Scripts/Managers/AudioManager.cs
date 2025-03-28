@@ -94,13 +94,23 @@ public class AudioManager : Singleton<AudioManager>
 
     public static void PlayDialogue(DialogueData dialogueData)
     {
+        if (dialogueData == null) return;
         UIManager.Instance.SetDialogueText(dialogueData);
         PlayOneShot(dialogueData.DialogueAudio);
     }
 
-    public static void RequestPlayDialogueData(DialogueData dialogueData)
-    {
+    public static void RequestPlayDialogue(DialogueData dialogueData) => PlayDialogueServerRpc(GameDataManager.Instance.GetDialogueDataIndex(dialogueData));
 
+    [ServerRpc(RequireOwnership = false)]
+    private static void PlayDialogueServerRpc(int index)
+    {
+        PlayDialogueClientRpc(index);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    private static void PlayDialogueClientRpc(int index)
+    {
+        PlayDialogue(GameDataManager.Instance.GetDialogueData(index));
     }
 
     public void CleanUp()

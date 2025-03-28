@@ -59,22 +59,20 @@ public class TimedExplosive : ThrowableItem
         AudioManager.PlayOneShot(timedExplosiveItemData.ExplosionSound, gameObject);
         Instantiate(timedExplosiveItemData.ExplosionEffect, transform.position, Quaternion.identity);
 
-        if (NetworkItem.IsServer)
-        {
-            RaycastHit[] raycastHits = new RaycastHit[25];
-            Physics.SphereCastNonAlloc(transform.position, timedExplosiveItemData.Radius, Vector3.forward, raycastHits, timedExplosiveItemData.Radius, timedExplosiveItemData.EffectableLayers);
-            OnExplosiveHit(raycastHits);
-        }
+        RaycastHit[] raycastHits = new RaycastHit[25];
+        Physics.SphereCastNonAlloc(transform.position, timedExplosiveItemData.Radius, Vector3.forward, raycastHits, timedExplosiveItemData.Radius, timedExplosiveItemData.EffectableLayers);
+        OnExplosiveHit(raycastHits);
     }
 
     public virtual void OnExplosiveHit(RaycastHit raycastHit)
     {
         if (raycastHit.collider == null) return;
-        Debug.Log($"{ItemData.Name} HIT: {raycastHit.collider.name}");
+        //Debug.Log($"{ItemData.Name} HIT: {raycastHit.collider.name}");
 
         if (raycastHit.collider.TryGetComponent(out Health health))
         {
-            health.RequestDamage(timedExplosiveItemData.Damage);
+            if (networkTimedExplosive.IsOwner) UIManager.Instance.TriggerHit();
+            if (networkTimedExplosive.IsServer) health.RequestDamage(timedExplosiveItemData.Damage);
         }
     }
 

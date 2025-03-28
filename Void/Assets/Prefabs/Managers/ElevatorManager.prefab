@@ -69,6 +69,7 @@ GameObject:
   - component: {fileID: 2046617441088736849}
   - component: {fileID: 2332339596387906324}
   - component: {fileID: 906168027934848335}
+  - component: {fileID: 4457280627704496164}
   m_Layer: 0
   m_Name: ElevatorManager
   m_TagString: Untagged
@@ -154,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3885423558
+  GlobalObjectIdHash: 1296979140
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -196,6 +197,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 12, y: 5, z: 7}
   m_Center: {x: 0, y: 2.5, z: 0}
+--- !u!114 &4457280627704496164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681449846524080027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6024dd00c65fe1643b34ca5c0da22c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compassIconPrefab: {fileID: 5616257516550400628, guid: 91d4062602e5fb94986745c79d56bc44,
+    type: 3}
 --- !u!1 &730292311322049118
 GameObject:
   m_ObjectHideFlags: 0

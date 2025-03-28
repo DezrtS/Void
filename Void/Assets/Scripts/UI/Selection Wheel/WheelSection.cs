@@ -1,9 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public abstract class WheelSection : MonoBehaviour
 {
     [SerializeField] private float transitionDuration;
+    [SerializeField] private RectTransform rotationPivot;
+    [SerializeField] private RectTransform scalePivot;
+    [SerializeField] private List<Image> selectionParts;
+    [SerializeField] private Image iconImage;
 
     protected Animator animator;
     protected bool active;
@@ -17,16 +22,6 @@ public abstract class WheelSection : MonoBehaviour
     public WheelSectionData Data => data;
     public Vector2 Direction => direction;
 
-    private void OnEnable()
-    {
-        //UIManager.OnSetupUI += OnSetupUI;
-    }
-
-    private void OnDisable()
-    {
-        //UIManager.OnSetupUI -= OnSetupUI;
-    }
-
     public abstract void OnSetupUI(GameObject player);
 
     private void Awake()
@@ -36,23 +31,28 @@ public abstract class WheelSection : MonoBehaviour
 
     public void Initialize(int index, float intervalAngle, float angleMargin, float radius)
     {
-        RectTransform rectTransform = GetComponent<RectTransform>();
-        rectTransform.sizeDelta = 2 * radius * Vector2.one;
-        rectTransform.eulerAngles = new Vector3(0, 0, intervalAngle * index + angleMargin / 2f + intervalAngle / 2f);
+        scalePivot.localScale = new Vector3(radius, radius, 1);
+        float angle = intervalAngle * index + intervalAngle / 2f - angleMargin / 2f;
+        rotationPivot.eulerAngles = new Vector3(0, 0, angle);
 
-        float sectionAngle = intervalAngle * index + angleMargin / 2f; //+ intervalAngle / 2f;
+        float sectionAngle = intervalAngle * index;
         direction = new Vector2(
-            Mathf.Cos(sectionAngle * Mathf.Deg2Rad),
-            Mathf.Sin(sectionAngle * Mathf.Deg2Rad)
+            -Mathf.Cos(sectionAngle * Mathf.Deg2Rad),
+            -Mathf.Sin(sectionAngle * Mathf.Deg2Rad)
         );
+        Debug.Log($"{index}: Angle: {angle} SectionAngle: {sectionAngle}, Direction: {direction}");
 
-        Image image = GetComponent<Image>();
-        image.fillAmount = (1f / 360f) * (intervalAngle - angleMargin);
+        foreach (Image image in selectionParts)
+        {
+            image.fillAmount = (1f / 360f) * (intervalAngle - angleMargin);
+        }
+        iconImage.rectTransform.localPosition = Quaternion.Euler(0, 0, sectionAngle) * iconImage.rectTransform.localPosition;
     }
 
     public virtual void InitializeData(WheelSectionData data)
     {
         this.data = data;
+        iconImage.sprite = data.SectionSprite;
     }
 
     private void FixedUpdate()

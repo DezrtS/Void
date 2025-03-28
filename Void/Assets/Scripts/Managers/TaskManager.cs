@@ -7,6 +7,7 @@ public class TaskManager : Singleton<TaskManager>
     public static event Action OnAllTasksCompleted;
 
     [SerializeField] private int taskCount = 1;
+    private int tasksLeft;
 
     private NetworkTaskManager networkTaskManager;
     private bool isAllTasksCompleted;
@@ -18,6 +19,7 @@ public class TaskManager : Singleton<TaskManager>
     public bool IsAllTasksCompleted => isAllTasksCompleted;
     public List<Task> Tasks => tasks;
 
+    public void RequestSetTasksLeft(int tasksLeft) => networkTaskManager.SetTasksLeftServerRpc(tasksLeft);
     public void RequestSetAllTasksCompletedState(bool isCompleted) => networkTaskManager.SetAllTasksCompletedStateServerRpc(isCompleted);
     public void RequestSpawnTask(int taskDataIndex) => networkTaskManager.SpawnTaskServerRpc(taskDataIndex);
     public void RequestAddTask(Task task) => networkTaskManager.AddTaskServerRpc(task.NetworkTask.NetworkObjectId);
@@ -50,22 +52,50 @@ public class TaskManager : Singleton<TaskManager>
 
     public bool CheckAllTasksCompleted()
     {
-        bool allTasksCompleted = true;
-        foreach (Task task in tasks)
+        int tasksLeft = 0;
+        for (int i = 0; i < tasks.Count; i++)
         {
-            if (!task.IsCompleted)
+            if (!tasks[i].IsCompleted)
             {
-                allTasksCompleted = false;
-                break;
+                tasksLeft++;
             }
         }
-        return allTasksCompleted;
+
+        RequestSetTasksLeft(tasksLeft);
+        return tasksLeft == 0;
+    }
+
+    public void SetTasksLeft(int tasksLeft)
+    {
+        this.tasksLeft = tasksLeft;
+        switch (tasksLeft)
+        {
+            case 5:
+                AudioManager.PlayDialogue(DialogueManager.Instance.FiveTasksLeft);
+                break;
+            case 4:
+                AudioManager.PlayDialogue(DialogueManager.Instance.FourTasksLeft);
+                break;
+            case 3:
+                AudioManager.PlayDialogue(DialogueManager.Instance.ThreeTasksLeft);
+                break;
+            case 2:
+                AudioManager.PlayDialogue(DialogueManager.Instance.TwoTasksLeft);
+                break;
+            case 1:
+                AudioManager.PlayDialogue(DialogueManager.Instance.OneTaskLeft);
+                break;
+        }
     }
 
     public void SetAllTasksCompleted(bool isAllTasksCompleted)
     {
         this.isAllTasksCompleted = isAllTasksCompleted;
-        if (isAllTasksCompleted) OnAllTasksCompleted?.Invoke();
+        if (isAllTasksCompleted)
+        {
+            AudioManager.PlayDialogue(DialogueManager.Instance.AllTasksComplete);
+            OnAllTasksCompleted?.Invoke();
+        }
     }
 
     public void RequestSpawnRandomTasks()
@@ -107,7 +137,14 @@ public class TaskManager : Singleton<TaskManager>
     public void OnTaskStateChanged(Task task, bool state)
     {
         Debug.Log($"{task.TaskData.TaskName} task was completed");
-        if (networkTaskManager.IsServer && state) RequestSetAllTasksCompletedState(CheckAllTasksCompleted());
+
+        if (networkTaskManager.IsServer)
+        {
+            if (state)
+            {
+                RequestSetAllTasksCompletedState(CheckAllTasksCompleted());
+            }
+        }
     }
 
     public void RegenerateTaskInstructions()

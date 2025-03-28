@@ -1,4 +1,3 @@
-using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +11,8 @@ public class GameDataManager : Singleton<GameDataManager>
     [SerializeField] private List<TaskData> tasks = new List<TaskData>();
 
     [SerializeField] private List<StatChangesData> statChanges = new List<StatChangesData>();
+
+    [SerializeField] private List<DialogueData> dialogues = new List<DialogueData>();
 
     public List<ItemData> Items => items;
     public List<RecipeData> Recipes => recipes;
@@ -80,6 +81,16 @@ public class GameDataManager : Singleton<GameDataManager>
     public StatChangesData GetStatChangesData(int index)
     {
         return statChanges[index];
+    }
+
+    public int GetDialogueDataIndex(DialogueData dialogueData)
+    {
+        return dialogues.IndexOf(dialogueData);
+    }
+
+    public DialogueData GetDialogueData(int index)
+    {
+        return dialogues[index];
     }
 
     public static Item SpawnItem(ItemData itemData)

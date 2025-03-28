@@ -146,7 +146,6 @@ public class Health : MonoBehaviour
     {
         this.isDead = isDead;
         if (isDead) AudioManager.PlayOneShot(deathSound, gameObject);
-        if (networkHealth.IsServer && !isDead) RequestFullHeal();
         OnDeathStateChanged?.Invoke(this, isDead);
     }
 

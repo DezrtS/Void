@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Dropoff
   m_EditorClassIdentifier: 
   title: Dropoff
-  description: Use [E] to Drop Off
+  description: Use [E] to Drop Off Item
