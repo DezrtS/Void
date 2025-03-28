@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] public GameObject FirstPersonCamera;
 
     [Header("Sound Events")]
+    [SerializeField] private List<TimedDialogueEvent> dialogueEvents;
 
     private NetworkGameManager networkGameManager;
     private GameState state;
@@ -59,6 +60,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
+        dialogueEvents.Sort((x, y) => y.Time.CompareTo(x.Time));
         networkGameManager = GetComponent<NetworkGameManager>();
         playerRoleDictionary = new Dictionary<ulong, PlayerRole>();
         deadClientIds = new List<ulong>();
@@ -68,6 +70,8 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
+        float deltaTime = Time.deltaTime;
+
         if (Input.GetKeyDown(KeyCode.Comma))
         {
             Time.timeScale = Mathf.Max(Time.timeScale - 0.05f, 0);
@@ -75,6 +79,23 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Period))
         {
             Time.timeScale += 0.05f;
+        }
+
+        if (gameTimer > 0)
+        {
+            gameTimer -= deltaTime;
+            if (gameTimer <= 0)
+            {
+                if (networkGameManager.IsServer) RequestSetGameState(GameState.GameOver);
+            }
+            else if (dialogueEvents.Count > 0)
+            {
+                if (gameTimer <= dialogueEvents[0].Time)
+                {
+                    if (networkGameManager.IsServer) AudioManager.RequestPlayDialogue(dialogueEvents[0].DialogueData);
+                    dialogueEvents.RemoveAt(0);
+                }
+            }
         }
     }
 
@@ -248,11 +269,12 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         StartCoroutine(PanicCoroutine());
+        gameTimer = gameDuration + panicDuration;
     }
 
     public void Panic()
     {
-        StartCoroutine(EndGameCoroutine());
+        //StartCoroutine(EndGameCoroutine());
     }
 
     public void EndGame()

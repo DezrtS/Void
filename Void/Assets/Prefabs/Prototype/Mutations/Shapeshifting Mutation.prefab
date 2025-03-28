@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8006547884009384095}
   - component: {fileID: 7483261379724094456}
   - component: {fileID: 5875011672280484825}
-  - component: {fileID: 8852280038702325357}
+  - component: {fileID: 2572590838689371247}
   m_Layer: 0
   m_Name: Shapeshifting Mutation
   m_TagString: Untagged
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 622a234ce09a44c47b6baf2c75347776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8852280038702325357
+--- !u!114 &2572590838689371247
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2712595020136137020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Script: {fileID: 11500000, guid: ad8deae8091111f4eb30a56c1f4e0d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TransitionStateInfoList:

@@ -10,6 +10,7 @@ public class SurvivorController : PlayerController
     private Hotbar hotbar;
     private Inventory inventory;
     private Draggable draggable;
+    private CompassObject compassObject;
 
     private InputActionMap survivorActionMap;
     private AnimationController animationController;
@@ -19,6 +20,7 @@ public class SurvivorController : PlayerController
 
     public override void AssignControls()
     {
+        if (!IsOwner) return;
         survivorActionMap ??= InputSystem.actions.FindActionMap("Survivor");
 
         InputAction switchInputAction = survivorActionMap.FindAction("Reload");
@@ -28,6 +30,8 @@ public class SurvivorController : PlayerController
 
     public override void EnableControls()
     {
+        if (!IsOwner) return;
+
         base.EnableControls();
         survivorActionMap.Enable();
     }
@@ -43,6 +47,8 @@ public class SurvivorController : PlayerController
 
     public override void DisableControls()
     {
+        if (!IsOwner) return;
+
         base.DisableControls();
         survivorActionMap.Disable();
     }
@@ -72,6 +78,7 @@ public class SurvivorController : PlayerController
         hotbar.OnDropItem += OnDropItem;
         inventory = GetComponent<Inventory>();
         draggable = GetComponent<Draggable>();
+        compassObject = GetComponent<CompassObject>();
         animationController = GetComponent<AnimationController>();
     }
 
@@ -173,11 +180,13 @@ public class SurvivorController : PlayerController
         {
             animationController.SetTrigger("Die");
             hotbar.RequestDropEverything();
+            compassObject.EnableCompassIcon();
         }
         else
         {
             animationController.SetTrigger("Respawn");
             draggable.RequestStopUsing();
+            compassObject.DisableCompassIcon();
         }
     }
 

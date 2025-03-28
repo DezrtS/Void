@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overrideTitle: 0
   title: Controls
-  description: 'Use [TAB] to Hide Controls
+  description: 'Use [TAB] to Hide Controls and Objective
 
     Use [WASD] to Move
 
-    Use [LMB]
-    to Attack
+    Use
+    [LMB] to Attack
 
     Use [SCROLL] to Switch Mutations'

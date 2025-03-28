@@ -15,16 +15,8 @@ public class CompassIcon : MonoBehaviour
 
     private void Start()
     {
-        // Cache reference to parent compass RectTransform
         compassRect = transform.parent.GetComponent<RectTransform>();
-        if (compassRect != null)
-        {
-            maxX = compassRect.rect.width / 2f;
-        }
-        else
-        {
-            Debug.LogError("CompassIcon requires a RectTransform parent!");
-        }
+        maxX = compassRect.rect.width / 2f;
     }
 
     private void FixedUpdate()
@@ -34,8 +26,14 @@ public class CompassIcon : MonoBehaviour
 
     private void UpdatePosition()
     {
-        if (isActive && compassRect != null)
+        if (isActive)
         {
+            if (compassObjectTransform == null || targetTransform == null)
+            {
+                isActive = false;
+                return;
+            }
+
             // Calculate direction to target (XZ plane only)
             Vector3 direction = compassObjectTransform.position - targetTransform.position;
             direction.y = 0;

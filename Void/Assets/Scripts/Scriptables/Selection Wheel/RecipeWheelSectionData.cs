@@ -20,7 +20,7 @@ public class RecipeWheelSectionData : WheelSectionData
 
         foreach (ResourceRequirement resourceRequirement in recipeData.ResourceRequirements)
         {
-            recipe += $"- {resourceRequirement.Amount} {resourceRequirement.Resource.Name}\n";
+            recipe += $"{resourceRequirement.Amount} {resourceRequirement.Resource.Name}\n";
         }
 
         return recipe;

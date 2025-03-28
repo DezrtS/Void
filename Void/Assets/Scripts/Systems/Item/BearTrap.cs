@@ -70,12 +70,16 @@ public class BearTrap : DeployableItem
         if (gameObject.TryGetComponent(out captured))
         {
             trigger.OnEnter -= OnEnter;
-            captured.RequestDamage(initialDamage);
-            if (captured.gameObject.TryGetComponent(out MovementController movementController))
+            if (networkBearTrap.IsOwner) UIManager.Instance.TriggerHit();
+            if (networkBearTrap.IsServer)
             {
-                movementController.RequestSetMovementDisabled(true);
+                captured.RequestDamage(initialDamage);
+                if (captured.gameObject.TryGetComponent(out MovementController movementController))
+                {
+                    movementController.RequestSetMovementDisabled(true);
+                }
+                RequestActivateBearTrap();
             }
-            RequestActivateBearTrap();
         }
     }
 
@@ -83,14 +87,14 @@ public class BearTrap : DeployableItem
     {
         isPrimed = true;
         animator.SetBool("Active", isActive);
-        if (NetworkItem.IsServer) trigger.OnEnter += OnEnter;
+        trigger.OnEnter += OnEnter;
     }
 
     public void UnprimeBearTrap()
     {
         isPrimed = false;
         animator.SetBool("Active", true);
-        if (NetworkItem.IsServer) trigger.OnEnter -= OnEnter;
+        trigger.OnEnter -= OnEnter;
     }
 
     public void ActivateBearTrap()

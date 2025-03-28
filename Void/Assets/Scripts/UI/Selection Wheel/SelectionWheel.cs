@@ -7,7 +7,6 @@ public class SelectionWheel : MonoBehaviour
 {
     [Header("Selection Wheel")]
     [SerializeField] private GameObject sectionPrefab;
-    [SerializeField] private GameObject iconPrefab;
     [SerializeField] private float radius;
     [SerializeField] private int count;
     [SerializeField] private float angleMargin;
@@ -104,8 +103,7 @@ public class SelectionWheel : MonoBehaviour
         selectionWheelHolder.SetActive(active);
 
         selectionInputAction.Enable();
-        playerController.PlayerLook.LockCamera(false);
-        playerController.PlayerLook.EnableDisableCameraControls(false);
+        playerController.PlayerLook.LockCamera(true);
     }
 
     public void DeactivateSelectionWheel()
@@ -119,8 +117,7 @@ public class SelectionWheel : MonoBehaviour
         selectionWheelHolder.SetActive(active);
 
         selectionInputAction.Disable();
-        playerController.PlayerLook.LockCamera(true);
-        playerController.PlayerLook.EnableDisableCameraControls(true);
+        playerController.PlayerLook.LockCamera(false);
     }
 
     private void FixedUpdate()
@@ -154,7 +151,6 @@ public class SelectionWheel : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             GameObject section = Instantiate(sectionPrefab, selectionWheelHolder.transform);
-            //GameObject icon = Instantiate(iconPrefab, selectionWheelHolder.transform);
 
             wheelSections[i] = section.GetComponent<WheelSection>();
             wheelSections[i].Initialize(i, intervalAngle, angleMargin, radius);
@@ -163,21 +159,18 @@ public class SelectionWheel : MonoBehaviour
             if (i < sections.Length)
             {
                 wheelSections[i].InitializeData(sections[i]);
-                //icon.GetComponent<Image>().sprite = sections[i].SectionSprite;
-                //icon.transform.position = wheelSections[i].Direction * (radius - radius * 0.13f) + (Vector2)transform.position;
-                //icon.transform.SetParent(wheelSections[i].transform, false);
             }
         }
     }
 
     public void UpdateCurrentSelection()
     {
-        Vector2 mousePos = mousePositionInputAction.ReadValue<Vector2>();// - new Vector2(Screen.width, Screen.height) * 0.5f; //* 0.1069167f;
+        Vector2 mousePos = mousePositionInputAction.ReadValue<Vector2>() - new Vector2(Screen.width, Screen.height) * 0.5f;
         //mouseTracker.localPosition = mousePos;
 
         if (!allowInnerSelection)
         {
-            if (Vector2.Distance(mousePos, transform.position) < radius - selectionOffset)
+            if (mousePos.magnitude < radius - selectionOffset)
             {
                 if (selectedWheelSection)
                 {
@@ -195,7 +188,7 @@ public class SelectionWheel : MonoBehaviour
 
         for (int i = 0; i < wheelSections.Length; i++)
         {
-            Vector2 sectionPosition = wheelSections[i].Direction * radius + (Vector2)transform.position;
+            Vector2 sectionPosition = wheelSections[i].Direction * radius;
 
             float distanceDifference = Vector2.Distance(mousePos, sectionPosition);
             float similarity = -distanceDifference;
@@ -204,7 +197,7 @@ public class SelectionWheel : MonoBehaviour
             {
                 bestMatch = similarity;
                 closestSection = wheelSections[i];
-                //bestOptionTracker.localPosition = sectionPosition;
+                //bestOptionTracker.position = sectionPosition + (Vector2)transform.position;
             }
         }
 

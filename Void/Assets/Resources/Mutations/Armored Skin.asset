@@ -17,7 +17,7 @@ MonoBehaviour:
   displaySprite: {fileID: 1330719568, guid: 041f534614a4d1f4bb2ce51a34089004, type: 3}
   mutationPrefab: {fileID: 2402010164325770602, guid: 748b099e968ebca4fa65104bb91decb2,
     type: 3}
-  cooldown: 10
+  cooldown: 15
   useSound:
     Guid:
       Data1: 159996010

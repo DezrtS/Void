@@ -1,113 +1,93 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HotbarSlot : MonoBehaviour
+public abstract class HotbarSlot : MonoBehaviour
 {
-    [SerializeField] private int slotIndex;
+    [SerializeField] protected int slotIndex;
     [SerializeField] private Image hotbarImage;
+    [SerializeField] private Color defaultColor;
+    [SerializeField] private Color cooldownColor;
+    [SerializeField] private TextMeshProUGUI slotIndexText;
     [SerializeField] private float transitionDuration = 1;
 
-    private Hotbar hotbar;
     private Animator animator;
     private bool active;
     private float activeValue;
 
-    private void OnEnable()
+    private float cooldownTime;
+    private float cooldownTimer;
+
+    protected virtual void OnEnable()
     {
         UIManager.OnSetupUI += OnSetupUI;
-
-        if (hotbar)
-        {
-            hotbar.OnSwitchItem += OnSwitchItem;
-            hotbar.OnPickUpItem += OnPickUpItem;
-            hotbar.OnDropItem += OnDropItem;
-        }
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         UIManager.OnSetupUI -= OnSetupUI;
-
-        if (hotbar)
-        {
-            hotbar.OnSwitchItem -= OnSwitchItem;
-            hotbar.OnPickUpItem -= OnPickUpItem;
-            hotbar.OnDropItem -= OnDropItem;
-        }
     }
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-    }
-
-    public void OnSetupUI(GameObject player)
-    {
-        if (player.TryGetComponent(out Hotbar hotbar))
-        {
-            AttachHotbarSlot(hotbar);
-        }
-    }
-
-    public void AttachHotbarSlot(Hotbar hotbar)
-    {
-        this.hotbar = hotbar;
-        hotbar.OnSwitchItem += OnSwitchItem;
-        hotbar.OnPickUpItem += OnPickUpItem;
-        hotbar.OnDropItem += OnDropItem;
-
-        if (hotbar.SelectedIndex == slotIndex) active = true;
-
-        Item item = hotbar.GetItem(slotIndex);
-        if (item != null)
-        {
-            UpdateHotbarImage(item.ItemData.ItemSprite);
-            EnableDisableHotbarImage(true);
-        }
-    }
-
-    public void DetachHotbarSlot()
-    {
-        hotbar.OnSwitchItem -= OnSwitchItem;
-        hotbar.OnPickUpItem -= OnPickUpItem;
-        hotbar.OnDropItem -= OnDropItem;
-        hotbar = null;
-    }
-
-    public void OnSwitchItem(int fromIndex, int toIndex, Item fromItem, Item toItem)
-    {
-        if (fromIndex == slotIndex)
-        {
-            active = false;
-            // Deactivate
-        } 
-        else if (toIndex == slotIndex)
-        {
-            active = true;
-            // Activate
-        }
+        slotIndexText.text = $"{slotIndex + 1}";
     }
 
     private void FixedUpdate()
     {
-        float fixedDeltaTime = (active) ? Time.fixedDeltaTime : -Time.fixedDeltaTime;
+        float fixedDeltaTime = Time.fixedDeltaTime;
+        if (cooldownTimer > 0)
+        {
+            cooldownTimer -= fixedDeltaTime;
+            if (cooldownTimer <= 0)
+            {
+                cooldownTimer = 0;
+                hotbarImage.fillAmount = 1;
+                hotbarImage.color = defaultColor;
+            }
+            else
+            {
+                float percentage = cooldownTimer / cooldownTime;
+                hotbarImage.fillAmount = 1 - percentage;
+            }
+        }
+
+        if (!active) fixedDeltaTime *= -1;
         activeValue = Mathf.Clamp(activeValue += fixedDeltaTime / transitionDuration, 0, 1);
         animator.SetFloat("Active", activeValue);
     }
 
-    public void OnPickUpItem(int index, Item item)
+    public abstract void OnSetupUI(GameObject player);
+
+    public void OnSwitchSlot(int fromIndex, int toIndex)
     {
-        if (index != slotIndex) return;
-        UpdateHotbarImage(item.ItemData.ItemSprite);
-        EnableDisableHotbarImage(true);
+        if (fromIndex == slotIndex)
+        {
+            Deactivate();
+        } 
+        else if (toIndex == slotIndex)
+        {
+            Activate();
+        }
+    }
+
+    public virtual void Activate()
+    {
         active = true;
     }
 
-    public void OnDropItem(int index, Item item)
+    public virtual void Deactivate()
     {
-        if (index != slotIndex) return;
-        UpdateHotbarImage(null);
-        EnableDisableHotbarImage(false);
+        active = false;
+    }
+
+    public void SetCooldownTimer(float time)
+    {
+        cooldownTime = time;
+        cooldownTimer = time;
+        hotbarImage.fillAmount = 0;
+        hotbarImage.color = cooldownColor;
     }
 
     public void UpdateHotbarImage(Sprite sprite)

@@ -33,6 +33,7 @@ public class VoidMonsterController : PlayerController
         else
         {
             UIManager.Instance.TriggerFade(false);
+            health.RequestFullHeal();
             movementController.Teleport(SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster));
         }
     }

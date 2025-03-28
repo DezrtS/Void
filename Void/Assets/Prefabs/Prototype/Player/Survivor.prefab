@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 7509421746790066431}
   - component: {fileID: 6812290034540885183}
   - component: {fileID: -755659047214935387}
+  - component: {fileID: 1240250816471740412}
   m_Layer: 9
   m_Name: Survivor
   m_TagString: Player
@@ -97,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3220849879
+  GlobalObjectIdHash: 119855383
   InScenePlacedSourceGlobalObjectIdHash: 1133239272
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -552,6 +553,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8556f9a3c7c26aa41bf6f6c6ce12cfd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1240250816471740412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575300930724462412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6024dd00c65fe1643b34ca5c0da22c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compassIconPrefab: {fileID: 5616257516550400628, guid: a00f32489f4c7a84982c47fbbceb7dc1,
+    type: 3}
+  disableCompassIconOnInitialize: 1
 --- !u!1 &1731880506800288069
 GameObject:
   m_ObjectHideFlags: 0

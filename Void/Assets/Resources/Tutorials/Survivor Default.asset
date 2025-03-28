@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overrideTitle: 0
   title: Controls
-  description: 'Use [TAB] to Hide Controls
+  description: 'Use [TAB] to Hide Controls and Objective
 
     Use [WASD] to Move
 
-    Use [SPACE]
-    to Jump
+    Use
+    [SPACE] to Jump
 
     Use [SCROLL] to Switch Items
 
-    Hold [F] and Let Go to Craft'
+    Hold [F] and Let Go to
+    Craft'

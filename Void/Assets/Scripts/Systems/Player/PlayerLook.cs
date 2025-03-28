@@ -12,6 +12,7 @@ public class PlayerLook : NetworkBehaviour
 
     [Header("Camera")]
     [SerializeField] private bool spawnFirstPersonCamera;
+    [SerializeField] private bool canLockCamera;
     [SerializeField] private bool lockPlayerCursor;
     [SerializeField] private Transform cameraRotationRootTransform;
     [SerializeField] private Transform cameraRootTransform;
@@ -36,47 +37,36 @@ public class PlayerLook : NetworkBehaviour
     private IInteractable interactable;
     private UIManager instance;
 
+    public bool CanLockCamera { get { return canLockCamera;  } set {  canLockCamera = value; } }
     public Transform CameraRotationRootTransform => cameraRotationRootTransform;
     public Transform CameraRootTransform => cameraRootTransform;
-
-    private void OnEnable()
-    {
-        cameraActionMap ??= InputSystem.actions.FindActionMap("Camera");
-        cameraActionMap.Enable();
-
-        lookInputAction = cameraActionMap.FindAction("Look");
-
-        UIManager.OnPause += (bool paused) =>
-        {
-            if (paused)
-            {
-                LockCamera(false);
-            }
-            else
-            {
-                LockCamera(true);
-            }
-        };
-    }
-
-    private void OnDisable()
-    {
-        cameraActionMap.Disable();
-    }
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
 
-        if (spawnFirstPersonCamera && IsOwner)
+        if (IsOwner)
         {
-            GameObject camera = Instantiate(GameManager.Instance.FirstPersonCamera);
-            CinemachineCamera cinemachineCamera = camera.GetComponentInChildren<CinemachineCamera>();
-            cinemachineCamera.Follow = cameraRootTransform;
-            cinemachineCamera.LookAt = lookAtTargetTransform;
+            AssignControls();
+            if (spawnFirstPersonCamera)
+            {
+                GameObject camera = Instantiate(GameManager.Instance.FirstPersonCamera);
+                CinemachineCamera cinemachineCamera = camera.GetComponentInChildren<CinemachineCamera>();
+                cinemachineCamera.Follow = cameraRootTransform;
+                cinemachineCamera.LookAt = lookAtTargetTransform;
+            }
+            LockCamera(false);
         }
+    }
 
-        LockCamera(true);
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        if (IsOwner)
+        {
+            UnassignControls();
+        }
     }
 
     private void Start()
@@ -142,6 +132,28 @@ public class PlayerLook : NetworkBehaviour
         }
     }
 
+    public void AssignControls()
+    {
+        if (!IsOwner) return;
+
+        cameraActionMap ??= InputSystem.actions.FindActionMap("Camera");
+        cameraActionMap.Enable();
+
+        lookInputAction = cameraActionMap.FindAction("Look");
+        UIManager.OnPause += LockCamera;
+    }
+
+    public void UnassignControls()
+    {
+        if (!IsOwner) return;
+
+        cameraActionMap ??= InputSystem.actions.FindActionMap("Camera");
+        cameraActionMap.Disable();
+
+        lookInputAction = null;
+        UIManager.OnPause -= LockCamera;
+    }
+
     public void AddXRotation(float value)
     {
         if (!IsOwner) return;
@@ -168,22 +180,22 @@ public class PlayerLook : NetworkBehaviour
         }
     }
 
-    public void LockCamera(bool locked)
+    public void LockCamera(bool isLocked)
     {
-        if (locked)
+        if (isLocked)
+        {
+            cameraActionMap.Disable();
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
         {
             cameraActionMap.Enable();
 
             if (!lockPlayerCursor) return;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
-        else
-        {
-            cameraActionMap.Disable();
-
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
         }
     }
 

@@ -17,6 +17,7 @@ public class ProjectileMutation : Mutation
     {
         base.SetupMutation(player);
         player.TryGetComponent(out playerLook);
+        projectileSpawner.OnHit += OnHit;
     }
 
     public override void StopUsing()
@@ -26,6 +27,15 @@ public class ProjectileMutation : Mutation
         StartCoroutine(SpawnProjectileCoroutine());
         cooldownTimer = mutationData.Cooldown;
         if (spawnProjectileTrigger != string.Empty) animationController.SetTrigger(spawnProjectileTrigger);
+    }
+
+    private void OnHit(Projectile projectile, ProjectileSpawner projectileSpawner, RaycastHit raycastHit)
+    {
+        if (!networkUseable.IsOwner) return;
+        if (raycastHit.collider.CompareTag("Monster") || raycastHit.collider.CompareTag("Player"))
+        {
+            UIManager.Instance.TriggerHit();
+        }
     }
 
     private IEnumerator SpawnProjectileCoroutine()

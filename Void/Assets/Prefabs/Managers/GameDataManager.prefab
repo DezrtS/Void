@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1240257690410169762}
   - component: {fileID: 8009228222742888170}
+  - component: {fileID: 7415013737225231948}
   m_Layer: 0
   m_Name: GameDataManager
   m_TagString: Untagged
@@ -83,9 +84,49 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ac2323f43b2d7e74f8cbdd36c5bdaf4f, type: 2}
   tasks:
   - {fileID: 11400000, guid: 4d4864e5649e0b9479d50441aaf3a62c, type: 2}
-  - {fileID: 11400000, guid: ae0de4f5e3e141b44ab680aa462355be, type: 2}
   statChanges:
   - {fileID: 11400000, guid: e337e8ea29ca5864c8046e5072ecaa65, type: 2}
   - {fileID: 11400000, guid: cf938b0b0f8192444b8e35320a470594, type: 2}
   - {fileID: 11400000, guid: 28084fe7b50a9ce47a82edbb91661cb5, type: 2}
   - {fileID: 11400000, guid: 1e50a8221b5439c45bfed6e364074985, type: 2}
+  dialogues:
+  - {fileID: 11400000, guid: e8531345199888049bcd825ac5d02197, type: 2}
+  - {fileID: 11400000, guid: 6d3404ab35dc39e468526088a6c99903, type: 2}
+  - {fileID: 11400000, guid: 171a7e11111652148925bd008587544b, type: 2}
+  - {fileID: 11400000, guid: 0972490a6bd091748ac69f1f8b3e598c, type: 2}
+  - {fileID: 11400000, guid: d257e8b08de404046b6d0fd2bc3708cb, type: 2}
+  - {fileID: 11400000, guid: 5018e772b82bb7f46b341f1529b95eef, type: 2}
+  - {fileID: 11400000, guid: da1face500907704db8cb5aa70c31e20, type: 2}
+  - {fileID: 11400000, guid: 083e4ceaed34ce340a8ef1d1207f5983, type: 2}
+  - {fileID: 11400000, guid: 374ff45a98ce1414da9e82c0cc9aff88, type: 2}
+  - {fileID: 11400000, guid: 140cda5817322574ba9c230a11d3dc7c, type: 2}
+  - {fileID: 11400000, guid: e332e3ba56cb2064e88c82a7aa0c5239, type: 2}
+--- !u!114 &7415013737225231948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131622987598794290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42bf90d2e821f364d85b69456d659200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Countdown: {fileID: 11400000, guid: d257e8b08de404046b6d0fd2bc3708cb, type: 2}
+  FifteenSeconds: {fileID: 11400000, guid: 5018e772b82bb7f46b341f1529b95eef, type: 2}
+  ThirtySeconds: {fileID: 11400000, guid: da1face500907704db8cb5aa70c31e20, type: 2}
+  OneMinute: {fileID: 11400000, guid: e8531345199888049bcd825ac5d02197, type: 2}
+  TwoMinutes: {fileID: 11400000, guid: 6d3404ab35dc39e468526088a6c99903, type: 2}
+  ThreeMinutes: {fileID: 11400000, guid: 171a7e11111652148925bd008587544b, type: 2}
+  FourMinutes: {fileID: 11400000, guid: 0972490a6bd091748ac69f1f8b3e598c, type: 2}
+  AllTasksComplete: {fileID: 11400000, guid: 140cda5817322574ba9c230a11d3dc7c, type: 2}
+  OneTaskLeft: {fileID: 0}
+  TwoTasksLeft: {fileID: 0}
+  ThreeTasksLeft: {fileID: 0}
+  FourTasksLeft: {fileID: 0}
+  FiveTasksLeft: {fileID: 0}
+  OnePlayerSlayed: {fileID: 11400000, guid: 083e4ceaed34ce340a8ef1d1207f5983, type: 2}
+  TwoPlayersSlayed: {fileID: 11400000, guid: 374ff45a98ce1414da9e82c0cc9aff88, type: 2}
+  MonsterKilled: {fileID: 0}
+  RandomHumanVoicelines: {fileID: 0}

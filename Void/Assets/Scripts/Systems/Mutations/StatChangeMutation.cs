@@ -4,9 +4,6 @@ public class StatChangeMutation : Mutation
 {
     [SerializeField] private StatChangesData statChangesData;
     private PlayerStats playerStats;
-    private float durationTimer;
-
-    public bool CanActivate() => durationTimer <= 0;
 
     public override void SetupMutation(GameObject player)
     {
@@ -20,28 +17,12 @@ public class StatChangeMutation : Mutation
     public override void Use()
     {
         base.Use();
-        if (CanActivate()) Activate();
+        Activate();
     }
 
     public void Activate()
     {
-        durationTimer = statChangesData.Duration;
-        playerStats.RequestChangeStats(statChangesData);
-    }
-
-    public override void UpdateTimers()
-    {
-        base.UpdateTimers();
-
-        if (durationTimer > 0)
-        {
-            durationTimer -= Time.fixedDeltaTime;
-
-            if (durationTimer <= 0)
-            {
-                durationTimer = 0;
-                cooldownTimer = mutationData.Cooldown;
-            }
-        }
+        cooldownTimer = mutationData.Cooldown;
+        if (networkUseable.IsServer) playerStats.RequestChangeStats(statChangesData);
     }
 }

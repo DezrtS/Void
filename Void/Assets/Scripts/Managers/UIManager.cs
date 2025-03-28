@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -13,6 +13,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject settingsUI;
     [SerializeField] private GameObject tutorialUI;
+    [SerializeField] private GameObject objectiveUI;
 
     [SerializeField] private GameObject deathUI;
 
@@ -21,6 +22,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject spectatorUI;
 
     [SerializeField] private TextMeshProUGUI taskText;
+    [SerializeField] private TextMeshProUGUI objectiveText;
     [SerializeField] private TextMeshProUGUI tutorialText;
     [SerializeField] private TextMeshProUGUI interactableText;
     [SerializeField] private TextMeshProUGUI gameStateText;
@@ -30,6 +32,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TextMeshProUGUI dialogueText;
 
     [SerializeField] private GameObject compassBar;
+    [SerializeField] private Image cooldownCircle;
 
     public static event Action<GameObject> OnSetupUI;
     public static event Action<bool> OnPause;
@@ -38,8 +41,10 @@ public class UIManager : Singleton<UIManager>
     private Animator animator;
     private bool paused;
     private float gameTimer;
+    private bool lockTutorialText;
 
-    private List<CompassIcon> compassIcons = new List<CompassIcon>();
+    private float cooldownTime;
+    private float cooldownTimer;
 
     public TextMeshProUGUI TaskText => taskText;
 
@@ -64,10 +69,35 @@ public class UIManager : Singleton<UIManager>
 
     private void FixedUpdate()
     {
+        float deltaTime = Time.fixedDeltaTime;
         if (gameTimer > 0)
         {
-            gameTimer -= Time.deltaTime;
+            gameTimer -= deltaTime;
             gameTimerText.text = ((int)gameTimer).ToString();
+        }
+
+        if (cooldownTimer > 0)
+        {
+            cooldownTimer -= deltaTime;
+            if (cooldownTimer <= 0)
+            {
+                cooldownTimer = 0;
+                cooldownCircle.gameObject.SetActive(false);
+            }
+            else
+            {
+                float percentage = cooldownTimer / cooldownTime;
+                cooldownCircle.fillAmount = 1 - percentage;
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            gameStateText.gameObject.SetActive(!gameStateText.gameObject.activeSelf);
+            gameTimerText.gameObject.SetActive(!gameTimerText.gameObject.activeSelf);
         }
     }
 
@@ -76,6 +106,7 @@ public class UIManager : Singleton<UIManager>
         EnableUI(playerRole);
         if (playerRole == GameManager.PlayerRole.Survivor) defaultTutorialData = defaultSurvivorTutorialData;
         else if (playerRole == GameManager.PlayerRole.Monster) defaultTutorialData = defaultMonsterTutorialData;
+        lockTutorialText = true;
         player.GetComponent<Health>().OnDeathStateChanged += OnDeathStateChanged;
         OnSetupUI?.Invoke(player);
     }
@@ -106,7 +137,6 @@ public class UIManager : Singleton<UIManager>
     {
         GameObject newIcon = Instantiate(prefab, Vector3.zero, Quaternion.identity, compassBar.transform);
         CompassIcon compassIcon = newIcon.GetComponent<CompassIcon>();
-        compassIcons.Add(compassIcon);
         return compassIcon;
     }
 
@@ -128,11 +158,12 @@ public class UIManager : Singleton<UIManager>
     public void HideUnhideTutorialUI()
     {
         tutorialUI.SetActive(!tutorialUI.activeSelf);
+        objectiveUI.SetActive(!objectiveUI.activeSelf);
     }
 
     public void SetTutorialText(TutorialData tutorialData)
     {
-        if (tutorialData == null) return;
+        if (tutorialData == null || lockTutorialText) return;
         tutorialText.text = tutorialData.Description;
     }
 
@@ -171,6 +202,14 @@ public class UIManager : Singleton<UIManager>
         gameTimer = time;
     }
 
+    public void SetCooldownTimer(float time)
+    {
+        cooldownCircle.fillAmount = 0;
+        cooldownCircle.gameObject.SetActive(true);
+        cooldownTime = time;
+        cooldownTimer = time;
+    }
+
     public void PauseUnpauseGame()
     {
         Debug.Log("PAUSING GAME");
@@ -206,12 +245,21 @@ public class UIManager : Singleton<UIManager>
         else animator.SetTrigger("FadeOut");
     }
 
+    public void TriggerHit()
+    {
+        animator.SetTrigger("Hit");
+    }
+
     private void OnGameStateChanged(GameManager.GameState gameState)
     {
         gameStateText.text = gameState.ToString();
         if (gameState == GameManager.GameState.WaitingToStart)
         {
             loadingUI.SetActive(false);
+        }
+        else if (gameState == GameManager.GameState.ReadyToStart)
+        {
+            lockTutorialText = false;
         }
         else if (gameState == GameManager.GameState.GameOver)
         {

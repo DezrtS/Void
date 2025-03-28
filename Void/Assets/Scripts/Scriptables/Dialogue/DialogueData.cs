@@ -25,3 +25,13 @@ public class DialogueLine
     public float Duration => duration;
     public string Dialogue => dialogue;
 }
+
+[Serializable]
+public class TimedDialogueEvent
+{
+    [SerializeField] private float time;
+    [SerializeField] private DialogueData dialogueData;
+
+    public float Time => time;
+    public DialogueData DialogueData => dialogueData;
+}
