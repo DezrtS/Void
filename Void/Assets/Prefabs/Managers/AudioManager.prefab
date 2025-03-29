@@ -45,6 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd2204998e3087f42a216fd69133a0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMusic:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  startMusicOnAwake: 0
 --- !u!114 &4784981991694889388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57,6 +65,167 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05037c1e78de64249ba1fb8ec27971e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TitleTheme:
+    Guid:
+      Data1: -1631800485
+      Data2: 1331602509
+      Data3: -570282078
+      Data4: -1896540679
+    Path: event:/Prototype/Music/TitleTheme
+  MainMenuTheme:
+    Guid:
+      Data1: 197273100
+      Data2: 1199250269
+      Data3: -1915996522
+      Data4: -488857076
+    Path: event:/Prototype/Music/MainMenuTheme
+  LobbyTheme:
+    Guid:
+      Data1: -294117460
+      Data2: 1090489723
+      Data3: -331309949
+      Data4: 415706827
+    Path: event:/Prototype/Music/LobbyTheme
+  ElevatorTheme:
+    Guid:
+      Data1: 638677497
+      Data2: 1149102432
+      Data3: 1117850787
+      Data4: 828400948
+    Path: event:/Prototype/Music/ElevatorTheme
+  BackgroundTheme:
+    Guid:
+      Data1: -440898285
+      Data2: 1303721553
+      Data3: -781522003
+      Data4: 2121305628
+    Path: event:/Prototype/Music/BgTheme
+  AlarmTheme:
+    Guid:
+      Data1: 1362471149
+      Data2: 1171257147
+      Data3: -1883932777
+      Data4: 1488298961
+    Path: event:/Prototype/Music/AlarmTheme
+  Countdown:
+    Guid:
+      Data1: -1384513352
+      Data2: 1213474799
+      Data3: -61253988
+      Data4: 1483033253
+    Path: event:/Prototype/Voicelines/Countdown
+  FifteenSeconds:
+    Guid:
+      Data1: -1493641949
+      Data2: 1082105150
+      Data3: -1218649162
+      Data4: -2042608150
+    Path: event:/Prototype/Voicelines/15SecondsLeft
+  ThirtySeconds:
+    Guid:
+      Data1: -2124662116
+      Data2: 1291767924
+      Data3: -1099890520
+      Data4: -1860872341
+    Path: event:/Prototype/Voicelines/30SecondsLeft
+  OneMinute:
+    Guid:
+      Data1: -876407093
+      Data2: 1274006722
+      Data3: -121763193
+      Data4: 889450825
+    Path: event:/Prototype/Voicelines/1MinuteLeft
+  TwoMinutes:
+    Guid:
+      Data1: 753985785
+      Data2: 1311486052
+      Data3: -27309439
+      Data4: 478836322
+    Path: event:/Prototype/Voicelines/2MinutesLeft
+  ThreeMinutes:
+    Guid:
+      Data1: 999173217
+      Data2: 1193064108
+      Data3: 371732155
+      Data4: 258362927
+    Path: event:/Prototype/Voicelines/3MinutesLeft
+  FourMinutes:
+    Guid:
+      Data1: -635853668
+      Data2: 1146327517
+      Data3: -444155716
+      Data4: 1267192349
+    Path: event:/Prototype/Voicelines/4MinutesLeft
+  AllTasksComplete:
+    Guid:
+      Data1: -1296233486
+      Data2: 1327889692
+      Data3: -971593595
+      Data4: 365774659
+    Path: event:/Prototype/Voicelines/TasksComplete
+  OneTaskLeft:
+    Guid:
+      Data1: 1867175603
+      Data2: 1091374889
+      Data3: 689497987
+      Data4: -396007323
+    Path: event:/Prototype/Voicelines/1TaskLeft
+  TwoTasksLeft:
+    Guid:
+      Data1: 989701680
+      Data2: 1274223195
+      Data3: -489683575
+      Data4: -2014622981
+    Path: event:/Prototype/Voicelines/2TasksLeft
+  ThreeTasksLeft:
+    Guid:
+      Data1: 1544639396
+      Data2: 1091532606
+      Data3: -1837878350
+      Data4: 1897504969
+    Path: event:/Prototype/Voicelines/3TasksLeft
+  FourTasksLeft:
+    Guid:
+      Data1: -731575070
+      Data2: 1090373596
+      Data3: 807060130
+      Data4: 1397181407
+    Path: event:/Prototype/Voicelines/4TasksLeft
+  FiveTasksLeft:
+    Guid:
+      Data1: 1638849965
+      Data2: 1224230986
+      Data3: 1319386776
+      Data4: 276079061
+    Path: event:/Prototype/Voicelines/5TasksLeft
+  OnePlayerSlayed:
+    Guid:
+      Data1: 621453713
+      Data2: 1093047167
+      Data3: 2027273898
+      Data4: -2002820525
+    Path: event:/Prototype/Voicelines/1PlayerSlayed
+  TwoPlayersSlayed:
+    Guid:
+      Data1: 1400834426
+      Data2: 1114647934
+      Data3: 596026501
+      Data4: -957675746
+    Path: event:/Prototype/Voicelines/2PlayersSlayed
+  MonsterKilled:
+    Guid:
+      Data1: 1073158274
+      Data2: 1166574789
+      Data3: -1322361943
+      Data4: 492119780
+    Path: event:/Prototype/Voicelines/MonsterDied
+  RandomHumanVoicelines:
+    Guid:
+      Data1: -1600877103
+      Data2: 1138398153
+      Data3: 688418475
+      Data4: 1073419985
+    Path: event:/Prototype/Voicelines/RandomHumanVoiceLines
   Sound1:
     Guid:
       Data1: 1967878443
@@ -71,3 +240,17 @@ MonoBehaviour:
       Data3: -789222729
       Data4: -1421211024
     Path: event:/Debugging/Sound2
+  SwitchItemSound:
+    Guid:
+      Data1: -571449395
+      Data2: 1081864936
+      Data3: 2095610532
+      Data4: -1320778866
+    Path: event:/Prototype/Survivor/SwitchItem/SwithItem
+  SelectMutationSound:
+    Guid:
+      Data1: -88974853
+      Data2: 1077803087
+      Data3: -2095384900
+      Data4: -2114515453
+    Path: event:/Prototype/VoidMonster/SelectMutation

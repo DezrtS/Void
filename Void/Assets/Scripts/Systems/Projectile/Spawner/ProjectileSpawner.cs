@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
 {
@@ -8,6 +9,7 @@ public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
     public event IProjectileSpawner.ProjectileEventHandler OnDestroy;
 
     [SerializeField] private ProjectileData projectileData;
+    [SerializeField] private List<VisualEffect> visualEffects;
     private ObjectPool objectPool;
 
     private void Awake()
@@ -26,11 +28,17 @@ public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
         GameObject projectileObject = objectPool.GetObject();
         if (projectileObject == null) return;
 
+        foreach (VisualEffect visualEffect in visualEffects)
+        {
+            visualEffect.Reinit();
+            visualEffect.Play();
+        }
         projectileObject.transform.SetPositionAndRotation(position, rotation);
         Projectile projectile = projectileObject.GetComponent<Projectile>();
         OnSpawn?.Invoke(projectile, this);
         projectile.InitializeProjectile(projectileData, this);
         projectile.FireProjectile(projectileObject.transform.forward);
+        AudioManager.PlayOneShot(projectileData.SpawnSound, projectileObject);
     }
 
     public virtual void OnProjectileHit(Projectile projectile, RaycastHit raycastHit, bool destroyProjectile = true)
@@ -48,6 +56,10 @@ public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
         {
             Vector3 difference = movementController.transform.position - projectile.transform.position;
             if (movementController.NetworkMovementController.IsServer) movementController.RequestApplyForce(difference.normalized * projectile.ProjectileData.Knockback, ForceMode.Impulse);
+        }
+        else if (raycastHit.collider.TryGetComponent(out Rigidbody rig))
+        {
+            rig.AddForceAtPosition(projectile.transform.forward * projectile.ProjectileData.Knockback, projectile.transform.position, ForceMode.Impulse);
         }
 
         if (destroyProjectile) projectile.DestroyProjectile();

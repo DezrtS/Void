@@ -5,7 +5,7 @@
 			<value>MonsterDied</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{2b922a2b-09a6-4f95-9b25-e7862e564ede}</destination>
@@ -72,6 +72,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{51a4f60e-86ec-424d-b36c-35869185cd1e}">
+		<property name="volume">
+			<value>-9</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{bc6f49a8-a549-4cc3-abd8-2ae59f0ca52c}</destination>
 		</relationship>
@@ -96,7 +99,6 @@
 	<object class="MixerBusEffectChain" id="{bc6f49a8-a549-4cc3-abd8-2ae59f0ca52c}">
 		<relationship name="effects">
 			<destination>{94f8c07a-92d9-4e82-b33a-59d2b80deda1}</destination>
-			<destination>{a7992492-29c3-4934-9c9a-1d3b21596300}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{195ba765-5244-41fc-8e42-ea513f84f800}" />
@@ -107,5 +109,4 @@
 	</object>
 	<object class="MixerBusFader" id="{761ee13a-2a70-4b7e-90fb-98bc334b19d0}" />
 	<object class="MixerBusFader" id="{94f8c07a-92d9-4e82-b33a-59d2b80deda1}" />
-	<object class="SpatialiserEffect" id="{a7992492-29c3-4934-9c9a-1d3b21596300}" />
 </objects>

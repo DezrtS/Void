@@ -7,6 +7,9 @@ public class DeployableItem : Item
     private NetworkDeployableItem networkDeployableItem;
     private bool isDeployed;
 
+    public DeployableItemData DeployableItemData => deployableItemData;
+    public bool IsDeployed => isDeployed;
+
     public bool CanDeploy() => !isDeployed;
     public bool CanUndeploy() => isDeployed;
 
@@ -33,8 +36,8 @@ public class DeployableItem : Item
 
     public override void PickUp()
     {
-        base.PickUp();
         if (networkDeployableItem.IsServer) RequestUndeploy();
+        base.PickUp();
     }
 
     public virtual void Deploy()
@@ -43,24 +46,19 @@ public class DeployableItem : Item
         rig.isKinematic = true;
         if (NetworkItem.IsOwner)
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit,
-                deployableItemData.DeployRange, deployableItemData.DeployLayers,
-                QueryTriggerInteraction.Ignore))
+            Transform castTransform = CameraManager.Instance.transform;
+            if (Physics.Raycast(castTransform.position, castTransform.forward, out RaycastHit hit, deployableItemData.DeployRange, deployableItemData.DeployLayers, QueryTriggerInteraction.Ignore))
             {
-                // Preserve original forward direction while aligning to surface normal
-                Vector3 surfaceAlignedForward = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
-
-                // Ensure valid rotation when projecting (edge case handling)
-                if (surfaceAlignedForward == Vector3.zero)
-                    surfaceAlignedForward = Vector3.forward;  // Fallback axis
-
+                Vector3 surfaceAlignedForward = Vector3.ProjectOnPlane(castTransform.forward, hit.normal).normalized;
+                if (surfaceAlignedForward == Vector3.zero) surfaceAlignedForward = Vector3.forward;
                 Quaternion surfaceAlignment = Quaternion.LookRotation(surfaceAlignedForward, hit.normal);
 
                 transform.SetPositionAndRotation(hit.point, surfaceAlignment);
+                AudioManager.RequestPlayOneShot(deployableItemData.DeploySound, transform.position);
             }
             else
             {
-                transform.SetPositionAndRotation(transform.position + transform.forward * deployableItemData.DeployRange, transform.rotation);
+                transform.SetPositionAndRotation(castTransform.position + castTransform.forward * deployableItemData.DeployRange, transform.rotation);
                 RequestUndeploy();
             }
         }
@@ -68,7 +66,7 @@ public class DeployableItem : Item
 
     public virtual void Undeploy()
     {
-        rig.isKinematic = false;
         isDeployed = false;
+        rig.isKinematic = false;
     }
 }

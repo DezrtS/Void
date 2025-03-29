@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class Claymore : DeployableItem
@@ -5,6 +6,7 @@ public class Claymore : DeployableItem
     [SerializeField] private Trigger trigger;
     [SerializeField] private float damage;
     [SerializeField] private GameObject explosionEffect;
+    [SerializeField] private EventReference activateSound;
 
     private NetworkClaymore networkClaymore;
     private bool isActive;
@@ -30,41 +32,43 @@ public class Claymore : DeployableItem
     public override void Deploy()
     {
         base.Deploy();
-        if (networkClaymore.IsServer) RequestActivateClaymore();
+        if (networkClaymore.IsOwner) RequestActivateClaymore();
     }
 
     public override void Undeploy()
     {
         base.Undeploy();
-        if (networkClaymore.IsServer) RequestDeactivateClaymore();
+        if (networkClaymore.IsOwner) RequestDeactivateClaymore();
     }
 
     public void OnEnter(Trigger trigger, GameObject gameObject)
     {
         if (!gameObject.CompareTag("Player") && !gameObject.CompareTag("Monster")) return;
-        RequestTriggerClaymore();
+        if (networkClaymore.IsServer) RequestTriggerClaymore();
 
         if (gameObject.TryGetComponent(out Health health))
         {
             trigger.OnEnter -= OnEnter;
-            health.RequestDamage(damage);
+            if (networkClaymore.IsOwner) UIManager.Instance.TriggerHit();
+            if (networkClaymore.IsServer) health.RequestDamage(damage);
         }
     }
 
     public void ActivateClaymore()
     {
         isActive = true;
-        if (networkClaymore.IsServer) trigger.OnEnter += OnEnter;
+        trigger.OnEnter += OnEnter;
     }
 
     public void DeactivateClaymore()
     {
         isActive = false;
-        if (networkClaymore.IsServer) trigger.OnEnter -= OnEnter;
+        trigger.OnEnter -= OnEnter;
     }
 
     public void TriggerClaymore()
     {
+        AudioManager.PlayOneShot(activateSound, gameObject);
         Instantiate(explosionEffect, transform.position, transform.rotation);
     }
 }

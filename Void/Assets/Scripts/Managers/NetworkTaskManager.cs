@@ -4,6 +4,7 @@ using UnityEngine;
 public class NetworkTaskManager : NetworkBehaviour
 {
     private TaskManager taskManager;
+    private readonly NetworkVariable<int> tasksLeft = new();
     private readonly NetworkVariable<bool> isAllTasksCompleted = new();
 
     private void Awake()
@@ -15,6 +16,7 @@ public class NetworkTaskManager : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
+        tasksLeft.OnValueChanged += OnTasksLeftChanged;
         isAllTasksCompleted.OnValueChanged += OnAllTasksCompletedStateChanged;
     }
 
@@ -22,13 +24,27 @@ public class NetworkTaskManager : NetworkBehaviour
     {
         base.OnNetworkDespawn();
 
+        tasksLeft.OnValueChanged -= OnTasksLeftChanged;
         isAllTasksCompleted.OnValueChanged -= OnAllTasksCompletedStateChanged;
+    }
+
+    private void OnTasksLeftChanged(int oldValue, int newValue)
+    {
+        if (oldValue == newValue) return;
+        taskManager.SetTasksLeft(newValue);
     }
 
     private void OnAllTasksCompletedStateChanged(bool oldValue, bool newValue)
     {
         if (oldValue == newValue) return;
         taskManager.SetAllTasksCompleted(newValue);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SetTasksLeftServerRpc(int tasksLeftValue)
+    {
+        if (tasksLeft.Value == tasksLeftValue) return;
+        tasksLeft.Value = tasksLeftValue;
     }
 
     [ServerRpc(RequireOwnership = false)]

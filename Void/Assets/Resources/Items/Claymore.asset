@@ -14,10 +14,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Claymore
   Description: A deployable explosive
-  ItemSprite: {fileID: 21300000, guid: 0398b851c79455d4c99f70a5c40f2a71, type: 3}
+  ItemSprite: {fileID: 1552961816, guid: 4a8ca23cf9a3fa4418ab72b0d4fa0d60, type: 3}
   ItemPrefab: {fileID: 2140256471134006915, guid: 14dcc12668fca3243ad51cfdc17c866c,
     type: 3}
+  useSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  pickUpSound:
+    Guid:
+      Data1: 320945385
+      Data2: 1082138234
+      Data3: 1422123177
+      Data4: -2075219262
+    Path: event:/Prototype/Tasks/Battery/BatteryPickUp
+  dropSound:
+    Guid:
+      Data1: 1055878425
+      Data2: 1195061842
+      Data3: -964257871
+      Data4: 1447670243
+    Path: event:/Prototype/Tasks/Battery/BatteryDrop
   deployRange: 5
   deployLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1463
+  deploySound:
+    Guid:
+      Data1: 1857818178
+      Data2: 1300722753
+      Data3: 1399964083
+      Data4: 1715162326
+    Path: event:/Prototype/Items/Claymore/ClayMoreSetup

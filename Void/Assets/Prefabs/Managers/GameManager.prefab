@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 562267644
+  GlobalObjectIdHash: 2557701004
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -71,7 +71,7 @@ MonoBehaviour:
   allowGameSlowDown: 0
   showGameTimer: 0
   resetPlayerPrefsOnAwake: 0
-  friendlyFireEnabled: 0
+  enableFriendlyFireOnAwake: 0
   endGameOnAllSurvivorDeath: 1
   defaultPlayerRole: 0
   forceReadyUpTimer: 30
@@ -79,12 +79,25 @@ MonoBehaviour:
   endGameDelay: 5
   gameDuration: 180
   panicDuration: 60
-  monsterPrefab: {fileID: 1173705057825196843, guid: 8cfc32a23ded537428f2e30e0904a6ad,
+  monsterPrefab: {fileID: 4651433403968472973, guid: 4d92554d6ab37c84f97966056a7bccde,
     type: 3}
   survivorPrefab: {fileID: 1575300930724462412, guid: ac7b75d41345af34294d3b00de9c4ec4,
     type: 3}
   FirstPersonCamera: {fileID: 1658748320854242559, guid: 6f8b2ced9ca176043835158ec70bcd4d,
     type: 3}
+  dialogueEvents:
+  - time: 180
+    dialogueData: {fileID: 11400000, guid: 171a7e11111652148925bd008587544b, type: 2}
+  - time: 120
+    dialogueData: {fileID: 11400000, guid: 6d3404ab35dc39e468526088a6c99903, type: 2}
+  - time: 60
+    dialogueData: {fileID: 11400000, guid: e8531345199888049bcd825ac5d02197, type: 2}
+  - time: 30
+    dialogueData: {fileID: 11400000, guid: da1face500907704db8cb5aa70c31e20, type: 2}
+  - time: 15
+    dialogueData: {fileID: 11400000, guid: 5018e772b82bb7f46b341f1529b95eef, type: 2}
+  - time: 5
+    dialogueData: {fileID: 11400000, guid: d257e8b08de404046b6d0fd2bc3708cb, type: 2}
 --- !u!114 &5254914792366982226
 MonoBehaviour:
   m_ObjectHideFlags: 0

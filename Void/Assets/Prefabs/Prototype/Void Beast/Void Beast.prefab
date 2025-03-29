@@ -9393,37 +9393,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 9131960337408219055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1565670506044385233
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6019010011077008550}
-  m_Layer: 0
-  m_Name: Tracking Colliders
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6019010011077008550
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1565670506044385233}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4734415556257247040}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1598685506310996690
 GameObject:
   m_ObjectHideFlags: 0
@@ -13607,9 +13576,9 @@ GameObject:
   - component: {fileID: 4085574950063731777}
   - component: {fileID: -3944637205266279486}
   - component: {fileID: -5247600483189517173}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Void Beast
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13631,7 +13600,6 @@ Transform:
   - {fileID: 4989481619476646122}
   - {fileID: 6299620455785016231}
   - {fileID: 1710153704656111096}
-  - {fileID: 6019010011077008550}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3460208250545404349
@@ -13646,7 +13614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3053299248
+  GlobalObjectIdHash: 2625954107
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -13667,8 +13635,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e65336e7c29e0ab4188a5741c6bc4b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coneVision: {fileID: 0}
-  surroundVision: {fileID: 0}
+  coneVision: {fileID: 3908999170491581488}
+  surroundVision: {fileID: 195893084969371951}
 --- !u!195 &34292222373604027
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -13676,7 +13644,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8643636204953852213}
-  m_Enabled: 0
+  m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
@@ -13751,6 +13719,27 @@ MonoBehaviour:
   healthRegenerationRate:
     baseValue: 0
   healthRegenerationDelay: 0
+  hurtSound:
+    Guid:
+      Data1: 290228717
+      Data2: 1165102239
+      Data3: 882104989
+      Data4: 179462128
+    Path: event:/Prototype/VoidBeast/BeastBulletHit
+  reflectSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  deathSound:
+    Guid:
+      Data1: 2062004534
+      Data2: 1329623011
+      Data3: 1909508011
+      Data4: -734419733
+    Path: event:/Prototype/VoidBeast/BeastDeath
 --- !u!114 &3916233935387246885
 MonoBehaviour:
   m_ObjectHideFlags: 0

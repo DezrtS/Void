@@ -14,10 +14,14 @@ public class MutationOption : MonoBehaviour
     public MutationData MutationData => mutationData;
     public bool IsSelected => isSelected;
 
-    private void Awake()
+    private void OnEnable()
     {
-        MutationSelectionManager.OnMutationDatasChanged += UpdateMutationData;
         MutationSelectionManager.OnMutationDataSelected += OnMutationDataSelected;
+    }
+
+    private void OnDisable()
+    {
+        MutationSelectionManager.OnMutationDataSelected -= OnMutationDataSelected;
     }
 
     public void UpdateMutationData()
@@ -33,6 +37,10 @@ public class MutationOption : MonoBehaviour
         if (index == optionIndex)
         {
             this.isSelected = isSelected;
+            if (isSelected)
+            {
+                AudioManager.PlayOneShot(FMODEventManager.Instance.SelectMutationSound);
+            }
         }
     }
 

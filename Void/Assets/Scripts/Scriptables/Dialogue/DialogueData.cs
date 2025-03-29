@@ -1,3 +1,4 @@
+using FMODUnity;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DialogueData", menuName = "ScriptableObjects/Dialogue/Data/DialogueData", order = 1)]
 public class DialogueData : ScriptableObject
 {
-    [SerializeField] DialogueNameData dialogueNameData;
+    [SerializeField] private DialogueNameData dialogueNameData;
+    [SerializeField] private EventReference dialogueAudio;
     [SerializeField] private List<DialogueLine> dialogueLines;
 
     public DialogueNameData DialogueNameData => dialogueNameData;
+    public EventReference DialogueAudio => dialogueAudio;
     public List<DialogueLine> DialogueLines => dialogueLines;
 }
 
@@ -21,4 +24,14 @@ public class DialogueLine
 
     public float Duration => duration;
     public string Dialogue => dialogue;
+}
+
+[Serializable]
+public class TimedDialogueEvent
+{
+    [SerializeField] private float time;
+    [SerializeField] private DialogueData dialogueData;
+
+    public float Time => time;
+    public DialogueData DialogueData => dialogueData;
 }

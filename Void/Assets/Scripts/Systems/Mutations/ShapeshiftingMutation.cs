@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class ShapeshiftingMutation : Mutation
@@ -6,10 +7,11 @@ public class ShapeshiftingMutation : Mutation
     [SerializeField] private Animator animator;
     [SerializeField] private float duration;
 
+    [SerializeField] private EventReference shapeshiftBackSound;
+
     private NetworkShapeshiftingMutation networkShapeshiftingMutation;
     private bool isActive;
 
-    AnimationController animationController;
     private GameObject playerModel;
     private float durationTimer;
 
@@ -28,7 +30,6 @@ public class ShapeshiftingMutation : Mutation
     public override void SetupMutation(GameObject player)
     {
         base.SetupMutation(player);
-        animationController = player.GetComponent<AnimationController>();
         playerModel = player.GetComponent<PlayerController>().PlayerModel;
     }
 
@@ -42,6 +43,7 @@ public class ShapeshiftingMutation : Mutation
     {
         isActive = true;
         durationTimer = duration;
+        cooldownTimer = mutationData.Cooldown;
         playerModel.SetActive(false);
         survivor.SetActive(true);
         animationController.AddAnimatorInstance("Player", animator);
@@ -59,7 +61,6 @@ public class ShapeshiftingMutation : Mutation
             {
                 durationTimer = 0;
                 if (networkShapeshiftingMutation.IsServer) RequestDeactivateShapeshiftingMutation();
-                cooldownTimer = mutationData.Cooldown;
             }
         }
     }
@@ -70,5 +71,6 @@ public class ShapeshiftingMutation : Mutation
         survivor.SetActive(false);
         playerModel.SetActive(true);
         animationController.RemoveAnimatorInstance(animator);
+        AudioManager.PlayOneShot(shapeshiftBackSound, gameObject);
     }
 }

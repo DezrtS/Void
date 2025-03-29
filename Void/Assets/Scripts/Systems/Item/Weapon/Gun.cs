@@ -26,8 +26,6 @@ public class Gun : Item, IReload, IAnimate
     private float reloadTimer;
     private float windupTimer;
 
-    private Recoil recoil;
-
     public int MaxAmmo => maxAmmo;
     public int Ammo { get { return ammo; } set { ammo = value; } }
 
@@ -45,7 +43,7 @@ public class Gun : Item, IReload, IAnimate
     {
         networkGun = NetworkItem as NetworkGun;
         projectileSpawner = projectileSpawnerObject.GetComponent<IProjectileSpawner>();
-        recoil = GetComponent<Recoil>();  
+        projectileSpawner.OnHit += OnHit;
     }
 
     private void Update()
@@ -104,7 +102,7 @@ public class Gun : Item, IReload, IAnimate
     {
         if (ammo <= 0)
         {
-            AudioManager.PlayOneShot(emptySound, transform.position);
+            AudioManager.PlayOneShot(emptySound, gameObject);
             return;
         }
 
@@ -113,18 +111,28 @@ public class Gun : Item, IReload, IAnimate
         //recoil.ApplyRecoil();
         OnFire?.Invoke();
         OnAnimationEvent?.Invoke(IAnimate.AnimationEventType.Trigger, "Fire", null);
-        AudioManager.PlayOneShot(fireSound, transform.position);
+        AudioManager.PlayOneShot(fireSound, gameObject);
     }
 
     public void Reload()
     {
-        AudioManager.PlayOneShot(reloadSound, transform.position);
+        AudioManager.PlayOneShot(reloadSound, gameObject);
         reloadTimer = timeToReload;
+        if (networkGun.IsOwner) UIManager.Instance.SetCooldownTimer(timeToReload);
     }
 
     public override void Interact(GameObject interactor)
     {
         base.Interact(interactor);
 
+    }
+
+    private void OnHit(Projectile projectile, ProjectileSpawner projectileSpawner, RaycastHit raycastHit)
+    {
+        if (!networkGun.IsOwner) return;
+        if (raycastHit.collider.CompareTag("Monster") || raycastHit.collider.CompareTag("Player"))
+        {
+            UIManager.Instance.TriggerHit();
+        }
     }
 }

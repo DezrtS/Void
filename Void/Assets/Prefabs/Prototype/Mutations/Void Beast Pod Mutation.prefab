@@ -51,6 +51,16 @@ MonoBehaviour:
   mutationData: {fileID: 11400000, guid: 0648ee68f76edb94eab1abbcddbb68e3, type: 2}
   tutorialData: {fileID: 11400000, guid: 21a55a6d457f4c34c92ef44735c401b7, type: 2}
   projectileSpawner: {fileID: 4439386080916199949}
+  spawnProjectileDelay: 0.5
+  spawnProjectileTrigger: ShootProjectile
+  spawnAtCamera: 1
+  spawnProjectileSound:
+    Guid:
+      Data1: -522855704
+      Data2: 1192115654
+      Data3: 479214508
+      Data4: -1811602636
+    Path: event:/Prototype/Mutations/EggExplosion/EggThrow
   voidBeastSpawnCount: 3
 --- !u!114 &4439386080916199949
 MonoBehaviour:
@@ -65,6 +75,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileData: {fileID: 11400000, guid: b1e083624a2569f46981a8c49a21db51, type: 2}
+  visualEffects: []
 --- !u!114 &8986859684110690607
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,7 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Shapeshifter
   description: Shape shift into a survivior
-  displaySprite: {fileID: 21300000, guid: 0398b851c79455d4c99f70a5c40f2a71, type: 3}
+  displaySprite: {fileID: 345291676, guid: f41a40f9b969f3e4798b430409a29c82, type: 3}
   mutationPrefab: {fileID: 2712595020136137020, guid: 27c507663e9e5ad47a8e6650574ef533,
     type: 3}
-  cooldown: 1
+  cooldown: 10
+  useSound:
+    Guid:
+      Data1: 1282375186
+      Data2: 1120014126
+      Data3: -44546403
+      Data4: -1214818684
+    Path: event:/Prototype/Mutations/ShapeShift/ShapeToHuman
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

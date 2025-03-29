@@ -77,6 +77,7 @@ public class Hotbar : MonoBehaviour
 
         if (networkHotbar.IsOwner)
         {
+            AudioManager.PlayOneShot(FMODEventManager.Instance.SwitchItemSound);
             Item item = hotbar[index];
             if (item != null)
             {

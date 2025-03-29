@@ -69,6 +69,7 @@ GameObject:
   - component: {fileID: 2046617441088736849}
   - component: {fileID: 2332339596387906324}
   - component: {fileID: 906168027934848335}
+  - component: {fileID: 4457280627704496164}
   m_Layer: 0
   m_Name: ElevatorManager
   m_TagString: Untagged
@@ -107,6 +108,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doorAnimator: {fileID: 1850265326009760139}
   trigger: {fileID: 3076333449126434194}
+  elevatorOpenSound:
+    Guid:
+      Data1: 1582182975
+      Data2: 1211546902
+      Data3: -1834456147
+      Data4: 1173569061
+    Path: event:/Prototype/Elevator/ElevatorOpen
+  elevatorCloseSound:
+    Guid:
+      Data1: -922605451
+      Data2: 1328400989
+      Data3: -244195176
+      Data4: -1897111115
+    Path: event:/Prototype/Elevator/ElevatorClose
+  elevatorDingSound:
+    Guid:
+      Data1: 1542571128
+      Data2: 1310441215
+      Data3: 1852737671
+      Data4: 729163937
+    Path: event:/Prototype/Elevator/ElevatorDing
+  elevatorMoveDownSound:
+    Guid:
+      Data1: -445109674
+      Data2: 1277249059
+      Data3: 902713510
+      Data4: 2098780638
+    Path: event:/Prototype/Elevator/EvevatorMoveDown
+  elevatorMoveUpSound:
+    Guid:
+      Data1: -1001391629
+      Data2: 1187420915
+      Data3: -1955076973
+      Data4: -567902770
+    Path: event:/Prototype/Elevator/ElevatorMoveUp
 --- !u!114 &2046617441088736849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,6 +197,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 12, y: 5, z: 7}
   m_Center: {x: 0, y: 2.5, z: 0}
+--- !u!114 &4457280627704496164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 681449846524080027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6024dd00c65fe1643b34ca5c0da22c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  compassIconPrefab: {fileID: 5616257516550400628, guid: 91d4062602e5fb94986745c79d56bc44,
+    type: 3}
 --- !u!1 &730292311322049118
 GameObject:
   m_ObjectHideFlags: 0

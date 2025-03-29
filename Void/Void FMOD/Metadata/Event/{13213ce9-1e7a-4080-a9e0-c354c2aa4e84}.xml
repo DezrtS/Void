@@ -72,6 +72,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{8021d3de-a0e1-42cc-8eed-f76adb1edbc3}">
+		<property name="volume">
+			<value>-6.5</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{fafd011d-929a-45a0-b942-adcd55fcf8b3}</destination>
 		</relationship>
@@ -112,7 +115,7 @@
 	<object class="SpatialiserEffect" id="{14df9d67-d547-4e71-ba80-76bb4b355d36}" />
 	<object class="SingleSound" id="{5607c063-b6db-4c10-993e-0bfc198a7be9}">
 		<relationship name="audioFile">
-			<destination>{587dcdb3-722e-4c47-b67e-e26b8af4c3ca}</destination>
+			<destination>{db70dea1-4972-43a6-83a8-c9a0a012f65f}</destination>
 		</relationship>
 	</object>
 	<object class="SingleSound" id="{fd8db489-16a0-4746-9aff-199dd0eb1dd4}">
@@ -122,7 +125,7 @@
 	</object>
 	<object class="SingleSound" id="{6c70175b-207e-44d9-9d55-f990298443ee}">
 		<relationship name="audioFile">
-			<destination>{054509a1-47f7-412e-bab1-bb4655e1ffb1}</destination>
+			<destination>{6f9dbbff-f871-479d-bbe1-820fca96841f}</destination>
 		</relationship>
 	</object>
 </objects>

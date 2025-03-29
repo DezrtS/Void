@@ -21,7 +21,7 @@ MonoBehaviour:
   boxCastSize: {x: 0.05, y: 0.05}
   lifetimeDuration: 10
   damage: 5
-  knockback: 0
+  knockback: 1
   hitEffect: {fileID: 2836366377352891722, guid: b5d45f1b5ffda594d999b679bb100e6e,
     type: 3}
   hitSound:

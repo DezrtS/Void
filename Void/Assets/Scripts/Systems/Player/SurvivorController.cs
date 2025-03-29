@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class SurvivorController : PlayerController
 {
-    [SerializeField] private InteractableData dragInteractableData;
     [SerializeField] private Transform leftHandTarget;
     [SerializeField] private Transform rightHandTarget;
     private InverseKinematicsObject inverseKinematicsObject;
@@ -11,6 +10,7 @@ public class SurvivorController : PlayerController
     private Hotbar hotbar;
     private Inventory inventory;
     private Draggable draggable;
+    private CompassObject compassObject;
 
     private InputActionMap survivorActionMap;
     private AnimationController animationController;
@@ -20,6 +20,7 @@ public class SurvivorController : PlayerController
 
     public override void AssignControls()
     {
+        if (!IsOwner) return;
         survivorActionMap ??= InputSystem.actions.FindActionMap("Survivor");
 
         InputAction switchInputAction = survivorActionMap.FindAction("Reload");
@@ -29,6 +30,8 @@ public class SurvivorController : PlayerController
 
     public override void EnableControls()
     {
+        if (!IsOwner) return;
+
         base.EnableControls();
         survivorActionMap.Enable();
     }
@@ -44,6 +47,8 @@ public class SurvivorController : PlayerController
 
     public override void DisableControls()
     {
+        if (!IsOwner) return;
+
         base.DisableControls();
         survivorActionMap.Disable();
     }
@@ -73,6 +78,7 @@ public class SurvivorController : PlayerController
         hotbar.OnDropItem += OnDropItem;
         inventory = GetComponent<Inventory>();
         draggable = GetComponent<Draggable>();
+        compassObject = GetComponent<CompassObject>();
         animationController = GetComponent<AnimationController>();
     }
 
@@ -87,6 +93,7 @@ public class SurvivorController : PlayerController
 
     private void OnFireGun()
     {
+        CameraManager.TriggerScreenShake(0.25f, 0.1f, 1f);
         playerLook.AddXRotation(-1.5f);
         playerLook.AddRandomYRotation();
     }
@@ -171,17 +178,21 @@ public class SurvivorController : PlayerController
 
         if (isDead)
         {
+            animationController.SetTrigger("Die");
             hotbar.RequestDropEverything();
+            compassObject.EnableCompassIcon();
         }
         else
         {
+            animationController.SetTrigger("Respawn");
             draggable.RequestStopUsing();
+            compassObject.DisableCompassIcon();
         }
     }
 
     public override void OnPrimaryAction(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
 
         if (context.performed)
         {
@@ -203,7 +214,7 @@ public class SurvivorController : PlayerController
 
     public override void OnSwitch(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
         int direction = (int)Mathf.Sign(context.ReadValue<float>());
         int newIndex = (hotbar.SelectedIndex + direction + hotbar.HotbarCapacity) % hotbar.HotbarCapacity;
         hotbar.RequestSwitchToItem(newIndex);
@@ -225,7 +236,7 @@ public class SurvivorController : PlayerController
 
     public void OnReload(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
 
         if (context.performed)
         {

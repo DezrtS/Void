@@ -80,6 +80,9 @@ crashlytics-build.properties
 
 # Ignore the Cache folder since it is updated locally.
 /[Aa]ssets/Plugins/FMOD/Cache/*
+/Void FMOD/.cache/
+/Void FMOD/.user/
+/Void FMOD/.unsaved/
 
 # Log-files
 fmod.log

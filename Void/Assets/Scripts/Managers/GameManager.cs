@@ -8,6 +8,8 @@ public class GameManager : Singleton<GameManager>
     public delegate void GameStateHandler(GameState gameState);
     public static event GameStateHandler OnGameStateChanged;
 
+    public static bool IsFriendlyFireDisabled;
+
     public enum GameState { None, WaitingToStart, ReadyToStart, GamePlaying, Panic, GameOver }
     public enum PlayerRole { Survivor, Monster, Spectator }
 
@@ -17,7 +19,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Options")]
     [SerializeField] private bool resetPlayerPrefsOnAwake;
-    [SerializeField] private bool friendlyFireEnabled;
+    [SerializeField] private bool enableFriendlyFireOnAwake;
     [SerializeField] private bool endGameOnAllSurvivorDeath;
     [SerializeField] private PlayerRole defaultPlayerRole;
     [SerializeField] private float forceReadyUpTimer;
@@ -33,13 +35,17 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] public GameObject FirstPersonCamera;
 
+    [Header("Sound Events")]
+    [SerializeField] private List<TimedDialogueEvent> dialogueEvents;
+
     private NetworkGameManager networkGameManager;
     private GameState state;
 
     private Dictionary<ulong, PlayerRole> playerRoleDictionary;
     private List<ulong> deadClientIds;
+    private float gameTimer;
 
-    public bool FriendlyFireEnabled => friendlyFireEnabled;
+    public PlayerRole DefaultPlayerRole => defaultPlayerRole;
     public NetworkGameManager NetworkGameManager => networkGameManager;
     public GameState State => state;
     public Dictionary<ulong, PlayerRole> PlayerRoleDictionary => playerRoleDictionary;
@@ -54,14 +60,18 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
+        dialogueEvents.Sort((x, y) => y.Time.CompareTo(x.Time));
         networkGameManager = GetComponent<NetworkGameManager>();
         playerRoleDictionary = new Dictionary<ulong, PlayerRole>();
         deadClientIds = new List<ulong>();
         if (resetPlayerPrefsOnAwake) PlayerPrefs.DeleteAll();
+        IsFriendlyFireDisabled = !enableFriendlyFireOnAwake;
     }
 
     private void Update()
     {
+        float deltaTime = Time.deltaTime;
+
         if (Input.GetKeyDown(KeyCode.Comma))
         {
             Time.timeScale = Mathf.Max(Time.timeScale - 0.05f, 0);
@@ -69,6 +79,23 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Period))
         {
             Time.timeScale += 0.05f;
+        }
+
+        if (gameTimer > 0)
+        {
+            gameTimer -= deltaTime;
+            if (gameTimer <= 0)
+            {
+                if (networkGameManager.IsServer) RequestSetGameState(GameState.GameOver);
+            }
+            else if (dialogueEvents.Count > 0)
+            {
+                if (gameTimer <= dialogueEvents[0].Time)
+                {
+                    if (networkGameManager.IsServer) AudioManager.RequestPlayDialogue(dialogueEvents[0].DialogueData);
+                    dialogueEvents.RemoveAt(0);
+                }
+            }
         }
     }
 
@@ -86,6 +113,7 @@ public class GameManager : Singleton<GameManager>
             case GameState.WaitingToStart:
                 RequestSpawnPlayer(networkGameManager.NetworkManager.LocalClientId);
                 UIManager.Instance.SetGameTimer(forceReadyUpTimer);
+                AudioManager.ChangeMusic(FMODEventManager.Instance.ElevatorTheme);
                 if (networkGameManager.IsServer) InitializeGame();
                 break;
             case GameState.ReadyToStart:
@@ -93,15 +121,19 @@ public class GameManager : Singleton<GameManager>
                 if (networkGameManager.IsServer) PrepareGame();
                 break;
             case GameState.GamePlaying:
+                gameTimer = gameDuration + panicDuration;
                 UIManager.Instance.SetGameTimer(gameDuration);
+                AudioManager.ChangeMusic(FMODEventManager.Instance.BackgroundTheme);
                 if (networkGameManager.IsServer) StartGame();
                 break;
             case GameState.Panic:
                 UIManager.Instance.SetGameTimer(panicDuration);
+                AudioManager.ChangeMusic(FMODEventManager.Instance.AlarmTheme);
                 if (networkGameManager.IsServer) Panic();
                 break;
             case GameState.GameOver:
                 UIManager.Instance.SetGameTimer(endGameDelay);
+                AudioManager.StopMusic(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
                 if (networkGameManager.IsServer) EndGame();
                 break;
             default:
@@ -177,7 +209,15 @@ public class GameManager : Singleton<GameManager>
         if (isDead)
         {
             deadClientIds.Add(health.NetworkHealth.OwnerClientId);
-            if (endGameOnAllSurvivorDeath && AllSurvivorsDead()) RequestSetGameState(GameState.GameOver);
+            if (endGameOnAllSurvivorDeath && AllSurvivorsDead())
+            {
+                RequestSetGameState(GameState.GameOver);
+            }
+            else
+            {
+                if (deadClientIds.Count == 1) AudioManager.RequestPlayOneShot(FMODEventManager.Instance.OnePlayerSlayed, transform.position);
+                else if (deadClientIds.Count == 2) AudioManager.RequestPlayOneShot(FMODEventManager.Instance.TwoPlayersSlayed, transform.position);
+            }
         }
         else
         {
@@ -229,11 +269,12 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         StartCoroutine(PanicCoroutine());
+        gameTimer = gameDuration + panicDuration;
     }
 
     public void Panic()
     {
-        StartCoroutine(EndGameCoroutine());
+        //StartCoroutine(EndGameCoroutine());
     }
 
     public void EndGame()

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8006547884009384095}
   - component: {fileID: 7483261379724094456}
   - component: {fileID: 5875011672280484825}
+  - component: {fileID: 2572590838689371247}
   m_Layer: 0
   m_Name: Shapeshifting Mutation
   m_TagString: Untagged
@@ -49,9 +50,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mutationData: {fileID: 11400000, guid: ac2323f43b2d7e74f8cbdd36c5bdaf4f, type: 2}
   tutorialData: {fileID: 11400000, guid: 21a55a6d457f4c34c92ef44735c401b7, type: 2}
+  disableActiveTransformOverride: 1
   survivor: {fileID: 3571704797521969294}
   animator: {fileID: 5404794168633028517}
   duration: 8
+  shapeshiftBackSound:
+    Guid:
+      Data1: -701762145
+      Data2: 1078264781
+      Data3: -275885922
+      Data4: -2145492753
+    Path: event:/Prototype/Mutations/ShapeShift/ShapeBackToMonster
 --- !u!114 &7483261379724094456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +94,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 622a234ce09a44c47b6baf2c75347776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2572590838689371247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2712595020136137020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad8deae8091111f4eb30a56c1f4e0d3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 4
+    OriginatingState: -453240694
+    DestinationState: 569745642
+    TransitionDuration: 0.25
+    TriggerNameHash: 1464497218
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 4
+    OriginatingState: -453240694
+    DestinationState: 1520933651
+    TransitionDuration: 0.25
+    TriggerNameHash: -707834555
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 6
+    OriginatingState: -367768302
+    DestinationState: -1762544625
+    TransitionDuration: 0.25
+    TriggerNameHash: 1793123249
+    TransitionIndex: 0
+  - IsCrossFadeExit: 0
+    Layer: 7
+    OriginatingState: -367768302
+    DestinationState: 1377215829
+    TransitionDuration: 0.25
+    TriggerNameHash: -1945444887
+    TransitionIndex: 0
+  m_Animator: {fileID: 5404794168633028517}
 --- !u!1001 &2535936913055644564
 PrefabInstance:
   m_ObjectHideFlags: 0

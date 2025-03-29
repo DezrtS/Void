@@ -5,7 +5,7 @@
 			<value>LobbyTheme</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{d25a8668-b26e-4b08-8ea1-8cd9cfbdd851}</destination>
@@ -75,6 +75,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{21a58972-5159-44b5-a0d4-1e0a8c75f46e}">
+		<property name="volume">
+			<value>-15</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{d62b6b9c-ec9e-4b18-9fac-7de3bf533942}</destination>
 		</relationship>
@@ -130,7 +133,6 @@
 	<object class="MixerBusEffectChain" id="{d62b6b9c-ec9e-4b18-9fac-7de3bf533942}">
 		<relationship name="effects">
 			<destination>{da02f39f-dc57-4284-b19b-982d662d8255}</destination>
-			<destination>{1552b9d5-2c0f-41d7-8dfb-24ea9a5eb19f}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{caf5b6a0-419b-4b25-b7c0-c67bdb2ecfe0}" />
@@ -142,6 +144,5 @@
 	</object>
 	<object class="MixerBusPanner" id="{f3a79a86-8754-4579-8927-f8801ce5f83d}" />
 	<object class="MixerBusFader" id="{da02f39f-dc57-4284-b19b-982d662d8255}" />
-	<object class="SpatialiserEffect" id="{1552b9d5-2c0f-41d7-8dfb-24ea9a5eb19f}" />
 	<object class="MixerBusFader" id="{a466fa7a-9e71-4402-b99e-c299cb8d6780}" />
 </objects>

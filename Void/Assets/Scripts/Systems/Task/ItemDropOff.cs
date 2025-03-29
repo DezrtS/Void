@@ -1,3 +1,5 @@
+using FMODUnity;
+using System.Collections;
 using UnityEngine;
 
 public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
@@ -9,7 +11,14 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
 
     [SerializeField] private float processingTime;
     [SerializeField] private float ejectionPower;
-    [SerializeField] private InteractableData interactableData;
+
+    [SerializeField] private EventReference openSound;
+    [SerializeField] private EventReference closeSound;
+    [SerializeField] private EventReference acceptSound;
+    [SerializeField] private EventReference rejectSound;
+
+    [SerializeField] private InteractableData dropOffInteractableData;
+    [SerializeField] private InteractableData processingItemInteractableData;
 
     private NetworkItemDropOff networkItemDropOff;
     private bool isUsing;
@@ -22,7 +31,6 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
     public bool CanUse() => !isUsing;
     public bool CanStopUsing() => isUsing;
     public bool HasItem() => item != null;
-    public bool CanEjectItem() => processingTimer <= 0;
 
     public void RequestUse() => networkItemDropOff.UseServerRpc();
     public void RequestStopUsing() => networkItemDropOff.StopUsingServerRpc();
@@ -35,20 +43,11 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
         networkItemDropOff = GetComponent<NetworkItemDropOff>();
     }
 
-    private void FixedUpdate()
-    {
-        UpdateTimers();
-
-        if (networkItemDropOff.IsServer && isUsing)
-        {
-            RequestEjectItem();
-        }
-    }
-
     public void Use()
     {
         isUsing = true;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(closeSound, transform.position);
         processingTimer = processingTime;
     }
 
@@ -56,6 +55,7 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
     {
         isUsing = false;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(openSound, transform.position);
         processingTimer = 0;
         item = null;
     }
@@ -64,18 +64,22 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
     {
         this.item = item;
         if (item.NetworkItem.IsOwner) item.transform.position = transform.position;
-        OnDropOff?.Invoke(item, this, true);
+        StartCoroutine(ProcessItemCoroutine());
     }
 
     public void AcceptItem()
     {
         Debug.Log("Item Accepted");
-        StopUsing();
+        AudioManager.PlayOneShot(acceptSound, transform.position);
+        StopAllCoroutines();
+        if (networkItemDropOff.IsServer) RequestStopUsing();
     }
 
     public void EjectItem()
     {
         OnDropOff?.Invoke(item, this, false);
+        AudioManager.PlayOneShot(rejectSound, transform.position);
+        StopAllCoroutines();
         if (item.NetworkItem.IsOwner)
         {
             item.RequestDrop();
@@ -88,7 +92,8 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
 
     public InteractableData GetInteractableData()
     {
-        return interactableData;
+        if (isUsing) return processingItemInteractableData;
+        else return dropOffInteractableData;
     }
 
     public void Interact(GameObject interactor)
@@ -102,13 +107,11 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
         }
     }
 
-    private void UpdateTimers()
+    private IEnumerator ProcessItemCoroutine()
     {
-        float fixedDeltaTime = Time.fixedDeltaTime;
-
-        if (processingTimer > 0)
-        {
-            processingTimer -= fixedDeltaTime;
-        }
+        yield return new WaitForSeconds(processingTime / 2f);
+        OnDropOff?.Invoke(item, this, true);
+        yield return new WaitForSeconds(processingTime / 2f);
+        if (networkItemDropOff.IsServer) RequestEjectItem();
     }
 }

@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,9 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
 
     [SerializeField] private float cooldown;
     [SerializeField] private float duration;
+    [SerializeField] private float attackDelay;
+
+    [SerializeField] private EventReference attackSound;
 
     protected NetworkUseable networkUseable;
 
@@ -43,8 +47,9 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
     {
         UpdateTimers();
 
-        if (networkUseable.IsServer && isAttacking)
+        if (isAttacking)
         {
+            if (durationTimer > duration - attackDelay) return;
             Collider[] results = new Collider[10];
             Physics.OverlapSphereNonAlloc(transform.position + offset, size, results, layerMask, QueryTriggerInteraction.Ignore);
 
@@ -57,7 +62,8 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
                     hitColliders.Add(collider);
                     if (collider.TryGetComponent(out Health health))
                     {
-                        health.RequestDamage(damage);
+                        if (networkUseable.IsOwner) UIManager.Instance.TriggerHit();
+                        if (networkUseable.IsServer) health.RequestDamage(damage);
                     }
                 }
             }
@@ -71,6 +77,7 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
         isAttacking = true;
         durationTimer = duration;
 
+        AudioManager.PlayOneShot(attackSound, gameObject);
         if (networkUseable.IsOwner) animator.SetTrigger("Attack");
     }
 
@@ -97,6 +104,7 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
                 isAttacking = false;
                 hitColliders.Clear();
                 cooldownTimer = cooldown;
+                if (networkUseable.IsOwner) UIManager.Instance.SetCooldownTimer(cooldown);
             }
         }
     }

@@ -1,3 +1,4 @@
+using FMODUnity;
 using UnityEngine;
 
 public class BearTrap : DeployableItem
@@ -7,13 +8,17 @@ public class BearTrap : DeployableItem
     [SerializeField] private float initialDamage;
     [SerializeField] private float damage;
     [SerializeField] private float duration;
+    [SerializeField] private EventReference activateSound;
     
     private NetworkBearTrap networkBearTrap;
+    private bool isPrimed;
     private bool isActive;
 
     private Health captured;
     private float durationTimer;
 
+    public bool CanPrimeBearTrap() => !isPrimed;
+    public bool CanUnprimeBearTrap() => isPrimed;
     public bool CanActivateBearTrap() => !isActive;
     public bool CanDeactivateBearTrap() => isActive;
 
@@ -32,7 +37,7 @@ public class BearTrap : DeployableItem
     {
         if (durationTimer > 0)
         {
-            if (networkBearTrap.IsServer) captured.RequestDamage(damage * Time.fixedDeltaTime);
+            //if (networkBearTrap.IsServer) captured.RequestDamage(damage * Time.fixedDeltaTime);
             durationTimer -= Time.fixedDeltaTime;
             if (durationTimer <= 0)
             {
@@ -41,19 +46,21 @@ public class BearTrap : DeployableItem
         }
     }
 
+    public void RequestPrimeBearTrap() => networkBearTrap.PrimeBearTrapServerRpc();
+    public void RequestUnprimeBearTrap() => networkBearTrap.UnprimeBearTrapServerRpc();
     public void RequestActivateBearTrap() => networkBearTrap.ActivateBearTrapServerRpc();
     public void RequestDeactivateBearTrap() => networkBearTrap.DeactivateBearTrapServerRpc();
 
     public override void Deploy()
     {
         base.Deploy();
-        if (NetworkItem.IsServer) trigger.OnEnter += OnEnter;
+        if (networkBearTrap.IsOwner) RequestPrimeBearTrap();
     }
 
     public override void Undeploy()
     {
         base.Undeploy();
-        if (NetworkItem.IsServer) trigger.OnEnter -= OnEnter;
+        if (networkBearTrap.IsOwner) RequestUnprimeBearTrap();
     }
 
     public void OnEnter(Trigger trigger, GameObject gameObject)
@@ -63,13 +70,31 @@ public class BearTrap : DeployableItem
         if (gameObject.TryGetComponent(out captured))
         {
             trigger.OnEnter -= OnEnter;
-            captured.RequestDamage(initialDamage);
-            if (captured.gameObject.TryGetComponent(out MovementController movementController))
+            if (networkBearTrap.IsOwner) UIManager.Instance.TriggerHit();
+            if (networkBearTrap.IsServer)
             {
-                movementController.RequestSetMovementDisabled(true);
+                captured.RequestDamage(initialDamage);
+                if (captured.gameObject.TryGetComponent(out MovementController movementController))
+                {
+                    movementController.RequestSetMovementDisabled(true);
+                }
+                RequestActivateBearTrap();
             }
-            RequestActivateBearTrap();
         }
+    }
+
+    public void PrimeBearTrap()
+    {
+        isPrimed = true;
+        animator.SetBool("Active", isActive);
+        trigger.OnEnter += OnEnter;
+    }
+
+    public void UnprimeBearTrap()
+    {
+        isPrimed = false;
+        animator.SetBool("Active", true);
+        trigger.OnEnter -= OnEnter;
     }
 
     public void ActivateBearTrap()
@@ -77,7 +102,8 @@ public class BearTrap : DeployableItem
         isActive = true;
         canPickUp = false;
         durationTimer = duration;
-        if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
+        AudioManager.PlayOneShot(activateSound, gameObject);
+        animator.SetBool("Active", isActive);
     }
 
     public void DeactivateBearTrap()
@@ -93,6 +119,5 @@ public class BearTrap : DeployableItem
             }
         }
         captured = null;
-        if (networkBearTrap.IsOwner) animator.SetBool("Active", isActive);
     }
 }

@@ -1,3 +1,5 @@
+using FMOD.Studio;
+using FMODUnity;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,12 +12,17 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     [SerializeField] private InteractableData dragInteractableData;
     [SerializeField] private InteractableData dropInteractableData;
 
+    [SerializeField] private EventReference dragSound;
+    [SerializeField] private EventReference stopDraggingSound;
+    [SerializeField] private EventReference draggingSound;
+
     private NetworkUseable networkUseable;
 
     private SpringJoint springJoint;
     private bool isUsing;
 
     private bool canDrag = true;
+    private EventInstance draggingInstance;
 
     public NetworkUseable NetworkUseable => networkUseable;
     public bool IsUsing => isUsing;
@@ -31,22 +38,23 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         networkUseable = GetComponent<NetworkUseable>();
         springJoint = GetComponent<SpringJoint>();
-        //GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
-        //{
-        //    if (networkUseable.IsServer && gameState == GameManager.GameState.GameOver) networkUseable.NetworkObject.Despawn(false);
-        //};
+        draggingInstance = AudioManager.CreateEventInstance(draggingSound, gameObject);
     }
 
     public void Use()
     {
         isUsing = true;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(dragSound, gameObject);
+        draggingInstance.start();
     }
 
     public void StopUsing()
     {
         isUsing = false;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(stopDraggingSound, gameObject);
+        draggingInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     public InteractableData GetInteractableData()
@@ -69,6 +77,8 @@ public class Draggable : MonoBehaviour, INetworkUseable, IInteractable
     {
         if (!springJoint) springJoint = transform.AddComponent<SpringJoint>();
         springJoint.connectedBody = rig;
+        springJoint.damper = 1;
+        springJoint.maxDistance = 1;
         springJoint.connectedMassScale = 0.1f;
     }
 

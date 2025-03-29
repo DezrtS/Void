@@ -6,15 +6,18 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
 
     [SerializeField] protected MutationData mutationData;
     [SerializeField] private TutorialData tutorialData;
+    [SerializeField] private bool disableActiveTransformOverride;
 
     protected NetworkUseable networkUseable;
     private bool isUsing;
 
     protected float cooldownTimer;
     protected GameObject player;
+    protected AnimationController animationController;
 
     public MutationData MutationData => mutationData;
     public TutorialData TutorialData => tutorialData;
+    public bool DisableActiveTransformOverride => disableActiveTransformOverride;
     public NetworkUseable NetworkUseable => networkUseable;
     public bool IsUsing => isUsing;
 
@@ -37,18 +40,22 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
     public virtual void SetupMutation(GameObject player)
     {
         this.player = player;
+        player.TryGetComponent(out animationController);
     }
 
     public virtual void Use()
     {
+        Debug.Log("USED MUTATION");
         isUsing = true;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(mutationData.UseSound, gameObject);
     }
 
     public virtual void StopUsing()
     {
         isUsing = false;
         OnUsed?.Invoke(this, isUsing);
+        AudioManager.PlayOneShot(mutationData.StopUsingSound, gameObject);
     }
 
     public virtual void UpdateTimers()

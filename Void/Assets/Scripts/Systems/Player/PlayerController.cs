@@ -33,24 +33,18 @@ public abstract class PlayerController : NetworkBehaviour
         if (IsOwner)
         {
             AssignControls();
-
-            UIManager.OnPause += (bool paused) =>
-            {
-                if (paused)
-                {
-                    playerActionMap.Disable();
-                }
-                else
-                {
-                    playerActionMap.Enable();
-                }
-            };
+            UIManager.OnPause += OnPause;
         }
     }
 
-    private void OnDisable()
+    public override void OnNetworkDespawn()
     {
-        UnassignControls();
+        base.OnNetworkDespawn();
+        if (IsOwner)
+        {
+            UnassignControls();
+            UIManager.OnPause -= OnPause;
+        }
     }
 
     public virtual void EnableControls()
@@ -149,14 +143,6 @@ public abstract class PlayerController : NetworkBehaviour
         playerLook = GetComponent<PlayerLook>();
         health = GetComponent<Health>();
         health.OnDeathStateChanged += OnDeathStateChanged;
-        //GameManager.OnGameStateChanged += (GameManager.GameState gameState) =>
-        //{
-        //    if (gameState == GameManager.GameState.GameOver)
-        //    {
-        //        UnassignControls();
-        //        if (IsServer) NetworkObject.Despawn();
-        //    }
-        //};
     }
 
     private void Start()
@@ -185,6 +171,12 @@ public abstract class PlayerController : NetworkBehaviour
         }
     }
 
+    private void OnPause(bool paused)
+    {
+        if (paused) playerActionMap.Disable();
+        else playerActionMap.Enable();
+    }
+
     public virtual void OnDeathStateChanged(Health health, bool isDead)
     {
         if (!IsOwner) return;
@@ -205,7 +197,7 @@ public abstract class PlayerController : NetworkBehaviour
     public abstract void OnSecondaryAction(InputAction.CallbackContext context);
     public void OnOpenSelection(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
 
         if (context.performed)
         {
@@ -236,7 +228,7 @@ public abstract class PlayerController : NetworkBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
         if (context.performed) playerLook.InteractWithObject();
     }
 

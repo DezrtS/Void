@@ -14,7 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Grappling Hook
   description: A grappling hook that pulls whatever it hits
-  displaySprite: {fileID: 1208872289, guid: e6e34c0e053e8834fac1a4bc6529a83d, type: 3}
+  displaySprite: {fileID: -1912423104, guid: be8ba05d4c3555143b18b423101c2d7c, type: 3}
   mutationPrefab: {fileID: 4142632218152818884, guid: 9d111a4643a25b34d9d865e46fcf64db,
     type: 3}
-  cooldown: 1
+  cooldown: 3
+  useSound:
+    Guid:
+      Data1: 1435196291
+      Data2: 1279332017
+      Data3: -954587977
+      Data4: 299688401
+    Path: event:/Prototype/VoidMonster/MonsterGrunt
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

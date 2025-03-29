@@ -14,6 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Assult Rifle
   Description: It's a gun
-  ItemSprite: {fileID: 1208872289, guid: e6e34c0e053e8834fac1a4bc6529a83d, type: 3}
+  ItemSprite: {fileID: -1152486182, guid: e4971ac5dc4391a4e920d78186b79f3a, type: 3}
   ItemPrefab: {fileID: 159275963486535576, guid: 581588bbb7eb22c47a3c090e0cbef5df,
     type: 3}
+  useSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  stopUsingSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  pickUpSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  dropSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 

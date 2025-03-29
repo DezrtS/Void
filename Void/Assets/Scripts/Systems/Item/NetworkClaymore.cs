@@ -48,7 +48,7 @@ public class NetworkClaymore : NetworkDeployableItem
     [ServerRpc(RequireOwnership = false)]
     public void ActivateClaymoreServerRpc()
     {
-        if (!claymore.CanActivateClaymore()) return;
+        if (!claymore.CanActivateClaymore() || !claymore.IsDeployed) return;
         isActive.Value = true;
     }
 

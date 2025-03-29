@@ -5,7 +5,7 @@
 			<value>3TasksLeft</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{2b922a2b-09a6-4f95-9b25-e7862e564ede}</destination>
@@ -72,6 +72,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{5d5cea35-a575-4e85-8bdb-9a29dbdaf41e}">
+		<property name="volume">
+			<value>-9</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{51db19b0-a616-402f-b0fe-8b9b4d808924}</destination>
 		</relationship>
@@ -96,7 +99,6 @@
 	<object class="MixerBusEffectChain" id="{51db19b0-a616-402f-b0fe-8b9b4d808924}">
 		<relationship name="effects">
 			<destination>{f1dd8f0e-8807-415b-8b55-9b4eb53f7237}</destination>
-			<destination>{edd7697d-0de0-4b20-b312-8cb5b64d1a4f}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{aeb52e76-137b-4fc7-9b52-3bd8d9b1c2ff}" />
@@ -107,5 +109,4 @@
 	</object>
 	<object class="MixerBusFader" id="{26bc4f44-57a8-48d0-922a-f756f3c4fc6a}" />
 	<object class="MixerBusFader" id="{f1dd8f0e-8807-415b-8b55-9b4eb53f7237}" />
-	<object class="SpatialiserEffect" id="{edd7697d-0de0-4b20-b312-8cb5b64d1a4f}" />
 </objects>

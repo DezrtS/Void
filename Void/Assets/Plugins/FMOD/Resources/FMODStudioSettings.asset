@@ -415,6 +415,17 @@ MonoBehaviour:
   MasterBanks:
   - Master
   Banks:
+  - Crafting
+  - DropBox
+  - Elevator
+  - Items
+  - Music
+  - Mutations
+  - Survivor
+  - Tasks
+  - Voicelines
+  - VoidBeast
+  - VoidMonster
   - Weapons
   BanksToLoad: []
   LiveUpdatePort: 9264

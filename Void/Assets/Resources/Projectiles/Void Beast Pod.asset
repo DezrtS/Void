@@ -17,12 +17,20 @@ MonoBehaviour:
   fireSpeed: 25
   angularVelocity: {x: 1, y: 0, z: 0}
   gravity: -9.8
+  useBoxCast: 1
   boxCastSize: {x: 1, y: 1}
   lifetimeDuration: 10
   damage: 10
   knockback: 15
   hitEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
     type: 3}
+  hitSound:
+    Guid:
+      Data1: -1471533643
+      Data2: 1314589227
+      Data3: 1921567678
+      Data4: -734452881
+    Path: event:/Prototype/Mutations/EggExplosion/EggBreak
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295

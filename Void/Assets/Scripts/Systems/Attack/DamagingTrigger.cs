@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class DamagingTrigger : MonoBehaviour
 {
+    [SerializeField] private GameManager.PlayerRole triggerRole;
     [SerializeField] private float damage;
     [SerializeField] private float damageRate;
     private readonly List<Health> healths = new List<Health>();
@@ -13,6 +14,20 @@ public class DamagingTrigger : MonoBehaviour
     {
         if (other.TryGetComponent(out Health health))
         {
+            //if (!GameManager.IsFriendlyFireDisabled)
+            //{
+            //    switch (triggerRole)
+            //    {
+            //        case GameManager.PlayerRole.Survivor:
+            //            if (other.CompareTag("Player")) return;
+            //            break;
+            //        case GameManager.PlayerRole.Monster:
+            //            if (other.CompareTag("Monster")) return;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //} 
             healths.Add(health);
             health.OnDeathStateChanged += OnDeathStateChanged;
         }
