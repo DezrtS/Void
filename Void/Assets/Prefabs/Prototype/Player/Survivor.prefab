@@ -1871,7 +1871,6 @@ GameObject:
   - component: {fileID: 7965163042404978423}
   - component: {fileID: 4726841137921398022}
   - component: {fileID: 7509421746790066431}
-  - component: {fileID: 6812290034540885183}
   - component: {fileID: -755659047214935387}
   - component: {fileID: 1240250816471740412}
   m_Layer: 9
@@ -2130,7 +2129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnFirstPersonCamera: 1
-  canLockCamera: 0
+  canLockCamera: 1
   lockPlayerCursor: 1
   cameraRotationRootTransform: {fileID: 3938142979775510420}
   cameraRootTransform: {fileID: 3662237747590448752}
@@ -2335,43 +2334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc164ac0ae2cac54da3e410f416c4141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6812290034540885183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1575300930724462412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecd2d6a0131e06e4f8a37a36a7729f47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dragInteractableData: {fileID: 11400000, guid: fe0b8f2675ac90e4dba75daff77e248b,
-    type: 2}
-  dropInteractableData: {fileID: 11400000, guid: a224c20df4c75a24ca38584b5a3d2ee8,
-    type: 2}
-  dragSound:
-    Guid:
-      Data1: 1936307440
-      Data2: 1172643231
-      Data3: -1186217303
-      Data4: 1405101078
-    Path: event:/Prototype/Tasks/DeadPlayer/PickUpBody
-  stopDraggingSound:
-    Guid:
-      Data1: 1059040681
-      Data2: 1273759724
-      Data3: 1065302413
-      Data4: -29466312
-    Path: event:/Prototype/Tasks/DeadPlayer/BodyThump
-  draggingSound:
-    Guid:
-      Data1: -1258015881
-      Data2: 1325734002
-      Data3: 873877136
-      Data4: 1031112157
-    Path: event:/Prototype/Tasks/DeadPlayer/DragBody
 --- !u!114 &-755659047214935387
 MonoBehaviour:
   m_ObjectHideFlags: 0

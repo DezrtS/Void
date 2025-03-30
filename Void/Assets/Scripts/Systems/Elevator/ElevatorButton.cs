@@ -9,9 +9,35 @@ public class ElevatorButton : MonoBehaviour, IInteractable
     [SerializeField] private InteractableData allPlayersInteractableData;
     [SerializeField] private InteractableData leaveInteractableData;
 
+    [SerializeField] private GameObject outline;
     [SerializeField] private EventReference pressSound;
     private bool isReady;
-    
+
+    private void OnEnable()
+    {
+        GameManager.OnGameStateChanged += OnGameStateChanged;
+        TaskManager.OnAllTasksCompleted += OnAllTasksCompleted;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged -= OnGameStateChanged;
+        TaskManager.OnAllTasksCompleted -= OnAllTasksCompleted;
+    }
+
+    private void OnGameStateChanged(GameManager.GameState state)
+    {
+        if (state == GameManager.GameState.ReadyToStart)
+        {
+            outline.SetActive(false);
+        }
+    }
+
+    private void OnAllTasksCompleted()
+    {
+        outline.SetActive(true);
+    }
+
     public InteractableData GetInteractableData()
     {
         if (GameManager.Instance.State == GameManager.GameState.WaitingToStart)

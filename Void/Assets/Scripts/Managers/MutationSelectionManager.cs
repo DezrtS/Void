@@ -149,6 +149,7 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
     {
         mutationSelectionHolder.SetActive(false);
 
+        voidMonsterController.PlayerLook.CanLockCamera = true;
         voidMonsterController.PlayerLook.LockCamera(false);
         //voidMonsterController.PlayerLook.EnableDisableCameraControls(true);
     }

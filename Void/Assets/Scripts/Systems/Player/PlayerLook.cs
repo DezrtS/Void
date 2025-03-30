@@ -188,14 +188,17 @@ public class PlayerLook : NetworkBehaviour
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            Debug.Log("Locked Camera (Can't Move)");
         }
         else
         {
+            if (!canLockCamera) return;
             cameraActionMap.Enable();
 
             if (!lockPlayerCursor) return;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            Debug.Log("Unlocked Camera (Can Move)");
         }
     }
 

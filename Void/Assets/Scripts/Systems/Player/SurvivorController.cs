@@ -169,17 +169,22 @@ public class SurvivorController : PlayerController
     public override void OnDeathStateChanged(Health health, bool isDead)
     {
         base.OnDeathStateChanged(health, isDead);
-        if (!IsOwner) return;
 
         if (isDead)
         {
-            animationController.SetTrigger("Die");
-            hotbar.RequestDropEverything();
+            if (IsOwner)
+            {
+                animationController.SetTrigger("Die");
+                hotbar.RequestDropEverything();
+            }
             compassObject.EnableCompassIcon();
         }
         else
         {
-            animationController.SetTrigger("Respawn");
+            if (IsOwner)
+            {
+                animationController.SetTrigger("Respawn");
+            }
             compassObject.DisableCompassIcon();
         }
     }
