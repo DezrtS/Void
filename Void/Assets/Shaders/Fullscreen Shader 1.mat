@@ -189,8 +189,8 @@ Material:
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 1
-    - _Mask_Contrast: 0.772
-    - _Mask_Size: 0.452
+    - _Mask_Contrast: 0.777
+    - _Mask_Size: 0.638
     - _MaterialID: 1
     - _Metallic: 0
     - _MetallicRemapMax: 1
@@ -249,10 +249,10 @@ Material:
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
-    - _speed: -4.65
+    - _speed: -2.61
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 16, g: 16, b: 16, a: 1}
+    - _Color: {r: 14.259478, g: 0.44866535, b: 0.13452114, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
