@@ -287,7 +287,7 @@ public class GameManager : Singleton<GameManager>
     {
         CleanUp();
         NetworkManager.Singleton.Shutdown();
-        Loader.Load(Loader.Scene.MainMenuScene);
+        Loader.Load(Loader.Scene.LobbyScene);
     }
 
     public void CleanUp()

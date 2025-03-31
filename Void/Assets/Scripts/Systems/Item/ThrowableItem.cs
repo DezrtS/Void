@@ -22,7 +22,7 @@ public class ThrowableItem : Item
         {
             RequestDrop();
             if (CanDrop()) Drop();
-            rig.AddForce(throwableItemData.ThrowSpeed * transform.forward, ForceMode.Impulse);
+            rig.AddForce(throwableItemData.ThrowSpeed * CameraManager.Instance.transform.forward, ForceMode.Impulse);
             rig.angularVelocity = throwableItemData.SpinSpeed * Vector3.right;
         }
     }

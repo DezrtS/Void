@@ -1871,7 +1871,6 @@ GameObject:
   - component: {fileID: 7965163042404978423}
   - component: {fileID: 4726841137921398022}
   - component: {fileID: 7509421746790066431}
-  - component: {fileID: 6812290034540885183}
   - component: {fileID: -755659047214935387}
   - component: {fileID: 1240250816471740412}
   m_Layer: 9
@@ -1911,7 +1910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 119855383
+  GlobalObjectIdHash: 3220849879
   InScenePlacedSourceGlobalObjectIdHash: 1133239272
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -2096,7 +2095,7 @@ MonoBehaviour:
       Data3: 162738075
       Data4: -711878353
     Path: event:/Prototype/Survivor/Walk/Walking
-  footstepDelay: 0.25
+  footstepDelay: 1
   canJump: 1
   jumpPower:
     baseValue: 7
@@ -2130,6 +2129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnFirstPersonCamera: 1
+  canLockCamera: 1
   lockPlayerCursor: 1
   cameraRotationRootTransform: {fileID: 3938142979775510420}
   cameraRootTransform: {fileID: 3662237747590448752}
@@ -2211,7 +2211,16 @@ MonoBehaviour:
   canRegenerateHealth: 1
   healthRegenerationRate:
     baseValue: 5
-  healthRegenerationDelay: 1
+  healthRegenerationDelay: 5
+  playHeartbeat: 1
+  gruntThreshold: 25
+  heartbeatSound:
+    Guid:
+      Data1: 162373804
+      Data2: 1251241505
+      Data3: -1424862290
+      Data4: -661919365
+    Path: event:/Prototype/Survivor/Heartbeat
   hurtSound:
     Guid:
       Data1: 1298896073
@@ -2219,6 +2228,13 @@ MonoBehaviour:
       Data3: -530929748
       Data4: 1793110144
     Path: event:/Prototype/Survivor/Damage/PlDamageBlunt
+  gruntSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   reflectSound:
     Guid:
       Data1: 0
@@ -2318,43 +2334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc164ac0ae2cac54da3e410f416c4141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6812290034540885183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1575300930724462412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecd2d6a0131e06e4f8a37a36a7729f47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dragInteractableData: {fileID: 11400000, guid: fe0b8f2675ac90e4dba75daff77e248b,
-    type: 2}
-  dropInteractableData: {fileID: 11400000, guid: a224c20df4c75a24ca38584b5a3d2ee8,
-    type: 2}
-  dragSound:
-    Guid:
-      Data1: 1936307440
-      Data2: 1172643231
-      Data3: -1186217303
-      Data4: 1405101078
-    Path: event:/Prototype/Tasks/DeadPlayer/PickUpBody
-  stopDraggingSound:
-    Guid:
-      Data1: 1059040681
-      Data2: 1273759724
-      Data3: 1065302413
-      Data4: -29466312
-    Path: event:/Prototype/Tasks/DeadPlayer/BodyThump
-  draggingSound:
-    Guid:
-      Data1: -1258015881
-      Data2: 1325734002
-      Data3: 873877136
-      Data4: 1031112157
-    Path: event:/Prototype/Tasks/DeadPlayer/DragBody
 --- !u!114 &-755659047214935387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3532,7 +3511,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 4579454407841743219, guid: b43c8863d8fc85d4298cf24eeb01f681, type: 3}
   m_Bones:

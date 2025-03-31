@@ -12,6 +12,8 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
     [SerializeField] private float processingTime;
     [SerializeField] private float ejectionPower;
 
+    [SerializeField] private GameObject outline;
+
     [SerializeField] private EventReference openSound;
     [SerializeField] private EventReference closeSound;
     [SerializeField] private EventReference acceptSound;
@@ -41,6 +43,35 @@ public class ItemDropOff : MonoBehaviour, INetworkUseable, IInteractable
     private void Awake()
     {
         networkItemDropOff = GetComponent<NetworkItemDropOff>();
+    }
+
+    private void OnEnable()
+    {
+        GameManager.OnGameStateChanged += OnGameStateChanged;
+        TaskManager.OnAllTasksCompleted += OnAllTasksCompleted;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged -= OnGameStateChanged;
+        TaskManager.OnAllTasksCompleted -= OnAllTasksCompleted;
+    }
+
+    private void OnGameStateChanged(GameManager.GameState state)
+    {
+        if (state == GameManager.GameState.GamePlaying)
+        {
+            outline.SetActive(true);
+        }
+        else if (state == GameManager.GameState.GameOver)
+        {
+            outline.SetActive(false);
+        }
+    }
+
+    private void OnAllTasksCompleted()
+    {
+        outline.SetActive(false);
     }
 
     public void Use()

@@ -1,3 +1,4 @@
+using FMOD.Studio;
 using FMODUnity;
 using System;
 using System.Collections.Generic;
@@ -64,7 +65,12 @@ public class Health : MonoBehaviour
     [SerializeField] protected Stat healthRegenerationRate = new(5);
     [SerializeField] protected float healthRegenerationDelay;
 
+    [SerializeField] private bool playHeartbeat;
+    [SerializeField] private float gruntThreshold;
+
+    [SerializeField] private EventReference heartbeatSound;
     [SerializeField] private EventReference hurtSound;
+    [SerializeField] private EventReference gruntSound;
     [SerializeField] private EventReference reflectSound;
     [SerializeField] private EventReference deathSound;
 
@@ -72,6 +78,7 @@ public class Health : MonoBehaviour
     private bool isDead;
     private float currentHealth;
 
+    private EventInstance heartbeatInstance;
     private float healthRegenerationDelayTimer;
 
     private List<HealthChange> healthChanges = new List<HealthChange>();
@@ -90,6 +97,16 @@ public class Health : MonoBehaviour
     protected virtual void Awake()
     {
         networkHealth = GetComponent<NetworkHealth>();
+    }
+
+    private void Start()
+    {
+        if (!networkHealth.IsOwner) return;
+        if (playHeartbeat)
+        {
+            heartbeatInstance = AudioManager.CreateEventInstance(heartbeatSound, gameObject);
+            heartbeatInstance.start();
+        }
     }
 
     private void Update()
@@ -127,7 +144,10 @@ public class Health : MonoBehaviour
             }
         }
 
-
+        if (networkHealth.IsOwner && playHeartbeat)
+        {
+            heartbeatInstance.setParameterByName("Heartbeat", 1 - (currentHealth / maxHealth.Value));
+        }
     }
 
     public void SetCurrentHealth(float value)
@@ -153,6 +173,7 @@ public class Health : MonoBehaviour
     {
         damage *= Mathf.Clamp(1 - damageResistance.Value, 0, 1);
         float newCurrentHealth = currentHealth - damage;
+        if (damage >= gruntThreshold) AudioManager.RequestPlayOneShot(gruntSound, transform.position);
         if (damage <= 0) AudioManager.RequestPlayOneShot(reflectSound, transform.position);
         RequestSetCurrentHealth(newCurrentHealth);
     }

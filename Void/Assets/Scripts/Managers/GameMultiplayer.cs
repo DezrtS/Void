@@ -27,7 +27,7 @@ public class GameMultiplayer : NetworkSingleton<GameMultiplayer>
         {
             PlayerReadyManager.OnAllPlayersReady += LoadGameplayScene;
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectedCallback;
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectedCallback;  
         }
     }
 
