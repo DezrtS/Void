@@ -3380,6 +3380,11 @@ PrefabInstance:
       propertyPath: bestOptionTracker
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 522273253711271395, guid: a853efa7001395d46bb27b32b1c88a66,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1812723234908372760, guid: a853efa7001395d46bb27b32b1c88a66,
         type: 3}
       propertyPath: m_AnchoredPosition.x

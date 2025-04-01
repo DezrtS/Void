@@ -86,7 +86,7 @@ public class LobbyManager : Singleton<LobbyManager>
 
     public void QuitGame()
     {
-        GameManager.Instance.QuitGame();
+        Application.Quit();
     }
 
     private IEnumerator TransitionCoroutine(bool showMainMenu, bool showLobby, bool showGame, bool showCredits)
