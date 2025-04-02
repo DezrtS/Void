@@ -44,6 +44,7 @@ public class Claymore : DeployableItem
     public void OnEnter(Trigger trigger, GameObject gameObject)
     {
         if (!gameObject.CompareTag("Player") && !gameObject.CompareTag("Monster")) return;
+        if (!GameManager.CanDamage(gameObject, GameManager.PlayerRole.Survivor)) return;
         if (networkClaymore.IsServer) RequestTriggerClaymore();
 
         if (gameObject.TryGetComponent(out Health health))

@@ -24,6 +24,13 @@ MonoBehaviour:
   knockback: 0
   hitEffect: {fileID: 3929961048621311391, guid: 6fc1624de8dee5240890f48b6f94881f,
     type: 3}
+  spawnSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   hitSound:
     Guid:
       Data1: -325948631
@@ -34,4 +41,4 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  range: 5
+  range: 3

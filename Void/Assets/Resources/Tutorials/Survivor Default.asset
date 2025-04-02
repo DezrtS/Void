@@ -16,12 +16,12 @@ MonoBehaviour:
   title: Controls
   description: 'Use [TAB] to Hide Controls and Objective
 
+    Use [SCROLL] to Switch
+    Items
+
+    Hold [F] and Let Go to Craft
+
     Use [WASD] to Move
 
-    Use
-    [SPACE] to Jump
-
-    Use [SCROLL] to Switch Items
-
-    Hold [F] and Let Go to
-    Craft'
+    Use [SPACE]
+    to Jump'

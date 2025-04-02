@@ -62,7 +62,7 @@ MonoBehaviour:
       Data3: 479214508
       Data4: -1811602636
     Path: event:/Prototype/Mutations/EggExplosion/EggThrow
-  voidBeastSpawnCount: 3
+  voidBeastSpawnCount: 0
 --- !u!114 &4439386080916199949
 MonoBehaviour:
   m_ObjectHideFlags: 0

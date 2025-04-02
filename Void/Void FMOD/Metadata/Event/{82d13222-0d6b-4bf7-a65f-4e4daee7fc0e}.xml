@@ -5,7 +5,7 @@
 			<value>Hitmarker</value>
 		</property>
 		<property name="outputFormat">
-			<value>2</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{e823f083-7ad1-45e2-980c-8c886e631ede}</destination>
@@ -72,6 +72,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{0e3370c6-5cb8-479e-a620-355f8425227b}">
+		<property name="volume">
+			<value>-10</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{65722a96-b9dd-4c3e-bacd-021ce4d44bff}</destination>
 		</relationship>
@@ -96,7 +99,6 @@
 	<object class="MixerBusEffectChain" id="{65722a96-b9dd-4c3e-bacd-021ce4d44bff}">
 		<relationship name="effects">
 			<destination>{1d739625-db40-4a8a-a32b-4823f3520e54}</destination>
-			<destination>{54687ebf-6069-43ce-9c5c-b712f97fb1f4}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{2e80922c-c61e-4847-a268-4b66a9b8c501}" />
@@ -111,7 +113,6 @@
 	</object>
 	<object class="MixerBusFader" id="{81dd8468-c58d-42b2-9427-8fb7cc26d4db}" />
 	<object class="MixerBusFader" id="{1d739625-db40-4a8a-a32b-4823f3520e54}" />
-	<object class="SpatialiserEffect" id="{54687ebf-6069-43ce-9c5c-b712f97fb1f4}" />
 	<object class="SingleSound" id="{f5d4b55a-9e61-46b2-b567-c5380cc46ee7}">
 		<relationship name="audioFile">
 			<destination>{be5feffe-77a4-4fbd-b465-cdc9f69a0f2f}</destination>

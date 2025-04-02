@@ -14,20 +14,7 @@ public class DamagingTrigger : MonoBehaviour
     {
         if (other.TryGetComponent(out Health health))
         {
-            //if (!GameManager.IsFriendlyFireDisabled)
-            //{
-            //    switch (triggerRole)
-            //    {
-            //        case GameManager.PlayerRole.Survivor:
-            //            if (other.CompareTag("Player")) return;
-            //            break;
-            //        case GameManager.PlayerRole.Monster:
-            //            if (other.CompareTag("Monster")) return;
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //} 
+            if (!GameManager.CanDamage(other.gameObject, triggerRole)) return;
             healths.Add(health);
             health.OnDeathStateChanged += OnDeathStateChanged;
         }

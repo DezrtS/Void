@@ -12,15 +12,18 @@ public class StatChangeItem : Item
 
     public void Activate()
     {
-        if (!NetworkItem.IsServer) return;
-
-        PlayerStats playerStats = GetComponentInParent<PlayerStats>();
-        if (playerStats == null)
+        if (NetworkItem.IsServer)
         {
-            Debug.Log("Player Stats == NULL");
-            return;
-        }
+            PlayerStats playerStats = GetComponentInParent<PlayerStats>();
+            if (playerStats == null)
+            {
+                Debug.Log("Player Stats == NULL");
+                return;
+            }
 
-        playerStats.RequestChangeStats(statChangesData);
+            playerStats.RequestChangeStats(statChangesData);
+            RequestDrop();
+        }
+        canPickUp = false;
     }
 }

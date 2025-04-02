@@ -240,6 +240,34 @@ MonoBehaviour:
       Data3: -789222729
       Data4: -1421211024
     Path: event:/Debugging/Sound2
+  ButtonClickSound:
+    Guid:
+      Data1: -998693734
+      Data2: 1146037082
+      Data3: -1184243275
+      Data4: -1438116356
+    Path: event:/Prototype/UI/Click
+  ButtonHoverSound:
+    Guid:
+      Data1: 1100274313
+      Data2: 1271600699
+      Data3: 93737369
+      Data4: 1534515143
+    Path: event:/Prototype/UI/Highlight
+  TransitionSound:
+    Guid:
+      Data1: 1987358565
+      Data2: 1317649456
+      Data3: -2098434894
+      Data4: -521032044
+    Path: event:/Prototype/UI/Transition
+  HitMarkerSound:
+    Guid:
+      Data1: -2100219358
+      Data2: 1274482027
+      Data3: 1296981926
+      Data4: 251455406
+    Path: event:/Prototype/Hitmarker/Hitmarker
   SwitchItemSound:
     Guid:
       Data1: -571449395

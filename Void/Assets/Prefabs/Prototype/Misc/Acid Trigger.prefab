@@ -48,7 +48,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88dda232a0505eb458e6479bb836ae1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  triggerRole: 1
+  damage: 5
   damageRate: 0.25
 --- !u!135 &7953647072762779737
 SphereCollider:

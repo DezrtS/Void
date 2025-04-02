@@ -81,8 +81,7 @@ public class UIManager : Singleton<UIManager>
             cooldownTimer -= deltaTime;
             if (cooldownTimer <= 0)
             {
-                cooldownTimer = 0;
-                cooldownCircle.gameObject.SetActive(false);
+                ResetCooldownTimer();
             }
             else
             {
@@ -106,6 +105,7 @@ public class UIManager : Singleton<UIManager>
         EnableUI(playerRole);
         if (playerRole == GameManager.PlayerRole.Survivor) defaultTutorialData = defaultSurvivorTutorialData;
         else if (playerRole == GameManager.PlayerRole.Monster) defaultTutorialData = defaultMonsterTutorialData;
+        SetTutorialText(defaultTutorialData);
         lockTutorialText = true;
         player.GetComponent<Health>().OnDeathStateChanged += OnDeathStateChanged;
         OnSetupUI?.Invoke(player);
@@ -210,6 +210,13 @@ public class UIManager : Singleton<UIManager>
         cooldownTimer = time;
     }
 
+    public void ResetCooldownTimer()
+    {
+        cooldownCircle.fillAmount = 0;
+        cooldownTimer = 0;
+        cooldownCircle.gameObject.SetActive(false);
+    }
+
     public void PauseUnpauseGame()
     {
         Debug.Log("PAUSING GAME");
@@ -247,6 +254,7 @@ public class UIManager : Singleton<UIManager>
 
     public void TriggerHit()
     {
+        AudioManager.PlayOneShot(FMODEventManager.Instance.HitMarkerSound);
         animator.SetTrigger("Hit");
     }
 

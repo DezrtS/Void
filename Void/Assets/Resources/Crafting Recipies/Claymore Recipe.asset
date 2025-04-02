@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f50661ca42a33494681ab509eb8d96b1, type: 3}
   m_Name: Claymore Recipe
   m_EditorClassIdentifier: 
-  ResourceRequirements:
-  - Resource: {fileID: 11400000, guid: 17c678a753e10ac48a2421c8ef306e39, type: 2}
-    Amount: 0
+  ResourceRequirements: []
   Item: {fileID: 11400000, guid: e7858be524467524490054361cd7d8af, type: 2}

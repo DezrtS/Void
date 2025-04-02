@@ -20,6 +20,8 @@ public class ProjectileData : ScriptableObject
     [SerializeField] private GameObject hitEffect;
     [SerializeField] private EventReference spawnSound;
     [SerializeField] private EventReference hitSound;
+    [SerializeField] private EventReference hitFleshSound;
+    [SerializeField] private EventReference hitMetalSound;
     [SerializeField] private LayerMask layerMask;
 
     public GameObject ProjectilePrefab => projectilePrefab;
@@ -34,5 +36,7 @@ public class ProjectileData : ScriptableObject
     public GameObject HitEffect => hitEffect;
     public EventReference SpawnSound => spawnSound;
     public EventReference HitSound => hitSound;
+    public EventReference HitFleshSound => hitFleshSound;
+    public EventReference HitMetalSound => hitMetalSound;
     public LayerMask LayerMask => layerMask;
 }

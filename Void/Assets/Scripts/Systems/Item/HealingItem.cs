@@ -25,5 +25,6 @@ public class HealingItem : Item
             health.RequestHealthChangeOverTime(healingItemData.Amount, healingItemData.Duration);
             RequestDrop();
         }
+        canPickUp = false;
     }
 }

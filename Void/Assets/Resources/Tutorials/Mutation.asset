@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overrideTitle: 0
   title: Mutation
-  description: 'Use [LMB] to Attack
+  description: 'Use [TAB] to Hide Controls and Objective
+
+    Use [SCROLL] to Switch
+    Mutations
+
+    Use [LMB] to Attack
 
     Use [RMB] to Use Mutation'

@@ -1,3 +1,4 @@
+using System;
 using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerLook : NetworkBehaviour
 {
+    public event Action<bool> OnInteract;
+
     private InputActionMap cameraActionMap;
     private InputAction lookInputAction;
 
@@ -20,6 +23,8 @@ public class PlayerLook : NetworkBehaviour
     [SerializeField] private bool hasLookAtTarget;
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform lookAtTargetTransform;
+
+    [SerializeField] private float recoilMultiplier;
 
     [Header("Interaction")]
     [SerializeField] private bool canInteract = true;
@@ -158,14 +163,14 @@ public class PlayerLook : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        currentXRotation = Mathf.Clamp(currentXRotation + value, -maxYRotation, maxYRotation);
+        currentXRotation = Mathf.Clamp(currentXRotation + value * recoilMultiplier, -maxYRotation, maxYRotation);
     }
 
     public void AddRandomYRotation()
     {
         if (!IsOwner) return;
 
-        transform.Rotate(new Vector3(0, Random.Range(-100, 100) / 100f, 0));
+        transform.Rotate(new Vector3(0, (UnityEngine.Random.Range(-100, 100) / 100f) * recoilMultiplier, 0));
     }
 
     public void EnableDisableCameraControls(bool enabled)
@@ -205,5 +210,11 @@ public class PlayerLook : NetworkBehaviour
     public void InteractWithObject()
     {
         interactable?.Interact(gameObject);
+        OnInteract?.Invoke(true);
+    }
+
+    public void UninteractWithObject()
+    {
+        OnInteract?.Invoke(false);
     }
 }

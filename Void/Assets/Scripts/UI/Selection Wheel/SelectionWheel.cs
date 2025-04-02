@@ -94,6 +94,7 @@ public class SelectionWheel : MonoBehaviour
     private void Awake()
     {
         GenerateSelectionWheel();
+        selectionWheelHolder.SetActive(active);
     }
 
     [ContextMenu("Activate Selection Wheel")]
@@ -122,8 +123,12 @@ public class SelectionWheel : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!active) return;
+        foreach (WheelSection wheel in wheelSections)
+        {
+            wheel.UpdateTimers(Time.fixedDeltaTime);
+        }
 
+        if (!active) return;
         UpdateCurrentSelection();
     }
 

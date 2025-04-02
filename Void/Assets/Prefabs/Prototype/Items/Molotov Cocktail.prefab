@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8993269855248955691}
   - component: {fileID: 4664515898007534629}
   - component: {fileID: 4102472890058519149}
+  - component: {fileID: 7225683700610096462}
   m_Layer: 6
   m_Name: Molotov Cocktail
   m_TagString: Untagged
@@ -78,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1858749305
+  GlobalObjectIdHash: 1511694687
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -150,6 +151,7 @@ MonoBehaviour:
   tutorialData: {fileID: 11400000, guid: 5af47656de132614ab048f694ee7fdc5, type: 2}
   holdingPositionData: {fileID: 11400000, guid: b09c02c6a3082c54a93c4a593155740f,
     type: 2}
+  explosiveRole: 0
 --- !u!114 &4664515898007534629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,6 +185,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2, y: 0.3, z: 0.1}
   m_Center: {x: 0, y: 0.05, z: 0}
+--- !u!114 &7225683700610096462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512034910407666928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ccc05229843e74d8de041e3d69ebb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 3
+  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  wireframe: 1
+  segments: 32
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &5713271889006502033
 GameObject:
   m_ObjectHideFlags: 0
