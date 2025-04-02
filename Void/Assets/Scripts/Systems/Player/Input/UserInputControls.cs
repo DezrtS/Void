@@ -864,15 +864,6 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Open Selection"",
-                    ""type"": ""Button"",
-                    ""id"": ""66f55ecf-eed4-46ca-b852-a65b07e5b2ea"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Switch"",
                     ""type"": ""Button"",
                     ""id"": ""b3f77419-59e0-4dce-8c11-ff5d752c8e02"",
@@ -920,17 +911,6 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Primary Action"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cedda1af-b555-4395-9bd5-1c78d0faf84b"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Open Selection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1080,6 +1060,15 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Open Selection"",
+                    ""type"": ""Button"",
+                    ""id"": ""dfe18bb9-395d-4171-b88c-36a0264ba579"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1091,6 +1080,17 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4b08a80-477a-40d6-87a7-40bdaa1dda80"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Open Selection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1171,13 +1171,13 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_PrimaryAction = m_Player.FindAction("Primary Action", throwIfNotFound: true);
         m_Player_SecondaryAction = m_Player.FindAction("Secondary Action", throwIfNotFound: true);
-        m_Player_OpenSelection = m_Player.FindAction("Open Selection", throwIfNotFound: true);
         m_Player_Switch = m_Player.FindAction("Switch", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
         // Survivor
         m_Survivor = asset.FindActionMap("Survivor", throwIfNotFound: true);
         m_Survivor_Reload = m_Survivor.FindAction("Reload", throwIfNotFound: true);
+        m_Survivor_OpenSelection = m_Survivor.FindAction("Open Selection", throwIfNotFound: true);
         // VoidMonster
         m_VoidMonster = asset.FindActionMap("VoidMonster", throwIfNotFound: true);
         // Spectator
@@ -1596,7 +1596,6 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_PrimaryAction;
     private readonly InputAction m_Player_SecondaryAction;
-    private readonly InputAction m_Player_OpenSelection;
     private readonly InputAction m_Player_Switch;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Drop;
@@ -1606,7 +1605,6 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         public PlayerActions(@UserInputControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @PrimaryAction => m_Wrapper.m_Player_PrimaryAction;
         public InputAction @SecondaryAction => m_Wrapper.m_Player_SecondaryAction;
-        public InputAction @OpenSelection => m_Wrapper.m_Player_OpenSelection;
         public InputAction @Switch => m_Wrapper.m_Player_Switch;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Drop => m_Wrapper.m_Player_Drop;
@@ -1625,9 +1623,6 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @SecondaryAction.started += instance.OnSecondaryAction;
             @SecondaryAction.performed += instance.OnSecondaryAction;
             @SecondaryAction.canceled += instance.OnSecondaryAction;
-            @OpenSelection.started += instance.OnOpenSelection;
-            @OpenSelection.performed += instance.OnOpenSelection;
-            @OpenSelection.canceled += instance.OnOpenSelection;
             @Switch.started += instance.OnSwitch;
             @Switch.performed += instance.OnSwitch;
             @Switch.canceled += instance.OnSwitch;
@@ -1647,9 +1642,6 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @SecondaryAction.started -= instance.OnSecondaryAction;
             @SecondaryAction.performed -= instance.OnSecondaryAction;
             @SecondaryAction.canceled -= instance.OnSecondaryAction;
-            @OpenSelection.started -= instance.OnOpenSelection;
-            @OpenSelection.performed -= instance.OnOpenSelection;
-            @OpenSelection.canceled -= instance.OnOpenSelection;
             @Switch.started -= instance.OnSwitch;
             @Switch.performed -= instance.OnSwitch;
             @Switch.canceled -= instance.OnSwitch;
@@ -1681,11 +1673,13 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Survivor;
     private List<ISurvivorActions> m_SurvivorActionsCallbackInterfaces = new List<ISurvivorActions>();
     private readonly InputAction m_Survivor_Reload;
+    private readonly InputAction m_Survivor_OpenSelection;
     public struct SurvivorActions
     {
         private @UserInputControls m_Wrapper;
         public SurvivorActions(@UserInputControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Reload => m_Wrapper.m_Survivor_Reload;
+        public InputAction @OpenSelection => m_Wrapper.m_Survivor_OpenSelection;
         public InputActionMap Get() { return m_Wrapper.m_Survivor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1698,6 +1692,9 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
+            @OpenSelection.started += instance.OnOpenSelection;
+            @OpenSelection.performed += instance.OnOpenSelection;
+            @OpenSelection.canceled += instance.OnOpenSelection;
         }
 
         private void UnregisterCallbacks(ISurvivorActions instance)
@@ -1705,6 +1702,9 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
+            @OpenSelection.started -= instance.OnOpenSelection;
+            @OpenSelection.performed -= instance.OnOpenSelection;
+            @OpenSelection.canceled -= instance.OnOpenSelection;
         }
 
         public void RemoveCallbacks(ISurvivorActions instance)
@@ -1881,7 +1881,6 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     {
         void OnPrimaryAction(InputAction.CallbackContext context);
         void OnSecondaryAction(InputAction.CallbackContext context);
-        void OnOpenSelection(InputAction.CallbackContext context);
         void OnSwitch(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnDrop(InputAction.CallbackContext context);
@@ -1889,6 +1888,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     public interface ISurvivorActions
     {
         void OnReload(InputAction.CallbackContext context);
+        void OnOpenSelection(InputAction.CallbackContext context);
     }
     public interface IVoidMonsterActions
     {

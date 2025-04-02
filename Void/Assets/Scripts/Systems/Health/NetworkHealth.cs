@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using static GameManager;
 
 public class NetworkHealth : NetworkBehaviour
 {
@@ -76,6 +77,7 @@ public class NetworkHealth : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SetDeathStateServerRpc(bool state)
     {
+        if (isDead.Value == state) return;
         isDead.Value = state;
     }
 

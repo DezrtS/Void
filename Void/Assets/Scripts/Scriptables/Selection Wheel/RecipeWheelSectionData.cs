@@ -4,7 +4,10 @@ using UnityEngine;
 public class RecipeWheelSectionData : WheelSectionData
 {
     [SerializeField] private bool overrideSectionTitle;
+    [SerializeField] private float craftingCooldown;
     [SerializeField] private RecipeData recipeData;
+
+    public float CraftingCooldown => craftingCooldown;
     public RecipeData RecipeData => recipeData;
 
     public override string GetTitle()

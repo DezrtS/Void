@@ -24,6 +24,10 @@ public class SurvivorController : PlayerController
 
         InputAction switchInputAction = survivorActionMap.FindAction("Reload");
         switchInputAction.performed += OnReload;
+
+        InputAction openSelectionInputAction = survivorActionMap.FindAction("Open Selection");
+        openSelectionInputAction.performed += OnOpenSelection;
+        openSelectionInputAction.canceled += OnOpenSelection;
         base.AssignControls();
     }
 
@@ -41,6 +45,10 @@ public class SurvivorController : PlayerController
 
         InputAction switchInputAction = survivorActionMap.FindAction("Reload");
         switchInputAction.performed -= OnReload;
+
+        InputAction openSelectionInputAction = survivorActionMap.FindAction("Open Selection");
+        openSelectionInputAction.performed -= OnOpenSelection;
+        openSelectionInputAction.canceled -= OnOpenSelection;
         base.UnassignControls();
     }
 

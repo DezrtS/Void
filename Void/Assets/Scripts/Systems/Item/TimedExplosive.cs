@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class TimedExplosive : ThrowableItem
 {
+    [SerializeField] protected GameManager.PlayerRole explosiveRole;
     private TimedExplosiveItemData timedExplosiveItemData;
 
     private NetworkTimedExplosive networkTimedExplosive;
@@ -71,6 +72,7 @@ public class TimedExplosive : ThrowableItem
 
         if (raycastHit.collider.TryGetComponent(out Health health))
         {
+            if (!GameManager.CanDamage(raycastHit.collider.gameObject, explosiveRole)) return;
             if (networkTimedExplosive.IsOwner) UIManager.Instance.TriggerHit();
             if (networkTimedExplosive.IsServer) health.RequestDamage(timedExplosiveItemData.Damage);
         }

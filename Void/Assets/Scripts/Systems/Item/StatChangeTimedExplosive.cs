@@ -11,6 +11,7 @@ public class StatChangeTimedExplosive : TimedExplosive
 
         if (raycastHit.collider.TryGetComponent(out PlayerStats playerStats))
         {
+            if (!GameManager.CanDamage(raycastHit.collider.gameObject, explosiveRole)) return;
             playerStats.RequestChangeStats(statChangesData);
         }
 

@@ -37,6 +37,13 @@ public class FMODEventManager : Singleton<FMODEventManager>
     [field: SerializeField] public EventReference Sound1;
     [field: SerializeField] public EventReference Sound2;
 
+    [field: SerializeField] public EventReference ButtonClickSound;
+    [field: SerializeField] public EventReference ButtonHoverSound;
+
+    [field: SerializeField] public EventReference TransitionSound;
+
+    [field: SerializeField] public EventReference HitMarkerSound;
+
     [field: SerializeField] public EventReference SwitchItemSound;
     [field: SerializeField] public EventReference SelectMutationSound;
 }

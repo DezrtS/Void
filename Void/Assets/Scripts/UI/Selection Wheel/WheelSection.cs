@@ -8,7 +8,8 @@ public abstract class WheelSection : MonoBehaviour
     [SerializeField] private RectTransform rotationPivot;
     [SerializeField] private RectTransform scalePivot;
     [SerializeField] private List<Image> selectionParts;
-    [SerializeField] private Image iconImage;
+    [SerializeField] private RectTransform iconPivot;
+    [SerializeField] private List<Image> iconImages;
 
     protected Animator animator;
     protected bool active;
@@ -24,13 +25,9 @@ public abstract class WheelSection : MonoBehaviour
 
     public abstract void OnSetupUI(GameObject player);
 
-    private void Awake()
-    {
-        animator = GetComponent<Animator>();
-    }
-
     public void Initialize(int index, float intervalAngle, float angleMargin, float radius)
     {
+        animator = GetComponent<Animator>();
         scalePivot.localScale = new Vector3(radius, radius, 1);
         float angle = intervalAngle * index + intervalAngle / 2f - angleMargin / 2f;
         rotationPivot.eulerAngles = new Vector3(0, 0, angle);
@@ -46,19 +43,22 @@ public abstract class WheelSection : MonoBehaviour
         {
             image.fillAmount = (1f / 360f) * (intervalAngle - angleMargin);
         }
-        iconImage.rectTransform.localPosition = Quaternion.Euler(0, 0, sectionAngle) * iconImage.rectTransform.localPosition;
+        iconPivot.localPosition = Quaternion.Euler(0, 0, sectionAngle) * iconPivot.localPosition;
     }
 
     public virtual void InitializeData(WheelSectionData data)
     {
         this.data = data;
-        iconImage.sprite = data.SectionSprite;
+        foreach (Image iconImage in iconImages)
+        {
+            iconImage.sprite = data.SectionSprite;
+        }
     }
 
-    private void FixedUpdate()
+    public virtual void UpdateTimers(float deltaTime)
     {
-        float fixedDeltaTime = (active) ? Time.fixedDeltaTime : -Time.fixedDeltaTime;
-        activeValue = Mathf.Clamp(activeValue += fixedDeltaTime / transitionDuration, 0, 1);
+        float activeTime = (active) ? deltaTime : -deltaTime;
+        activeValue = Mathf.Clamp(activeValue += activeTime / transitionDuration, 0, 1);
         animator.SetFloat("Active", activeValue);
     }
 

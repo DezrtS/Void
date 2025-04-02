@@ -20,10 +20,17 @@ MonoBehaviour:
   useBoxCast: 0
   boxCastSize: {x: 0.05, y: 0.05}
   lifetimeDuration: 10
-  damage: 5
-  knockback: 1
+  damage: 10
+  knockback: 5
   hitEffect: {fileID: 2836366377352891722, guid: b5d45f1b5ffda594d999b679bb100e6e,
     type: 3}
+  spawnSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   hitSound:
     Guid:
       Data1: 0

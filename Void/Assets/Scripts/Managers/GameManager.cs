@@ -65,7 +65,7 @@ public class GameManager : Singleton<GameManager>
         playerRoleDictionary = new Dictionary<ulong, PlayerRole>();
         deadClientIds = new List<ulong>();
         if (resetPlayerPrefsOnAwake) PlayerPrefs.DeleteAll();
-        IsFriendlyFireDisabled = !enableFriendlyFireOnAwake;
+        IsFriendlyFireDisabled = enableFriendlyFireOnAwake;
     }
 
     private void Update()
@@ -202,6 +202,26 @@ public class GameManager : Singleton<GameManager>
         NetworkObject networkObject = survivorGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
         return networkObject;
+    }
+
+    public static bool CanDamage(GameObject gameObject, PlayerRole damagerRole)
+    {
+        if (!IsFriendlyFireDisabled)
+        {
+            switch (damagerRole)
+            {
+                case PlayerRole.Survivor:
+                    if (gameObject.CompareTag("Player")) return false;
+                    break;
+                case PlayerRole.Monster:
+                    if (gameObject.CompareTag("Monster")) return false;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return true;
     }
 
     private void OnSurvivorDeathStateChanged(Health health, bool isDead)

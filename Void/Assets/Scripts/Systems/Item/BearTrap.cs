@@ -67,6 +67,7 @@ public class BearTrap : DeployableItem
     {
         if (captured != null) return;
 
+        if (!GameManager.CanDamage(gameObject, GameManager.PlayerRole.Survivor)) return;
         if (gameObject.TryGetComponent(out captured))
         {
             trigger.OnEnter -= OnEnter;

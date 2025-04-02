@@ -7,6 +7,8 @@ public class Revive : MonoBehaviour, IInteractable
 
     [SerializeField] private float reviveTime;
 
+    private PlayerLook playerLook;
+    private MovementController movementController;
     private Health health;
     private bool isReviving;
     private float reviveTimer;
@@ -24,6 +26,7 @@ public class Revive : MonoBehaviour, IInteractable
             if (reviveTimer <= 0)
             {
                 isReviving = false;
+                OnInteract(false);
                 health.RequestRespawn();
             }
         }
@@ -41,7 +44,28 @@ public class Revive : MonoBehaviour, IInteractable
     {
         if (isReviving || !health.IsDead) return;
 
+        interactor.TryGetComponent(out playerLook);
+        interactor.TryGetComponent(out movementController);
+        playerLook.OnInteract += OnInteract;
+        playerLook.EnableDisableCameraControls(false);
+        movementController.RequestSetInputDisabled(true);
         isReviving = true;
         reviveTimer = reviveTime;
+        UIManager.Instance.SetCooldownTimer(reviveTimer);
+    }
+
+    public void OnInteract(bool isInteracting)
+    {
+        if (!isInteracting)
+        {
+            playerLook.OnInteract -= OnInteract;
+            playerLook.EnableDisableCameraControls(true);
+            movementController.RequestSetInputDisabled(false);
+            isReviving = false;
+            reviveTimer = 0;
+            UIManager.Instance.ResetCooldownTimer();
+            playerLook = null;
+            movementController = null;
+        }
     }
 }

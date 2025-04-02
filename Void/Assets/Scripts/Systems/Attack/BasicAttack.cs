@@ -51,7 +51,7 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
         {
             if (durationTimer > duration - attackDelay) return;
             Collider[] results = new Collider[10];
-            Physics.OverlapSphereNonAlloc(transform.position + offset, size, results, layerMask, QueryTriggerInteraction.Ignore);
+            Physics.OverlapSphereNonAlloc(transform.position + transform.rotation * offset, size, results, layerMask, QueryTriggerInteraction.Ignore);
 
             if (results.Length > 0)
             {

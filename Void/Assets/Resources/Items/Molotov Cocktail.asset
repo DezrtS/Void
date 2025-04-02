@@ -47,14 +47,14 @@ MonoBehaviour:
     Path: event:/Prototype/Tasks/Battery/BatteryDrop
   throwSpeed: 15
   spinSpeed: 2
-  radius: 4.5
+  radius: 3
   damage: 40
   explodeOnImpact: 1
   timeToActivation: 2
   effectableLayers:
     serializedVersion: 2
     m_Bits: 576
-  explosionEffect: {fileID: 3929961048621311391, guid: 6fc1624de8dee5240890f48b6f94881f,
+  explosionEffect: {fileID: 3929961048621311391, guid: f53a5705acff9274dad31b1d02a66690,
     type: 3}
   explosionSound:
     Guid:

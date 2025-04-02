@@ -2136,6 +2136,7 @@ MonoBehaviour:
   hasLookAtTarget: 1
   lookAtTransform: {fileID: 249768029589015800}
   lookAtTargetTransform: {fileID: 2030871599825353972}
+  recoilMultiplier: 0.75
   canInteract: 1
   interactRange: 5
   interactLayerMask:

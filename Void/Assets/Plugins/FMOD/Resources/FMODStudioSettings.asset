@@ -418,11 +418,14 @@ MonoBehaviour:
   - Crafting
   - DropBox
   - Elevator
+  - Hitmarker
   - Items
   - Music
   - Mutations
+  - Powerdown
   - Survivor
   - Tasks
+  - UI
   - Voicelines
   - VoidBeast
   - VoidMonster

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -1174665880939302636}
   - component: {fileID: -3840539361474128825}
   - component: {fileID: 9103310957871375336}
+  - component: {fileID: -7992515524392225898}
   m_Layer: 6
   m_Name: Flashbang
   m_TagString: Untagged
@@ -78,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2666475405
+  GlobalObjectIdHash: 1599732047
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -149,6 +150,7 @@ MonoBehaviour:
     type: 2}
   tutorialData: {fileID: 11400000, guid: 5af47656de132614ab048f694ee7fdc5, type: 2}
   holdingPositionData: {fileID: 0}
+  explosiveRole: 0
 --- !u!114 &-3840539361474128825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,6 +184,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1, y: 0.35, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7992515524392225898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512034910407666928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ccc05229843e74d8de041e3d69ebb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 5
+  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  wireframe: 1
+  segments: 32
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &4612239018956117962
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3690518019917096240}
   - component: {fileID: 5682143140711046894}
   - component: {fileID: -3222436000470431126}
+  - component: {fileID: -259144131023922064}
   m_Layer: 6
   m_Name: Slow Grenade
   m_TagString: Untagged
@@ -99,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 248843611
+  GlobalObjectIdHash: 599021451
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -170,6 +171,7 @@ MonoBehaviour:
     type: 2}
   tutorialData: {fileID: 11400000, guid: 5af47656de132614ab048f694ee7fdc5, type: 2}
   holdingPositionData: {fileID: 0}
+  explosiveRole: 0
   statChangesData: {fileID: 11400000, guid: cf938b0b0f8192444b8e35320a470594, type: 2}
 --- !u!114 &-3222436000470431126
 MonoBehaviour:
@@ -183,6 +185,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ae8f3f2ce45d584b82c0701e1d519d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-259144131023922064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512034910407666928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ccc05229843e74d8de041e3d69ebb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 4.5
+  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  wireframe: 1
+  segments: 32
+  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &8423974761709718677
 GameObject:
   m_ObjectHideFlags: 0

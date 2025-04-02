@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour, IProjectile
 {
+    [SerializeField] protected GameManager.PlayerRole projectileRole;
     private ProjectileData projectileData;
     private ProjectileSpawner projectileSpawner;
 
@@ -57,8 +58,10 @@ public class Projectile : MonoBehaviour, IProjectile
 
     public virtual void OnProjectileHit(RaycastHit raycastHit)
     {
+        if (!GameManager.CanDamage(raycastHit.collider.gameObject, projectileRole)) return;
         if (projectileData.HitEffect != null) Instantiate(projectileData.HitEffect, transform.position, Quaternion.LookRotation(-raycastHit.normal), raycastHit.transform);
-        AudioManager.PlayOneShot(projectileData.HitSound, gameObject);
+        if (raycastHit.collider.CompareTag("Monster") || raycastHit.collider.CompareTag("Survivor")) AudioManager.PlayOneShot(projectileData.HitFleshSound, gameObject);
+        else AudioManager.PlayOneShot(projectileData.HitSound, gameObject);
         projectileSpawner.OnProjectileHit(this, raycastHit);
     }
 
@@ -91,8 +94,8 @@ public class Projectile : MonoBehaviour, IProjectile
 
         if (hasHit)
         {
-            OnProjectileHit(lastHit);
             hasHit = false;
+            OnProjectileHit(lastHit);
             return;
         }
 
@@ -102,38 +105,32 @@ public class Projectile : MonoBehaviour, IProjectile
             Vector3 halfExtents = new Vector3(projectileData.BoxCastSize.x * 0.5f, projectileData.BoxCastSize.y * 0.5f, travelDistance);
             Quaternion orientation = Quaternion.LookRotation(velocity);
 
-            if (Physics.BoxCast(transform.position, halfExtents, velocity.normalized, out RaycastHit hitInfo, orientation, travelDistance, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
+            DebugDraw.DrawBoxCast(transform.position, halfExtents, velocity.normalized, orientation, travelDistance, Color.blue, 1);
+            if (Physics.BoxCast(transform.position, halfExtents, velocity.normalized, out RaycastHit boxHitInfo, orientation, travelDistance, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
             {
                 DebugDraw.DrawBoxCast(transform.position, halfExtents, velocity.normalized, orientation, travelDistance, Color.red, 5);
-                //DebugDraw.DrawBoxCast(transform.position + velocity * deltaTime, halfExtents, velocity.normalized, orientation, projectileData.BoxCastSize.y, Color.green, 5);
                 //OnProjectileHit(hitInfo);
-                lastHit = hitInfo;
+                lastHit = boxHitInfo;
                 hasHit = true;
 
-                transform.position = hitInfo.point;
-                UpdateRotation(deltaTime);
-            }
-            else
-            {
-                UpdatePosition(deltaTime);
+                transform.position = boxHitInfo.point;
                 UpdateRotation(deltaTime);
             }
         }
+
+        Debug.DrawRay(transform.position, velocity.normalized * velocity.magnitude * deltaTime, Color.green);
+        if (!hasHit && Physics.Raycast(transform.position, velocity.normalized, out RaycastHit hitInfo, velocity.magnitude * deltaTime, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
+        {
+            lastHit = hitInfo;
+            hasHit = true;
+            Debug.DrawRay(transform.position, velocity.normalized * velocity.magnitude, Color.yellow);
+            transform.position = hitInfo.point;
+            UpdateRotation(deltaTime);
+        }
         else
         {
-            if (Physics.Raycast(transform.position, velocity.normalized, out RaycastHit hitInfo, velocity.magnitude, projectileData.LayerMask, QueryTriggerInteraction.Ignore))
-            {
-                lastHit = hitInfo;
-                hasHit = true;
-
-                transform.position = hitInfo.point;
-                UpdateRotation(deltaTime);
-            }
-            else
-            {
-                UpdatePosition(deltaTime);
-                UpdateRotation(deltaTime);
-            }
+            UpdatePosition(deltaTime);
+            UpdateRotation(deltaTime);
         }
 
         if (HasExpired()) DestroyProjectile();

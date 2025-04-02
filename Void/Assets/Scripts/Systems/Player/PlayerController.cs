@@ -79,15 +79,12 @@ public abstract class PlayerController : NetworkBehaviour
         secondaryActionInputAction.performed += OnSecondaryAction;
         secondaryActionInputAction.canceled += OnSecondaryAction;
 
-        InputAction openSelectionInputAction = playerActionMap.FindAction("Open Selection");
-        openSelectionInputAction.performed += OnOpenSelection;
-        openSelectionInputAction.canceled += OnOpenSelection;
-
         InputAction switchInputAction = playerActionMap.FindAction("Switch");
         switchInputAction.performed += OnSwitch;
 
         InputAction interactInputAction = playerActionMap.FindAction("Interact");
         interactInputAction.performed += OnInteract;
+        interactInputAction.canceled += OnInteract;
 
         InputAction dropInputAction = playerActionMap.FindAction("Drop");
         dropInputAction.performed += OnDrop;
@@ -121,15 +118,12 @@ public abstract class PlayerController : NetworkBehaviour
         secondaryActionInputAction.performed -= OnSecondaryAction;
         secondaryActionInputAction.canceled -= OnSecondaryAction;
 
-        InputAction openSelectionInputAction = playerActionMap.FindAction("Open Selection");
-        openSelectionInputAction.performed -= OnOpenSelection;
-        openSelectionInputAction.canceled -= OnOpenSelection;
-
         InputAction switchInputAction = playerActionMap.FindAction("Switch");
         switchInputAction.performed -= OnSwitch;
 
         InputAction interactInputAction = playerActionMap.FindAction("Interact");
         interactInputAction.performed -= OnInteract;
+        interactInputAction.canceled -= OnInteract;
 
         InputAction dropInputAction = playerActionMap.FindAction("Drop");
         dropInputAction.performed -= OnDrop;
@@ -228,8 +222,20 @@ public abstract class PlayerController : NetworkBehaviour
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (!IsOwner || health.IsDead) return;
-        if (context.performed) playerLook.InteractWithObject();
+        if (!IsOwner) return;
+
+        if (context.performed)
+        {
+            if (health.IsDead) return;
+            playerLook.InteractWithObject();
+            return;
+        }
+
+        if (context.canceled)
+        {
+            playerLook.UninteractWithObject();
+            return;
+        }
     }
 
     public abstract void OnDrop(InputAction.CallbackContext context);

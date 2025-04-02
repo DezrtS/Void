@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04d1a9b4c6d7a649b7f6b78a7619563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectileRole: 1
 --- !u!120 &7928494311067864818
 LineRenderer:
   serializedVersion: 2

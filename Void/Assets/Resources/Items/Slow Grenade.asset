@@ -47,7 +47,7 @@ MonoBehaviour:
     Path: event:/Prototype/Tasks/Battery/BatteryDrop
   throwSpeed: 15
   spinSpeed: 2
-  radius: 3
+  radius: 4.5
   damage: 10
   explodeOnImpact: 0
   timeToActivation: 1
