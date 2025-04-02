@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EventFolder" id="{831d740a-696d-4c90-9e21-09b309cf0cdc}">
+		<property name="name">
+			<value>Powerdown</value>
+		</property>
+		<relationship name="folder">
+			<destination>{d27b16d7-1cd2-4583-b119-d5bee07beb8a}</destination>
+		</relationship>
+	</object>
+</objects>
