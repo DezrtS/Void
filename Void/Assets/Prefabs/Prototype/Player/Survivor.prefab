@@ -1873,6 +1873,7 @@ GameObject:
   - component: {fileID: 7509421746790066431}
   - component: {fileID: -755659047214935387}
   - component: {fileID: 1240250816471740412}
+  - component: {fileID: -3887721034701567124}
   m_Layer: 9
   m_Name: Survivor
   m_TagString: Player
@@ -2136,7 +2137,7 @@ MonoBehaviour:
   hasLookAtTarget: 1
   lookAtTransform: {fileID: 249768029589015800}
   lookAtTargetTransform: {fileID: 2030871599825353972}
-  recoilMultiplier: 0.75
+  recoilMultiplier: 0.5
   canInteract: 1
   interactRange: 5
   interactLayerMask:
@@ -2362,6 +2363,23 @@ MonoBehaviour:
   compassIconPrefab: {fileID: 5616257516550400628, guid: a00f32489f4c7a84982c47fbbceb7dc1,
     type: 3}
   disableCompassIconOnInitialize: 1
+--- !u!114 &-3887721034701567124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1575300930724462412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c5c4ca95960a3047aeda7874fa2abf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reviveInteractableData: {fileID: 11400000, guid: 1201c0f93ca7dde45be73ecd51d27ea8,
+    type: 2}
+  revivingInteractableData: {fileID: 11400000, guid: 057473299fdb8bb45932348017844880,
+    type: 2}
+  reviveTime: 2.5
 --- !u!1 &1665853232064547981
 GameObject:
   m_ObjectHideFlags: 0
