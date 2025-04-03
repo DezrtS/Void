@@ -1649,7 +1649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0
+  m_Weight: 1
   m_Effectors: []
 --- !u!1 &1407695683425128943
 GameObject:
@@ -1910,7 +1910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3220849879
+  GlobalObjectIdHash: 119855383
   InScenePlacedSourceGlobalObjectIdHash: 1133239272
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -4326,6 +4326,59 @@ Transform:
   - {fileID: 5831675654578413429}
   m_Father: {fileID: 1213107250082860532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3870036202095283902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3360454256840398106}
+  - component: {fileID: 777153328676585548}
+  m_Layer: 0
+  m_Name: WeaponReload
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3360454256840398106
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3870036202095283902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.36}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9161522079473141990}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &777153328676585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3870036202095283902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf219326d2292de48a0c671da18d402b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Weight: 1
+  m_Data:
+    m_ConstrainedObject: {fileID: 5663446266643966711}
+    m_OverrideSource: {fileID: 3360454256840398106}
+    m_OverridePosition: {x: 0, y: 0, z: 0}
+    m_OverrideRotation: {x: 0, y: 0, z: 0}
+    m_PositionWeight: 1
+    m_RotationWeight: 1
+    m_Space: 2
 --- !u!1 &3876195402432361852
 GameObject:
   m_ObjectHideFlags: 0
@@ -7075,7 +7128,12 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Spine_02'\n\tTransform 'Neck_02'\n\tTransform
+    'Shoulder.R'\n\tTransform 'Hips'\n\tTransform 'Spine_04'\n\tTransform 'Wrist.R'\n\tTransform
+    'Wrist.L'\n\tTransform 'Spine_01'\n\tTransform 'Shoulder.L'\n\tTransform 'Forearm.L'\n\tand
+    more ..."
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -7715,7 +7773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0
+  m_Weight: 1
   m_Effectors: []
 --- !u!1 &7100440692352732031
 GameObject:
@@ -8124,8 +8182,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7666285446247602059}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5935407, y: 0.6259777, z: -0.46427104, w: 0.20078288}
-  m_LocalPosition: {x: -0.00076, y: -0.00323, z: 0.0009}
+  m_LocalRotation: {x: 0.7143703, y: 0.34990087, z: -0.6058339, w: -0.014481157}
+  m_LocalPosition: {x: -0.0005, y: -0.00271, z: 0.00122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8163,6 +8221,7 @@ Transform:
   m_Children:
   - {fileID: 7719895135037693208}
   - {fileID: 3679514370553233568}
+  - {fileID: 3360454256840398106}
   m_Father: {fileID: 7344480668413680578}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &90243078397026564
@@ -8177,7 +8236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 0
+  m_Weight: 1
   m_Effectors: []
 --- !u!1 &7768848021988718179
 GameObject:
@@ -8578,7 +8637,7 @@ Transform:
   m_GameObject: {fileID: 8075874723461551913}
   serializedVersion: 2
   m_LocalRotation: {x: -0.6246384, y: 0.05871557, z: -0.16383098, w: 0.76127446}
-  m_LocalPosition: {x: 0.071508914, y: 1.3527305, z: 0.06602666}
+  m_LocalPosition: {x: -0, y: 1.285, z: 0.462}
   m_LocalScale: {x: 83.33332, y: 83.333305, z: 83.33331}
   m_ConstrainProportionsScale: 0
   m_Children:
