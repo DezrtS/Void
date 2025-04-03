@@ -2545,8 +2545,8 @@ MonoBehaviour:
   canRegenerateHealth: 1
   healthRegenerationRate:
     baseValue: 10
-  healthRegenerationDelay: 2
-  playHeartbeat: 0
+  healthRegenerationDelay: 10
+  playHeartbeat: 1
   gruntThreshold: 50
   heartbeatSound:
     Guid:
@@ -2608,11 +2608,11 @@ MonoBehaviour:
   timeToDeaccelerate:
     baseValue: 0.1
   walkSpeed:
-    baseValue: 6
+    baseValue: 5
   sprintSpeed:
-    baseValue: 10
+    baseValue: 8
   crouchSpeed:
-    baseValue: 4
+    baseValue: 3
   jumpPower:
     baseValue: 7
   crouchHeight:
