@@ -13,6 +13,7 @@ public abstract class PlayerController : NetworkBehaviour
 
     [SerializeField] private GameObject playerModel;
     [SerializeField] private bool disableForOwnerOnStart;
+    [SerializeField] private GameObject[] playerModelVisuals;
     [SerializeField] private GameObject[] disableForOwner;
 
     private InputActionMap playerActionMap;
@@ -89,6 +90,9 @@ public abstract class PlayerController : NetworkBehaviour
         InputAction dropInputAction = playerActionMap.FindAction("Drop");
         dropInputAction.performed += OnDrop;
 
+        InputAction hotbarSlotAction = playerActionMap.FindAction("Hotbar Slot");
+        hotbarSlotAction.performed += OnHotbarSlot;
+
         EnableControls();
     }
 
@@ -128,6 +132,9 @@ public abstract class PlayerController : NetworkBehaviour
         InputAction dropInputAction = playerActionMap.FindAction("Drop");
         dropInputAction.performed -= OnDrop;
 
+        InputAction hotbarSlotAction = playerActionMap.FindAction("Hotbar Slot");
+        hotbarSlotAction.performed -= OnHotbarSlot;
+
         DisableControls();
     }
 
@@ -144,13 +151,21 @@ public abstract class PlayerController : NetworkBehaviour
         if (!IsOwner || !disableForOwnerOnStart) return;
         foreach (GameObject gameObject in disableForOwner)
         {
-            gameObject.SetActive(false);
+            gameObject.layer = LayerMask.NameToLayer("Ignore Local");
         }
     }
 
     private void FixedUpdate()
     {
         UpdateTimers(Time.fixedDeltaTime);
+    }
+
+    public void HidePlayerModel(bool hide)
+    {
+        foreach (GameObject gameObject in playerModelVisuals)
+        {
+            gameObject.SetActive(!hide);
+        }
     }
 
     public virtual void UpdateTimers(float deltaTime)
@@ -239,4 +254,6 @@ public abstract class PlayerController : NetworkBehaviour
     }
 
     public abstract void OnDrop(InputAction.CallbackContext context);
+
+    public abstract void OnHotbarSlot(InputAction.CallbackContext context);
 }

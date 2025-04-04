@@ -6,14 +6,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerLook : NetworkBehaviour
 {
-    public event Action<bool> OnInteract;
-
-    private InputActionMap cameraActionMap;
-    private InputAction lookInputAction;
-
-    private float currentXRotation = 0f;
+    public delegate void InteractHandler(GameObject interactor, bool isInteracting);
+    //public event InteractHandler OnInteract;
 
     [Header("Camera")]
+    [SerializeField] private bool lockCameraOnCameraSpawn;
+
     [SerializeField] private bool spawnFirstPersonCamera;
     [SerializeField] private bool canLockCamera;
     [SerializeField] private bool lockPlayerCursor;
@@ -21,8 +19,10 @@ public class PlayerLook : NetworkBehaviour
     [SerializeField] private Transform cameraRootTransform;
 
     [SerializeField] private bool hasLookAtTarget;
+    [SerializeField] private bool useOffsetLookAtTarget;
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform lookAtTargetTransform;
+    [SerializeField] private Transform offsetLookAtTargetTransform;
 
     [SerializeField] private float recoilMultiplier;
 
@@ -39,9 +39,27 @@ public class PlayerLook : NetworkBehaviour
     [SerializeField] private float xSensitivity = 0.02f;
     [SerializeField] private float ySensitivity = 0.01f;
 
+    private Transform target;
+
+    private NetworkPlayerLook networkPlayerLook;
+    private float xRotation;
+
+    public event Action<bool> OnInteract;
+
+    private InputActionMap cameraActionMap;
+    private InputAction lookInputAction;
+
+    private float currentXRotation = 0f;
+
     private IInteractable interactable;
     private UIManager instance;
 
+    public NetworkPlayerLook NetworkPlayerLook => networkPlayerLook;
+    public float XRotation { get { return xRotation; } set { xRotation = value; } }
+
+
+
+    public Transform LookAtTargetTransform => lookAtTargetTransform;
     public bool CanLockCamera { get { return canLockCamera;  } set {  canLockCamera = value; } }
     public Transform CameraRotationRootTransform => cameraRotationRootTransform;
     public Transform CameraRootTransform => cameraRootTransform;
@@ -60,7 +78,7 @@ public class PlayerLook : NetworkBehaviour
                 cinemachineCamera.Follow = cameraRootTransform;
                 cinemachineCamera.LookAt = lookAtTargetTransform;
             }
-            LockCamera(false);
+            if (lockCameraOnCameraSpawn) LockCamera(false);
         }
     }
 
@@ -76,6 +94,8 @@ public class PlayerLook : NetworkBehaviour
 
     private void Start()
     {
+        if (useOffsetLookAtTarget) target = offsetLookAtTargetTransform;
+        else target = lookAtTargetTransform;
         instance = UIManager.Instance;
     }
 
@@ -85,7 +105,7 @@ public class PlayerLook : NetworkBehaviour
 
         if (hasLookAtTarget)
         {
-            lookAtTransform.position = lookAtTargetTransform.position;
+            lookAtTransform.position = target.position;
         }
 
         Vector2 rotationInput = lookInputAction.ReadValue<Vector2>();
@@ -96,6 +116,7 @@ public class PlayerLook : NetworkBehaviour
         currentXRotation = Mathf.Clamp(currentXRotation, -maxYRotation, maxYRotation);
 
         cameraRotationRootTransform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
+        SetXRotationServerRpc(currentXRotation);
 
         Quaternion newRotation = Quaternion.Euler(0, transform.eulerAngles.y + rotationInput.x * xSensitivity, 0);
 
@@ -137,6 +158,21 @@ public class PlayerLook : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void SetXRotationServerRpc(float xRotation, ServerRpcParams serverRpcParams = default)
+    {
+        ClientRpcParams clientRpcParams = GameMultiplayer.GenerateClientRpcParams(serverRpcParams);
+        SetXRotationClientRpc(xRotation, clientRpcParams);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void SetXRotationClientRpc(float xRotation, ClientRpcParams clientRpcParams = default)
+    {
+        currentXRotation = xRotation;
+        cameraRotationRootTransform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
+    }
+
+
     public void AssignControls()
     {
         if (!IsOwner) return;
@@ -157,6 +193,14 @@ public class PlayerLook : NetworkBehaviour
 
         lookInputAction = null;
         UIManager.OnPause -= LockCamera;
+    }
+
+    public void SpawnFirstPersonCamera()
+    {
+        GameObject camera = Instantiate(GameManager.Instance.FirstPersonCamera);
+        CinemachineCamera cinemachineCamera = camera.GetComponentInChildren<CinemachineCamera>();
+        cinemachineCamera.Follow = cameraRootTransform;
+        cinemachineCamera.LookAt = lookAtTargetTransform;
     }
 
     public void AddXRotation(float value)

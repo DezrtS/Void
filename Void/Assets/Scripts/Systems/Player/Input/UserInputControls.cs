@@ -889,6 +889,15 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Hotbar Slot"",
+                    ""type"": ""Button"",
+                    ""id"": ""5ac075fb-d7f0-4538-a017-e83f1061b480"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1045,6 +1054,72 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
                     ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""064bb9da-fa19-4625-8acc-5d47b17ac010"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hotbar Slot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cc39bb58-5849-40ad-ba95-fb1e29c3dec0"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=2)"",
+                    ""groups"": """",
+                    ""action"": ""Hotbar Slot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cc63fd6e-8016-4b67-95d7-36b344320942"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=3)"",
+                    ""groups"": """",
+                    ""action"": ""Hotbar Slot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bed53072-df97-4524-9e92-5119ddd770e7"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=4)"",
+                    ""groups"": """",
+                    ""action"": ""Hotbar Slot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""67877277-26d4-4774-a1bd-e78995a6bae9"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=5)"",
+                    ""groups"": """",
+                    ""action"": ""Hotbar Slot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9864f4d8-c871-4945-9a26-8e3c9fc9e113"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=6)"",
+                    ""groups"": """",
+                    ""action"": ""Hotbar Slot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1174,6 +1249,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         m_Player_Switch = m_Player.FindAction("Switch", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Drop = m_Player.FindAction("Drop", throwIfNotFound: true);
+        m_Player_HotbarSlot = m_Player.FindAction("Hotbar Slot", throwIfNotFound: true);
         // Survivor
         m_Survivor = asset.FindActionMap("Survivor", throwIfNotFound: true);
         m_Survivor_Reload = m_Survivor.FindAction("Reload", throwIfNotFound: true);
@@ -1599,6 +1675,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Switch;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Drop;
+    private readonly InputAction m_Player_HotbarSlot;
     public struct PlayerActions
     {
         private @UserInputControls m_Wrapper;
@@ -1608,6 +1685,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         public InputAction @Switch => m_Wrapper.m_Player_Switch;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Drop => m_Wrapper.m_Player_Drop;
+        public InputAction @HotbarSlot => m_Wrapper.m_Player_HotbarSlot;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1632,6 +1710,9 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @Drop.started += instance.OnDrop;
             @Drop.performed += instance.OnDrop;
             @Drop.canceled += instance.OnDrop;
+            @HotbarSlot.started += instance.OnHotbarSlot;
+            @HotbarSlot.performed += instance.OnHotbarSlot;
+            @HotbarSlot.canceled += instance.OnHotbarSlot;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1651,6 +1732,9 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
             @Drop.started -= instance.OnDrop;
             @Drop.performed -= instance.OnDrop;
             @Drop.canceled -= instance.OnDrop;
+            @HotbarSlot.started -= instance.OnHotbarSlot;
+            @HotbarSlot.performed -= instance.OnHotbarSlot;
+            @HotbarSlot.canceled -= instance.OnHotbarSlot;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1884,6 +1968,7 @@ public partial class @UserInputControls: IInputActionCollection2, IDisposable
         void OnSwitch(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnDrop(InputAction.CallbackContext context);
+        void OnHotbarSlot(InputAction.CallbackContext context);
     }
     public interface ISurvivorActions
     {

@@ -74,6 +74,7 @@ public class NetworkHotbar : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SwitchToItemServerRpc(int index)
     {
+        if (index >= hotbar.HotbarCapacity || index < 0) return;
         selectedIndex.Value = index;
     }
 

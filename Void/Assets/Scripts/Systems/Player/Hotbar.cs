@@ -81,6 +81,7 @@ public class Hotbar : MonoBehaviour
             Item item = hotbar[index];
             if (item != null)
             {
+                item.RequestStopUsing();
                 UIManager.Instance.SetTutorialText(item.TutorialData);
             }
             else

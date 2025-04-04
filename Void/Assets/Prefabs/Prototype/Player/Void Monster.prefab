@@ -236,7 +236,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 70948873267775455, guid: 4b6c1f106653c1747bb7e14ee8cdc681, type: 3}
   m_Bones:
@@ -1319,7 +1319,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 8531650635235613698, guid: 4b6c1f106653c1747bb7e14ee8cdc681, type: 3}
   m_Bones:
@@ -1851,7 +1851,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 8157087392354824629, guid: 4b6c1f106653c1747bb7e14ee8cdc681, type: 3}
   m_Bones:
@@ -2260,7 +2260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3593659605
+  GlobalObjectIdHash: 4253240432
   InScenePlacedSourceGlobalObjectIdHash: 3567632822
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -2324,7 +2324,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad8deae8091111f4eb30a56c1f4e0d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TransitionStateInfoList: []
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 3
+    OriginatingState: 2086354982
+    DestinationState: 2081823275
+    TransitionDuration: 0
+    TriggerNameHash: 657687027
+    TransitionIndex: 0
   m_Animator: {fileID: 4087824999110072731}
 --- !u!54 &5233021753913394284
 Rigidbody:
@@ -2423,14 +2430,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc28ff1e2e1e28a44862b19dda36313e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockCameraOnCameraSpawn: 0
   spawnFirstPersonCamera: 1
   canLockCamera: 0
   lockPlayerCursor: 1
   cameraRotationRootTransform: {fileID: 1848131393473264207}
   cameraRootTransform: {fileID: 5989482127351808705}
   hasLookAtTarget: 1
+  useOffsetLookAtTarget: 1
   lookAtTransform: {fileID: 4068377097280247978}
-  lookAtTargetTransform: {fileID: 4628094985417148649}
+  lookAtTargetTransform: {fileID: 4872378298549078721}
+  offsetLookAtTargetTransform: {fileID: 4628094985417148649}
   recoilMultiplier: 0
   canInteract: 0
   interactRange: 5
@@ -2481,8 +2491,16 @@ MonoBehaviour:
   respawnDelay: 10
   playerModel: {fileID: 4421207556848156263}
   disableForOwnerOnStart: 1
+  playerModelVisuals:
+  - {fileID: 4053486318580492301}
+  - {fileID: 3210281457743994519}
+  - {fileID: 200275330594798486}
+  - {fileID: 7943793232169697089}
+  - {fileID: 466373266532717932}
   disableForOwner:
   - {fileID: 3210281457743994519}
+  - {fileID: 7943793232169697089}
+  - {fileID: 466373266532717932}
 --- !u!114 &2076485307417209633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3981,7 +3999,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 4711208715938537054, guid: 4b6c1f106653c1747bb7e14ee8cdc681, type: 3}
   m_Bones:

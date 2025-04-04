@@ -23,6 +23,7 @@ public class StatChangeMutation : Mutation
     public void Activate()
     {
         cooldownTimer = mutationData.Cooldown;
-        if (networkUseable.IsServer) playerStats.RequestChangeStats(statChangesData);
+        playerStats.ChangeStats(statChangesData);
+        //if (networkUseable.IsServer) playerStats.RequestChangeStats(statChangesData);
     }
 }

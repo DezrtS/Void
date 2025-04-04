@@ -33,18 +33,6 @@ MonoBehaviour:
     - model: {fileID: 8926484042661617901}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 0}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661617905}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661617908}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661617911}
-      id: 0
-      isStickyNote: 0
   stickyNoteInfos: []
   categories: []
   uiBounds:

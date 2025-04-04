@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,12 +11,17 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
     [SerializeField] private int optionCount;
     [SerializeField] private int requiredSelectionCount;
     [SerializeField] private GameObject mutationSelectionHolder;
+    [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private TextMeshProUGUI mutationNameText;
+    [SerializeField] private TextMeshProUGUI mutationDescriptionText;
     [SerializeField] private List<MutationOption> mutationOptions;
     [SerializeField] private List<MutationData> avoidMutations = new List<MutationData>();
 
     private VoidMonsterController voidMonsterController;
     private MutationData[] mutationDatas;
     private List<MutationData> selectedMutationDatas = new List<MutationData>();
+
+    private float selectionTimer;
 
     public MutationData[] MuationDatas => mutationDatas;
     public List<MutationData> SelectedMutationData => selectedMutationDatas;
@@ -47,6 +52,22 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (selectionTimer > 0)
+        {
+            if (selectedMutationDatas.Count >= 3)
+            {
+                infoText.text = "Waiting for other players...";
+            }
+            else
+            {
+                selectionTimer -= Time.fixedDeltaTime;
+                infoText.text = $"[{Mathf.CeilToInt(selectionTimer)}] Select Three Mutations";
+            }
+        }
+    }
+
     private void OnGameStateChanged(GameManager.GameState gameState)
     {
         if (voidMonsterController == null) return;
@@ -54,6 +75,7 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
         switch (gameState)
         {
             case GameManager.GameState.WaitingToStart:
+                selectionTimer = 30;
                 RandomizeMutationOptions(new List<MutationData>());
                 ActivateMutationSelection();
                 break;
@@ -73,6 +95,18 @@ public class MutationSelectionManager : Singleton<MutationSelectionManager>
     {
         voidMonsterController = player.GetComponent<VoidMonsterController>();
         OnGameStateChanged(GameManager.GameState.WaitingToStart);
+    }
+
+    public void SetMutationText(MutationData mutationData)
+    {
+        mutationNameText.text = mutationData.DisplayName;
+        mutationDescriptionText.text = mutationData.Description;
+    }
+
+    public void ResetMutationText()
+    {
+        mutationNameText.text = string.Empty;
+        mutationDescriptionText.text = string.Empty;
     }
 
     private bool CanSelectMutationOption()

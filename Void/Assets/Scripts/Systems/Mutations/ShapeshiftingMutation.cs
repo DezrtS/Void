@@ -4,6 +4,9 @@ using UnityEngine;
 public class ShapeshiftingMutation : Mutation
 {
     [SerializeField] private GameObject survivor;
+    [SerializeField] private Transform lookAtTransform;
+    [SerializeField] private GameObject[] survivorModelVisuals;
+    [SerializeField] private GameObject[] disableForOwner;
     [SerializeField] private Animator animator;
     [SerializeField] private float duration;
 
@@ -12,7 +15,7 @@ public class ShapeshiftingMutation : Mutation
     private NetworkShapeshiftingMutation networkShapeshiftingMutation;
     private bool isActive;
 
-    private GameObject playerModel;
+    private PlayerController playerController;
     private float durationTimer;
 
     public bool CanActivate() => durationTimer <= 0;
@@ -30,7 +33,15 @@ public class ShapeshiftingMutation : Mutation
     public override void SetupMutation(GameObject player)
     {
         base.SetupMutation(player);
-        playerModel = player.GetComponent<PlayerController>().PlayerModel;
+        if (networkShapeshiftingMutation.IsOwner)
+        {
+            foreach (GameObject gameObject in disableForOwner)
+            {
+                gameObject.layer = LayerMask.NameToLayer("Ignore Local");
+            }
+        }
+        playerController = player.GetComponent<PlayerController>();
+        animationController.AddAnimatorInstance("Player", animator);
     }
 
     public override void Use()
@@ -44,9 +55,9 @@ public class ShapeshiftingMutation : Mutation
         isActive = true;
         durationTimer = duration;
         cooldownTimer = mutationData.Cooldown;
-        playerModel.SetActive(false);
-        survivor.SetActive(true);
-        animationController.AddAnimatorInstance("Player", animator);
+        playerController.HidePlayerModel(true);
+        HideModel(false);
+        //animationController.AddAnimatorInstance("Player", animator);
     }
 
     public override void UpdateTimers()
@@ -56,7 +67,7 @@ public class ShapeshiftingMutation : Mutation
         if (durationTimer > 0)
         {
             durationTimer -= Time.deltaTime;
-
+            lookAtTransform.position = playerController.PlayerLook.LookAtTargetTransform.position;
             if (durationTimer <= 0)
             {
                 durationTimer = 0;
@@ -68,9 +79,17 @@ public class ShapeshiftingMutation : Mutation
     public void Deactivate()
     {
         isActive = false;
-        survivor.SetActive(false);
-        playerModel.SetActive(true);
-        animationController.RemoveAnimatorInstance(animator);
+        HideModel(true);
+        playerController.HidePlayerModel(false);
+        //animationController.RemoveAnimatorInstance(animator);
         AudioManager.PlayOneShot(shapeshiftBackSound, gameObject);
+    }
+
+    public void HideModel(bool hide)
+    {
+        foreach (GameObject gameObject in survivorModelVisuals)
+        {
+            gameObject.SetActive(!hide);
+        }
     }
 }
