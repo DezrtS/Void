@@ -16,5 +16,5 @@ MonoBehaviour:
   sectionTitle: 
   sectionText: 
   overrideSectionTitle: 1
-  craftingCooldown: 2
+  craftingCooldown: 5
   recipeData: {fileID: 11400000, guid: 79d25af2f628af546805f5a3b2e3210e, type: 2}

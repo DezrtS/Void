@@ -3,7 +3,9 @@ using UnityEngine;
 public class StatChangeMutation : Mutation
 {
     [SerializeField] private StatChangesData statChangesData;
+    [SerializeField] private string changeStatsTrigger;
     private PlayerStats playerStats;
+
 
     public override void SetupMutation(GameObject player)
     {
@@ -23,6 +25,7 @@ public class StatChangeMutation : Mutation
     public void Activate()
     {
         cooldownTimer = mutationData.Cooldown;
+        if (networkUseable.IsOwner && changeStatsTrigger != string.Empty) animationController.SetTrigger(changeStatsTrigger);
         playerStats.ChangeStats(statChangesData);
         //if (networkUseable.IsServer) playerStats.RequestChangeStats(statChangesData);
     }

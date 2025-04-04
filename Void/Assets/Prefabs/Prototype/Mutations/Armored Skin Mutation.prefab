@@ -72,6 +72,7 @@ MonoBehaviour:
   tutorialData: {fileID: 11400000, guid: 21a55a6d457f4c34c92ef44735c401b7, type: 2}
   disableActiveTransformOverride: 0
   statChangesData: {fileID: 11400000, guid: e337e8ea29ca5864c8046e5072ecaa65, type: 2}
+  changeStatsTrigger: Metal
 --- !u!114 &-6360011152182680397
 MonoBehaviour:
   m_ObjectHideFlags: 0

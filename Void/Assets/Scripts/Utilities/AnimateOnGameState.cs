@@ -6,8 +6,7 @@ public class AnimateOnGameState : MonoBehaviour
     [Serializable]
     private class AnimateOnGameStateData
     {
-        public string animatorBoolName;
-        public bool value;
+        public string animatorTriggerName;
         public GameManager.GameState gameState;
     }
 
@@ -35,7 +34,7 @@ public class AnimateOnGameState : MonoBehaviour
         {
             if (data.gameState == gameState)
             {
-                animator.SetBool(data.animatorBoolName, data.value);
+                animator.SetTrigger(data.animatorTriggerName);
             }
         }
     }
