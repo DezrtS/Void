@@ -290,6 +290,7 @@ public class UIManager : Singleton<UIManager>
         else if (gameState == GameManager.GameState.GameOver)
         {
             TriggerFade(true);
+            animator.SetTrigger("EndGame");
         }
     }
 

@@ -4155,7 +4155,7 @@ PrefabInstance:
     - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
         type: 3}
       propertyPath: defaultPlayerRole
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
         type: 3}
@@ -4170,7 +4170,7 @@ PrefabInstance:
     - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
         type: 3}
       propertyPath: enableFriendlyFireOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5034460106564701492, guid: aad99ba52c7e0d84794d34264be43923,
         type: 3}
@@ -17402,6 +17402,7 @@ MonoBehaviour:
   healthRegenerationRate:
     baseValue: 0
   healthRegenerationDelay: 0
+  playOnHurt: {fileID: 0}
   playHeartbeat: 0
   gruntThreshold: 0
   heartbeatSound:

@@ -54,7 +54,7 @@ MonoBehaviour:
   effectableLayers:
     serializedVersion: 2
     m_Bits: 576
-  explosionEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
+  explosionEffect: {fileID: 6274707129183794047, guid: 7726a4071028f8b468ab2101e1dc9a9b,
     type: 3}
   explosionSound:
     Guid:

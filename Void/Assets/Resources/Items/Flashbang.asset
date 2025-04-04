@@ -50,7 +50,7 @@ MonoBehaviour:
   radius: 5
   damage: 10
   explodeOnImpact: 0
-  timeToActivation: 2
+  timeToActivation: 1
   effectableLayers:
     serializedVersion: 2
     m_Bits: 576

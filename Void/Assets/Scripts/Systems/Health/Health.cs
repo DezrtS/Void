@@ -3,6 +3,7 @@ using FMODUnity;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Health : MonoBehaviour
 {
@@ -64,6 +65,8 @@ public class Health : MonoBehaviour
     [SerializeField] private bool canRegenerateHealth;
     [SerializeField] protected Stat healthRegenerationRate = new(5);
     [SerializeField] protected float healthRegenerationDelay;
+
+    [SerializeField] private VisualEffect playOnHurt;
 
     [SerializeField] private bool playHeartbeat;
     [SerializeField] private float gruntThreshold;
@@ -156,6 +159,7 @@ public class Health : MonoBehaviour
         {
             healthRegenerationDelayTimer = healthRegenerationDelay;
             AudioManager.PlayOneShot(hurtSound, gameObject);
+            if (playOnHurt != null) playOnHurt.Play();
         }
 
         OnCurrentHealthChanged?.Invoke(currentHealth, value, MaxHealth);

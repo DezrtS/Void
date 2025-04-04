@@ -45,5 +45,5 @@ MonoBehaviour:
       Data3: -964257871
       Data4: 1447670243
     Path: event:/Prototype/Tasks/Battery/BatteryDrop
-  amount: 30
-  duration: 3
+  amount: 50
+  duration: 5
