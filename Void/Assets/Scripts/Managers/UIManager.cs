@@ -9,6 +9,9 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TutorialData defaultSurvivorTutorialData;
     [SerializeField] private TutorialData defaultMonsterTutorialData;
 
+    [SerializeField] private TutorialData defaultSurvivorObjectiveData;
+    [SerializeField] private TutorialData defaultMonsterObjectiveData;
+
     [SerializeField] private GameObject loadingUI;
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject settingsUI;
@@ -103,8 +106,16 @@ public class UIManager : Singleton<UIManager>
     public void SetupUI(GameManager.PlayerRole playerRole, GameObject player)
     {
         EnableUI(playerRole);
-        if (playerRole == GameManager.PlayerRole.Survivor) defaultTutorialData = defaultSurvivorTutorialData;
-        else if (playerRole == GameManager.PlayerRole.Monster) defaultTutorialData = defaultMonsterTutorialData;
+        if (playerRole == GameManager.PlayerRole.Survivor)
+        {
+            defaultTutorialData = defaultSurvivorTutorialData;
+            SetObjectiveText(defaultSurvivorObjectiveData);
+        }
+        else if (playerRole == GameManager.PlayerRole.Monster)
+        {
+            defaultTutorialData = defaultMonsterTutorialData;
+            SetObjectiveText(defaultMonsterObjectiveData);
+        }
         SetTutorialText(defaultTutorialData);
         lockTutorialText = true;
         player.GetComponent<Health>().OnDeathStateChanged += OnDeathStateChanged;
@@ -170,6 +181,12 @@ public class UIManager : Singleton<UIManager>
     public void ResetTutorialText()
     {
         tutorialText.text = defaultTutorialData.Description;
+    }
+
+    public void SetObjectiveText(TutorialData tutorialData)
+    {
+        if (tutorialData == null) return;
+        objectiveText.text = tutorialData.Description;
     }
 
     public void SetDialogueText(DialogueData dialogueData)

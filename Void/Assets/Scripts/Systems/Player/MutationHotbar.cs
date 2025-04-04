@@ -67,6 +67,7 @@ public class MutationHotbar : MonoBehaviour
             Mutation mutation = mutations[index];
             if (mutation != null)
             {
+                mutation.RequestStopUsing();
                 UIManager.Instance.SetTutorialText(mutation.TutorialData);
             }
             else

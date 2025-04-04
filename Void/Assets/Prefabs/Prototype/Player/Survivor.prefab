@@ -301,7 +301,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 6690141603448424749, guid: b43c8863d8fc85d4298cf24eeb01f681, type: 3}
   m_Bones:
@@ -922,7 +922,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 3538712456934850711, guid: b43c8863d8fc85d4298cf24eeb01f681, type: 3}
   m_Bones:
@@ -1190,7 +1190,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 6894428203817054813, guid: b43c8863d8fc85d4298cf24eeb01f681, type: 3}
   m_Bones:
@@ -1911,7 +1911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 119855383
+  GlobalObjectIdHash: 3220849879
   InScenePlacedSourceGlobalObjectIdHash: 1133239272
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -2129,14 +2129,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc28ff1e2e1e28a44862b19dda36313e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockCameraOnCameraSpawn: 1
   spawnFirstPersonCamera: 1
   canLockCamera: 1
   lockPlayerCursor: 1
   cameraRotationRootTransform: {fileID: 3938142979775510420}
   cameraRootTransform: {fileID: 3662237747590448752}
   hasLookAtTarget: 1
+  useOffsetLookAtTarget: 0
   lookAtTransform: {fileID: 249768029589015800}
   lookAtTargetTransform: {fileID: 2030871599825353972}
+  offsetLookAtTargetTransform: {fileID: 0}
   recoilMultiplier: 0.5
   canInteract: 1
   interactRange: 5
@@ -2187,6 +2190,15 @@ MonoBehaviour:
   respawnDelay: 0
   playerModel: {fileID: 6352260142708180014}
   disableForOwnerOnStart: 1
+  playerModelVisuals:
+  - {fileID: 3522174262254214065}
+  - {fileID: 807574205657411412}
+  - {fileID: 6273692495318054016}
+  - {fileID: 156412450023050522}
+  - {fileID: 3022110857739850285}
+  - {fileID: 3934817469661160250}
+  - {fileID: 979210020603348077}
+  - {fileID: 5746921840959865147}
   disableForOwner:
   - {fileID: 807574205657411412}
   - {fileID: 6273692495318054016}
@@ -3991,7 +4003,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 3350666307752880756, guid: b43c8863d8fc85d4298cf24eeb01f681, type: 3}
   m_Bones:
@@ -4540,7 +4552,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 6416302070336371891, guid: b43c8863d8fc85d4298cf24eeb01f681, type: 3}
   m_Bones:
@@ -6233,7 +6245,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: 3808484407320267576, guid: b43c8863d8fc85d4298cf24eeb01f681, type: 3}
   m_Bones:
@@ -6923,7 +6935,7 @@ SkinnedMeshRenderer:
   m_SortingOrder: 0
   serializedVersion: 2
   m_Quality: 0
-  m_UpdateWhenOffscreen: 0
+  m_UpdateWhenOffscreen: 1
   m_SkinnedMotionVectors: 1
   m_Mesh: {fileID: -3137129725661375301, guid: b43c8863d8fc85d4298cf24eeb01f681, type: 3}
   m_Bones:
@@ -7146,12 +7158,7 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'Spine_02'\n\tTransform 'Neck_02'\n\tTransform
-    'Shoulder.R'\n\tTransform 'Hips'\n\tTransform 'Spine_04'\n\tTransform 'Wrist.R'\n\tTransform
-    'Wrist.L'\n\tTransform 'Spine_01'\n\tTransform 'Shoulder.L'\n\tTransform 'Forearm.L'\n\tand
-    more ..."
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0

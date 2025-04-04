@@ -21,7 +21,7 @@ MonoBehaviour:
   boxCastSize: {x: 1, y: 1}
   lifetimeDuration: 10
   damage: 15
-  knockback: 15
+  knockback: 10
   hitEffect: {fileID: 7119166199665987238, guid: 8f7e97b8c0e93074d91bcdb96543e4f4,
     type: 3}
   spawnSound:
@@ -38,6 +38,20 @@ MonoBehaviour:
       Data3: 1921567678
       Data4: -734452881
     Path: event:/Prototype/Mutations/EggExplosion/EggBreak
+  hitFleshSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  hitMetalSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295

@@ -32,6 +32,7 @@ public class NetworkMutationHotbar : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SwitchToMutationServerRpc(int index)
     {
+        if (index >= mutationHotbar.MutationCount || index < 0) return;
         selectedIndex.Value = index;
     }
 
@@ -41,6 +42,11 @@ public class NetworkMutationHotbar : NetworkBehaviour
         Mutation mutation = GameDataManager.SpawnMutation(mutationDataIndex);
         mutation.transform.SetParent(transform);
         mutation.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        if (mutation.NetworkUseable.NetworkObject.OwnerClientId != OwnerClientId)
+        {
+            Debug.Log("Changed Ownership");
+            mutation.NetworkUseable.NetworkObject.ChangeOwnership(OwnerClientId);
+        }
         AddMutationClientRpc(mutation.NetworkUseable.NetworkObjectId);
     }
 

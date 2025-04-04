@@ -192,6 +192,7 @@ public class SurvivorController : PlayerController
             if (IsOwner)
             {
                 animationController.SetTrigger("Respawn");
+                health.RequestHealing(30);
             }
             compassObject.DisableCompassIcon();
         }
@@ -229,7 +230,7 @@ public class SurvivorController : PlayerController
 
     public override void OnDrop(InputAction.CallbackContext context)
     {
-        if (!IsOwner) return;
+        if (!IsOwner || health.IsDead) return;
 
         if (hotbar.IsDragging)
         {
@@ -239,6 +240,14 @@ public class SurvivorController : PlayerController
         {
             hotbar.RequestDropItem();
         }
+    }
+
+    public override void OnHotbarSlot(InputAction.CallbackContext context)
+    {
+        if (!IsOwner || health.IsDead) return;
+
+        int index = (int)context.ReadValue<float>() - 1;
+        hotbar.RequestSwitchToItem(index);
     }
 
     public void OnReload(InputAction.CallbackContext context)

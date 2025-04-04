@@ -60,7 +60,7 @@ public class Projectile : MonoBehaviour, IProjectile
     {
         if (!GameManager.CanDamage(raycastHit.collider.gameObject, projectileRole)) return;
         if (projectileData.HitEffect != null) Instantiate(projectileData.HitEffect, transform.position, Quaternion.LookRotation(-raycastHit.normal), raycastHit.transform);
-        if (raycastHit.collider.CompareTag("Monster") || raycastHit.collider.CompareTag("Survivor")) AudioManager.PlayOneShot(projectileData.HitFleshSound, gameObject);
+        if (raycastHit.collider.CompareTag("Monster") || raycastHit.collider.CompareTag("Player")) AudioManager.PlayOneShot(projectileData.HitFleshSound, gameObject);
         else AudioManager.PlayOneShot(projectileData.HitSound, gameObject);
         projectileSpawner.OnProjectileHit(this, raycastHit);
     }

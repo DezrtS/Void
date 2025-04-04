@@ -60,7 +60,7 @@ public class TimedExplosive : ThrowableItem
         AudioManager.PlayOneShot(timedExplosiveItemData.ExplosionSound, gameObject);
         Instantiate(timedExplosiveItemData.ExplosionEffect, transform.position, Quaternion.identity);
 
-        RaycastHit[] raycastHits = new RaycastHit[25];
+        RaycastHit[] raycastHits = new RaycastHit[30];
         Physics.SphereCastNonAlloc(transform.position, timedExplosiveItemData.Radius, Vector3.forward, raycastHits, timedExplosiveItemData.Radius, timedExplosiveItemData.EffectableLayers);
         OnExplosiveHit(raycastHits);
     }

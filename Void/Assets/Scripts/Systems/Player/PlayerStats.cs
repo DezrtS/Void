@@ -195,6 +195,7 @@ public class PlayerStats : MonoBehaviour
     [ClientRpc(RequireOwnership = false)]
     public void ChangeStatsClientRpc(int index)
     {
+        Debug.Log("CHaninging Stats");
         ChangeStats(GameDataManager.Instance.GetStatChangesData(index));
     }
 

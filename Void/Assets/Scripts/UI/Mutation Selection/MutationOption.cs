@@ -6,7 +6,7 @@ public class MutationOption : MonoBehaviour
 {
     [SerializeField] private int optionIndex;
     [SerializeField] private Image mutationOptionImage;
-    [SerializeField] private TextMeshProUGUI mutationOptionText;
+    [SerializeField] private Animator animator;
 
     private MutationData mutationData;
     private bool isSelected;
@@ -29,7 +29,6 @@ public class MutationOption : MonoBehaviour
         mutationData = MutationSelectionManager.Instance.MuationDatas[optionIndex];
 
         mutationOptionImage.sprite = mutationData.DisplaySprite;
-        mutationOptionText.text = mutationData.Description;
     }
 
     private void OnMutationDataSelected(int index, bool isSelected)
@@ -48,7 +47,15 @@ public class MutationOption : MonoBehaviour
     {
         if (!mutationData) return;
         
-        if (isSelected) MutationSelectionManager.Instance.UnselectMutationOption(optionIndex);
-        else MutationSelectionManager.Instance.SelectMutationOption(optionIndex);
+        if (isSelected)
+        {
+            //MutationSelectionManager.Instance.UnselectMutationOption(optionIndex);
+            //animator.SetTrigger("Unselect");
+        }
+        else
+        {
+            MutationSelectionManager.Instance.SelectMutationOption(optionIndex);
+            animator.SetTrigger("Select");
+        }
     }
 }

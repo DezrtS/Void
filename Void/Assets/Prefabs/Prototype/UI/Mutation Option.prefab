@@ -87,6 +87,8 @@ GameObject:
   - component: {fileID: 6315848965076267255}
   - component: {fileID: 7718528404922515093}
   - component: {fileID: 2925622104502897523}
+  - component: {fileID: 1346052189165350767}
+  - component: {fileID: 8786928686201173020}
   m_Layer: 5
   m_Name: Mutation Button
   m_TagString: Untagged
@@ -201,6 +203,64 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1346052189165350767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2706666839908721492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7839ec5ca12ec374584ae5cd8a3220c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mutationOption: {fileID: 8345475934734085157}
+--- !u!114 &8786928686201173020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2706666839908721492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1346052189165350767}
+          m_TargetAssemblyTypeName: UpdateMutationText, Assembly-CSharp
+          m_MethodName: UpdateText
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1346052189165350767}
+          m_TargetAssemblyTypeName: UpdateMutationText, Assembly-CSharp
+          m_MethodName: ResetText
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &3524123443623693060
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,4 +387,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   optionIndex: 0
   mutationOptionImage: {fileID: 4610424604706014254}
-  mutationOptionText: {fileID: 0}
+  animator: {fileID: 2925622104502897523}

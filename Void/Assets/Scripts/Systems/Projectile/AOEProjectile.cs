@@ -14,7 +14,7 @@ public class AOEProjectile : Projectile
     {
         if (!GameManager.CanDamage(raycastHit.collider.gameObject, projectileRole)) return;
         if (aOEProjectileData.HitEffect != null) Instantiate(aOEProjectileData.HitEffect, transform.position, Quaternion.identity);
-        RaycastHit[] raycastHits = new RaycastHit[10];
+        RaycastHit[] raycastHits = new RaycastHit[30];
         Physics.SphereCastNonAlloc(transform.position, aOEProjectileData.Range, Vector3.forward, raycastHits, aOEProjectileData.Range, aOEProjectileData.LayerMask);
         
         ProjectileSpawner.OnProjectileHit(this, raycastHits);

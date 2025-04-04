@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 7859409295400648617, guid: 2d2f3b14916226b499422f3c13f02d96,
     type: 3}
-  fireSpeed: 20
+  fireSpeed: 30
   angularVelocity: {x: 0, y: 2, z: 0}
   gravity: -1
   useBoxCast: 1
@@ -37,6 +37,20 @@ MonoBehaviour:
       Data3: -1861387848
       Data4: 1812969984
     Path: event:/Prototype/Mutations/ClawThrowing/ClawConnect
+  hitFleshSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  hitMetalSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295

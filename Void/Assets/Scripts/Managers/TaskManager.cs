@@ -68,22 +68,23 @@ public class TaskManager : Singleton<TaskManager>
     public void SetTasksLeft(int tasksLeft)
     {
         this.tasksLeft = tasksLeft;
+        if (!networkTaskManager.IsServer) return;
         switch (tasksLeft)
         {
             case 5:
-                AudioManager.PlayDialogue(DialogueManager.Instance.FiveTasksLeft);
+                AudioManager.RequestPlayDialogue(DialogueManager.Instance.FiveTasksLeft);
                 break;
             case 4:
-                AudioManager.PlayDialogue(DialogueManager.Instance.FourTasksLeft);
+                AudioManager.RequestPlayDialogue(DialogueManager.Instance.FourTasksLeft);
                 break;
             case 3:
-                AudioManager.PlayDialogue(DialogueManager.Instance.ThreeTasksLeft);
+                AudioManager.RequestPlayDialogue(DialogueManager.Instance.ThreeTasksLeft);
                 break;
             case 2:
-                AudioManager.PlayDialogue(DialogueManager.Instance.TwoTasksLeft);
+                AudioManager.RequestPlayDialogue(DialogueManager.Instance.TwoTasksLeft);
                 break;
             case 1:
-                AudioManager.PlayDialogue(DialogueManager.Instance.OneTaskLeft);
+                AudioManager.RequestPlayDialogue(DialogueManager.Instance.OneTaskLeft);
                 break;
         }
     }
