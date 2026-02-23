@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 
 
+/// <summary>
+/// The blackboard is the dictionary of values that the tree can use for any information from to assess it's decisions
+/// </summary>
 
     public class Blackboard
     {

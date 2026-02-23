@@ -1,5 +1,10 @@
 using UnityEngine;
 
+
+/// <summary>
+/// The Leaf node can have no children
+/// </summary>
+/// <param name="tickMthd"> The assignable method for the tree's leaves.</param>
 public class Leaf : BTNode
 {
     public delegate STATUS tickMTHD();

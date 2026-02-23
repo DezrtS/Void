@@ -1,3 +1,7 @@
+
+/// <summary>
+/// Selector, runs a child if it fails, runs the next child, until one succeeds, or they all fail.
+/// </summary>
 public class Selector : BTComposite
 {
     public Selector(string ID) : base(ID)

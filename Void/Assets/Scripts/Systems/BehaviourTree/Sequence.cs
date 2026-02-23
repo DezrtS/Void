@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using UnityEngine.ProBuilder;
-
-    public class Sequence : BTComposite
+/// <summary>
+/// Sequence, runs a child if it succeeds, continues, if it fails, the sequence fails.
+/// </summary>
+public class Sequence : BTComposite
     {
         public Sequence(string ID) : base(ID)
         {
