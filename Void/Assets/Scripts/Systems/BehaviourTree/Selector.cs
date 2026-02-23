@@ -12,6 +12,10 @@ public class Selector : BTComposite
         else if (childStatus == STATUS.FAIL)
         {
             currentChildIndex++;
+            if (currentChildIndex >= children.Count)
+            {
+                currentChildIndex = 0;
+            }
         }
         else if (childStatus == STATUS.SUCCESS)
         {
