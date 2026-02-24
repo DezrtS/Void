@@ -68,6 +68,7 @@ public class TaskManager : Singleton<TaskManager>
     public void SetTasksLeft(int tasksLeft)
     {
         this.tasksLeft = tasksLeft;
+        return;
         if (!networkTaskManager.IsServer) return;
         switch (tasksLeft)
         {
