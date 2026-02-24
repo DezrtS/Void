@@ -46,7 +46,7 @@ using UnityEngine.AI;
             agent.SetDestination(go.transform.position);
             float distToTarget = Vector3.Distance(go.transform.position, agent.transform.position);
 
-            if (distToTarget > 10)
+            if (distToTarget > 5)
             {
                 return BTNode.STATUS.FAIL;
             }
@@ -79,7 +79,7 @@ using UnityEngine.AI;
             float distToTarget = Vector3.Distance(go.transform.position, agent.transform.position);
             if (distToTarget > 10)
             {
-                return BTNode.STATUS.RUNNING;
+                return BTNode.STATUS.SUCCESS;
             }
             return BTNode.STATUS.FAIL;
         }

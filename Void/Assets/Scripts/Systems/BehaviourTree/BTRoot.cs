@@ -17,15 +17,17 @@ public class BTRoot : BTNode
     public BTRoot(string ID) : base(ID)
     {
         nodeName = "Root";
-        if (children.Count != 1)
-        {
-            Debug.LogWarning("WARNING: ONLY ONE CHILD ALLOWED");
-        }
+        
     }
 
 
     public override STATUS tick(Blackboard blackboard)
     {
+        if (children.Count != 1)
+        {
+            Debug.LogWarning("WARNING: ONLY ONE CHILD ALLOWED"+ children.Count);
+        }
+        
         STATUS childStatus = children[currentChildIndex].tick(blackboard);
         
         return childStatus;
