@@ -46,7 +46,7 @@ public class ProjectileSpawner : MonoBehaviour, IProjectileSpawner
         if (raycastHit.collider == null) return;
 
         OnHit?.Invoke(projectile, this, raycastHit);
-        Debug.Log($"Hit: {raycastHit.collider.name}");
+        //Debug.Log($"Hit: {raycastHit.collider.name}");
         if (raycastHit.collider.TryGetComponent(out Health health))
         {
             if (health.NetworkHealth.IsServer) health.RequestDamage(projectile.ProjectileData.Damage);

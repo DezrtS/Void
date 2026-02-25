@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -5,36 +6,62 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Rigidbody))]
 public class NavMeshMovement : MovementController
 {
-    private NavMeshAgent navMeshAgent;
     private Rigidbody rig;
 
-    [SerializeField] private Animator animator;
+    [SerializeField] private AnimationController animator;
 
     private bool isPathfinding;
     private Vector3 pathfindingDestination;
+    private PlayerStats playerStats;
+    
+    public NavMeshAgent NavMeshAgent { get; private set; }
 
     public bool IsPathfinding => isPathfinding;
-    //public Vector3 PathfindingDestination { get { return pathfindingDestination; } set { pathfindingDestination = value; } }
 
     public Vector3 PathfindingDestination 
     { 
-        get { return pathfindingDestination; } 
+        get => pathfindingDestination;
         set 
         { 
             pathfindingDestination = value;
-            if (isPathfinding && navMeshAgent != null) 
+            if (isPathfinding && NavMeshAgent != null) 
             {
-                navMeshAgent.SetDestination(pathfindingDestination);
+                NavMeshAgent.SetDestination(pathfindingDestination);
             }
         } 
     }
+    
+    public override void SetMovementDisabled(bool isMovementDisabled)
+    {
+        base.SetMovementDisabled(isMovementDisabled);
+        if (isMovementDisabled && isPathfinding) StopPathfinding();
+        rig.isKinematic = isMovementDisabled;
+    }
+
 
     protected override void Awake()
     {
         base.Awake();
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshAgent.enabled = false;
+        NavMeshAgent = GetComponent<NavMeshAgent>();
+        NavMeshAgent.enabled = false;
         rig = GetComponent<Rigidbody>();
+        
+        playerStats = GetComponent<PlayerStats>();
+        playerStats.OnStatChanged += UpdateStats;
+        playerStats.OnStatUpdated += UpdateStats;
+        UpdateStats(playerStats);
+    }
+
+    private void OnDisable()
+    {
+        playerStats.OnStatChanged -= UpdateStats;
+        playerStats.OnStatUpdated -= UpdateStats;
+    }
+
+    private void UpdateStats(PlayerStats playerStats)
+    {
+        NavMeshAgent.acceleration = playerStats.Acceleration.Value;
+        NavMeshAgent.speed = playerStats.SprintSpeed.Value;
     }
 
     private void FixedUpdate()
@@ -46,24 +73,24 @@ public class NavMeshMovement : MovementController
 
     private void Update()
     {
-        if (!NetworkMovementController.IsServer) return;
-
-        Vector3 velocity = GetVelocity();
-        velocity.y = 0;
-        animator.SetFloat("Speed", velocity.magnitude / navMeshAgent.speed);
+        if (!NetworkMovementController.IsServer || !animator) return;
+        
+        Vector3 localVelocity = WorldToLocalVelocity(GetVelocity(), transform.rotation) / playerStats.SprintSpeed.BaseValue;
+        animator.SetFloat("xinput", localVelocity.x);
+        animator.SetFloat("yinput", localVelocity.z);
     }
 
     public override void ApplyForce(Vector3 force, ForceMode forceMode)
     {
         if (IsMovementDisabled) return;
 
-        if (isPathfinding) navMeshAgent.velocity += force * 0.1f;
+        if (isPathfinding) NavMeshAgent.velocity += force * 0.1f;
         else rig.AddForce(force, forceMode);
     }
 
     public override Vector3 GetVelocity()
     {
-        if (isPathfinding) return navMeshAgent.velocity;
+        if (isPathfinding) return NavMeshAgent.velocity;
         else return rig.linearVelocity;
     }
 
@@ -71,15 +98,15 @@ public class NavMeshMovement : MovementController
     {
         if (IsMovementDisabled) return;
 
-        if (isPathfinding) navMeshAgent.velocity = velocity;
+        if (isPathfinding) NavMeshAgent.velocity = velocity;
         else rig.linearVelocity = velocity;
     }
 
     public bool CanPathfind(Vector3 position)
     {
-        if (isPathfinding) return false;
+        if (isPathfinding || IsMovementDisabled) return false;
 
-        return NavMesh.SamplePosition(position, out _, 5, NavMesh.AllAreas);
+        return NavMesh.SamplePosition(position, out _, NavMeshAgent.height * 2f, NavMesh.AllAreas);
     }
 
     public bool CanPathfind()
@@ -92,11 +119,11 @@ public class NavMeshMovement : MovementController
         pathfindingDestination = position;
         if (CanPathfind())
         {
-            navMeshAgent.enabled = true;
+            NavMeshAgent.enabled = true;
             //navMeshAgent.updatePosition = false;
-            navMeshAgent.isStopped = false;
-            navMeshAgent.SetDestination(pathfindingDestination);
-            navMeshAgent.velocity = GetVelocity();
+            NavMeshAgent.isStopped = false;
+            NavMeshAgent.SetDestination(pathfindingDestination);
+            NavMeshAgent.velocity = GetVelocity();
             SetVelocity(Vector3.zero);
 
             rig.isKinematic = true;
@@ -107,8 +134,8 @@ public class NavMeshMovement : MovementController
 
     private void UpdatePathfinding()
     {
-        if (IsInputDisabled != navMeshAgent.isStopped) navMeshAgent.isStopped = IsInputDisabled;
-        if (navMeshAgent.destination != pathfindingDestination) navMeshAgent.SetDestination(pathfindingDestination);
+        if (IsInputDisabled != NavMeshAgent.isStopped) NavMeshAgent.isStopped = IsInputDisabled;
+        if (NavMeshAgent.destination != pathfindingDestination) NavMeshAgent.SetDestination(pathfindingDestination);
 
         //if (navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid || (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance && !navMeshAgent.pathPending))
         //{
@@ -120,7 +147,7 @@ public class NavMeshMovement : MovementController
     {
         if (!isPathfinding) return;
 
-        navMeshAgent.isStopped = true;
+        NavMeshAgent.isStopped = true;
         //navMeshAgent.updatePosition = true;
 
         rig.isKinematic = false;
@@ -129,6 +156,6 @@ public class NavMeshMovement : MovementController
         SetVelocity(Vector3.zero);
 
         isPathfinding = false;
-        navMeshAgent.enabled = false;
+        NavMeshAgent.enabled = false;
     }
 }

@@ -81,6 +81,8 @@ MonoBehaviour:
   panicDuration: 60
   monsterPrefab: {fileID: 4651433403968472973, guid: 4d92554d6ab37c84f97966056a7bccde,
     type: 3}
+  aiMonsterPrefab: {fileID: 4651433403968472973, guid: cdcc7ee8f34bfb14680466b8d94ff7e8,
+    type: 3}
   survivorPrefab: {fileID: 1575300930724462412, guid: ac7b75d41345af34294d3b00de9c4ec4,
     type: 3}
   FirstPersonCamera: {fileID: 1658748320854242559, guid: 6f8b2ced9ca176043835158ec70bcd4d,

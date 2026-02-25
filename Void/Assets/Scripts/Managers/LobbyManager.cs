@@ -15,6 +15,7 @@ public class LobbyManager : Singleton<LobbyManager>
     [SerializeField] private GameObject lobbyButtonHolder;
     [SerializeField] private GameObject gameButtonHolder;
 
+    [SerializeField] private string defaultIpAddress;
     [SerializeField] private TMP_InputField ipAddressInputField;
 
     private bool selectedSurvivor = true;
@@ -56,7 +57,7 @@ public class LobbyManager : Singleton<LobbyManager>
     public void CreateGame()
     {
         AudioManager.PlayOneShot(FMODEventManager.Instance.ButtonClickSound);
-        string ipAddress = "127.0.0.1";
+        string ipAddress = defaultIpAddress;
         if (ipAddressInputField.text != string.Empty) ipAddress = ipAddressInputField.text;
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(ipAddress, 7777);
         GameMultiplayer.StartHost();
@@ -66,7 +67,7 @@ public class LobbyManager : Singleton<LobbyManager>
     public void JoinGame()
     {
         AudioManager.PlayOneShot(FMODEventManager.Instance.ButtonClickSound);
-        string ipAddress = "127.0.0.1";
+        string ipAddress = defaultIpAddress;
         if (ipAddressInputField.text != string.Empty) ipAddress = ipAddressInputField.text;
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(ipAddress, 7777);
         GameMultiplayer.StartClient();

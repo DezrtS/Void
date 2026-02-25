@@ -45,7 +45,7 @@ public abstract class Mutation : MonoBehaviour, INetworkUseable
 
     public virtual void Use()
     {
-        Debug.Log("USED MUTATION");
+        //Debug.Log("USED MUTATION");
         isUsing = true;
         OnUsed?.Invoke(this, isUsing);
         AudioManager.PlayOneShot(mutationData.UseSound, gameObject);

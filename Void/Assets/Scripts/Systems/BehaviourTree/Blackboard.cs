@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
         public object this[string key]
         {
-            get { return blackboard[key]; }
+            get { return TryGetValue(key); }
             
             set { blackboard[key] = value; }
         }
