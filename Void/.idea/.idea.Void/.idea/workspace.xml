@@ -5,29 +5,54 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05bbb3c4-6f7c-4865-baf9-5df882d1fd4e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Void/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Void/.idea/projectSettingsUpdater.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/AttackTarget.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/AttackTarget.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/FindReachableSurvivors.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/FindReachableSurvivors.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/HasRechargedMutation.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/HasRechargedMutation.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/IsTargetInRange.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/IsTargetInRange.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/MoveToTarget.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/MoveToTarget.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/SelectClosestSurvivor.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/SelectClosestSurvivor.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/UseMutations.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/UseMutations.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Void/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Void/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Prototype/UI/RecipeSelectionPiece.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Prototype/UI/RecipeSelectionPiece.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Projectiles/Basic Bullet.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Projectiles/Basic Bullet.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/DefaultNetworkPrefabs.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/DefaultNetworkPrefabs.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Managers/GameManager.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Managers/GameManager.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Stats/Armored Skin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Stats/Armored Skin.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Gameplay/GameplayScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Gameplay/GameplayScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Gameplay/GameplayScene/GameplayScene Baking Set.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Gameplay/GameplayScene/GameplayScene Baking Set.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Gameplay/LobbyScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Gameplay/LobbyScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/LobbyManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/LobbyManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/TaskManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/HDRPDefaultResources/HDRenderPipelineGlobalSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/HDRPDefaultResources/HDRenderPipelineGlobalSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Void FMOD/.cache/buildrecords/Desktop/Master.br" beforeDir="false" afterPath="$PROJECT_DIR$/Void FMOD/.cache/buildrecords/Desktop/Master.br" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Void FMOD/.cache/buildrecords/Desktop/Weapons.br" beforeDir="false" afterPath="$PROJECT_DIR$/Void FMOD/.cache/buildrecords/Desktop/Weapons.br" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Void FMOD/Build/Desktop/Music.bank" beforeDir="false" afterPath="$PROJECT_DIR$/Void FMOD/Build/Desktop/Music.bank" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Void FMOD/Metadata/Event/{ee781fac-8d7b-40ff-839c-40eccb2ec718}.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Void FMOD/Metadata/Event/{ee781fac-8d7b-40ff-839c-40eccb2ec718}.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Prototype/ProcGeneration.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Prototype/ProcGeneration.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/BehaviourTree.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/BehaviourTree.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/Blackboard.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/Blackboard.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/MoveToTransform.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/MoveToTransform.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/StopMoving.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/StopMoving.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/Task.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/Task.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/VoidMonsterAI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Assignment 1/VoidMonsterAI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Managers/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Systems/BehaviourTree/Blackboard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Systems/BehaviourTree/Blackboard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Systems/BehaviourTree/Selector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Systems/BehaviourTree/Selector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Systems/Movement/NavMeshMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Systems/Movement/NavMeshMovement.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Systems/Mutations/Mutation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Systems/Mutations/Mutation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Systems/Player/PlayerStats.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Systems/Player/PlayerStats.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Systems/Projectile/Spawner/ProjectileSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Systems/Projectile/Spawner/ProjectileSpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -45,8 +70,11 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Assignment 1/Blackboard.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Assignment 1/MoveToTransform.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/314938d17f3848e8ac683e11b27f62ee46ae00/e8/01e5a04a/List`1.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a3cc2668891e49a2857d06e68d8a076a11200/84/9d4ad17f/NavMeshAgent.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Assignment 1/UseMutations.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.netcode.gameobjects@61beb9aa5947/Runtime/Spawning/NetworkSpawnManager.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -59,8 +87,10 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.50088185&quot;,
     &quot;git-widget-placeholder&quot;: &quot;proc-generation&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -162,7 +192,8 @@
       <workItem from="1758333253807" duration="2623000" />
       <workItem from="1765341975809" duration="55000" />
       <workItem from="1771622512233" duration="821000" />
-      <workItem from="1771813074867" duration="1836000" />
+      <workItem from="1771813074867" duration="18913000" />
+      <workItem from="1771968356552" duration="6675000" />
     </task>
     <servers />
   </component>
@@ -194,6 +225,32 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Assignment 1/SelectClosestSurvivor.cs</url>
+          <line>11</line>
+          <properties documentPath="C:\Users\denzi\Documents\GitHub\Void\Void\Assets\Scripts\Assignment 1\SelectClosestSurvivor.cs" containingFunctionPresentation="Method 'tick'">
+            <startOffsets>
+              <option value="277" />
+            </startOffsets>
+            <endOffsets>
+              <option value="388" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Assignment 1/IsTargetInRange.cs</url>
+          <line>15</line>
+          <properties documentPath="C:\Users\denzi\Documents\GitHub\Void\Void\Assets\Scripts\Assignment 1\IsTargetInRange.cs" containingFunctionPresentation="Method 'tick'">
+            <startOffsets>
+              <option value="340" />
+            </startOffsets>
+            <endOffsets>
+              <option value="443" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

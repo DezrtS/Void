@@ -41,6 +41,8 @@ public class StatModifier
 [Serializable]
 public class Stat
 {
+    public event Action Changed;
+    
     [SerializeField] private float baseValue; // The base value of the stat
     [SerializeField] private Dictionary<int, StatModifier> modifiers = new Dictionary<int, StatModifier>();
     private float value;
@@ -96,6 +98,7 @@ public class Stat
             if (modifier.Value.IsExpired(timeSinceLevelLoad))
             {
                 modifiers.Remove(modifier.Key);
+                Changed?.Invoke();
                 continue;
             } 
 
@@ -137,6 +140,9 @@ public class StatChange
 
 public class PlayerStats : MonoBehaviour
 {
+    public event Action<PlayerStats> OnStatChanged;
+    public event Action<PlayerStats> OnStatUpdated;
+    
     [Header("Health")]
     [SerializeField] private Stat maxHealth = new Stat(100);
     [SerializeField] private Stat healthRegenerationRate = new Stat(5);
@@ -174,6 +180,41 @@ public class PlayerStats : MonoBehaviour
 
     public Stat CrouchHeight => crouchHeight;
 
+    private void OnEnable()
+    {
+        MaxHealth.Changed += StatOnChanged;
+        HealthRegenerationRate.Changed += StatOnChanged;
+        DamageResistance.Changed += StatOnChanged;
+        Acceleration.Changed += StatOnChanged;
+        TimeToAccelerate.Changed += StatOnChanged;
+        TimeToDeacclerate.Changed += StatOnChanged;
+        WalkSpeed.Changed += StatOnChanged;
+        SprintSpeed.Changed += StatOnChanged;
+        CrouchSpeed.Changed += StatOnChanged;
+        JumpPower.Changed += StatOnChanged;
+        CrouchHeight.Changed += StatOnChanged;
+    }
+
+    private void OnDisable()
+    {
+        MaxHealth.Changed -= StatOnChanged;
+        HealthRegenerationRate.Changed -= StatOnChanged;
+        DamageResistance.Changed -= StatOnChanged;
+        Acceleration.Changed -= StatOnChanged;
+        TimeToAccelerate.Changed -= StatOnChanged;
+        TimeToDeacclerate.Changed -= StatOnChanged;
+        WalkSpeed.Changed -= StatOnChanged;
+        SprintSpeed.Changed -= StatOnChanged;
+        CrouchSpeed.Changed -= StatOnChanged;
+        JumpPower.Changed -= StatOnChanged;
+        CrouchHeight.Changed -= StatOnChanged;
+    }
+
+    private void StatOnChanged()
+    {
+        OnStatUpdated?.Invoke(this);
+    }
+
 
     public void ChangeStats(StatChangesData statChangesData)
     {
@@ -182,6 +223,7 @@ public class PlayerStats : MonoBehaviour
             StatChange statChange = statChangesData.StatChanges[i];
             ApplyModifier(statChange.StatName, statChangesData.Key * 100 + i, statChange.Modifier, statChange.ModifierType, statChangesData.Duration);
         }
+        OnStatChanged?.Invoke(this);
     }
 
     public void RequestChangeStats(StatChangesData statChangesData) => ChangeStatsServerRpc(GameDataManager.Instance.GetStatChangesDataIndex(statChangesData));

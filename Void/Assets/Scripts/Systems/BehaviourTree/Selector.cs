@@ -1,4 +1,6 @@
 
+using System;
+
 /// <summary>
 /// Selector, runs a child if it fails, runs the next child, until one succeeds, or they all fail.
 /// </summary>
@@ -12,19 +14,28 @@ public class Selector : BTComposite
     public override STATUS tick(Blackboard blackboard)
     {
         STATUS childStatus = children[currentChildIndex].tick(blackboard);
-        if (childStatus == STATUS.RUNNING) return STATUS.RUNNING;
-        else if (childStatus == STATUS.FAIL)
+        
+        switch (childStatus)
         {
-            currentChildIndex++;
-            if (currentChildIndex >= children.Count)
+            case STATUS.RUNNING:
+                return STATUS.RUNNING;
+            case STATUS.FAIL:
             {
-                currentChildIndex = 0;
+                currentChildIndex++;
+                if (currentChildIndex >= children.Count)
+                {
+                    currentChildIndex = 0;
+                }
+
+                break;
             }
+            case STATUS.SUCCESS:
+                currentChildIndex = 0;
+                return STATUS.SUCCESS;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
-        else if (childStatus == STATUS.SUCCESS)
-        {
-            return STATUS.SUCCESS;
-        }
+        
         return childStatus;
     }
 }

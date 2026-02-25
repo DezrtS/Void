@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be722de141029ff45a68953c666e0d9b, type: 3}
   m_Name: Armored Skin
   m_EditorClassIdentifier: 
-  key: 0
+  key: 5
   duration: 5
   statChanges:
   - statName: damageResistance

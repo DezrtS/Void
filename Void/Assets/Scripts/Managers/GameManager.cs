@@ -31,6 +31,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Prefabs")]
     [SerializeField] private GameObject monsterPrefab;
+    [SerializeField] private GameObject aiMonsterPrefab;
     [SerializeField] private GameObject survivorPrefab;
 
     [SerializeField] public GameObject FirstPersonCamera;
@@ -121,6 +122,10 @@ public class GameManager : Singleton<GameManager>
                 if (networkGameManager.IsServer) PrepareGame();
                 break;
             case GameState.GamePlaying:
+                if (NetworkGameManager.IsServer)
+                {
+                    if (!playerRoleDictionary.ContainsValue(PlayerRole.Monster)) SpawnAIMonster();
+                }
                 gameTimer = gameDuration + panicDuration;
                 UIManager.Instance.SetGameTimer(gameDuration);
                 AudioManager.ChangeMusic(FMODEventManager.Instance.BackgroundTheme);
@@ -192,6 +197,14 @@ public class GameManager : Singleton<GameManager>
         GameObject monsterGameObject = Instantiate(monsterPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster), Quaternion.identity);
         NetworkObject networkObject = monsterGameObject.GetComponent<NetworkObject>();
         networkObject.SpawnAsPlayerObject(clientId, true);
+        return networkObject;
+    }
+
+    private NetworkObject SpawnAIMonster()
+    {
+        GameObject monsterGameObject = Instantiate(aiMonsterPrefab, SpawnManager.Instance.GetRandomSpawnpointPosition(Spawnpoint.SpawnpointType.Monster), Quaternion.identity);
+        NetworkObject networkObject = monsterGameObject.GetComponent<NetworkObject>();
+        networkObject.Spawn(true);
         return networkObject;
     }
 
