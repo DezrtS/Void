@@ -31,6 +31,8 @@ public class BasicAttack : MonoBehaviour, INetworkUseable
 
     public bool IsAttacking => isAttacking;
     public bool IsUsing => isUsing;
+    public float Damage => damage;
+    public float UseDuration => cooldown + duration + attackDelay;
 
     public bool CanUse() => !isUsing && !isAttacking && cooldownTimer <= 0 && durationTimer <= 0;
     public bool CanStopUsing() => isUsing;

@@ -13,18 +13,18 @@ using UnityEngine;
         
         private int actionIndex = -1;
 
-        public void ProgressPlan()
+        public void ProgressPlan(ref Blackboard currentBlackboard)
         {
             if (actionIndex >= 0 && actionIndex < plannedActions.Count)
             {
                 var previousAction = plannedActions[actionIndex];
-                previousAction.EndAction(blackboard);
+                previousAction.EndAction(currentBlackboard);
             }
             actionIndex++;
             if (actionIndex >= 0 && actionIndex < plannedActions.Count)
             {
                 var nextAction = plannedActions[actionIndex];
-                nextAction.BeginAction(blackboard);
+                nextAction.BeginAction(currentBlackboard);
             }
         }
 

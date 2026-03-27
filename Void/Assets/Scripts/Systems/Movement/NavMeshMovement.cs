@@ -12,11 +12,12 @@ public class NavMeshMovement : MovementController
 
     private bool isPathfinding;
     private Vector3 pathfindingDestination;
-    private PlayerStats playerStats;
+    [SerializeField] private PlayerStats playerStats;
     
     public NavMeshAgent NavMeshAgent { get; private set; }
 
     public bool IsPathfinding => isPathfinding;
+    public PlayerStats PlayerStats => playerStats;
 
     public Vector3 PathfindingDestination 
     { 
@@ -46,7 +47,7 @@ public class NavMeshMovement : MovementController
         NavMeshAgent.enabled = false;
         rig = GetComponent<Rigidbody>();
         
-        playerStats = GetComponent<PlayerStats>();
+        if (!playerStats) playerStats = GetComponent<PlayerStats>();
         playerStats.OnStatChanged += UpdateStats;
         playerStats.OnStatUpdated += UpdateStats;
         UpdateStats(playerStats);

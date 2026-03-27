@@ -23,7 +23,11 @@ namespace Assignment_1
                 closestIndex = i;
             }
             
-            blackboard["Target"] = targets[closestIndex];
+            var selectedTarget = targets[closestIndex];
+            blackboard["Target"] = selectedTarget;
+            var targetHealth = selectedTarget.GetComponent<Health>();
+            blackboard["Target Health"] = targetHealth;
+            blackboard["Target Health Value"] = targetHealth.CurrentHealth;
             return STATUS.SUCCESS;
         }
     }

@@ -22,22 +22,24 @@ public class GNode : BTNode
         if (currentPlan == null)
         {
             if (goalFunction(blackboard)) return STATUS.SUCCESS;
-            currentPlan = planner.Plan(blackboard, availableActions, goalFunction);
-            blackboard = currentPlan.blackboard;
+            var newState = new Blackboard(blackboard);
+            currentPlan = planner.Plan(newState, availableActions, goalFunction);
+            //blackboard = currentPlan.blackboard;
             if (currentPlan == null)
                 return STATUS.FAIL;
-            currentPlan.ProgressPlan();
+            currentPlan.ProgressPlan(ref blackboard);
         }
 
         GAction current = currentPlan.Peek();
-        if (!current.UpdateAction(currentPlan.blackboard))
+        if (!current.UpdateAction(blackboard))
         {
+            currentPlan = null;
             return STATUS.FAIL;
         }
 
-        if (current.IsActionDone(currentPlan.blackboard))
+        if (current.IsActionDone(blackboard))
         {
-            currentPlan.ProgressPlan();
+            currentPlan.ProgressPlan(ref blackboard);
         }
 
         if (currentPlan.IsComplete())

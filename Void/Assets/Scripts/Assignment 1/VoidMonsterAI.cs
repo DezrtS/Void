@@ -50,19 +50,33 @@ namespace Assignment_1
                 ["MovementController"] = navMeshMovement,
                 ["Attack"] = basicAttack,
                 ["Position"] = transform.position,
+                ["Time"] = 0f,
+                ["Time At Last Attack"] = float.MinValue,
+                ["Time At Last Speedster Mutation"] = float.MinValue,
+                ["Movement Speed"] = navMeshMovement.PlayerStats.SprintSpeed.Value,
             };
 
             behaviourTree = new BTRoot("Root");
             var mainSelector = new Selector("Mutations Vs Attack Selector");
-            var mutationSequence = new Sequence("Mutation Sequence");
-            var hasRechargedMutation = new HasRechargedMutation("Has Recharged Mutation");
-            var useMutations = new UseMutations("Use Mutations");
+            //var mutationSequence = new Sequence("Mutation Sequence");
+            //var hasRechargedMutation = new HasRechargedMutation("Has Recharged Mutation");
+            //var useMutations = new UseMutations("Use Mutations");
             var searchSequence = new Sequence("Search Sequence");
             var findReachableSurvivors = new FindReachableSurvivors("Find Reachable Survivors", targetSearchRadius, targetLayerMask);
             var selectClosestTarget = new SelectClosestSurvivor("Select Closest Target");
             var movementSelector = new Selector("Movement Selector");
             var attackPlanner = new GNode("Attack Planner", GoalFunction,
-                new List<GAction>() { new GMoveToTarget("Move To Target", desiredStopDistanceFromTarget) });
+                new List<GAction>()
+                {
+                    new GMoveToTarget("Move To Target", secondsPerTick, desiredStopDistanceFromTarget),
+                    new GAttackTarget("Attack Target", desiredTargetRange),
+                    new GWait("Wait", 0.5f, secondsPerTick),
+                    //new GWaitFor("Wait for Attack", "Time At Last Attack", 1.8f, secondsPerTick),
+                    //new GWaitFor("Wait for Speedster Mutation", "Time At Last Speedster Mutation", 12.1f, secondsPerTick),
+                    //new GWaitFor("Wait for Armored Skin Mutation", "Time At Last Armored Skin Mutation", 12.1f, secondsPerTick),
+                    new GUseMutation("Use Speedster Mutation", blackboard, "Speedster", SpeedsterEffect),
+                    new GUseMutation("Use Armored Skin Mutation", blackboard, "Armored Skin", ArmoredSkinEffect)
+                });
             //var attackSequence = new Sequence("Attack Sequence");
             //var isTargetInRange = new IsTargetInRange("Is Target in Range", desiredTargetRange);
             //var attackTarget = new AttackTarget("Attack Target");
@@ -70,9 +84,9 @@ namespace Assignment_1
 
             behaviourTree.children.Add(mainSelector);
             
-            mainSelector.children.Add(mutationSequence);
-            mutationSequence.children.Add(hasRechargedMutation);
-            mutationSequence.children.Add(useMutations);
+            //mainSelector.children.Add(mutationSequence);
+            //mutationSequence.children.Add(hasRechargedMutation);
+            //mutationSequence.children.Add(useMutations);
             
             mainSelector.children.Add(searchSequence);
             searchSequence.children.Add(findReachableSurvivors);
@@ -88,10 +102,25 @@ namespace Assignment_1
             //movementSelector.children.Add(moveToTarget);
         }
 
+        private Blackboard SpeedsterEffect(Blackboard newBlackboard)
+        {
+            newBlackboard["Movement Speed"] = (float)newBlackboard["Movement Speed"] * 2f;
+            return newBlackboard;
+        }
+        
+        private Blackboard ArmoredSkinEffect(Blackboard newBlackboard)
+        {
+            newBlackboard["Movement Speed"] = (float)newBlackboard["Movement Speed"] / 2f;
+            return newBlackboard;
+        }
+
         private bool GoalFunction(Blackboard blackboard)
         {
-            var distance = Vector3.Distance((Vector3)blackboard["Position"], ((Transform)blackboard["Target"]).position);
-            return distance <= desiredStopDistanceFromTarget;
+            var targetHealth = (float)blackboard["Target Health Value"];
+            return targetHealth <= 0;
+            
+            //var distance = Vector3.Distance((Vector3)blackboard["Position"], ((Transform)blackboard["Target"]).position);
+            //return distance <= desiredStopDistanceFromTarget;
         }
 
         private void Start()
@@ -148,6 +177,7 @@ namespace Assignment_1
         {
             while (!endTree)
             {
+                blackboard["Movement Speed"] = navMeshMovement.PlayerStats.SprintSpeed.Value;
                 treeStatus = behaviourTree.tick(ref blackboard);
                 yield return new WaitForSeconds(secondsPerTick);   
             }

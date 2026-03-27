@@ -7,8 +7,12 @@ using UnityEngine;
  */
 public class GPlanner
 {
+    public static int maxDepth = 1000;
+    
 	public GPlan Plan(Blackboard blackboard, List<GAction> possibleActions, Func<Blackboard, bool> goalFunction)
 	{
+        int currentDepth = 0;
+        
 		var allPlans = new List<GPlan>
 		{
 			new GPlan
@@ -21,6 +25,7 @@ public class GPlanner
 		
 		while (allPlans.Count > 0)
         {
+            ++currentDepth;
             int cheapestOption = 0;
 
             //Performance-wise this could be improved, but it serves its purpose of finding the cheapest option
@@ -38,6 +43,11 @@ public class GPlanner
             //If this plan meets the criteria, then we've found a solution! Great!
             if (goalFunction(chosenPlan.blackboard))
             {
+                return chosenPlan;
+            }
+            else if (currentDepth >= maxDepth)
+            {
+                Debug.Log("Reached maximum depth");
                 return chosenPlan;
             }
 
