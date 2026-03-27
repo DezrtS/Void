@@ -87,7 +87,7 @@ using UnityEngine.AI;
         private void Update()
         {
             
-                treeStatus = behaviourTree.tick(blackboard);
+                treeStatus = behaviourTree.tick(ref blackboard);
                 Debug.Log(treeStatus);
             
         }

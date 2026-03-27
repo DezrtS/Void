@@ -7,39 +7,66 @@ using System.Collections.Generic;
 
     public class Blackboard
     {
-        private Dictionary<string, object> blackboard = new Dictionary<string, object>();
+        public Dictionary<string, object> values = new Dictionary<string, object>();
 
         public object this[string key]
         {
             get { return TryGetValue(key); }
             
-            set { blackboard[key] = value; }
+            set { values[key] = value; }
+        }
+
+        public Blackboard()
+        {
+            
+        }
+        
+        public Blackboard(Blackboard other)
+        {
+            foreach (var keyValuePair in other.values)
+            {
+                values[keyValuePair.Key] = keyValuePair.Value;
+            }
         }
 
         public void Clear()
         {
-            blackboard.Clear();
+            values.Clear();
         }
 
         public bool ContainsKey(string key)
         {
-            return blackboard.ContainsKey(key);
+            return values.ContainsKey(key);
         }
 
         public bool Remove(string key)
         {
-            return this.blackboard.Remove(key);
+            return this.values.Remove(key);
         }
 
         public object TryGetValue(string key, object value = default)
         {
             object ret = default;
 
-            if (this.blackboard.TryGetValue(key, out ret))
+            if (this.values.TryGetValue(key, out ret))
             {
                 return ret;
             }
 
             return value;
+        }
+        
+        public bool EqualTo(Blackboard otherBlackboard)
+        {
+            if (otherBlackboard.values.Count != values.Count) return false;
+            
+            foreach (var kvp in values)
+            {
+                if (!otherBlackboard.values.ContainsKey(kvp.Key)) return false;
+
+                if (!otherBlackboard.values[kvp.Key].Equals(kvp.Value)) return false;
+            }
+
+            return true;
         }
     }

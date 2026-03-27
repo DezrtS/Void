@@ -8,9 +8,9 @@ public class Sequence : BTComposite
             nodeName = ID;
         }
 
-        public override STATUS tick(Blackboard blackboard)
+        public override STATUS tick(ref Blackboard blackboard)
         {
-            STATUS childStatus = children[currentChildIndex].tick(blackboard);
+            STATUS childStatus = children[currentChildIndex].tick(ref blackboard);
             if (childStatus == STATUS.RUNNING) return STATUS.RUNNING;
             else if (childStatus == STATUS.FAIL)
             {

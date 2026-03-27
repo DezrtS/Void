@@ -11,9 +11,9 @@ public class Selector : BTComposite
         nodeName = ID;
     }
 
-    public override STATUS tick(Blackboard blackboard)
+    public override STATUS tick(ref Blackboard blackboard)
     {
-        STATUS childStatus = children[currentChildIndex].tick(blackboard);
+        STATUS childStatus = children[currentChildIndex].tick(ref blackboard);
         
         switch (childStatus)
         {

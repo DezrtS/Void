@@ -4,7 +4,7 @@ namespace Assignment_1
     {
         public AttackTarget(string ID) : base(ID) {}
 
-        public override STATUS tick(Blackboard blackboard)
+        public override STATUS tick(ref Blackboard blackboard)
         {
             if (blackboard["Attack"] is not BasicAttack basicAttack) return STATUS.FAIL;
 

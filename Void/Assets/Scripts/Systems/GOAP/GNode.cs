@@ -1,54 +1,50 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GNode : BTNode
 {
     private GPlanner planner;
-    private HashSet<GAction> availableActions;
-    private Queue<GAction> currentPlan;
-    private HashSet<KeyValuePair<string,object>> currentGoal;
-    private GameObject owner;
+    private List<GAction> availableActions;
+    private Func<Blackboard, bool> goalFunction;
+    private GPlan currentPlan;
     
-    public GNode(string ID, GameObject owner, HashSet<KeyValuePair<string,object>> goal, HashSet<GAction> actions) : base(ID)
+    public GNode(string ID, Func<Blackboard, bool> goalFunction, List<GAction> actions) : base(ID)
     {
-        this.owner = owner;
-        this.currentGoal = goal;
-        this.availableActions = actions;
-        this.currentPlan = new Queue<GAction>();
-        this.planner = new GPlanner();
+        this.goalFunction = goalFunction;
+        availableActions = actions;
+        planner = new GPlanner();
     }
 
-    public override STATUS tick(Blackboard blackboard)
+    public override STATUS tick(ref Blackboard blackboard)
     {
         // No plan, try to build one
-        if (currentPlan.Count == 0)
+        if (currentPlan == null)
         {
-            var worldState = (HashSet<KeyValuePair<string, object>>)blackboard["worldState"];
-            currentPlan = planner.plan(owner, availableActions, worldState, currentGoal);
-
-            if (currentPlan == null || currentPlan.Count == 0)
+            if (goalFunction(blackboard)) return STATUS.SUCCESS;
+            currentPlan = planner.Plan(blackboard, availableActions, goalFunction);
+            blackboard = currentPlan.blackboard;
+            if (currentPlan == null)
                 return STATUS.FAIL;
-
+            currentPlan.ProgressPlan();
         }
 
         GAction current = currentPlan.Peek();
-
-        if (!current.checkProceduralPrecondition((owner)))
+        if (!current.UpdateAction(currentPlan.blackboard))
         {
-            currentPlan.Clear();
             return STATUS.FAIL;
         }
 
-        current.perform(owner);
-
-        if (current.isDone())
+        if (current.IsActionDone(currentPlan.blackboard))
         {
-            currentPlan.Dequeue();
-
+            currentPlan.ProgressPlan();
         }
 
-        if (currentPlan.Count == 0)
-            return STATUS.SUCCESS;
+        if (currentPlan.IsComplete())
+        {
+            currentPlan = null;
+            return STATUS.SUCCESS;   
+        }
 
         return STATUS.RUNNING;
 

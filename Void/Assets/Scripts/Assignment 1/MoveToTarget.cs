@@ -12,7 +12,7 @@ namespace Assignment_1
             this.stopDistanceFromTarget = stopDistanceFromTarget;
         }
 
-        public override STATUS tick(Blackboard blackboard)
+        public override STATUS tick(ref Blackboard blackboard)
         {
             if (blackboard["MovementController"] is not NavMeshMovement navMeshMovement || blackboard["Target"] is not Transform target) return STATUS.FAIL;
 

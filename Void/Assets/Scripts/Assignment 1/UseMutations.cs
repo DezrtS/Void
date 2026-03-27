@@ -7,7 +7,7 @@ namespace Assignment_1
     {
         public UseMutations(string ID) : base(ID) {}
 
-        public override STATUS tick(Blackboard blackboard)
+        public override STATUS tick(ref Blackboard blackboard)
         {
             if (blackboard["Mutations"] is not List<Mutation> mutations) return STATUS.FAIL;
 

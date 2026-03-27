@@ -21,14 +21,14 @@ public class BTRoot : BTNode
     }
 
 
-    public override STATUS tick(Blackboard blackboard)
+    public override STATUS tick(ref Blackboard blackboard)
     {
         if (children.Count != 1)
         {
             Debug.LogWarning("WARNING: ONLY ONE CHILD ALLOWED"+ children.Count);
         }
         
-        STATUS childStatus = children[currentChildIndex].tick(blackboard);
+        STATUS childStatus = children[currentChildIndex].tick(ref blackboard);
         
         return childStatus;
     }

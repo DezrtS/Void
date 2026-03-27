@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -6,16 +7,54 @@ using UnityEngine;
 /// </summary>
     public class GPlan
     {
-        // Indicates whether action should be considered or not.
-        bool isValid()
+        public Blackboard blackboard;
+        public List<GAction> plannedActions = new List<GAction>();
+        public float cost;
+        
+        private int actionIndex = -1;
+
+        public void ProgressPlan()
         {
-            return true;
+            if (actionIndex >= 0 && actionIndex < plannedActions.Count)
+            {
+                var previousAction = plannedActions[actionIndex];
+                previousAction.EndAction(blackboard);
+            }
+            actionIndex++;
+            if (actionIndex >= 0 && actionIndex < plannedActions.Count)
+            {
+                var nextAction = plannedActions[actionIndex];
+                nextAction.BeginAction(blackboard);
+            }
         }
 
-        //This is a function so it handles situational costs, when the world
-        // state is considered when calculating the cost. 
-        int get_cost(Blackboard blackboard)
+        public GAction Peek()
         {
-            return 1000;
+            return plannedActions[actionIndex];
+        }
+
+        public bool IsComplete()
+        {
+            return actionIndex >= plannedActions.Count;
+        }
+
+        public GPlan CreateCopyWithAction(GAction newAction)
+        {
+            GPlan newPlan = new GPlan
+            {
+                //Set the new cost
+                cost = cost + newAction.Cost(blackboard)
+            };
+
+            //Create the new world state
+            Blackboard newState = new Blackboard(blackboard);
+            newAction.OnCompletion(newState);
+            newPlan.blackboard = newState;
+
+            //Copy all the previous actions, and add the new one
+            newPlan.plannedActions.AddRange(plannedActions);
+            newPlan.plannedActions.Add(newAction);
+
+            return newPlan;
         }
     }

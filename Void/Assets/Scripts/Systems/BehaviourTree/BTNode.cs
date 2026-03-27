@@ -22,7 +22,7 @@ public class BTNode
         nodeName = ID;
     }
 
-    public virtual STATUS tick(Blackboard blackboard)
+    public virtual STATUS tick(ref Blackboard blackboard)
     {
         return status;
     }

@@ -15,7 +15,7 @@ namespace Assignment_1
             this.searchLayerMask = searchLayerMask;
         }
 
-        public override STATUS tick(Blackboard blackboard)
+        public override STATUS tick(ref Blackboard blackboard)
         {
             if (blackboard["MovementController"] is not NavMeshMovement navMeshMovement ) return STATUS.FAIL;
             var results = new Collider[10];

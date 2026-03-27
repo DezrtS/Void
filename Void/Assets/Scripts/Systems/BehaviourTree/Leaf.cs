@@ -17,7 +17,7 @@ public class Leaf : BTNode
         
     }
 
-    public override STATUS tick(Blackboard blackboard)
+    public override STATUS tick(ref Blackboard blackboard)
     {
         if (tickMthd != null)
         {

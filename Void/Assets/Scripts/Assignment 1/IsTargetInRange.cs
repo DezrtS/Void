@@ -11,7 +11,7 @@ namespace Assignment_1
             this.range = range;
         }
 
-        public override STATUS tick(Blackboard blackboard)
+        public override STATUS tick(ref Blackboard blackboard)
         {
             if (blackboard["Transform"] is not Transform transform || blackboard["Target"] is not Transform target) return STATUS.FAIL;
             

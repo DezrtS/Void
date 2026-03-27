@@ -7,7 +7,7 @@ namespace Assignment_1
     {
         public SelectClosestSurvivor(string ID) : base(ID) {}
 
-        public override STATUS tick(Blackboard blackboard)
+        public override STATUS tick(ref Blackboard blackboard)
         {
             if (blackboard["Transform"] is not Transform transform || blackboard["Targets"] is not List<Transform> targets) return STATUS.FAIL;
 

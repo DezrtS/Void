@@ -10,9 +10,9 @@ public class Repeater : BTDecorator
     }
 
 
-    public override STATUS tick(Blackboard blackboard)
+    public override STATUS tick(ref Blackboard blackboard)
     {
-        STATUS childStatus = child.tick(blackboard);
+        STATUS childStatus = child.tick(ref blackboard);
         if (childStatus == STATUS.SUCCESS && counter < times)
         {
             counter++;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assignment_2;
 using UnityEngine;
 
 namespace Assignment_1
@@ -47,7 +48,8 @@ namespace Assignment_1
             {
                 ["Transform"] = transform,
                 ["MovementController"] = navMeshMovement,
-                ["Attack"] = basicAttack
+                ["Attack"] = basicAttack,
+                ["Position"] = transform.position,
             };
 
             behaviourTree = new BTRoot("Root");
@@ -59,10 +61,12 @@ namespace Assignment_1
             var findReachableSurvivors = new FindReachableSurvivors("Find Reachable Survivors", targetSearchRadius, targetLayerMask);
             var selectClosestTarget = new SelectClosestSurvivor("Select Closest Target");
             var movementSelector = new Selector("Movement Selector");
-            var attackSequence = new Sequence("Attack Sequence");
-            var isTargetInRange = new IsTargetInRange("Is Target in Range", desiredTargetRange);
-            var attackTarget = new AttackTarget("Attack Target");
-            var moveToTarget = new MoveToTarget("Move To Target", desiredStopDistanceFromTarget);
+            var attackPlanner = new GNode("Attack Planner", GoalFunction,
+                new List<GAction>() { new GMoveToTarget("Move To Target", desiredStopDistanceFromTarget) });
+            //var attackSequence = new Sequence("Attack Sequence");
+            //var isTargetInRange = new IsTargetInRange("Is Target in Range", desiredTargetRange);
+            //var attackTarget = new AttackTarget("Attack Target");
+            //var moveToTarget = new MoveToTarget("Move To Target", desiredStopDistanceFromTarget);
 
             behaviourTree.children.Add(mainSelector);
             
@@ -75,11 +79,19 @@ namespace Assignment_1
             searchSequence.children.Add(selectClosestTarget);
             searchSequence.children.Add(movementSelector);
             
-            movementSelector.children.Add(attackSequence);
-            attackSequence.children.Add(isTargetInRange);
-            attackSequence.children.Add(attackTarget);
+            movementSelector.children.Add(attackPlanner);
             
-            movementSelector.children.Add(moveToTarget);
+            //movementSelector.children.Add(attackSequence);
+            //attackSequence.children.Add(isTargetInRange);
+            //attackSequence.children.Add(attackTarget);
+            
+            //movementSelector.children.Add(moveToTarget);
+        }
+
+        private bool GoalFunction(Blackboard blackboard)
+        {
+            var distance = Vector3.Distance((Vector3)blackboard["Position"], ((Transform)blackboard["Target"]).position);
+            return distance <= desiredStopDistanceFromTarget;
         }
 
         private void Start()
@@ -136,7 +148,7 @@ namespace Assignment_1
         {
             while (!endTree)
             {
-                treeStatus = behaviourTree.tick(blackboard);
+                treeStatus = behaviourTree.tick(ref blackboard);
                 yield return new WaitForSeconds(secondsPerTick);   
             }
         }
