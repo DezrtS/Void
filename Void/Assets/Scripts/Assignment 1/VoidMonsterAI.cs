@@ -51,13 +51,14 @@ namespace Assignment_1
                 ["Attack"] = basicAttack,
                 ["Position"] = transform.position,
                 ["Time"] = 0f,
-                ["Time At Last Attack"] = float.MinValue,
-                ["Time At Last Speedster Mutation"] = float.MinValue,
+                ["Time At Last Attack"] = 0f,
+                ["Time At Last Speedster Mutation"] = 0f,
                 ["Movement Speed"] = navMeshMovement.PlayerStats.SprintSpeed.Value,
+                ["Is At Target And Can Attack"]  = false,
             };
 
             behaviourTree = new BTRoot("Root");
-            var mainSelector = new Selector("Mutations Vs Attack Selector");
+            //var mainSelector = new Selector("Mutations Vs Attack Selector");
             //var mutationSequence = new Sequence("Mutation Sequence");
             //var hasRechargedMutation = new HasRechargedMutation("Has Recharged Mutation");
             //var useMutations = new UseMutations("Use Mutations");
@@ -68,9 +69,10 @@ namespace Assignment_1
             var attackPlanner = new GNode("Attack Planner", GoalFunction,
                 new List<GAction>()
                 {
-                    new GMoveToTarget("Move To Target", secondsPerTick, desiredStopDistanceFromTarget),
+                    //new GMoveToTarget("Move To Target", secondsPerTick, desiredStopDistanceFromTarget),
                     new GAttackTarget("Attack Target", desiredTargetRange),
-                    new GWait("Wait", 0.5f, secondsPerTick),
+                    //new GWait("Wait", 0.5f, secondsPerTick),
+                    new GEnsureAtTargetAndCanAttack("Ensure At Target And Can Attack", secondsPerTick, desiredStopDistanceFromTarget, basicAttack.UseDuration),
                     //new GWaitFor("Wait for Attack", "Time At Last Attack", 1.8f, secondsPerTick),
                     //new GWaitFor("Wait for Speedster Mutation", "Time At Last Speedster Mutation", 12.1f, secondsPerTick),
                     //new GWaitFor("Wait for Armored Skin Mutation", "Time At Last Armored Skin Mutation", 12.1f, secondsPerTick),
@@ -82,13 +84,14 @@ namespace Assignment_1
             //var attackTarget = new AttackTarget("Attack Target");
             //var moveToTarget = new MoveToTarget("Move To Target", desiredStopDistanceFromTarget);
 
-            behaviourTree.children.Add(mainSelector);
+            //behaviourTree.children.Add(mainSelector);
+            behaviourTree.children.Add(searchSequence);
             
             //mainSelector.children.Add(mutationSequence);
             //mutationSequence.children.Add(hasRechargedMutation);
             //mutationSequence.children.Add(useMutations);
             
-            mainSelector.children.Add(searchSequence);
+            //mainSelector.children.Add(searchSequence);
             searchSequence.children.Add(findReachableSurvivors);
             searchSequence.children.Add(selectClosestTarget);
             searchSequence.children.Add(movementSelector);

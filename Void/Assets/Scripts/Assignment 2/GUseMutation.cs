@@ -63,5 +63,10 @@ namespace Assignment_2
         {
             return true;
         }
+        
+        public override void EndAction(Blackboard blackboard)
+        {
+            blackboard["Is At Target And Can Attack"] = false;
+        }
     }
 }

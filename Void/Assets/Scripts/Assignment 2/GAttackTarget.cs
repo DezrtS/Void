@@ -14,9 +14,10 @@ namespace Assignment_2
         
         public override bool CanHappen(Blackboard blackboard)
         {
-            if (blackboard["Attack"] is not BasicAttack basicAttack || blackboard["Time"] is not float time || blackboard["Time At Last Attack"] is not float timeAtLastAttack || blackboard["Target"] is not Transform target || blackboard["Position"] is not Vector3 position)
+            if (blackboard["Is At Target And Can Attack"] is not bool isAtTargetAndCanAttack || blackboard["Attack"] is not BasicAttack basicAttack || blackboard["Time"] is not float time || blackboard["Time At Last Attack"] is not float timeAtLastAttack || blackboard["Target"] is not Transform target || blackboard["Position"] is not Vector3 position)
                 return false;
-            
+
+            if (!isAtTargetAndCanAttack) return false;
             return Vector3.Distance(target.position, position) <= minAttackDistance && time - timeAtLastAttack >= basicAttack.UseDuration;
         }
 
@@ -25,6 +26,7 @@ namespace Assignment_2
             var attack = (BasicAttack)blackboard["Attack"];
             blackboard["Target Health Value"] = (float)blackboard["Target Health Value"] - attack.Damage;
             blackboard["Time At Last Attack"] = blackboard["Time"];
+            blackboard["Is At Target And Can Attack"] = false;
             return blackboard;
         }
 
@@ -38,19 +40,20 @@ namespace Assignment_2
 
         public override bool UpdateAction(Blackboard blackboard)
         {
-            var currentHealth = ((Health)blackboard["Target Health"]).CurrentHealth;
-            blackboard["Target Health Value"] = currentHealth;
+            return true;
+        }
+
+        public override void EndAction(Blackboard blackboard)
+        {
             var basicAttack = (BasicAttack)blackboard["Attack"];
-            if (basicAttack.IsAttacking) return true;
+            blackboard["Is At Target And Can Attack"] = false;
             basicAttack.RequestStopUsing();
-            
-            return currentHealth < initialHealth;
         }
 
         public override bool IsActionDone(Blackboard blackboard)
         {
-            var currentHealth = ((Health)blackboard["Target Health"]).CurrentHealth;
-            return currentHealth < initialHealth;
+            var basicAttack = (BasicAttack)blackboard["Attack"];
+            return !basicAttack.IsAttacking;
         }
     }
 }

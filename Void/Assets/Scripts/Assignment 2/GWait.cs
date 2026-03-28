@@ -16,7 +16,7 @@ namespace Assignment_2
 
         public override float Cost(Blackboard blackboard)
         {
-            return timeToWait * 100f;
+            return timeToWait * 10f;
         }
 
         public override bool CanHappen(Blackboard blackboard)
