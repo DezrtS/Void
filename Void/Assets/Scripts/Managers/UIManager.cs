@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utilities;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -23,6 +24,8 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private GameObject voidMonsterUI;
     [SerializeField] private GameObject survivorUI;
     [SerializeField] private GameObject spectatorUI;
+
+    [SerializeField] private TMP_LogConsole logConsole;
 
     [SerializeField] private TextMeshProUGUI taskText;
     [SerializeField] private TextMeshProUGUI objectiveText;
@@ -50,6 +53,7 @@ public class UIManager : Singleton<UIManager>
     private float cooldownTimer;
 
     public TextMeshProUGUI TaskText => taskText;
+    public TMP_LogConsole LogConsole => logConsole;
 
     protected override void OnEnable()
     {

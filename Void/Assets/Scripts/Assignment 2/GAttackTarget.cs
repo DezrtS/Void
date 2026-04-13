@@ -32,6 +32,7 @@ namespace Assignment_2
 
         public override void BeginAction(Blackboard blackboard)
         {
+            base.BeginAction(blackboard);
             var basicAttack = (BasicAttack)blackboard["Attack"];
             initialHealth = (float)blackboard["Target Health Value"];
             blackboard["Time At Last Attack"] = blackboard["Time"];
@@ -45,6 +46,7 @@ namespace Assignment_2
 
         public override void EndAction(Blackboard blackboard)
         {
+            base.EndAction(blackboard);
             var basicAttack = (BasicAttack)blackboard["Attack"];
             blackboard["Is At Target And Can Attack"] = false;
             basicAttack.RequestStopUsing();

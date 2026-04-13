@@ -1,16 +1,16 @@
+using Final_Assignment;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Assignment_2
 {
-    public class GMoveToTarget : GAction
+    public class GFleeToSafePoint : GAction
     {
         private readonly float stopDistanceFromTarget;
         private readonly float secondsPerTick;
 
         private float movementTimer;
 
-        public GMoveToTarget(string ID, float secondsPerTick, float stopDistanceFromTarget) : base(ID)
+        public GFleeToSafePoint(string ID, float secondsPerTick, float stopDistanceFromTarget) : base(ID)
         {
             this.secondsPerTick = secondsPerTick;
             this.stopDistanceFromTarget = stopDistanceFromTarget;
@@ -18,26 +18,26 @@ namespace Assignment_2
         
         public override bool CanHappen(Blackboard blackboard)
         {
-            if (blackboard["MovementController"] is not NavMeshMovement || blackboard["Target"] is not Transform target ||
+            if (blackboard["MovementController"] is not NavMeshMovement || blackboard["SafePoint"] is not SafePoint safePoint ||
                 blackboard["Position"] is not Vector3 position) return false;
-            return Vector3.Distance(position, target.position) > stopDistanceFromTarget;
+            return Vector3.Distance(position, safePoint.transform.position) > stopDistanceFromTarget;
         }
 
         public override float Cost(Blackboard blackboard)
         {
             var position = (Vector3)blackboard["Position"];
-            var target = blackboard["Target"] as Transform;
+            var safePoint = (SafePoint)blackboard["SafePoint"];
             var movementSpeed = (float)blackboard["Movement Speed"];
-            var distance = Vector3.Distance(position, target.position);
+            var distance = Vector3.Distance(position, safePoint.transform.position);
             return distance / movementSpeed + 1;
         }
 
         public override Blackboard OnCompletion(Blackboard blackboard)
         {
             var position = (Vector3)blackboard["Position"];
-            var target = blackboard["Target"] as Transform;
-            var distance = Vector3.Distance(position, target.position);
-            blackboard["Position"] = target.position;
+            var safePoint = (SafePoint)blackboard["SafePoint"];
+            var distance = Vector3.Distance(position, safePoint.transform.position);
+            blackboard["Position"] = safePoint.transform.position;
             blackboard["Time"] = (float)blackboard["Time"] + distance / (float)blackboard["Movement Speed"];
             return blackboard;
         }
@@ -52,8 +52,8 @@ namespace Assignment_2
         {
             movementTimer += Time.deltaTime + secondsPerTick;
             var navMeshMovement = blackboard["MovementController"] as NavMeshMovement;
-            var target = blackboard["Target"] as Transform;
-            navMeshMovement.Pathfind(target.position);
+            var safePoint = (SafePoint)blackboard["SafePoint"];
+            navMeshMovement.Pathfind(safePoint.transform.position);
             blackboard["Position"] = navMeshMovement.transform.position;
             return true;
         }
@@ -61,8 +61,8 @@ namespace Assignment_2
         public override bool IsActionDone(Blackboard blackboard)
         {
             var navMeshMovement = blackboard["MovementController"] as NavMeshMovement;
-            var target = blackboard["Target"] as Transform;
-            var distance = Vector3.Distance(navMeshMovement.transform.position, target.position);
+            var safePoint = (SafePoint)blackboard["SafePoint"];
+            var distance = Vector3.Distance(navMeshMovement.transform.position, safePoint.transform.position);
             return !(distance > stopDistanceFromTarget);
         }
 

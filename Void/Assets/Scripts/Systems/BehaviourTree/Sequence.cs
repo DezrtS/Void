@@ -11,6 +11,7 @@ public class Sequence : BTComposite
         public override STATUS tick(ref Blackboard blackboard)
         {
             STATUS childStatus = children[currentChildIndex].tick(ref blackboard);
+            //UIManager.Instance.LogConsole.AddLog($"{nodeName} - {children[currentChildIndex].nodeName}");
             if (childStatus == STATUS.RUNNING) return STATUS.RUNNING;
             else if (childStatus == STATUS.FAIL)
             {

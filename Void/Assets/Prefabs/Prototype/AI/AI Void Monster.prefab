@@ -2593,6 +2593,9 @@ MonoBehaviour:
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 512
+  collisionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4993
 --- !u!195 &3168966115732562025
 NavMeshAgent:
   m_ObjectHideFlags: 0

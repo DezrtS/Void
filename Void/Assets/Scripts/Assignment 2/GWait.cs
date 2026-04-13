@@ -32,6 +32,7 @@ namespace Assignment_2
 
         public override void BeginAction(Blackboard blackboard)
         {
+            base.BeginAction(blackboard);
             timer = 0;
         }
 
@@ -43,6 +44,7 @@ namespace Assignment_2
 
         public override void EndAction(Blackboard blackboard)
         {
+            base.EndAction(blackboard);
             blackboard["Time"] = (float)blackboard["Time"] + timeToWait;
         }
 

@@ -2,6 +2,7 @@ using FMOD.Studio;
 using FMODUnity;
 using System;
 using System.Collections.Generic;
+using Final_Assignment;
 using UnityEngine;
 
 public class ElevatorManager : Singleton<ElevatorManager>
@@ -15,6 +16,8 @@ public class ElevatorManager : Singleton<ElevatorManager>
 
     [SerializeField] private EventReference elevatorMoveDownSound;
     [SerializeField] private EventReference elevatorMoveUpSound;
+    
+    [SerializeField] private List<SafePoint> safePoints;
 
     private NetworkElevatorManager networkElevatorManager;
     private bool isReadyToLeave;
@@ -26,6 +29,7 @@ public class ElevatorManager : Singleton<ElevatorManager>
     public NetworkElevatorManager NetworkElevatorManager => networkElevatorManager;
     public bool IsReadyToLeave => isReadyToLeave;
     public bool IsAllSurvivorsInElevator => isAllSurvivorsInElevator;
+    public List<SafePoint> SafePoints => safePoints;
 
     public void RequestSetReadyToLeaveState(bool isReady) => networkElevatorManager.SetReadyToLeaveStateServerRpc(isReady);
     public void RequestSetAllSurvivorsInElevatorState(bool allSurvivorsInElevator) => networkElevatorManager.SetAllSurvivorsInElevatorStateServerRpc(allSurvivorsInElevator);

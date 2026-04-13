@@ -45,6 +45,7 @@ namespace Assignment_2
 
         public override void BeginAction(Blackboard blackboard)
         {
+            base.BeginAction(blackboard);
             //var time = (float)blackboard["Time"];
             //var timeAtLastActionUse = (float)blackboard[timeAtLastActionUseKey];
             waitTime = timeToWait;
@@ -59,6 +60,7 @@ namespace Assignment_2
 
         public override void EndAction(Blackboard blackboard)
         {
+            base.EndAction(blackboard);
             blackboard["Time"] = (float)blackboard["Time"] + waitTime;
         }
 

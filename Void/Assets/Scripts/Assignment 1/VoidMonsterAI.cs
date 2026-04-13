@@ -20,6 +20,7 @@ namespace Assignment_1
         
         [SerializeField] private float targetSearchRadius;
         [SerializeField] private LayerMask targetLayerMask;
+        [SerializeField] private LayerMask collisionLayerMask;
         
         private BasicAttack basicAttack;
         private List<Mutation> mutations;
@@ -35,11 +36,14 @@ namespace Assignment_1
         private bool endTree;
         private float respawnTimer;
 
+        private GNode movementPlanner;
+
         private void Awake()
         {
             basicAttack = GetComponent<BasicAttack>();
             
             health = GetComponent<Health>();
+            health.OnCurrentHealthChanged += HealthOnOnCurrentHealthChanged;
             health.OnDeathStateChanged += HealthOnOnDeathStateChanged;
             animationController = GetComponent<AnimationController>();
             navMeshMovement = GetComponent<NavMeshMovement>();
@@ -50,6 +54,7 @@ namespace Assignment_1
                 ["MovementController"] = navMeshMovement,
                 ["Attack"] = basicAttack,
                 ["Position"] = transform.position,
+                ["Health"] = health,
                 ["Time"] = 0f,
                 ["Time At Last Attack"] = 0f,
                 ["Time At Last Speedster Mutation"] = 0f,
@@ -58,15 +63,37 @@ namespace Assignment_1
             };
 
             behaviourTree = new BTRoot("Root");
-            //var mainSelector = new Selector("Mutations Vs Attack Selector");
-            //var mutationSequence = new Sequence("Mutation Sequence");
-            //var hasRechargedMutation = new HasRechargedMutation("Has Recharged Mutation");
-            //var useMutations = new UseMutations("Use Mutations");
+            var mainSelector = new Selector("Retreat Vs Attack Selector");
+            var safePointSequence = new Sequence("Safe Point Sequence");
+            var isBelowHealth = new IsBelowHealth("Is Below Health", 100);
+            var selectClosestSafePoint = new SelectClosestSafePoint("Select Closest Safe Point");
+            var retreatSelector = new Selector("Retreat Selector");
+            var waitSequence = new Sequence("Wait Sequence");
+            var isSafe = new IsSafe("Is Safe", 50f, targetLayerMask, collisionLayerMask);
+            var wait = new Wait("Wait");
+            var retreatPlanner = new GNode("Retreat Planner", RetreatGoalFunction, new List<GAction>()
+            {
+                new GUseMutation("Use Speedster Mutation", blackboard, "Speedster", SpeedsterEffect),
+                new GUseMutation("Use Armored Skin Mutation", blackboard, "Armored Skin", ArmoredSkinEffect),
+                new GMoveTo("Move to Safe Point", "SafePoint", secondsPerTick, desiredStopDistanceFromTarget),
+            });
+            
             var searchSequence = new Sequence("Search Sequence");
             var findReachableSurvivors = new FindReachableSurvivors("Find Reachable Survivors", targetSearchRadius, targetLayerMask);
             var selectClosestTarget = new SelectClosestSurvivor("Select Closest Target");
             var movementSelector = new Selector("Movement Selector");
-            var attackPlanner = new GNode("Attack Planner", GoalFunction,
+            var attackSequence = new Sequence("Attack Sequence");
+            var isTargetInRange = new IsTargetInRange("Is Target in Range", desiredTargetRange);
+            var attackTarget = new AttackTarget("Attack Target");
+            
+            movementPlanner = new GNode("Movement Planner", MovementGoalFunction, new List<GAction>()
+            {
+                new GUseMutation("Use Speedster Mutation", blackboard, "Speedster", SpeedsterEffect),
+                new GUseMutation("Use Armored Skin Mutation", blackboard, "Armored Skin", ArmoredSkinEffect),
+                new GMoveTo("Move to Target", "Target", secondsPerTick, desiredStopDistanceFromTarget),
+            });
+            
+            /*var attackPlanner = new GNode("Attack Planner", GoalFunction,
                 new List<GAction>()
                 {
                     //new GMoveToTarget("Move To Target", secondsPerTick, desiredStopDistanceFromTarget),
@@ -78,31 +105,42 @@ namespace Assignment_1
                     //new GWaitFor("Wait for Armored Skin Mutation", "Time At Last Armored Skin Mutation", 12.1f, secondsPerTick),
                     new GUseMutation("Use Speedster Mutation", blackboard, "Speedster", SpeedsterEffect),
                     new GUseMutation("Use Armored Skin Mutation", blackboard, "Armored Skin", ArmoredSkinEffect)
-                });
-            //var attackSequence = new Sequence("Attack Sequence");
-            //var isTargetInRange = new IsTargetInRange("Is Target in Range", desiredTargetRange);
-            //var attackTarget = new AttackTarget("Attack Target");
+                });*/
+            
             //var moveToTarget = new MoveToTarget("Move To Target", desiredStopDistanceFromTarget);
 
-            //behaviourTree.children.Add(mainSelector);
-            behaviourTree.children.Add(searchSequence);
+            behaviourTree.children.Add(mainSelector);
+            //behaviourTree.children.Add(searchSequence);
             
-            //mainSelector.children.Add(mutationSequence);
-            //mutationSequence.children.Add(hasRechargedMutation);
-            //mutationSequence.children.Add(useMutations);
+            mainSelector.children.Add(safePointSequence);
+            safePointSequence.children.Add(isBelowHealth);
+            safePointSequence.children.Add(selectClosestSafePoint);
+            safePointSequence.children.Add(retreatSelector);
+            retreatSelector.children.Add(waitSequence);
+            waitSequence.children.Add(isSafe);
+            waitSequence.children.Add(wait);
             
-            //mainSelector.children.Add(searchSequence);
+            retreatSelector.children.Add(retreatPlanner);
+            
+            mainSelector.children.Add(searchSequence);
             searchSequence.children.Add(findReachableSurvivors);
             searchSequence.children.Add(selectClosestTarget);
             searchSequence.children.Add(movementSelector);
             
-            movementSelector.children.Add(attackPlanner);
+            //movementSelector.children.Add(attackPlanner);
             
-            //movementSelector.children.Add(attackSequence);
-            //attackSequence.children.Add(isTargetInRange);
-            //attackSequence.children.Add(attackTarget);
+            movementSelector.children.Add(attackSequence);
+            attackSequence.children.Add(isTargetInRange);
+            attackSequence.children.Add(attackTarget);
             
             //movementSelector.children.Add(moveToTarget);
+            movementSelector.children.Add(movementPlanner);
+        }
+
+        private void HealthOnOnCurrentHealthChanged(float previousValue, float newValue, float maxValue)
+        {
+            if (newValue < previousValue) movementPlanner.Interrupt();
+            Debug.Log(newValue);
         }
 
         private Blackboard SpeedsterEffect(Blackboard newBlackboard)
@@ -121,9 +159,18 @@ namespace Assignment_1
         {
             var targetHealth = (float)blackboard["Target Health Value"];
             return targetHealth <= 0;
-            
-            //var distance = Vector3.Distance((Vector3)blackboard["Position"], ((Transform)blackboard["Target"]).position);
-            //return distance <= desiredStopDistanceFromTarget;
+        }
+        
+        private bool RetreatGoalFunction(Blackboard blackboard)
+        {
+            var distance = Vector3.Distance((Vector3)blackboard["Position"], ((Transform)blackboard["SafePoint"]).position);
+            return distance <= desiredStopDistanceFromTarget;
+        }
+        
+        private bool MovementGoalFunction(Blackboard blackboard)
+        {
+            var distance = Vector3.Distance((Vector3)blackboard["Position"], ((Transform)blackboard["Target"]).position);
+            return distance <= desiredStopDistanceFromTarget;
         }
 
         private void Start()

@@ -14,6 +14,7 @@ public class Selector : BTComposite
     public override STATUS tick(ref Blackboard blackboard)
     {
         STATUS childStatus = children[currentChildIndex].tick(ref blackboard);
+        //UIManager.Instance.LogConsole.AddLog($"{nodeName} - {children[currentChildIndex].nodeName}");
         
         switch (childStatus)
         {

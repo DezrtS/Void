@@ -31,6 +31,7 @@ namespace Assignment_2
 
         public override void BeginAction(Blackboard blackboard)
         {
+            base.BeginAction(blackboard);
             var mutations = (List<Mutation>)blackboard["Mutations"];
 
             foreach (var mutation in mutations)

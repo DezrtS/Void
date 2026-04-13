@@ -68,6 +68,7 @@ namespace Assignment_2
 
         public override void EndAction(Blackboard blackboard)
         {
+            base.EndAction(blackboard);
             var navMeshMovement = blackboard["MovementController"] as NavMeshMovement;
             navMeshMovement.StopPathfinding();
         }

@@ -21,12 +21,18 @@ public abstract class GAction
 	public abstract bool CanHappen(Blackboard blackboard);
 	
 	public abstract Blackboard OnCompletion(Blackboard blackboard);
-	
-	public virtual void BeginAction(Blackboard blackboard) { }
+
+	public virtual void BeginAction(Blackboard blackboard)
+	{
+		UIManager.Instance.LogConsole.AddLog($"{actionName}: Began");
+	}
 
 	public abstract bool UpdateAction(Blackboard blackboard);
-	
-	public virtual void EndAction(Blackboard blackboard) { }
+
+	public virtual void EndAction(Blackboard blackboard)
+	{
+		UIManager.Instance.LogConsole.AddLog($"{actionName}: Ended");
+	}
 
 	public abstract bool IsActionDone(Blackboard blackboard);
 }

@@ -8,6 +8,9 @@ public class GNode : BTNode
     private List<GAction> availableActions;
     private Func<Blackboard, bool> goalFunction;
     private GPlan currentPlan;
+
+    private bool interrupt;
+    private bool interrupted;
     
     public GNode(string ID, Func<Blackboard, bool> goalFunction, List<GAction> actions) : base(ID)
     {
@@ -18,6 +21,29 @@ public class GNode : BTNode
 
     public override STATUS tick(ref Blackboard blackboard)
     {
+        if (interrupted)
+        {
+            interrupt = false;
+            interrupted = false;
+            if (currentPlan != null)
+            {
+                if (blackboard["Target"] != currentPlan.blackboard["Target"])
+                {
+                    currentPlan = null;
+                }
+                else
+                {
+                    currentPlan?.Peek()?.BeginAction(blackboard);
+                }   
+            }
+        } 
+        else if (interrupt)
+        {
+            interrupted = true;
+            currentPlan?.Peek()?.EndAction(blackboard);
+            return STATUS.SUCCESS;
+        }
+        
         // No plan, try to build one
         if (currentPlan == null)
         {
@@ -50,6 +76,11 @@ public class GNode : BTNode
 
         return STATUS.RUNNING;
 
+    }
+
+    public void Interrupt()
+    {
+        interrupt = true;
     }
 
 }

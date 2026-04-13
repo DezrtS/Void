@@ -40,6 +40,7 @@ namespace Assignment_2
 
         public override void BeginAction(Blackboard blackboard)
         {
+            base.BeginAction(blackboard);
             var mutations = (List<Mutation>)blackboard["Mutations"];
 
             foreach (var mutation in mutations)
@@ -66,6 +67,7 @@ namespace Assignment_2
         
         public override void EndAction(Blackboard blackboard)
         {
+            base.EndAction(blackboard);
             blackboard["Is At Target And Can Attack"] = false;
         }
     }
