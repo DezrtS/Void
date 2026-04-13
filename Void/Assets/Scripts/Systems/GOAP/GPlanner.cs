@@ -12,6 +12,7 @@ public class GPlanner
 	public GPlan Plan(Blackboard blackboard, List<GAction> possibleActions, Func<Blackboard, bool> goalFunction)
 	{
         int currentDepth = 0;
+        blackboard["Time At Plan Start"] = (float)blackboard["Time"];
         
 		var allPlans = new List<GPlan>
 		{

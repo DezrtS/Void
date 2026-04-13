@@ -52,6 +52,23 @@ public class Health : MonoBehaviour
             return false;
         }
     }
+    
+    private struct DamageEntry
+    {
+        public float damage;
+        public float time;
+
+        public DamageEntry(float damage, float time)
+        {
+            this.damage = damage;
+            this.time = time;
+        }
+    }
+
+    [SerializeField] private float damageTrackingWindow = 5f;
+
+    private readonly Queue<DamageEntry> damageHistory = new Queue<DamageEntry>();
+    private float totalDamageInWindow;
 
 
     public delegate void HealthHandler(float previousValue, float newValue, float maxValue);
@@ -178,12 +195,39 @@ public class Health : MonoBehaviour
     public void RequestDamage(float damage)
     {
         damage *= Mathf.Clamp(1 - damageResistance.Value, 0, 1);
+
+        if (networkHealth.IsServer && damage > 0f)
+        {
+            RecordDamage(damage);
+        }
+
         float newCurrentHealth = currentHealth - damage;
+
         if (damage >= gruntThreshold) AudioManager.RequestPlayOneShot(gruntSound, transform.position);
         if (damage <= 0) AudioManager.RequestPlayOneShot(reflectSound, transform.position);
+
         RequestSetCurrentHealth(newCurrentHealth);
     }
+    
+    private void RecordDamage(float damage)
+    {
+        float currentTime = Time.time;
 
+        damageHistory.Enqueue(new DamageEntry(damage, currentTime));
+        totalDamageInWindow += damage;
+
+        CleanupOldDamage(currentTime);
+    }
+
+    private void CleanupOldDamage(float currentTime)
+    {
+        while (damageHistory.Count > 0 &&
+               currentTime - damageHistory.Peek().time > damageTrackingWindow)
+        {
+            var old = damageHistory.Dequeue();
+            totalDamageInWindow -= old.damage;
+        }
+    }
     public void RequestHealing(float healing) => RequestSetCurrentHealth(currentHealth + healing);
 
     public void RequestFullHeal() => RequestSetCurrentHealth(MaxHealth);
@@ -191,5 +235,31 @@ public class Health : MonoBehaviour
     public void ChangeHealthOverTime(float healthChange, float duration)
     {
         healthChanges.Add(new HealthChange(healthChange, duration));
+    }
+    
+    private float GetRecentDPS()
+    {
+        if (!networkHealth.IsServer) return 0f;
+
+        CleanupOldDamage(Time.time);
+
+        if (damageHistory.Count == 0) return 0f;
+
+        float duration = Time.time - damageHistory.Peek().time;
+        if (duration <= 0f) return 0f;
+
+        return totalDamageInWindow / duration;
+    }
+    
+    public bool WillDieInTime(float time)
+    {
+        if (!networkHealth.IsServer) return false;
+
+        float dps = GetRecentDPS();
+        if (dps <= 0f) return false;
+
+        float expectedDamage = dps * time;
+
+        return expectedDamage >= currentHealth;
     }
 }

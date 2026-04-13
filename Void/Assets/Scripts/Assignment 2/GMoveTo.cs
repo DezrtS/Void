@@ -30,7 +30,9 @@ namespace Assignment_2
             var target = blackboard[targetName] as Transform;
             var movementSpeed = (float)blackboard["Movement Speed"];
             var distance = Vector3.Distance(position, target.position);
-            return distance / movementSpeed + 1;
+            var time = distance / movementSpeed;
+            if (blackboard["Could Die"] is true) time += 10;
+            return time + 1;
         }
 
         public override Blackboard OnCompletion(Blackboard blackboard)

@@ -51,6 +51,7 @@ namespace Assignment_1
             blackboard = new Blackboard
             {
                 ["Transform"] = transform,
+                ["Could Die"] = true,
                 ["MovementController"] = navMeshMovement,
                 ["Attack"] = basicAttack,
                 ["Position"] = transform.position,
@@ -60,12 +61,13 @@ namespace Assignment_1
                 ["Time At Last Speedster Mutation"] = 0f,
                 ["Movement Speed"] = navMeshMovement.PlayerStats.SprintSpeed.Value,
                 ["Is At Target And Can Attack"]  = false,
+                ["Check If Could Die"] = false,
             };
 
             behaviourTree = new BTRoot("Root");
             var mainSelector = new Selector("Retreat Vs Attack Selector");
             var safePointSequence = new Sequence("Safe Point Sequence");
-            var isBelowHealth = new IsBelowHealth("Is Below Health", 100);
+            var isBelowHealth = new IsBelowHealth("Is Below Health", 100, 1f);
             var selectClosestSafePoint = new SelectClosestSafePoint("Select Closest Safe Point");
             var retreatSelector = new Selector("Retreat Selector");
             var waitSequence = new Sequence("Wait Sequence");
@@ -75,6 +77,7 @@ namespace Assignment_1
             {
                 new GUseMutation("Use Speedster Mutation", blackboard, "Speedster", SpeedsterEffect),
                 new GUseMutation("Use Armored Skin Mutation", blackboard, "Armored Skin", ArmoredSkinEffect),
+                new GCheckIfCouldDie("Check If Could Die", 2f),
                 new GMoveTo("Move to Safe Point", "SafePoint", secondsPerTick, desiredStopDistanceFromTarget),
             });
             
@@ -89,6 +92,7 @@ namespace Assignment_1
             movementPlanner = new GNode("Movement Planner", MovementGoalFunction, new List<GAction>()
             {
                 new GUseMutation("Use Speedster Mutation", blackboard, "Speedster", SpeedsterEffect),
+                new GCheckIfCouldDie("Check If Could Die", 2f),
                 new GUseMutation("Use Armored Skin Mutation", blackboard, "Armored Skin", ArmoredSkinEffect),
                 new GMoveTo("Move to Target", "Target", secondsPerTick, desiredStopDistanceFromTarget),
             });
@@ -152,6 +156,7 @@ namespace Assignment_1
         private Blackboard ArmoredSkinEffect(Blackboard newBlackboard)
         {
             newBlackboard["Movement Speed"] = (float)newBlackboard["Movement Speed"] / 2f;
+            newBlackboard["Could Die"] = false;
             return newBlackboard;
         }
 
@@ -166,11 +171,21 @@ namespace Assignment_1
             var distance = Vector3.Distance((Vector3)blackboard["Position"], ((Transform)blackboard["SafePoint"]).position);
             return distance <= desiredStopDistanceFromTarget;
         }
+
+        private bool RetreatResetFunction(Blackboard blackboard)
+        {
+            return true;
+        }
         
         private bool MovementGoalFunction(Blackboard blackboard)
         {
             var distance = Vector3.Distance((Vector3)blackboard["Position"], ((Transform)blackboard["Target"]).position);
             return distance <= desiredStopDistanceFromTarget;
+        }
+        
+        private bool MovementResetFunction(Blackboard blackboard)
+        {
+            return true;
         }
 
         private void Start()

@@ -25,7 +25,7 @@ public class GNode : BTNode
         {
             interrupt = false;
             interrupted = false;
-            if (currentPlan != null)
+            /*if (currentPlan != null)
             {
                 if (blackboard["Target"] != currentPlan.blackboard["Target"])
                 {
@@ -34,13 +34,14 @@ public class GNode : BTNode
                 else
                 {
                     currentPlan?.Peek()?.BeginAction(blackboard);
-                }   
-            }
+                }
+            }*/
         } 
         else if (interrupt)
         {
             interrupted = true;
             currentPlan?.Peek()?.EndAction(blackboard);
+            currentPlan = null;
             return STATUS.SUCCESS;
         }
         

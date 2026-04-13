@@ -93,6 +93,7 @@ public class Stat
 
         for (int i = modifiers.Count - 1; i >= 0; i--)
         {
+            if (modifiers.Count <= 0) return;
             KeyValuePair<int, StatModifier> modifier = modifiers.ElementAt(i);
 
             if (modifier.Value.IsExpired(timeSinceLevelLoad))
